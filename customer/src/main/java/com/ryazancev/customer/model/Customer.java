@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Data
 @Builder
 @Entity
+@Table(name = "customers")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer implements Serializable {
@@ -25,8 +26,14 @@ public class Customer implements Serializable {
             generator = "customer_id_sequence"
     )
     private Long id;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "email")
     private String email;
+
+    @Column (name = "balance")
     private Double balance;
 
 }

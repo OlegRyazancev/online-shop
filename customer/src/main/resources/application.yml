@@ -7,12 +7,14 @@ spring:
   datasource:
     username: oleg
     password: password
-    url: jdbc:postgresql://localhost:5432/customer
+    url: jdbc:postgresql://localhost:5432/customer?currentSchema=customer
   jpa:
-    hibernate:
-      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
