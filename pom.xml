@@ -11,7 +11,7 @@
     <name>online-shop</name>
     <description>online-shop-pet-project</description>
     <modules>
-        <module>user</module>
+        <module>customer</module>
     </modules>
 
     <properties>
