@@ -12,6 +12,7 @@
     <description>online-shop-pet-project</description>
     <modules>
         <module>customer</module>
+        <module>purchase-history</module>
     </modules>
 
     <properties>
