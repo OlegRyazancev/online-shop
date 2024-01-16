@@ -1,0 +1,21 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: purchase-history
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      authentication-database: admin
+      database: purchase-history
+      username: oleg
+      password: password
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MongoDBDialect
+        format_sql: true
+    show-sql: true
