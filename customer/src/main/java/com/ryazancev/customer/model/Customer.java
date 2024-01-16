@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Data
-@Builder
 @Entity
 @Table(name = "customers")
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer implements Serializable {

@@ -12,7 +12,7 @@
     <description>online-shop-pet-project</description>
     <modules>
         <module>customer</module>
-        <module>purchase-history</module>
+        <module>purchase</module>
     </modules>
 
     <properties>
@@ -34,6 +34,8 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -74,6 +76,7 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate.validator.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

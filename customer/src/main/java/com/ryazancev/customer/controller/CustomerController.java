@@ -37,7 +37,6 @@ public class CustomerController {
     }
 
     //todo: add method to watch purchase history
-    //todo: add method to increase user's balance
-    //todo: add method to watch notifications????
+    //todo: add method to watch notifications?
 
 }
