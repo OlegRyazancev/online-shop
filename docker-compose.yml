@@ -45,6 +45,21 @@ services:
       - online-shop
     restart: unless-stopped
 
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: oleg
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+    ports:
+      - "8081:8081"
+    networks:
+      - online-shop
+    restart: unless-stopped
+
+
+
 networks:
   online-shop:
     driver: bridge
