@@ -21,10 +21,19 @@ public class CustomerController {
     private final CustomerMapper customerMapper;
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerDTO> getCustomerInfo(@PathVariable("customerId") Long customerId) {
+    public ResponseEntity<CustomerDTO> getCustomerInfo(
+            @PathVariable("customerId") Long customerId) {
         Customer customer = customerService.getById(customerId);
         log.info("Request for get customer info {}", customer.toString());
         return ResponseEntity.ok(customerMapper.toDTO(customer));
+    }
+
+    @PutMapping("/{customerId}/increase-balance")
+    public ResponseEntity<String> increaseBalance(
+            @PathVariable Long customerId,
+            @RequestParam Double amount) {
+        String message = customerService.increaseBalance(customerId, amount);
+        return ResponseEntity.ok(message);
     }
 
     //todo: add method to watch purchase history

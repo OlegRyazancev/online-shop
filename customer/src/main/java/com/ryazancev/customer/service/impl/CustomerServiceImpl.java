@@ -21,4 +21,17 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Customer not found"));
     }
+
+    @Transactional
+    @Override
+    public String increaseBalance(Long customerId, Double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        Customer customer = getById(customerId);
+        Double updatedBalance = customer.getBalance() + amount;
+        customer.setBalance(updatedBalance);
+        customerRepository.save(customer);
+        return "The customer's balance has been successfully increased!";
+    }
 }

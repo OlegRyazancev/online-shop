@@ -1,4 +1,4 @@
-insert into customers (name, email, balance)
+insert into customers (username, email, balance)
 values ('John Doe', 'john@example.com', 100.00),
        ('Jane Smith', 'jane@example.com', 150.50),
        ('Bob Johnson', 'bob@example.com', 75.25),
