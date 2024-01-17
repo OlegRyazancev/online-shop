@@ -1,6 +1,5 @@
 package com.ryazancev.purchase.service.impl;
 
-import com.ryazancev.purchase.dto.CustomerPurchasesResponse;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;

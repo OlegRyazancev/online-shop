@@ -14,6 +14,7 @@
         <module>customer</module>
         <module>purchase</module>
         <module>eureka-server</module>
+        <module>clients</module>
     </modules>
 
     <properties>
@@ -49,6 +50,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -86,6 +93,10 @@
             <version>${hibernate.validator.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

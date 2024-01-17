@@ -1,6 +1,5 @@
 package com.ryazancev.purchase.service;
 
-import com.ryazancev.purchase.dto.CustomerPurchasesResponse;
 import com.ryazancev.purchase.model.Purchase;
 
 import java.util.List;

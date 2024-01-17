@@ -1,7 +1,7 @@
 package com.ryazancev.purchase.controller;
 
-import com.ryazancev.purchase.dto.CustomerPurchasesResponse;
-import com.ryazancev.purchase.dto.PurchaseDTO;
+import com.ryazancev.clients.purchase.dto.CustomerPurchasesResponse;
+import com.ryazancev.clients.purchase.dto.PurchaseDTO;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.service.PurchaseService;
 import com.ryazancev.purchase.util.mappers.PurchaseMapper;
@@ -32,6 +32,7 @@ public class PurchaseController {
     @GetMapping("/customer/{customerId}")
     public CustomerPurchasesResponse findByCustomerId(@PathVariable Long customerId) {
         List<Purchase> purchases = purchaseService.getByCustomerId(customerId);
+        log.info("Found purchases: {}", purchases);
         return CustomerPurchasesResponse.builder()
                 .purchases(purchaseMapper.toDTO(purchases))
                 .build();

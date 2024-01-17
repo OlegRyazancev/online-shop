@@ -1,7 +1,7 @@
 package com.ryazancev.customer.controller;
 
+import com.ryazancev.clients.purchase.dto.CustomerPurchasesResponse;
 import com.ryazancev.customer.dto.CustomerDTO;
-import com.ryazancev.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.mappers.CustomerMapper;
@@ -34,12 +34,14 @@ public class CustomerController {
             @PathVariable Long customerId,
             @RequestParam Double amount) {
         String message = customerService.increaseBalance(customerId, amount);
+        log.info("Request to increase customer balance. id {}, amount: {}", customerId, amount);
         return ResponseEntity.ok(message);
     }
 
     @GetMapping("/{customerId}/purchases")
     public ResponseEntity<CustomerPurchasesResponse> getPurchasesByCustomerId(@PathVariable Long customerId) {
         CustomerPurchasesResponse purchases = customerService.getPurchasesByCustomerId(customerId);
+        log.info("Request to get purchases by customer id: {}", customerId);
         return ResponseEntity.ok(purchases);
     }
 

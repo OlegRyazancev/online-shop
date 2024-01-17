@@ -1,6 +1,6 @@
 package com.ryazancev.customer.service;
 
-import com.ryazancev.customer.dto.CustomerPurchasesResponse;
+import com.ryazancev.clients.purchase.dto.CustomerPurchasesResponse;
 import com.ryazancev.customer.model.Customer;
 
 public interface CustomerService {
