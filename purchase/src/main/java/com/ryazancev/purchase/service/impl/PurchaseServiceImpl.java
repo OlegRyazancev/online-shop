@@ -1,5 +1,6 @@
 package com.ryazancev.purchase.service.impl;
 
+import com.ryazancev.purchase.dto.CustomerPurchasesResponse;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,5 +25,10 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchase.setPurchaseDate(LocalDateTime.now());
         log.info("Saving purchase: {}", purchase);
         return purchaseRepository.save(purchase);
+    }
+
+    @Override
+    public List<Purchase> getByCustomerId(Long customerId) {
+        return purchaseRepository.findByCustomerId(customerId);
     }
 }

@@ -1,5 +1,6 @@
 package com.ryazancev.purchase.controller;
 
+import com.ryazancev.purchase.dto.CustomerPurchasesResponse;
 import com.ryazancev.purchase.dto.PurchaseDTO;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.service.PurchaseService;
@@ -7,10 +8,9 @@ import com.ryazancev.purchase.util.mappers.PurchaseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -27,6 +27,14 @@ public class PurchaseController {
         Purchase savedPurchase = purchaseService.processPurchase(purchase);
         log.info("Purchase saved with id: {} and date: {}", savedPurchase.getId(), savedPurchase.getPurchaseDate());
         return ResponseEntity.ok("Purchase successfully saved");
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public CustomerPurchasesResponse findByCustomerId(@PathVariable Long customerId) {
+        List<Purchase> purchases = purchaseService.getByCustomerId(customerId);
+        return CustomerPurchasesResponse.builder()
+                .purchases(purchaseMapper.toDTO(purchases))
+                .build();
     }
 
 }

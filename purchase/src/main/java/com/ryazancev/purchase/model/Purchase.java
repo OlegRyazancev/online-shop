@@ -19,7 +19,7 @@ public class Purchase implements Serializable {
 
     @Id
     private String id;
-    private Long userId;
+    private Long customerId;
     private Long productId;
     private Double amount;
     private LocalDateTime purchaseDate;
