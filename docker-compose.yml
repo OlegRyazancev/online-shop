@@ -4,9 +4,11 @@ services:
   postgres:
     container_name: postgres
     image: postgres:16-alpine
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: oleg
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
@@ -18,10 +20,12 @@ services:
 
   pgadmin:
     container_name: pgadmin
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:8.2
+    env_file:
+      - .env
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin:/var/lib/pgadmin
@@ -34,9 +38,11 @@ services:
   mongodb:
     container_name: mongodb
     image: mongo
+    env_file:
+      - .env
     environment:
-      MONGO_INITDB_ROOT_USERNAME: oleg
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongodb:/data/db
     ports:
@@ -48,23 +54,60 @@ services:
   mongo-express:
     container_name: mongo-express
     image: mongo-express
+    env_file:
+      - .env
     environment:
       ME_CONFIG_MONGODB_SERVER: mongodb
-      ME_CONFIG_MONGODB_ADMINUSERNAME: oleg
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGOEXPRESS_LOGIN}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGOEXPRESS_PASSWORD}
     ports:
       - "8081:8081"
+    depends_on:
+      - mongodb
     networks:
       - online-shop
     restart: unless-stopped
 
+  mariadb:
+    container_name: mariadb
+    image: mariadb:11.2.2
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - online-shop
 
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2.1
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - "8079:80"
+    environment:
+      PMA_HOST: ${MYSQL_PMA_HOST}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - online-shop
 
 networks:
   online-shop:
     driver: bridge
 
 volumes:
+  mysql:
   postgres:
   pgadmin:
   mongodb:
