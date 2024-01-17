@@ -1,6 +1,7 @@
 package com.ryazancev.customer.controller;
 
 import com.ryazancev.customer.dto.CustomerDTO;
+import com.ryazancev.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.mappers.CustomerMapper;
@@ -36,7 +37,13 @@ public class CustomerController {
         return ResponseEntity.ok(message);
     }
 
-    //todo: add method to watch purchase history
+    @GetMapping("/{customerId}/purchases")
+    public ResponseEntity<CustomerPurchasesResponse> getPurchasesByCustomerId(@PathVariable Long customerId) {
+        CustomerPurchasesResponse purchases = customerService.getPurchasesByCustomerId(customerId);
+        return ResponseEntity.ok(purchases);
+    }
+
+
     //todo: add method to watch notifications?
 
 }
