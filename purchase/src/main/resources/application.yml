@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: purchase-history
+    name: purchase
 
   data:
     mongodb:
@@ -19,3 +19,12 @@ spring:
         dialect: org.hibernate.dialect.MongoDBDialect
         format_sql: true
     show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+      fetch-registry: true
+      register-with-eureka: true
+  instance:
+    preferIpAddress: true
