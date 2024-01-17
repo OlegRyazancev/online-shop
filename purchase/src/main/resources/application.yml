@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: ${PURCHASE_PORT}
 
 spring:
   application:
@@ -7,12 +7,12 @@ spring:
 
   data:
     mongodb:
-      host: localhost
+      host: ${MONGO_HOST}
       port: 27017
       authentication-database: admin
-      database: purchase-history
-      username: oleg
-      password: password
+      database: ${MONGO_DATABASE}
+      username: ${MONGO_INITDB_ROOT_USERNAME}
+      password: ${MONGO_INITDB_ROOT_PASSWORD}
   jpa:
     properties:
       hibernate:

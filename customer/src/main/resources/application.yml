@@ -1,13 +1,15 @@
 server:
-  port: 8082
+  port: ${CUSTOMER_PORT}
 
 spring:
+  config:
+    import:
   application:
     name: customer
   datasource:
-    username: oleg
-    password: password
-    url: jdbc:postgresql://localhost:5432/customer?currentSchema=customer
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
   jpa:
     properties:
       hibernate:
