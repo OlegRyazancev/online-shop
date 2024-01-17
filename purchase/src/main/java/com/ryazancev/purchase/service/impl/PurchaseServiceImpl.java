@@ -21,6 +21,8 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Transactional
     @Override
     public Purchase processPurchase(Purchase purchase) {
+        //todo: user's money (check available and make it less)
+        //todo: product in stock
         purchase.setPurchaseDate(LocalDateTime.now());
         log.info("Saving purchase: {}", purchase);
         return purchaseRepository.save(purchase);

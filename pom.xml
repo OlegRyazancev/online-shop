@@ -15,6 +15,7 @@
         <module>purchase</module>
         <module>eureka-server</module>
         <module>clients</module>
+        <module>product</module>
     </modules>
 
     <properties>
