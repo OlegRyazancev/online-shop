@@ -4,6 +4,16 @@ server:
 spring:
   application:
     name: product
+  datasource:
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    url: jdbc:mariadb://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: true
+    show-sql: true
 
 eureka:
   client:

@@ -2,8 +2,6 @@ server:
   port: ${CUSTOMER_PORT}
 
 spring:
-  config:
-    import:
   application:
     name: customer
   datasource:
