@@ -1,7 +1,7 @@
-package com.ryazancev.clients.purchase;
+package com.ryazancev.clients;
 
-import com.ryazancev.clients.purchase.dto.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.dto.PurchaseDTO;
+import com.ryazancev.dto.CustomerPurchasesResponse;
+import com.ryazancev.dto.PurchaseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

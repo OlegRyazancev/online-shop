@@ -1,7 +1,7 @@
 package com.ryazancev.customer.service.impl;
 
-import com.ryazancev.clients.purchase.PurchaseClient;
-import com.ryazancev.clients.purchase.dto.CustomerPurchasesResponse;
+import com.ryazancev.clients.PurchaseClient;
+import com.ryazancev.dto.CustomerPurchasesResponse;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;

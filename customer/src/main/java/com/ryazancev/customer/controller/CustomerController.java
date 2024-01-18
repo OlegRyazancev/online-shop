@@ -1,10 +1,10 @@
 package com.ryazancev.customer.controller;
 
-import com.ryazancev.clients.purchase.dto.CustomerPurchasesResponse;
-import com.ryazancev.customer.dto.CustomerDTO;
+import com.ryazancev.dto.CustomerDTO;
+import com.ryazancev.dto.CustomerPurchasesResponse;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
-import com.ryazancev.customer.util.mappers.CustomerMapper;
+import com.ryazancev.mappers.CustomerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +46,6 @@ public class CustomerController {
     }
 
 
-    //todo: add method to watch notifications?
+    //todo: add method to watch notifications
 
 }

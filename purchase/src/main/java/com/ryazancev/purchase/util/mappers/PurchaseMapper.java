@@ -1,6 +1,6 @@
 package com.ryazancev.purchase.util.mappers;
 
-import com.ryazancev.clients.purchase.dto.PurchaseDTO;
+import com.ryazancev.dto.PurchaseDTO;
 import com.ryazancev.purchase.model.Purchase;
 import org.mapstruct.Mapper;
 

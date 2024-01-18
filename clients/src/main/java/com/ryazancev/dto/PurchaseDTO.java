@@ -1,4 +1,4 @@
-package com.ryazancev.clients.purchase.dto;
+package com.ryazancev.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
