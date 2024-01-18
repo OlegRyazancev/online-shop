@@ -1,4 +1,4 @@
-package com.ryazancev.dto;
+package com.ryazancev.clients;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class CustomerDTO {
 
     @NotNull(message = "Id must not be null")

@@ -1,7 +1,5 @@
 package com.ryazancev.clients;
 
-import com.ryazancev.dto.CustomerPurchasesResponse;
-import com.ryazancev.dto.PurchaseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient("purchase")
+@FeignClient(name = "purchase")
 public interface PurchaseClient {
 
     @PostMapping("api/v1/purchases")

@@ -1,7 +1,7 @@
-package com.ryazancev.mappers;
+package com.ryazancev.customer.util.mappers;
 
 import com.ryazancev.customer.model.Customer;
-import com.ryazancev.dto.CustomerDTO;
+import com.ryazancev.clients.CustomerDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
