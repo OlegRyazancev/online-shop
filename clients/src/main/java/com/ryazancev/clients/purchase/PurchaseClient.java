@@ -1,5 +1,6 @@
-package com.ryazancev.clients;
+package com.ryazancev.clients.purchase;
 
+import com.ryazancev.clients.customer.CustomerPurchasesResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

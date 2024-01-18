@@ -1,8 +1,7 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.clients.ProductDTO;
-import com.ryazancev.clients.ProductInfoDTO;
-import com.ryazancev.clients.ProductsGetResponse;
+import com.ryazancev.clients.product.ProductInfoDTO;
+import com.ryazancev.clients.product.ProductsGetResponse;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

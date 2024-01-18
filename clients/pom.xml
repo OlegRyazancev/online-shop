@@ -11,8 +11,6 @@
     <artifactId>clients</artifactId>
     <packaging>jar</packaging>
 
-    <name>clients</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

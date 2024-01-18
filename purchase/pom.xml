@@ -11,9 +11,6 @@
     <artifactId>purchase</artifactId>
     <packaging>jar</packaging>
 
-
-    <name>purchase-history</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mongodb.driver.version>4.11.1</mongodb.driver.version>

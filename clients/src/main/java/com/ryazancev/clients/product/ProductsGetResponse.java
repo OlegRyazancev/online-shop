@@ -1,4 +1,4 @@
-package com.ryazancev.clients;
+package com.ryazancev.clients.product;
 
 
 import lombok.*;

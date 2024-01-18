@@ -11,8 +11,6 @@
     <artifactId>product</artifactId>
     <packaging>jar</packaging>
 
-    <name>product</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mariadb.java.client.version>3.3.2</mariadb.java.client.version>

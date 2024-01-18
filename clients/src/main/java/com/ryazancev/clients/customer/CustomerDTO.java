@@ -1,4 +1,4 @@
-package com.ryazancev.clients;
+package com.ryazancev.clients.customer;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;

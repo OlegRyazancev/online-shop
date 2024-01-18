@@ -1,7 +1,7 @@
 package com.ryazancev.product.service;
 
-import com.ryazancev.clients.ProductInfoDTO;
-import com.ryazancev.clients.ProductsGetResponse;
+import com.ryazancev.clients.product.ProductInfoDTO;
+import com.ryazancev.clients.product.ProductsGetResponse;
 import com.ryazancev.product.model.Product;
 
 public interface ProductService {

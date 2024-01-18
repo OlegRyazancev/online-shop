@@ -1,7 +1,7 @@
 package com.ryazancev.purchase.controller;
 
-import com.ryazancev.clients.CustomerPurchasesResponse;
-import com.ryazancev.clients.PurchaseDTO;
+import com.ryazancev.clients.customer.CustomerPurchasesResponse;
+import com.ryazancev.clients.purchase.PurchaseDTO;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.service.PurchaseService;
 import com.ryazancev.purchase.util.mappers.PurchaseMapper;

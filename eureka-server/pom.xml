@@ -11,8 +11,6 @@
     <artifactId>eureka-server</artifactId>
     <packaging>jar</packaging>
 
-    <name>eureka-server</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

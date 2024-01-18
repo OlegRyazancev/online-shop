@@ -1,4 +1,4 @@
-package com.ryazancev.clients;
+package com.ryazancev.clients.purchase;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

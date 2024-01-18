@@ -1,8 +1,8 @@
 package com.ryazancev.product.service.impl;
 
-import com.ryazancev.clients.OrganizationDTO;
-import com.ryazancev.clients.ProductInfoDTO;
-import com.ryazancev.clients.ProductsGetResponse;
+import com.ryazancev.clients.organization.OrganizationDTO;
+import com.ryazancev.clients.product.ProductInfoDTO;
+import com.ryazancev.clients.product.ProductsGetResponse;
 import com.ryazancev.product.util.mappers.ProductMapper;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;

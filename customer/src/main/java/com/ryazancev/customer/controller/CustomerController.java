@@ -1,7 +1,7 @@
 package com.ryazancev.customer.controller;
 
-import com.ryazancev.clients.CustomerDTO;
-import com.ryazancev.clients.CustomerPurchasesResponse;
+import com.ryazancev.clients.customer.CustomerDTO;
+import com.ryazancev.clients.customer.CustomerPurchasesResponse;
 import com.ryazancev.customer.util.mappers.CustomerMapper;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;

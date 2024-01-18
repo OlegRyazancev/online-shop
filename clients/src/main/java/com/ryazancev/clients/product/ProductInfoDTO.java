@@ -1,5 +1,6 @@
-package com.ryazancev.clients;
+package com.ryazancev.clients.product;
 
+import com.ryazancev.clients.organization.OrganizationDTO;
 import lombok.*;
 
 @Setter
