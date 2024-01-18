@@ -11,12 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFeignClients(
         basePackages = "com.ryazancev.clients"
 )
-@ComponentScan(
-        basePackages = {
-                "com.ryazancev.dto",
-                "com.ryazancev.mappers"
-        }
-)
 public class ProductApplication {
 
     public static void main(String[] args) {

@@ -9,6 +9,8 @@ spring:
     password: ${MYSQL_PASSWORD}
     url: jdbc:mariadb://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
   jpa:
+    hibernate:
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect

@@ -1,10 +1,12 @@
 package com.ryazancev.product.service;
 
+import com.ryazancev.clients.ProductInfoDTO;
+import com.ryazancev.clients.ProductsGetResponse;
 import com.ryazancev.product.model.Product;
 
 public interface ProductService {
 
-    Product getById(Long productId);
+    ProductInfoDTO getById(Long productId);
 
     Product create(Product product);
 
@@ -12,5 +14,5 @@ public interface ProductService {
 
     void delete(Long productId);
 
-
+    ProductsGetResponse getAvailableProducts();
 }

@@ -1,4 +1,4 @@
-package com.ryazancev.dto;
+package com.ryazancev.clients;
 
 
 import lombok.*;
@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerPurchasesResponse {
+public class ProductsGetResponse {
 
-    private List<PurchaseDTO> purchases;
+    private List<ProductDTO> products;
 }
