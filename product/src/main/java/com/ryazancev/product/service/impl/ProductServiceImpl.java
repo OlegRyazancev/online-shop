@@ -2,6 +2,7 @@ package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.organization.OrganizationDTO;
 import com.ryazancev.clients.product.ProductInfoDTO;
+import com.ryazancev.clients.product.ProductPostDTO;
 import com.ryazancev.clients.product.ProductsGetResponse;
 import com.ryazancev.product.util.mappers.ProductMapper;
 import com.ryazancev.product.model.Product;
@@ -35,6 +36,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductInfoDTO save(ProductPostDTO productPostDTO) {
+        //todo:rename method
+        //todo: add checks
+        Product product = productMapper.toEntity(productPostDTO);
+        System.out.println(product.getKeywords());
+        Product savedProduct = productRepository.save(product);
+        ProductInfoDTO savedDtoProduct = productMapper.toDTO(savedProduct);
+        OrganizationDTO organization = OrganizationDTO.builder()
+                .id(1L)
+                .name("IKEA")
+                .build();
+        //todo:OrganizationClient
+        savedDtoProduct.setOrganization(organization);
+        log.info("saved product has id: {}", savedProduct.getId());
+        return savedDtoProduct;
+    }
+
+    @Override
     public ProductInfoDTO getById(Long productId) {
         Product foundProduct = productRepository.findById(productId)
                 .orElseThrow(() ->
@@ -53,12 +72,6 @@ public class ProductServiceImpl implements ProductService {
         //todo: count average rating (Review client)
         log.info(productInfoDTO.toString());
         return productInfoDTO;
-    }
-
-    @Transactional
-    @Override
-    public Product create(Product product) {
-        return null;
     }
 
     @Transactional

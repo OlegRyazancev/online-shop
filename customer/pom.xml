@@ -14,7 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <postgresql.version>42.6.0</postgresql.version>
-        <liquibase.version>4.25.1</liquibase.version>
+        <liquibase.version>4.25.0</liquibase.version>
         <preliquibase.version>1.5.0</preliquibase.version>
     </properties>
 

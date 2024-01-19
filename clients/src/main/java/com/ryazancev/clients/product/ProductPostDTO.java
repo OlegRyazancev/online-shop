@@ -1,7 +1,5 @@
 package com.ryazancev.clients.product;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ryazancev.clients.organization.OrganizationDTO;
 import lombok.*;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductInfoDTO {
+public class ProductPostDTO {
 
     private Long id;
 
@@ -19,13 +17,12 @@ public class ProductInfoDTO {
 
     private String description;
 
-    private OrganizationDTO organization;
+    private Long organizationId;
 
     private Double price;
 
     private Integer quantityInStock;
 
-    @JsonProperty("keywords")
     private List<String> keywords;
 
     //todo: discount field

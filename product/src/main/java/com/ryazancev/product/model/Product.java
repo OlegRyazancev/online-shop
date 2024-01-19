@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -17,14 +18,7 @@ import java.io.Serializable;
 public class Product implements Serializable {
 
     @Id
-    @SequenceGenerator(
-            name = "product_id_sequence",
-            sequenceName = "product_id_sequence"
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "product_id_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
@@ -41,6 +35,9 @@ public class Product implements Serializable {
 
     @Column(name = "quantity_in_stock")
     private Integer quantityInStock;
+
+    @Column(name = "keywords")
+    private String keywords;
 
     //todo: discount field
 }
