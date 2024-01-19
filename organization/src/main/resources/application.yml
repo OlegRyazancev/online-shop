@@ -1,0 +1,27 @@
+server:
+  port: ${ORGANIZATION_PORT}
+
+spring:
+  application:
+    name: organization
+  datasource:
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_ORGANIZATION_DATABASE}?currentSchema=${POSTGRES_ORGANIZATION_SCHEMA}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
