@@ -3,7 +3,6 @@ package com.ryazancev.organization.service.impl;
 import com.ryazancev.clients.organization.OrganizationDetailedDTO;
 import com.ryazancev.clients.organization.OrganizationsListResponse;
 import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.ProductDTO;
 import com.ryazancev.clients.product.ProductListResponse;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
@@ -12,7 +11,6 @@ import com.ryazancev.organization.util.mappers.OrganizationMapper;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

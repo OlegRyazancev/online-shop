@@ -7,13 +7,16 @@ import com.ryazancev.product.model.Product;
 
 public interface ProductService {
 
-    ProductListResponse getAvailableProducts();
+    ProductListResponse getAll();
 
     ProductDetailedDTO getById(Long productId);
+
+    ProductListResponse getByOrganizationId(Long organizationId);
 
     ProductDetailedDTO save(ProductPostDTO productPostDTO);
 
     //todo: update and delete products
+
     Product update(Product product);
 
     void delete(Long productId);

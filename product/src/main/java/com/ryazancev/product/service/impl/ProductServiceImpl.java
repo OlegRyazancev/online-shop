@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
-    public ProductListResponse getAvailableProducts() {
+    public ProductListResponse getAll() {
         List<Product> products = productRepository.findAll();
         List<ProductDTO> productsDTO = productMapper.toDTO(products);
         return ProductListResponse.builder()
@@ -75,6 +75,15 @@ public class ProductServiceImpl implements ProductService {
         //todo: count average rating (Review client)
         log.info(productDetailedDTO.toString());
         return productDetailedDTO;
+    }
+
+    @Override
+    public ProductListResponse getByOrganizationId(Long organizationId) {
+        List<Product> products = productRepository.findByOrganizationId(organizationId);
+        return ProductListResponse.builder()
+                .products(productMapper.toDTO(products))
+                .build();
+
     }
 
     @Transactional
