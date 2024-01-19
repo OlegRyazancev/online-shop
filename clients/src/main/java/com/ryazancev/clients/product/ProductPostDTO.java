@@ -13,7 +13,7 @@ public class ProductPostDTO {
 
     private Long id;
 
-    private String name;
+    private String productName;
 
     private String description;
 

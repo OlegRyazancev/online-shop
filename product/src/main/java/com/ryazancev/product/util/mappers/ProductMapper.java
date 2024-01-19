@@ -1,14 +1,13 @@
 package com.ryazancev.product.util.mappers;
 
 import com.ryazancev.clients.product.ProductDTO;
-import com.ryazancev.clients.product.ProductInfoDTO;
+import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductPostDTO;
 import com.ryazancev.product.model.Product;
 import org.mapstruct.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -24,7 +23,7 @@ public interface ProductMapper {
     @Mappings({
             @Mapping(target = "keywords", source = "keywords", qualifiedByName = "keywordsToString"),
     })
-    ProductInfoDTO toDTO(Product product);
+    ProductDetailedDTO toDTO(Product product);
 
     @Named("keywordsToString")
     default List<String> keywordsToString(String string) {

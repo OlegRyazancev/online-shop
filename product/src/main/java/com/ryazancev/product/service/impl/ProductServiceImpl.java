@@ -1,9 +1,10 @@
 package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.organization.OrganizationDTO;
-import com.ryazancev.clients.product.ProductInfoDTO;
+import com.ryazancev.clients.product.ProductDTO;
+import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductPostDTO;
-import com.ryazancev.clients.product.ProductsGetResponse;
+import com.ryazancev.clients.product.ProductListResponse;
 import com.ryazancev.product.util.mappers.ProductMapper;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;
@@ -26,52 +27,54 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
-    public ProductsGetResponse getAvailableProducts() {
+    public ProductListResponse getAvailableProducts() {
         List<Product> products = productRepository.findAll();
-        log.info(String.valueOf(products.size()));
-        return ProductsGetResponse.builder()
-                .products(productMapper.toDTO(products))
+        List<ProductDTO> productsDTO = productMapper.toDTO(products);
+        return ProductListResponse.builder()
+                .products(productsDTO)
                 .build();
-
     }
 
+    @Transactional
     @Override
-    public ProductInfoDTO save(ProductPostDTO productPostDTO) {
-        //todo:rename method
-        //todo: add checks
-        Product product = productMapper.toEntity(productPostDTO);
-        System.out.println(product.getKeywords());
-        Product savedProduct = productRepository.save(product);
-        ProductInfoDTO savedDtoProduct = productMapper.toDTO(savedProduct);
+    public ProductDetailedDTO save(ProductPostDTO productPostDTO) {
+
+        //todo: add checks name, etc
+        Product productToSave = productMapper.toEntity(productPostDTO);
+        Product savedProduct = productRepository.save(productToSave);
+        ProductDetailedDTO savedDtoProduct = productMapper.toDTO(savedProduct);
+
+        //todo:OrganizationClient
         OrganizationDTO organization = OrganizationDTO.builder()
                 .id(1L)
                 .name("IKEA")
                 .build();
-        //todo:OrganizationClient
+
         savedDtoProduct.setOrganization(organization);
         log.info("saved product has id: {}", savedProduct.getId());
         return savedDtoProduct;
     }
 
     @Override
-    public ProductInfoDTO getById(Long productId) {
+    public ProductDetailedDTO getById(Long productId) {
         Product foundProduct = productRepository.findById(productId)
                 .orElseThrow(() ->
                         new NotFoundException("Product not found"));
 
-        ProductInfoDTO productInfoDTO = productMapper.toDTO(foundProduct);
+        ProductDetailedDTO productDetailedDTO = productMapper.toDTO(foundProduct);
 
+        //todo:OrganizationClient
         OrganizationDTO organization = OrganizationDTO.builder()
                 .id(1L)
                 .name("IKEA")
                 .build();
-        //todo:OrganizationClient
-        productInfoDTO.setOrganization(organization);
+
+        productDetailedDTO.setOrganization(organization);
 
         //todo: get reviews (Review client)
         //todo: count average rating (Review client)
-        log.info(productInfoDTO.toString());
-        return productInfoDTO;
+        log.info(productDetailedDTO.toString());
+        return productDetailedDTO;
     }
 
     @Transactional

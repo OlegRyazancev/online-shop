@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -21,10 +20,10 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "product_name")
+    private String productName;
 
-    @Column(name = "description")
+    @Column(name = "description", unique = true)
     private String description;
 
     @Column(name = "organization_id")

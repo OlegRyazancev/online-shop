@@ -1,4 +1,4 @@
-INSERT INTO products (name, description, organization_id, price,
+INSERT INTO products (product_name, description, organization_id, price,
                       quantity_in_stock, keywords)
 VALUES ('Laptop', 'High-performance laptop with SSD storage', 1, 1299.99, 50,
         'electronics, laptop, SSD'),

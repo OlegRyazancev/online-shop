@@ -11,11 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductInfoDTO {
+public class ProductDetailedDTO {
 
     private Long id;
 
-    private String name;
+    private String productName;
 
     private String description;
 

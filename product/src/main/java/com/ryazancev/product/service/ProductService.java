@@ -1,19 +1,20 @@
 package com.ryazancev.product.service;
 
-import com.ryazancev.clients.product.ProductInfoDTO;
+import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductPostDTO;
-import com.ryazancev.clients.product.ProductsGetResponse;
+import com.ryazancev.clients.product.ProductListResponse;
 import com.ryazancev.product.model.Product;
 
 public interface ProductService {
 
-    ProductInfoDTO getById(Long productId);
+    ProductListResponse getAvailableProducts();
 
+    ProductDetailedDTO getById(Long productId);
+
+    ProductDetailedDTO save(ProductPostDTO productPostDTO);
+
+    //todo: update and delete products
     Product update(Product product);
 
     void delete(Long productId);
-
-    ProductsGetResponse getAvailableProducts();
-
-   ProductInfoDTO save(ProductPostDTO productPostDTO);
 }

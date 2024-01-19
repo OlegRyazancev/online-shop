@@ -11,5 +11,5 @@ import lombok.*;
 public class ProductDTO {
 
     private Long id;
-    private String name;
+    private String productName;
 }

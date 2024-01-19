@@ -1,9 +1,8 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.clients.product.ProductInfoDTO;
+import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductPostDTO;
-import com.ryazancev.clients.product.ProductsGetResponse;
-import com.ryazancev.product.model.Product;
+import com.ryazancev.clients.product.ProductListResponse;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,21 +20,21 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<ProductsGetResponse> getAvailableProducts() {
-        ProductsGetResponse products = productService.getAvailableProducts();
+    public ResponseEntity<ProductListResponse> getAvailableProducts() {
+        ProductListResponse products = productService.getAvailableProducts();
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductInfoDTO> getProductInfo(@PathVariable("productId") Long productId) {
-        return ResponseEntity.ok(productService.getById(productId));
+    public ResponseEntity<ProductDetailedDTO> getProductInfo(@PathVariable("productId") Long productId) {
+        ProductDetailedDTO product = productService.getById(productId);
+        return ResponseEntity.ok(product);
     }
 
     @PostMapping
-    public ResponseEntity<ProductInfoDTO> save(@RequestBody ProductPostDTO productPostDTO) {
-        productService.save(productPostDTO);
-        return ResponseEntity.ok(productService.save(productPostDTO));
-        //todo:refactor
+    public ResponseEntity<ProductDetailedDTO> save(@RequestBody ProductPostDTO productPostDTO) {
+        ProductDetailedDTO savedProduct = productService.save(productPostDTO);
+        return ResponseEntity.ok(savedProduct);
     }
 
 
