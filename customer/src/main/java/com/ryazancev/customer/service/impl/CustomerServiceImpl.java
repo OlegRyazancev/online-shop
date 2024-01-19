@@ -44,13 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerPurchasesResponse getPurchasesByCustomerId(Long customerId) {
-
-        CustomerPurchasesResponse customerPurchases =
-                purchaseClient.findByCustomerId(customerId);
-        if (customerPurchases.getPurchases().isEmpty()) {
-            throw new NotFoundException("Customer has not made any purchases");
-        }
-        return customerPurchases;
+        return purchaseClient.findByCustomerId(customerId);
     }
 
     private Customer findCustomerById(Long customerId) {

@@ -16,16 +16,13 @@ public class PurchaseController {
 
     private final PurchaseService purchaseService;
     @PostMapping
-    public ResponseEntity<PurchaseDTO> processPurchase(@RequestBody PurchaseDTO purchaseDTO) {
-        PurchaseDTO savedPurchase = purchaseService.processPurchase(purchaseDTO);
-        return ResponseEntity.ok(savedPurchase);
+    public PurchaseDTO processPurchase(@RequestBody PurchaseDTO purchaseDTO) {
+        return purchaseService.processPurchase(purchaseDTO);
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<CustomerPurchasesResponse> findByCustomerId(@PathVariable Long customerId) {
-        CustomerPurchasesResponse purchases = purchaseService.getByCustomerId(customerId);
-        log.info("Found purchases: {}", purchases);
-        return ResponseEntity.ok(purchases);
+    public CustomerPurchasesResponse findByCustomerId(@PathVariable Long customerId) {
+        return purchaseService.getByCustomerId(customerId);
     }
 
 }

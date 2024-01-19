@@ -22,14 +22,12 @@ public class OrganizationController {
     private final OrganizationService organizationService;
 
     @GetMapping
-    public ResponseEntity<OrganizationsListResponse> getOrganizations() {
-        OrganizationsListResponse organizations = organizationService.getAll();
-        return ResponseEntity.ok(organizations);
+    public OrganizationsListResponse getOrganizations() {
+        return organizationService.getAll();
     }
 
     @GetMapping("/{organizationId}")
-    public ResponseEntity<OrganizationDetailedDTO> getById(@PathVariable("organizationId") Long organizationId) {
-        OrganizationDetailedDTO organization = organizationService.getById(organizationId);
-        return ResponseEntity.ok(organization);
+    public OrganizationDetailedDTO getById(@PathVariable("organizationId") Long organizationId) {
+        return organizationService.getById(organizationId);
     }
 }

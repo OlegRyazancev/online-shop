@@ -17,6 +17,7 @@
         <module>clients</module>
         <module>product</module>
         <module>review</module>
+        <module>organization</module>
     </modules>
 
     <properties>
