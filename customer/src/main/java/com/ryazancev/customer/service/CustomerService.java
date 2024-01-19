@@ -1,12 +1,12 @@
 package com.ryazancev.customer.service;
 
+import com.ryazancev.clients.customer.CustomerDTO;
 import com.ryazancev.clients.customer.CustomerPurchasesResponse;
-import com.ryazancev.customer.model.Customer;
 
 public interface CustomerService {
-    Customer getById(Long customerId);
+    CustomerDTO getById(Long customerId);
 
-    String increaseBalance(Long customerId, Double amount);
+    CustomerDTO increaseBalance(Long customerId, Double amount);
 
     CustomerPurchasesResponse getPurchasesByCustomerId(Long customerId);
 }

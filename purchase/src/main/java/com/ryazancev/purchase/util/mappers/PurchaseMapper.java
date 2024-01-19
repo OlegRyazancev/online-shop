@@ -13,5 +13,7 @@ public interface PurchaseMapper {
 
     Purchase toEntity(PurchaseDTO purchaseDTO);
 
+    PurchaseDTO toDTO(Purchase purchase);
+
     List<PurchaseDTO> toDTO(List<Purchase> purchase);
 }

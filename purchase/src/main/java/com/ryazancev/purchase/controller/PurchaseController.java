@@ -2,15 +2,11 @@ package com.ryazancev.purchase.controller;
 
 import com.ryazancev.clients.customer.CustomerPurchasesResponse;
 import com.ryazancev.clients.purchase.PurchaseDTO;
-import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.service.PurchaseService;
-import com.ryazancev.purchase.util.mappers.PurchaseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,23 +15,17 @@ import java.util.List;
 public class PurchaseController {
 
     private final PurchaseService purchaseService;
-    private final PurchaseMapper purchaseMapper;
-
     @PostMapping
-    public ResponseEntity<String> processPurchase(@RequestBody PurchaseDTO purchaseDTO) {
-        Purchase purchase = purchaseMapper.toEntity(purchaseDTO);
-        Purchase savedPurchase = purchaseService.processPurchase(purchase);
-        log.info("Purchase saved with id: {} and date: {}", savedPurchase.getId(), savedPurchase.getPurchaseDate());
-        return ResponseEntity.ok("Purchase successfully saved");
+    public ResponseEntity<PurchaseDTO> processPurchase(@RequestBody PurchaseDTO purchaseDTO) {
+        PurchaseDTO savedPurchase = purchaseService.processPurchase(purchaseDTO);
+        return ResponseEntity.ok(savedPurchase);
     }
 
     @GetMapping("/customer/{customerId}")
-    public CustomerPurchasesResponse findByCustomerId(@PathVariable Long customerId) {
-        List<Purchase> purchases = purchaseService.getByCustomerId(customerId);
+    public ResponseEntity<CustomerPurchasesResponse> findByCustomerId(@PathVariable Long customerId) {
+        CustomerPurchasesResponse purchases = purchaseService.getByCustomerId(customerId);
         log.info("Found purchases: {}", purchases);
-        return CustomerPurchasesResponse.builder()
-                .purchases(purchaseMapper.toDTO(purchases))
-                .build();
+        return ResponseEntity.ok(purchases);
     }
 
 }

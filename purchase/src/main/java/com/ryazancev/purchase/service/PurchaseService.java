@@ -1,12 +1,11 @@
 package com.ryazancev.purchase.service;
 
-import com.ryazancev.purchase.model.Purchase;
-
-import java.util.List;
+import com.ryazancev.clients.customer.CustomerPurchasesResponse;
+import com.ryazancev.clients.purchase.PurchaseDTO;
 
 public interface PurchaseService {
 
-    Purchase processPurchase(Purchase purchase);
+    PurchaseDTO processPurchase(PurchaseDTO purchase);
 
-    List<Purchase> getByCustomerId(Long customerId);
+    CustomerPurchasesResponse getByCustomerId(Long customerId);
 }

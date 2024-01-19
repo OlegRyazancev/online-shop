@@ -2,8 +2,6 @@ package com.ryazancev.customer.controller;
 
 import com.ryazancev.clients.customer.CustomerDTO;
 import com.ryazancev.clients.customer.CustomerPurchasesResponse;
-import com.ryazancev.customer.util.mappers.CustomerMapper;
-import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,23 +17,20 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final CustomerMapper customerMapper;
-
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerDTO> getCustomerInfo(
-            @PathVariable("customerId") Long customerId) {
-        Customer customer = customerService.getById(customerId);
+    public ResponseEntity<CustomerDTO> getCustomerInfo(@PathVariable("customerId") Long customerId) {
+        CustomerDTO customer = customerService.getById(customerId);
         log.info("Request for get customer info {}", customer.toString());
-        return ResponseEntity.ok(customerMapper.toDTO(customer));
+        return ResponseEntity.ok(customer);
     }
 
     @PutMapping("/{customerId}/increase-balance")
-    public ResponseEntity<String> increaseBalance(
+    public ResponseEntity<CustomerDTO> increaseBalance(
             @PathVariable Long customerId,
             @RequestParam Double amount) {
-        String message = customerService.increaseBalance(customerId, amount);
+        CustomerDTO customerWithNewBalance = customerService.increaseBalance(customerId, amount);
         log.info("Request to increase customer balance. id {}, amount: {}", customerId, amount);
-        return ResponseEntity.ok(message);
+        return ResponseEntity.ok(customerWithNewBalance);
     }
 
     @GetMapping("/{customerId}/purchases")
