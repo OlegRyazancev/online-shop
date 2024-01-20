@@ -31,15 +31,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
-    public CustomerDTO increaseBalance(Long customerId, Double amount) {
+    public CustomerDTO updateBalance(Long customerId, Double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive");
         }
-        Customer foundCustomer = findCustomerById(customerId);
-        Double updatedBalance = foundCustomer.getBalance() + amount;
-        foundCustomer.setBalance(updatedBalance);
-        customerRepository.save(foundCustomer);
-        return customerMapper.toDTO(foundCustomer);
+        Customer existing = findCustomerById(customerId);
+        existing.setBalance(amount);
+        customerRepository.save(existing);
+        return customerMapper.toDTO(existing);
     }
 
     @Override

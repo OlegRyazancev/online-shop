@@ -3,6 +3,8 @@ package com.ryazancev.clients.product;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "product")
 public interface ProductClient {
@@ -10,4 +12,9 @@ public interface ProductClient {
     ProductListResponse getByOrganizationId(
             @PathVariable("organizationId") Long organizationId);
 
+    @GetMapping("api/v1/products/{productId}")
+    ProductDetailedDTO getInfoById(@PathVariable("productId") Long productId);
+
+    @PutMapping("api/v1/products/{productId}/update-quantity")
+    ProductDetailedDTO updateQuantity(@PathVariable("productId") Long productId, @RequestParam("quantity") Integer quantity);
 }

@@ -2,7 +2,7 @@ package com.ryazancev.product.util.mappers;
 
 import com.ryazancev.clients.product.ProductDTO;
 import com.ryazancev.clients.product.ProductDetailedDTO;
-import com.ryazancev.clients.product.ProductPostDTO;
+import com.ryazancev.clients.product.ProductCreateDTO;
 import com.ryazancev.product.model.Product;
 import org.mapstruct.*;
 
@@ -18,7 +18,7 @@ public interface ProductMapper {
     @Mappings({
             @Mapping(target = "keywords", source = "keywords", qualifiedByName = "stringListToString"),
     })
-    Product toEntity(ProductPostDTO productPostDTO);
+    Product toEntity(ProductCreateDTO productCreateDTO);
 
     @Mappings({
             @Mapping(target = "keywords", source = "keywords", qualifiedByName = "keywordsToString"),

@@ -1,11 +1,12 @@
 package com.ryazancev.purchase.service;
 
 import com.ryazancev.clients.customer.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.PurchaseDTO;
+import com.ryazancev.clients.purchase.PurchaseDetailedDTO;
+import com.ryazancev.clients.purchase.PurchasePostDTO;
 
 public interface PurchaseService {
 
-    PurchaseDTO processPurchase(PurchaseDTO purchase);
+    PurchaseDetailedDTO processPurchase(PurchasePostDTO purchase);
 
     CustomerPurchasesResponse getByCustomerId(Long customerId);
 }

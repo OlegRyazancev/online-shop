@@ -2,8 +2,7 @@ package com.ryazancev.product.service;
 
 import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductListResponse;
-import com.ryazancev.clients.product.ProductPostDTO;
-import com.ryazancev.product.model.Product;
+import com.ryazancev.clients.product.ProductCreateDTO;
 
 public interface ProductService {
 
@@ -13,11 +12,12 @@ public interface ProductService {
 
     ProductListResponse getByOrganizationId(Long organizationId);
 
-    ProductDetailedDTO save(ProductPostDTO productPostDTO);
+    ProductDetailedDTO create(ProductCreateDTO productCreateDTO);
+
+    ProductDetailedDTO updateQuantity(Long productId, Integer quantity);
 
     //todo: update and delete products
 
-    Product update(Product product);
 
     void delete(Long productId);
 }

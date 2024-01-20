@@ -1,10 +1,7 @@
 package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.organization.OrganizationDTO;
-import com.ryazancev.clients.product.ProductDTO;
-import com.ryazancev.clients.product.ProductDetailedDTO;
-import com.ryazancev.clients.product.ProductListResponse;
-import com.ryazancev.clients.product.ProductPostDTO;
+import com.ryazancev.clients.product.*;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
@@ -37,10 +34,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductDetailedDTO save(ProductPostDTO productPostDTO) {
+    public ProductDetailedDTO create(ProductCreateDTO productCreateDTO) {
 
         //todo: add checks name, etc
-        Product productToSave = productMapper.toEntity(productPostDTO);
+        Product productToSave = productMapper.toEntity(productCreateDTO);
         Product savedProduct = productRepository.save(productToSave);
         ProductDetailedDTO savedDtoProduct = productMapper.toDTO(savedProduct);
 
@@ -55,13 +52,14 @@ public class ProductServiceImpl implements ProductService {
         return savedDtoProduct;
     }
 
+
     @Override
     public ProductDetailedDTO getById(Long productId) {
-        Product foundProduct = productRepository.findById(productId)
+        Product existing = productRepository.findById(productId)
                 .orElseThrow(() ->
                         new NotFoundException("Product not found"));
 
-        ProductDetailedDTO productDetailedDTO = productMapper.toDTO(foundProduct);
+        ProductDetailedDTO productDetailedDTO = productMapper.toDTO(existing);
 
         //todo:OrganizationClient
         OrganizationDTO organization = OrganizationDTO.builder()
@@ -88,9 +86,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public Product update(Product product) {
-        return null;
+    public ProductDetailedDTO updateQuantity(Long productId, Integer quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity can not be less than 0");
+        }
+        Product existing = productRepository.findById(productId)
+                .orElseThrow(() ->
+                        new NotFoundException("Product not found"));
+        existing.setQuantityInStock(quantity);
+        return productMapper.toDTO(existing);
+
     }
+
 
     @Transactional
     @Override

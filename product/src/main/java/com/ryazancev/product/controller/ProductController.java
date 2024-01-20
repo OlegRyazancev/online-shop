@@ -2,7 +2,7 @@ package com.ryazancev.product.controller;
 
 import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductListResponse;
-import com.ryazancev.clients.product.ProductPostDTO;
+import com.ryazancev.clients.product.ProductCreateDTO;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ProductDetailedDTO getProductInfo(@PathVariable("productId") Long productId) {
+    public ProductDetailedDTO getInfoById(@PathVariable("productId") Long productId) {
         return productService.getById(productId);
     }
 
@@ -34,9 +34,15 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDetailedDTO save(@RequestBody ProductPostDTO productPostDTO) {
-        return productService.save(productPostDTO);
+    public ProductDetailedDTO create(@RequestBody ProductCreateDTO productCreateDTO) {
+        return productService.create(productCreateDTO);
     }
+
+    @PutMapping("/{productId}/update-quantity")
+    public ProductDetailedDTO updateQuantity(@PathVariable("productId") Long productId, @RequestParam("quantity") Integer quantity) {
+        return productService.updateQuantity(productId, quantity);
+    }
+
 
     //todo: get Reviews and rating of a product (communicate to review service)
     //todo: set Review and rating of a product (communicate to review service)

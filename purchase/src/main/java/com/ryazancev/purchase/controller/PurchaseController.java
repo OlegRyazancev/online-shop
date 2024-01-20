@@ -1,7 +1,8 @@
 package com.ryazancev.purchase.controller;
 
 import com.ryazancev.clients.customer.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.PurchaseDTO;
+import com.ryazancev.clients.purchase.PurchaseDetailedDTO;
+import com.ryazancev.clients.purchase.PurchasePostDTO;
 import com.ryazancev.purchase.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +16,12 @@ public class PurchaseController {
 
     private final PurchaseService purchaseService;
     @PostMapping
-    public PurchaseDTO processPurchase(@RequestBody PurchaseDTO purchaseDTO) {
-        return purchaseService.processPurchase(purchaseDTO);
+    public PurchaseDetailedDTO processPurchase(@RequestBody PurchasePostDTO purchasePostDTO) {
+        return purchaseService.processPurchase(purchasePostDTO);
     }
 
     @GetMapping("/customer/{customerId}")
-    public CustomerPurchasesResponse findByCustomerId(@PathVariable Long customerId) {
+    public CustomerPurchasesResponse findByCustomerId(@PathVariable("customerId") Long customerId) {
         return purchaseService.getByCustomerId(customerId);
     }
 

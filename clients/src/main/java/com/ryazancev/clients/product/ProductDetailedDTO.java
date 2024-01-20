@@ -25,7 +25,6 @@ public class ProductDetailedDTO {
 
     private Integer quantityInStock;
 
-    @JsonProperty("keywords")
     private List<String> keywords;
 
     //todo: discount field

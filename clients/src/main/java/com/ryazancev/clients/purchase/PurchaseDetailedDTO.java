@@ -1,6 +1,5 @@
 package com.ryazancev.clients.purchase;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,9 +9,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class PurchaseDTO {
+public class PurchaseDetailedDTO {
 
+    private String id;
     private Long customerId;
     private Long productId;
     private Double amount;

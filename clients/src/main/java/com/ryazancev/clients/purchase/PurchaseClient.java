@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface PurchaseClient {
 
     @PostMapping("api/v1/purchases")
-    PurchaseDTO processPurchase(@RequestBody PurchaseDTO purchaseDTO);
+    PurchasePostDTO processPurchase(@RequestBody PurchasePostDTO purchasePostDTO);
 
     @GetMapping("api/v1/purchases/customer/{customerId}")
     CustomerPurchasesResponse findByCustomerId(@PathVariable("customerId") Long customerId);

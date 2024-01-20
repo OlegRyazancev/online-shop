@@ -9,9 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductPostDTO {
-
-    private Long id;
+public class ProductCreateDTO {
 
     private String productName;
 
