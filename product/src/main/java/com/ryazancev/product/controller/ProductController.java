@@ -3,6 +3,7 @@ package com.ryazancev.product.controller;
 import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductListResponse;
 import com.ryazancev.clients.product.ProductCreateDTO;
+import com.ryazancev.clients.product.ProductUpdateDTO;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,17 @@ public class ProductController {
         return productService.updateQuantity(productId, quantity);
     }
 
+    @GetMapping("/{productId}/check-organization")
+    public Boolean isOrganizationProduct(@PathVariable("productId") Long productId, @RequestParam("organizationId") Long organizationId) {
+        return productService.isOrganizationProduct(productId, organizationId);
+    }
+
+    @PutMapping
+    public ProductDetailedDTO update(@RequestBody ProductUpdateDTO productUpdateDTO) {
+        log.info("Product update id: {}", productUpdateDTO.getId());
+
+        return productService.update(productUpdateDTO);
+    }
 
     //todo: get Reviews and rating of a product (communicate to review service)
     //todo: set Review and rating of a product (communicate to review service)

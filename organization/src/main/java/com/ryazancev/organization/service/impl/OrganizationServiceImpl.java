@@ -4,7 +4,9 @@ import com.ryazancev.clients.organization.OrganizationDTO;
 import com.ryazancev.clients.organization.OrganizationDetailedDTO;
 import com.ryazancev.clients.organization.OrganizationsListResponse;
 import com.ryazancev.clients.product.ProductClient;
+import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductListResponse;
+import com.ryazancev.clients.product.ProductUpdateDTO;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
@@ -64,5 +66,18 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationDTO.setLogo("Logo1");
 
         return organizationDTO;
+    }
+
+    @Transactional
+    @Override
+    public ProductDetailedDTO update(Long organizationId, ProductUpdateDTO productUpdateDTO) {
+        log.info("Product update in Org service id: {}", productUpdateDTO.getId());
+        Boolean isOrgProduct = productClient.isOrganizationProduct(productUpdateDTO.getId(), organizationId);
+        log.info("boolean: {}", isOrgProduct);
+        if (!isOrgProduct) {
+            throw new IllegalArgumentException("Product doesn't belong to the specified organization.");
+        }
+
+        return productClient.update(productUpdateDTO);
     }
 }

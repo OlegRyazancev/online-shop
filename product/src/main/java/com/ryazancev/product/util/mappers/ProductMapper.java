@@ -16,22 +16,22 @@ public interface ProductMapper {
     List<ProductDTO> toDTO(List<Product> products);
 
     @Mappings({
-            @Mapping(target = "keywords", source = "keywords", qualifiedByName = "stringListToString"),
+            @Mapping(target = "keywords", source = "keywords", qualifiedByName = "keywordsToString"),
     })
     Product toEntity(ProductCreateDTO productCreateDTO);
 
     @Mappings({
-            @Mapping(target = "keywords", source = "keywords", qualifiedByName = "keywordsToString"),
+            @Mapping(target = "keywords", source = "keywords", qualifiedByName = "stringToKeywords"),
     })
     ProductDetailedDTO toDTO(Product product);
 
-    @Named("keywordsToString")
-    default List<String> keywordsToString(String string) {
+    @Named("stringToKeywords")
+    default List<String> stringToKeywords(String string) {
         return Arrays.asList(string.split(", "));
     }
 
-    @Named("stringListToString")
-    default String stringListToString(List<String> stringList) {
+    @Named("keywordsToString")
+    default String keywordsToString(List<String> stringList) {
         return String.join(", ", stringList);
     }
 }
