@@ -1,5 +1,6 @@
 package com.ryazancev.product.service.impl;
 
+import com.ryazancev.clients.organization.OrganizationClient;
 import com.ryazancev.clients.organization.OrganizationDTO;
 import com.ryazancev.clients.product.*;
 import com.ryazancev.product.model.Product;
@@ -23,6 +24,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
+    private final OrganizationClient organizationClient;
+
     @Override
     public ProductListResponse getAll() {
         List<Product> products = productRepository.findAll();
@@ -41,14 +44,8 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(productToSave);
         ProductDetailedDTO savedDtoProduct = productMapper.toDTO(savedProduct);
 
-        //todo:OrganizationClient
-        OrganizationDTO organization = OrganizationDTO.builder()
-                .id(1L)
-                .name("IKEA")
-                .build();
-
-        savedDtoProduct.setOrganization(organization);
-        log.info("saved product has id: {}", savedProduct.getId());
+        OrganizationDTO productOrganization = organizationClient.getById(savedProduct.getOrganizationId());
+        savedDtoProduct.setOrganization(productOrganization);
         return savedDtoProduct;
     }
 
@@ -59,19 +56,12 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() ->
                         new NotFoundException("Product not found"));
 
+        OrganizationDTO productOrganization = organizationClient.getById(existing.getOrganizationId());
+
         ProductDetailedDTO productDetailedDTO = productMapper.toDTO(existing);
-
-        //todo:OrganizationClient
-        OrganizationDTO organization = OrganizationDTO.builder()
-                .id(1L)
-                .name("IKEA")
-                .build();
-
-        productDetailedDTO.setOrganization(organization);
-
+        productDetailedDTO.setOrganization(productOrganization);
         //todo: get reviews (Review client)
         //todo: count average rating (Review client)
-        log.info(productDetailedDTO.toString());
         return productDetailedDTO;
     }
 

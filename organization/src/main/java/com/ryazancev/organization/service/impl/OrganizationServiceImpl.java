@@ -1,5 +1,6 @@
 package com.ryazancev.organization.service.impl;
 
+import com.ryazancev.clients.organization.OrganizationDTO;
 import com.ryazancev.clients.organization.OrganizationDetailedDTO;
 import com.ryazancev.clients.organization.OrganizationsListResponse;
 import com.ryazancev.clients.product.ProductClient;
@@ -24,18 +25,29 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository organizationRepository;
     private final OrganizationMapper organizationMapper;
+
     private final ProductClient productClient;
 
     @Override
     public OrganizationsListResponse getAll() {
         List<Organization> organizations = organizationRepository.findAll();
         return OrganizationsListResponse.builder()
-                .organizations(organizationMapper.toDTO(organizations))
+                .organizations(organizationMapper.toDetailedListDTO(organizations))
                 .build();
     }
 
     @Override
-    public OrganizationDetailedDTO getById(Long organizationId) {
+    public OrganizationDTO getById(Long organizationId) {
+        Organization existing = organizationRepository.findById(organizationId)
+                .orElseThrow(() ->
+                        new NotFoundException("Organization not found"));
+
+        return organizationMapper.toSimpleDTO(existing);
+    }
+
+
+    @Override
+    public OrganizationDetailedDTO getDetailedById(Long organizationId) {
         //todo:add exception checks
 
         Organization organization = organizationRepository.findById(organizationId)
@@ -43,9 +55,12 @@ public class OrganizationServiceImpl implements OrganizationService {
                         new NotFoundException("Organization not found"));
 
         ProductListResponse response = productClient.getByOrganizationId(organizationId);
-        OrganizationDetailedDTO organizationDTO = organizationMapper.toDTO(organization);
+        OrganizationDetailedDTO organizationDTO = organizationMapper.toDetailedDTO(organization);
         System.out.println(response.getProducts().size());
         organizationDTO.setProducts(response.getProducts());
+
+        //todo: logo client??
+
         organizationDTO.setLogo("Logo1");
 
         return organizationDTO;

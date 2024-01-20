@@ -12,7 +12,7 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface OrganizationMapper {
 
-    List<OrganizationDTO> toDTO(List<Organization> organization);
-
-    OrganizationDetailedDTO toDTO(Organization organization);
+    List<OrganizationDTO> toDetailedListDTO(List<Organization> organization);
+    OrganizationDetailedDTO toDetailedDTO(Organization organization);
+    OrganizationDTO toSimpleDTO(Organization organization);
 }

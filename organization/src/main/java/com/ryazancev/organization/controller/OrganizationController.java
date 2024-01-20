@@ -1,5 +1,6 @@
 package com.ryazancev.organization.controller;
 
+import com.ryazancev.clients.organization.OrganizationDTO;
 import com.ryazancev.clients.organization.OrganizationDetailedDTO;
 import com.ryazancev.clients.organization.OrganizationsListResponse;
 import com.ryazancev.organization.service.OrganizationService;
@@ -26,7 +27,12 @@ public class OrganizationController {
     }
 
     @GetMapping("/{organizationId}")
-    public OrganizationDetailedDTO getById(@PathVariable("organizationId") Long organizationId) {
+    public OrganizationDTO getById(@PathVariable("organizationId") Long organizationId) {
         return organizationService.getById(organizationId);
+    }
+
+    @GetMapping("/{organizationId}/details")
+    public OrganizationDetailedDTO getDetailedById(@PathVariable("organizationId") Long organizationId) {
+        return organizationService.getDetailedById(organizationId);
     }
 }
