@@ -1,9 +1,10 @@
 package com.ryazancev.clients.product;
 
+import com.ryazancev.config.FeignClientsConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "product")
+@FeignClient(name = "product", configuration = FeignClientsConfiguration.class)
 public interface ProductClient {
     @GetMapping("api/v1/products/organizations/{organizationId}")
     ProductListResponse getByOrganizationId(@PathVariable("organizationId") Long organizationId);

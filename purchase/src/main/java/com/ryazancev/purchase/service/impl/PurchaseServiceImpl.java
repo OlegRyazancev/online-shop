@@ -10,9 +10,13 @@ import com.ryazancev.clients.purchase.PurchasePostDTO;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;
+import com.ryazancev.purchase.util.exception.IncorrectBalanceException;
+import com.ryazancev.purchase.util.exception.OutOfStockException;
+import com.ryazancev.purchase.util.exception.PurchasesNotFoundException;
 import com.ryazancev.purchase.util.mappers.PurchaseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,12 +47,17 @@ public class PurchaseServiceImpl implements PurchaseService {
         Integer availableProductsInStock = selectedProduct.getQuantityInStock();
         Double availableCustomerBalance = selectedCustomer.getBalance();
 
-        //todo: replace by custom exceptions
         if (availableCustomerBalance < selectedProductPrice) {
-            throw new IllegalArgumentException("Customer doesn't have enough money to purchase the product");
+            throw new IncorrectBalanceException(
+                    "Customer doesn't have enough money to purchase the product",
+                    HttpStatus.BAD_REQUEST
+            );
         }
         if (availableProductsInStock == 0) {
-            throw new IllegalArgumentException("No available products in stock");
+            throw new OutOfStockException(
+                    "No available products in stock",
+                    HttpStatus.CONFLICT
+            );
         }
 
         //todo: make async
@@ -69,6 +78,12 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public CustomerPurchasesResponse getByCustomerId(Long customerId) {
         List<Purchase> purchases = purchaseRepository.findByCustomerId(customerId);
+        if (purchases.isEmpty()) {
+            throw new PurchasesNotFoundException(
+                    "No purchases found for customer with this ID",
+                    HttpStatus.NOT_FOUND
+            );
+        }
         return CustomerPurchasesResponse.builder()
                 .purchases(purchaseMapper.toDetailedDTO(purchases))
                 .build();

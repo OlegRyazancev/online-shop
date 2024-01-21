@@ -1,13 +1,14 @@
 package com.ryazancev.clients.purchase;
 
 import com.ryazancev.clients.customer.CustomerPurchasesResponse;
+import com.ryazancev.config.FeignClientsConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "purchase")
+@FeignClient(name = "purchase", configuration = FeignClientsConfiguration.class)
 public interface PurchaseClient {
 
     @PostMapping("api/v1/purchases")
