@@ -1,6 +1,5 @@
 package com.ryazancev.clients.product;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ryazancev.clients.organization.OrganizationDTO;
 import lombok.*;
 

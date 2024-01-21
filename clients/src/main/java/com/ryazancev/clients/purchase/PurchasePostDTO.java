@@ -1,9 +1,6 @@
 package com.ryazancev.clients.purchase;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Setter
 @Getter

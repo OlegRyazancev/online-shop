@@ -1,8 +1,8 @@
 package com.ryazancev.product.controller;
 
+import com.ryazancev.clients.product.ProductCreateDTO;
 import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductListResponse;
-import com.ryazancev.clients.product.ProductCreateDTO;
 import com.ryazancev.clients.product.ProductUpdateDTO;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
