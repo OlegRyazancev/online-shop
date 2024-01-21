@@ -1,4 +1,4 @@
-package com.ryazancev.customer.util.mappers;
+package com.ryazancev.customer.util.mapper;
 
 import com.ryazancev.clients.customer.CustomerDTO;
 import com.ryazancev.customer.model.Customer;
