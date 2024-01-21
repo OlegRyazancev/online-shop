@@ -102,6 +102,14 @@ services:
     networks:
       - online-shop
 
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - online-shop
+
 networks:
   online-shop:
     driver: bridge
