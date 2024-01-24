@@ -19,6 +19,11 @@ spring:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
 eureka:
   client:
     service-url:
