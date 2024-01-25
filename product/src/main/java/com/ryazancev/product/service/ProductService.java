@@ -17,12 +17,7 @@ public interface ProductService {
 
     ProductDetailedDTO updateQuantity(Long productId, Integer quantity);
 
-    Boolean isOrganizationProduct(Long productId, Long organizationId);
-
     ProductDetailedDTO update(ProductUpdateDTO productUpdateDTO);
-
-    //todo:delete products
-
 
     void delete(Long productId);
 }

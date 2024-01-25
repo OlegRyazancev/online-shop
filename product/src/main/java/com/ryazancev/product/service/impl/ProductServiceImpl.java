@@ -84,11 +84,6 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @Override
-    public Boolean isOrganizationProduct(Long productId, Long organizationId) {
-        return productRepository.existsByIdAndOrganizationId(productId, organizationId);
-    }
-
     @Transactional
     @Override
     public ProductDetailedDTO update(ProductUpdateDTO productUpdateDTO) {

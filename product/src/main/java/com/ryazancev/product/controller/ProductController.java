@@ -44,11 +44,6 @@ public class ProductController {
         return productService.updateQuantity(productId, quantity);
     }
 
-    @GetMapping("/{productId}/check-organization")
-    public Boolean isOrganizationProduct(@PathVariable("productId") Long productId, @RequestParam("organizationId") Long organizationId) {
-        return productService.isOrganizationProduct(productId, organizationId);
-    }
-
     @PutMapping
     public ProductDetailedDTO update(@RequestBody ProductUpdateDTO productUpdateDTO) {
         log.info("Product update id: {}", productUpdateDTO.getId());
