@@ -1,8 +1,6 @@
 package com.ryazancev.organization.service;
 
-import com.ryazancev.clients.organization.OrganizationDTO;
-import com.ryazancev.clients.organization.OrganizationDetailedDTO;
-import com.ryazancev.clients.organization.OrganizationsListResponse;
+import com.ryazancev.clients.organization.*;
 import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductUpdateDTO;
 
@@ -14,5 +12,8 @@ public interface OrganizationService {
 
     OrganizationDetailedDTO getDetailedById(Long organizationId);
 
-    ProductDetailedDTO update(Long organizationId, ProductUpdateDTO productUpdateDTO);
+
+    OrganizationDetailedDTO register(OrganizationCreateDTO organizationCreateDTO);
+
+    OrganizationDetailedDTO update(OrganizationUpdateDTO organizationUpdateDTO);
 }

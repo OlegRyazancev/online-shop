@@ -1,8 +1,6 @@
 package com.ryazancev.organization.controller;
 
-import com.ryazancev.clients.organization.OrganizationDTO;
-import com.ryazancev.clients.organization.OrganizationDetailedDTO;
-import com.ryazancev.clients.organization.OrganizationsListResponse;
+import com.ryazancev.clients.organization.*;
 import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductUpdateDTO;
 import com.ryazancev.organization.service.OrganizationService;
@@ -21,7 +19,7 @@ public class OrganizationController {
     private final OrganizationService organizationService;
 
     @GetMapping
-    public OrganizationsListResponse getOrganizations() {
+    public OrganizationsListResponse getAll() {
         return organizationService.getAll();
     }
 
@@ -35,23 +33,16 @@ public class OrganizationController {
         return organizationService.getDetailedById(organizationId);
     }
 
-    //todo: register organization
+    @PostMapping
+    public OrganizationDetailedDTO register(@RequestBody OrganizationCreateDTO organizationCreateDTO) {
+        return organizationService.register(organizationCreateDTO);
+    }
 
-    //todo: update organization
+    @PutMapping
+    public OrganizationDetailedDTO update(@RequestBody OrganizationUpdateDTO organizationUpdateDTO) {
+        return organizationService.update(organizationUpdateDTO);
+    }
 
     //todo: get products by organizationId
 
-    @PutMapping("/{organizationId}/products")
-    public ProductDetailedDTO updateProduct(
-            @PathVariable("organizationId") Long organizationId,
-            @RequestBody ProductUpdateDTO productUpdateDTO) {
-
-        log.info("Product update id: {}", productUpdateDTO.getId());
-        return organizationService.update(organizationId, productUpdateDTO);
-    }
-    //todo: update product
-
-    //todo:create product
-
-    //todo: delete product
 }

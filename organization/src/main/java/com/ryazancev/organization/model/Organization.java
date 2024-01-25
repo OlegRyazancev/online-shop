@@ -19,12 +19,13 @@ public class Organization implements Serializable {
 
     @Id
     @SequenceGenerator(
-            name = "organization_id_sequence",
-            sequenceName = "organization_id_sequence"
+            name = "organizations_id_seq",
+            sequenceName = "organizations_id_seq",
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "organization_id_sequence"
+            generator = "organizations_id_seq"
     )
     private Long id;
 
@@ -33,6 +34,9 @@ public class Organization implements Serializable {
 
     @Column(name = "description", unique = true)
     private String description;
+
+    @Column(name = "logo")
+    private String logo;
 
     //todo: add logo (logo-service)
 
