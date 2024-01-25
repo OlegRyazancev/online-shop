@@ -1,8 +1,6 @@
 package com.ryazancev.organization.service;
 
 import com.ryazancev.clients.organization.*;
-import com.ryazancev.clients.product.ProductDetailedDTO;
-import com.ryazancev.clients.product.ProductUpdateDTO;
 
 public interface OrganizationService {
 

@@ -1,8 +1,6 @@
 package com.ryazancev.organization.controller;
 
 import com.ryazancev.clients.organization.*;
-import com.ryazancev.clients.product.ProductDetailedDTO;
-import com.ryazancev.clients.product.ProductUpdateDTO;
 import com.ryazancev.organization.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

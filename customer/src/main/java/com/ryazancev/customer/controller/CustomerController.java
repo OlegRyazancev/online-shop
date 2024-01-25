@@ -1,7 +1,6 @@
 package com.ryazancev.customer.controller;
 
 import com.ryazancev.clients.customer.CustomerDTO;
-import com.ryazancev.clients.customer.CustomerPurchasesResponse;
 import com.ryazancev.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,14 +31,6 @@ public class CustomerController {
         log.info("Request to increase customer balance. id {}, amount: {}", customerId, balance);
         return customerWithNewBalance;
     }
-
-    @GetMapping("/{customerId}/purchases")
-    public CustomerPurchasesResponse getPurchasesByCustomerId(@PathVariable("customerId") Long customerId) {
-        CustomerPurchasesResponse purchases = customerService.getPurchasesByCustomerId(customerId);
-        log.info("Request to get purchases by customer id: {}", customerId);
-        return purchases;
-    }
-
 
     //todo: add method to watch notifications
 

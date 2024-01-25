@@ -1,8 +1,6 @@
 package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.clients.customer.CustomerDTO;
-import com.ryazancev.clients.customer.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.PurchaseClient;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
@@ -22,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
-    private final PurchaseClient purchaseClient;
 
     @Override
     public CustomerDTO getById(Long customerId) {
@@ -43,12 +40,6 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setBalance(balance);
         customerRepository.save(existing);
         return customerMapper.toDTO(existing);
-    }
-
-    @Override
-    public CustomerPurchasesResponse getPurchasesByCustomerId(Long customerId) {
-        Customer existing = findCustomerById(customerId);
-        return purchaseClient.findByCustomerId(existing.getId());
     }
 
     private Customer findCustomerById(Long customerId) {

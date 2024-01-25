@@ -2,9 +2,7 @@ package com.ryazancev.organization.service.impl;
 
 import com.ryazancev.clients.organization.*;
 import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.ProductDetailedDTO;
 import com.ryazancev.clients.product.ProductListResponse;
-import com.ryazancev.clients.product.ProductUpdateDTO;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
