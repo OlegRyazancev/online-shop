@@ -46,11 +46,10 @@ public class ProductController {
 
     @PutMapping
     public ProductDetailedDTO update(@RequestBody ProductUpdateDTO productUpdateDTO) {
-        log.info("Product update id: {}", productUpdateDTO.getId());
-
         return productService.update(productUpdateDTO);
     }
 
+    //todo: add global exception handler and custom exceptions
     //todo: delete product
 
     //todo: get Reviews and rating of a product (communicate to review service)

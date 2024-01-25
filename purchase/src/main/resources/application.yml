@@ -5,6 +5,7 @@ spring:
   application:
     name: purchase
 
+  #MongoDB connection
   data:
     mongodb:
       host: ${MONGO_HOST}
@@ -20,16 +21,16 @@ spring:
         format_sql: true
     show-sql: true
 
+#Zipkin
 management:
   tracing:
     sampling:
       probability: 1.0
 
+#Eureka
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
-      fetch-registry: true
-      register-with-eureka: true
-  instance:
-    preferIpAddress: true
+    fetch-registry: true
+    register-with-eureka: true

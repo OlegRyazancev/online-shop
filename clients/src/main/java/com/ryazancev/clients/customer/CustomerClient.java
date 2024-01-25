@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "customer", configuration = FeignClientsConfiguration.class)
+@FeignClient(
+        name = "customer",
+        configuration = FeignClientsConfiguration.class
+)
 public interface CustomerClient {
 
     @GetMapping("api/v1/customers/{customerId}")

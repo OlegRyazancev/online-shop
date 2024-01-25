@@ -6,10 +6,12 @@ import com.ryazancev.clients.product.*;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.exception.custom.ProductCreationException;
+import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import com.ryazancev.product.util.mappers.ProductMapper;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,32 +31,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductListResponse getAll() {
         List<Product> products = productRepository.findAll();
-        List<ProductDTO> productsDTO = productMapper.toDTO(products);
+        List<ProductDTO> productsDTO = productMapper.toListDTO(products);
         return ProductListResponse.builder()
                 .products(productsDTO)
                 .build();
     }
 
-    @Transactional
-    @Override
-    public ProductDetailedDTO create(ProductCreateDTO productCreateDTO) {
-
-        //todo: add checks name, etc
-        Product productToSave = productMapper.toEntity(productCreateDTO);
-        Product savedProduct = productRepository.save(productToSave);
-        ProductDetailedDTO savedProductDetailedDTO = productMapper.toDTO(savedProduct);
-
-        OrganizationDTO productOrganization = organizationClient.getById(savedProduct.getOrganizationId());
-        savedProductDetailedDTO.setOrganization(productOrganization);
-        return savedProductDetailedDTO;
-    }
-
-
     @Override
     public ProductDetailedDTO getById(Long productId) {
         Product existing = getProductById(productId);
 
-        ProductDetailedDTO productDetailedDTO = productMapper.toDTO(existing);
+        ProductDetailedDTO productDetailedDTO = productMapper.toDetailedDTO(existing);
 
         OrganizationDTO productOrganization = organizationClient.getById(existing.getOrganizationId());
         productDetailedDTO.setOrganization(productOrganization);
@@ -67,9 +54,28 @@ public class ProductServiceImpl implements ProductService {
     public ProductListResponse getByOrganizationId(Long organizationId) {
         List<Product> products = productRepository.findByOrganizationId(organizationId);
         return ProductListResponse.builder()
-                .products(productMapper.toDTO(products))
+                .products(productMapper.toListDTO(products))
                 .build();
 
+    }
+
+    @Transactional
+    @Override
+    public ProductDetailedDTO create(ProductCreateDTO productCreateDTO) {
+
+        if (productRepository.findByProductName(productCreateDTO.getProductName()).isPresent()) {
+            throw new ProductCreationException(
+                    "Organization with this name already exists",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        Product productToSave = productMapper.toEntity(productCreateDTO);
+        Product savedProduct = productRepository.save(productToSave);
+        ProductDetailedDTO savedProductDetailedDTO = productMapper.toDetailedDTO(savedProduct);
+
+        OrganizationDTO productOrganization = organizationClient.getById(savedProduct.getOrganizationId());
+        savedProductDetailedDTO.setOrganization(productOrganization);
+        return savedProductDetailedDTO;
     }
 
     @Transactional
@@ -80,15 +86,16 @@ public class ProductServiceImpl implements ProductService {
         }
         Product existing = getProductById(productId);
         existing.setQuantityInStock(quantity);
-        return productMapper.toDTO(existing);
+        return productMapper.toDetailedDTO(existing);
 
     }
 
     @Transactional
     @Override
     public ProductDetailedDTO update(ProductUpdateDTO productUpdateDTO) {
+
         Product existing = getProductById(productUpdateDTO.getId());
-        //todo: some checks??
+
         existing.setProductName(productUpdateDTO.getProductName());
         existing.setDescription(productUpdateDTO.getDescription());
         existing.setPrice(productUpdateDTO.getPrice());
@@ -97,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product savedProduct = productRepository.save(existing);
 
-        ProductDetailedDTO savedProductDetailedDTO = productMapper.toDTO(savedProduct);
+        ProductDetailedDTO savedProductDetailedDTO = productMapper.toDetailedDTO(savedProduct);
 
         OrganizationDTO productOrganization = organizationClient.getById(existing.getOrganizationId());
         savedProductDetailedDTO.setOrganization(productOrganization);
@@ -105,14 +112,11 @@ public class ProductServiceImpl implements ProductService {
         return savedProductDetailedDTO;
     }
 
-    @Transactional
-    @Override
-    public void delete(Long productId) {
-
-    }
-
     private Product getProductById(Long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new NotFoundException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException(
+                        "Product not found",
+                        HttpStatus.NOT_FOUND
+                ));
     }
 }

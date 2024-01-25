@@ -1,4 +1,4 @@
-package com.ryazancev.purchase.util.exception;
+package com.ryazancev.customer.util.exception.custom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,10 +8,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PurchasesNotFoundException extends RuntimeException{
+public class CustomerNotFoundException extends RuntimeException {
     private HttpStatus httpStatus;
 
-    public PurchasesNotFoundException(String message, HttpStatus httpStatus) {
+    public CustomerNotFoundException(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

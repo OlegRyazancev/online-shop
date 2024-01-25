@@ -6,10 +6,9 @@ import com.ryazancev.clients.product.ProductListResponse;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.util.exception.OrganizationCreationException;
-import com.ryazancev.organization.util.exception.OrganizationNotFoundException;
+import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
+import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.organization.util.mappers.OrganizationMapper;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -41,27 +40,17 @@ public class OrganizationServiceImpl implements OrganizationService {
     public OrganizationDTO getById(Long organizationId) {
         Organization existing = findById(organizationId);
 
-
         return organizationMapper.toSimpleDTO(existing);
     }
 
-
     @Override
     public OrganizationDetailedDTO getDetailedById(Long organizationId) {
-        //todo:add exception checks
+        Organization existing = findById(organizationId);
 
-        Organization organization = organizationRepository.findById(organizationId)
-                .orElseThrow(() ->
-                        new NotFoundException("Organization not found"));
+        ProductListResponse orgProducts = productClient.getByOrganizationId(organizationId);
 
-        ProductListResponse response = productClient.getByOrganizationId(organizationId);
-        OrganizationDetailedDTO organizationDTO = organizationMapper.toDetailedDTO(organization);
-        System.out.println(response.getProducts().size());
-        organizationDTO.setProducts(response.getProducts());
-
-        //todo: logo client??
-
-        organizationDTO.setLogo("Logo1");
+        OrganizationDetailedDTO organizationDTO = organizationMapper.toDetailedDTO(existing);
+        organizationDTO.setProducts(orgProducts.getProducts());
 
         return organizationDTO;
     }
@@ -75,23 +64,14 @@ public class OrganizationServiceImpl implements OrganizationService {
                     HttpStatus.BAD_REQUEST
             );
         }
-
         Organization organizationToSave = organizationMapper.toEntity(organizationCreateDTO);
         Organization savedOrganization = organizationRepository.save(organizationToSave);
         return organizationMapper.toDetailedDTO(savedOrganization);
-
     }
 
     @Transactional
     @Override
     public OrganizationDetailedDTO update(OrganizationUpdateDTO organizationUpdateDTO) {
-        if (organizationRepository.findByName(organizationUpdateDTO.getName()).isPresent()) {
-            throw new OrganizationCreationException(
-                    "Organization with this name already exists",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
         Organization existing = findById(organizationUpdateDTO.getId());
         existing.setName(organizationUpdateDTO.getName());
         existing.setDescription(organizationUpdateDTO.getDescription());
@@ -103,11 +83,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private Organization findById(Long organizationId) {
         return organizationRepository.findById(organizationId)
-                .orElseThrow(() ->
-                        new OrganizationNotFoundException(
-                                "Organization not found",
-                                HttpStatus.NOT_FOUND
-                        ));
+                .orElseThrow(() -> new OrganizationNotFoundException(
+                        "Organization not found",
+                        HttpStatus.NOT_FOUND
+                ));
     }
 
 }

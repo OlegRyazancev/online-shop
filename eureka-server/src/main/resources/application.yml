@@ -5,11 +5,13 @@ spring:
 server:
   port: 8761
 
+#Zipkin
 management:
   tracing:
     sampling:
       probability: 1.0
 
+#Eureka
 eureka:
   client:
     fetch-registry: false

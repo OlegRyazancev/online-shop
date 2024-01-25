@@ -4,8 +4,8 @@ import com.ryazancev.clients.customer.CustomerDTO;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
-import com.ryazancev.customer.util.exception.CustomerNotFoundException;
-import com.ryazancev.customer.util.exception.IncorrectBalanceException;
+import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
+import com.ryazancev.customer.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getById(Long customerId) {
-        Customer foundCustomer = findCustomerById(customerId);
+        Customer foundCustomer = findById(customerId);
         return customerMapper.toDTO(foundCustomer);
     }
 
@@ -36,15 +36,18 @@ public class CustomerServiceImpl implements CustomerService {
                     HttpStatus.BAD_REQUEST
             );
         }
-        Customer existing = findCustomerById(customerId);
+        Customer existing = findById(customerId);
         existing.setBalance(balance);
         customerRepository.save(existing);
         return customerMapper.toDTO(existing);
     }
 
-    private Customer findCustomerById(Long customerId) {
+    private Customer findById(Long customerId) {
         return customerRepository.findById(customerId)
                 .orElseThrow(() ->
-                        new CustomerNotFoundException("Customer not found with this ID", HttpStatus.NOT_FOUND));
+                        new CustomerNotFoundException(
+                                "Customer not found with this ID",
+                                HttpStatus.NOT_FOUND
+                        ));
     }
 }

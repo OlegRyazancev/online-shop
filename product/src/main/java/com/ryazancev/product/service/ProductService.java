@@ -19,5 +19,4 @@ public interface ProductService {
 
     ProductDetailedDTO update(ProductUpdateDTO productUpdateDTO);
 
-    void delete(Long productId);
 }

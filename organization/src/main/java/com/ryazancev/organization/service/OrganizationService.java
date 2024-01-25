@@ -10,7 +10,6 @@ public interface OrganizationService {
 
     OrganizationDetailedDTO getDetailedById(Long organizationId);
 
-
     OrganizationDetailedDTO register(OrganizationCreateDTO organizationCreateDTO);
 
     OrganizationDetailedDTO update(OrganizationUpdateDTO organizationUpdateDTO);

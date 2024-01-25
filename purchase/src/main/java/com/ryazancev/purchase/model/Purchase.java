@@ -24,5 +24,4 @@ public class Purchase implements Serializable {
     private Double amount;
     private LocalDateTime purchaseDate;
 
-
 }

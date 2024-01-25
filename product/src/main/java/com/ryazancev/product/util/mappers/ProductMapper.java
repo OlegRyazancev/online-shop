@@ -9,11 +9,13 @@ import org.mapstruct.*;
 import java.util.Arrays;
 import java.util.List;
 
-@Mapper(componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(
+        componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface ProductMapper {
 
-    List<ProductDTO> toDTO(List<Product> products);
+    List<ProductDTO> toListDTO(List<Product> products);
 
     @Mappings({
             @Mapping(target = "keywords", source = "keywords", qualifiedByName = "keywordsToString"),
@@ -23,7 +25,7 @@ public interface ProductMapper {
     @Mappings({
             @Mapping(target = "keywords", source = "keywords", qualifiedByName = "stringToKeywords"),
     })
-    ProductDetailedDTO toDTO(Product product);
+    ProductDetailedDTO toDetailedDTO(Product product);
 
     @Named("stringToKeywords")
     default List<String> stringToKeywords(String string) {

@@ -40,7 +40,4 @@ public class OrganizationController {
     public OrganizationDetailedDTO update(@RequestBody OrganizationUpdateDTO organizationUpdateDTO) {
         return organizationService.update(organizationUpdateDTO);
     }
-
-    //todo: get products by organizationId
-
 }

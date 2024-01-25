@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: customer
+
+  #PostgreSQL connection
   datasource:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
@@ -15,15 +17,18 @@ spring:
         format_sql: true
     show-sql: true
 
+  #Liquibase
   liquibase:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true
 
+#Zipkin
 management:
   tracing:
     sampling:
       probability: 1.0
 
+#Eureka
 eureka:
   client:
     service-url:

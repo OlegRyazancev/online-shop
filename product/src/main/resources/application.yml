@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: product
+
+  #MariaDB connection
   datasource:
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
@@ -14,16 +16,19 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: true
     show-sql: true
+
+  #Liquibase
   liquibase:
     change-log: classpath:liquibase/db.changelog.yml
     enabled: true
 
+#Zipkin
 management:
   tracing:
     sampling:
       probability: 1.0
 
-
+#Eureka
 eureka:
   client:
     service-url:

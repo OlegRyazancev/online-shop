@@ -10,9 +10,9 @@ import com.ryazancev.clients.purchase.PurchasePostDTO;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;
-import com.ryazancev.purchase.util.exception.IncorrectBalanceException;
-import com.ryazancev.purchase.util.exception.OutOfStockException;
-import com.ryazancev.purchase.util.exception.PurchasesNotFoundException;
+import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
+import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
+import com.ryazancev.purchase.util.exception.custom.PurchasesNotFoundException;
 import com.ryazancev.purchase.util.mappers.PurchaseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,7 +85,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             );
         }
         return CustomerPurchasesResponse.builder()
-                .purchases(purchaseMapper.toDetailedDTO(purchases))
+                .purchases(purchaseMapper.toDetailedListDTO(purchases))
                 .build();
     }
 }

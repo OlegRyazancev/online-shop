@@ -1,4 +1,4 @@
-package com.ryazancev.organization.util.exception;
+package com.ryazancev.purchase.util.exception.custom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,12 +8,12 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Setter
-public class OrganizationNotFoundException extends RuntimeException {
+public class IncorrectBalanceException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
 
-    public OrganizationNotFoundException(String message, HttpStatus httpStatus) {
+    public IncorrectBalanceException(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

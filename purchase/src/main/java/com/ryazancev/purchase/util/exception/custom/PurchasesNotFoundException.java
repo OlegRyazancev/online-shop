@@ -1,4 +1,4 @@
-package com.ryazancev.organization.util.exception;
+package com.ryazancev.purchase.util.exception.custom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,11 +8,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Setter
-public class OrganizationCreationException extends RuntimeException {
+public class PurchasesNotFoundException extends RuntimeException{
     private HttpStatus httpStatus;
 
-
-    public OrganizationCreationException(String message, HttpStatus httpStatus) {
+    public PurchasesNotFoundException(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

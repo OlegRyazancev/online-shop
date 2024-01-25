@@ -1,7 +1,9 @@
-package com.ryazancev.customer.util.exception;
+package com.ryazancev.organization.util.exception;
 
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
+import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
+import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -12,26 +14,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class CustomerGlobalExceptionHandler {
+public class OrganizationExceptionHandler {
 
-    @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<ExceptionBody> handleCustomerNotFound(CustomerNotFoundException e) {
+    @ExceptionHandler(OrganizationCreationException.class)
+    public ResponseEntity<ExceptionBody> handleOrganizationCreation(OrganizationCreationException e) {
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
                         e.getMessage(),
-                        ServiceStage.CUSTOMER,
+                        ServiceStage.ORGANIZATION,
                         e.getHttpStatus()
                 ));
     }
 
-    @ExceptionHandler(IncorrectBalanceException.class)
-    public ResponseEntity<ExceptionBody> handleBalance(IncorrectBalanceException e) {
+    @ExceptionHandler(OrganizationNotFoundException.class)
+    public ResponseEntity<ExceptionBody> handleOrganizationNotFound(OrganizationNotFoundException e) {
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
                         e.getMessage(),
-                        ServiceStage.CUSTOMER,
+                        ServiceStage.ORGANIZATION,
                         e.getHttpStatus()
                 ));
     }
@@ -46,25 +48,11 @@ public class CustomerGlobalExceptionHandler {
                         ConstraintViolation::getMessage
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
-        exceptionBody.setServiceStage(ServiceStage.CUSTOMER);
+        exceptionBody.setServiceStage(ServiceStage.ORGANIZATION);
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(final Exception e) {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ExceptionBody(
-                        "Internal error: " + e.getMessage(),
-                        ServiceStage.CUSTOMER,
-                        HttpStatus.INTERNAL_SERVER_ERROR
-                ));
-    }
-
-
-    ///GLOBAL EXCEPTION
 
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(OnlineShopException e) {
@@ -75,6 +63,17 @@ public class CustomerGlobalExceptionHandler {
                         e.getErrors(),
                         e.getServiceStage(),
                         e.getHttpStatus()
+                ));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionBody> handleAny(final Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionBody(
+                        "Internal error: " + e.getMessage(),
+                        ServiceStage.ORGANIZATION,
+                        HttpStatus.INTERNAL_SERVER_ERROR
                 ));
     }
 }
