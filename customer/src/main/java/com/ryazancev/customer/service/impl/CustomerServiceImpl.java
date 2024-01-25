@@ -1,6 +1,7 @@
 package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.clients.customer.CustomerDTO;
+import com.ryazancev.clients.customer.CustomerDetailedDTO;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
@@ -27,9 +28,15 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.toDTO(foundCustomer);
     }
 
+    @Override
+    public CustomerDetailedDTO getDetailedById(Long customerId) {
+        Customer foundCustomer = findById(customerId);
+        return customerMapper.toDetailedDTO(foundCustomer);
+    }
+
     @Transactional
     @Override
-    public CustomerDTO updateBalance(Long customerId, Double balance) {
+    public CustomerDetailedDTO updateBalance(Long customerId, Double balance) {
         if (balance <= 0) {
             throw new IncorrectBalanceException(
                     "Balance must be positive",
@@ -39,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer existing = findById(customerId);
         existing.setBalance(balance);
         customerRepository.save(existing);
-        return customerMapper.toDTO(existing);
+        return customerMapper.toDetailedDTO(existing);
     }
 
     private Customer findById(Long customerId) {

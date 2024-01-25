@@ -19,9 +19,12 @@ public class Purchase implements Serializable {
 
     @Id
     private String id;
-    private Long customerId;
-    private Long productId;
-    private Double amount;
-    private LocalDateTime purchaseDate;
 
+    private Long customerId;
+
+    private Long productId;
+
+    private Double amount;
+
+    private LocalDateTime purchaseDate;
 }

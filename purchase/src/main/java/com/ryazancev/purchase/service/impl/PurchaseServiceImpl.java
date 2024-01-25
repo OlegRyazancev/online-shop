@@ -1,7 +1,7 @@
 package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.customer.CustomerClient;
-import com.ryazancev.clients.customer.CustomerDTO;
+import com.ryazancev.clients.customer.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.CustomerPurchasesResponse;
 import com.ryazancev.clients.product.ProductClient;
 import com.ryazancev.clients.product.ProductDetailedDTO;
@@ -13,7 +13,7 @@ import com.ryazancev.purchase.service.PurchaseService;
 import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
 import com.ryazancev.purchase.util.exception.custom.PurchasesNotFoundException;
-import com.ryazancev.purchase.util.mappers.PurchaseMapper;
+import com.ryazancev.purchase.util.mapper.PurchaseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +25,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PurchaseServiceImpl implements PurchaseService {
 
@@ -39,9 +40,9 @@ public class PurchaseServiceImpl implements PurchaseService {
     public PurchaseDetailedDTO processPurchase(PurchasePostDTO purchasePostDTO) {
 
         ProductDetailedDTO selectedProduct = productClient
-                .getInfoById(purchasePostDTO.getProductId());
-        CustomerDTO selectedCustomer = customerClient
-                .getInfoById(purchasePostDTO.getCustomerId());
+                .getDetailedById(purchasePostDTO.getProductId());
+        CustomerDetailedDTO selectedCustomer = customerClient
+                .getDetailedById(purchasePostDTO.getCustomerId());
 
         Double selectedProductPrice = selectedProduct.getPrice();
         Integer availableProductsInStock = selectedProduct.getQuantityInStock();

@@ -8,7 +8,7 @@ import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
-import com.ryazancev.product.util.mappers.ProductMapper;
+import com.ryazancev.product.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,8 +38,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDetailedDTO getById(Long productId) {
-        Product existing = getProductById(productId);
+    public ProductDTO getById(Long productId) {
+        Product existing = findById(productId);
+
+        return productMapper.toSimpleDTO(existing);
+    }
+
+    @Override
+    public ProductDetailedDTO getDetailedById(Long productId) {
+        Product existing = findById(productId);
 
         ProductDetailedDTO productDetailedDTO = productMapper.toDetailedDTO(existing);
 
@@ -84,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
         if (quantity < 0) {
             throw new IllegalArgumentException("Quantity can not be less than 0");
         }
-        Product existing = getProductById(productId);
+        Product existing = findById(productId);
         existing.setQuantityInStock(quantity);
         return productMapper.toDetailedDTO(existing);
 
@@ -94,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDetailedDTO update(ProductUpdateDTO productUpdateDTO) {
 
-        Product existing = getProductById(productUpdateDTO.getId());
+        Product existing = findById(productUpdateDTO.getId());
 
         existing.setProductName(productUpdateDTO.getProductName());
         existing.setDescription(productUpdateDTO.getDescription());
@@ -112,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
         return savedProductDetailedDTO;
     }
 
-    private Product getProductById(Long productId) {
+    private Product findById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(
                         "Product not found",

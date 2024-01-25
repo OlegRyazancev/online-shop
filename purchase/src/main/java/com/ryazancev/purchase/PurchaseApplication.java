@@ -11,7 +11,11 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFeignClients(
         basePackages = "com.ryazancev.clients"
 )
-@ComponentScan(basePackages = {"com.ryazancev.config", "com.ryazancev.purchase"})
+@ComponentScan(
+        basePackages = {
+                "com.ryazancev.config",
+                "com.ryazancev.purchase"
+        })
 public class PurchaseApplication {
 
     public static void main(String[] args) {

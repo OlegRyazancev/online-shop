@@ -1,4 +1,4 @@
-package com.ryazancev.purchase.util.mappers;
+package com.ryazancev.purchase.util.mapper;
 
 import com.ryazancev.clients.purchase.PurchaseDetailedDTO;
 import com.ryazancev.clients.purchase.PurchasePostDTO;

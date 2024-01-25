@@ -1,4 +1,4 @@
-package com.ryazancev.product.util.mappers;
+package com.ryazancev.product.util.mapper;
 
 import com.ryazancev.clients.product.ProductCreateDTO;
 import com.ryazancev.clients.product.ProductDTO;
@@ -14,6 +14,8 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface ProductMapper {
+
+    ProductDTO toSimpleDTO(Product existing);
 
     List<ProductDTO> toListDTO(List<Product> products);
 
@@ -36,4 +38,5 @@ public interface ProductMapper {
     default String keywordsToString(List<String> stringList) {
         return String.join(", ", stringList);
     }
+
 }

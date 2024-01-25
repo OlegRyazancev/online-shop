@@ -21,7 +21,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public CustomerPurchasesResponse findByCustomerId(@PathVariable("customerId") Long customerId) {
+    public CustomerPurchasesResponse getByCustomerId(@PathVariable("customerId") Long customerId) {
         return purchaseService.getByCustomerId(customerId);
     }
 

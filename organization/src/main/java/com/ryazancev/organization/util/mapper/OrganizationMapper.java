@@ -1,4 +1,4 @@
-package com.ryazancev.organization.util.mappers;
+package com.ryazancev.organization.util.mapper;
 
 import com.ryazancev.clients.organization.OrganizationCreateDTO;
 import com.ryazancev.clients.organization.OrganizationDTO;

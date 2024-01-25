@@ -1,15 +1,14 @@
 package com.ryazancev.product.service;
 
-import com.ryazancev.clients.product.ProductCreateDTO;
-import com.ryazancev.clients.product.ProductDetailedDTO;
-import com.ryazancev.clients.product.ProductListResponse;
-import com.ryazancev.clients.product.ProductUpdateDTO;
+import com.ryazancev.clients.product.*;
 
 public interface ProductService {
 
     ProductListResponse getAll();
 
-    ProductDetailedDTO getById(Long productId);
+    ProductDTO getById(Long productId);
+
+    ProductDetailedDTO getDetailedById(Long productId);
 
     ProductListResponse getByOrganizationId(Long organizationId);
 

@@ -1,9 +1,6 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.clients.product.ProductCreateDTO;
-import com.ryazancev.clients.product.ProductDetailedDTO;
-import com.ryazancev.clients.product.ProductListResponse;
-import com.ryazancev.clients.product.ProductUpdateDTO;
+import com.ryazancev.clients.product.*;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +22,13 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ProductDetailedDTO getInfoById(@PathVariable("productId") Long productId) {
+    public ProductDTO getById(@PathVariable("productId") Long productId) {
         return productService.getById(productId);
+    }
+
+    @GetMapping("/{productId}/details")
+    public ProductDetailedDTO getDetailedById(@PathVariable("productId") Long productId) {
+        return productService.getDetailedById(productId);
     }
 
     @GetMapping("/organizations/{organizationId}")

@@ -8,7 +8,7 @@ import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
-import com.ryazancev.organization.util.mappers.OrganizationMapper;
+import com.ryazancev.organization.util.mapper.OrganizationMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -11,7 +11,7 @@ spring:
       host: ${MONGO_HOST}
       port: 27017
       authentication-database: admin
-      database: ${MONGO_DATABASE}
+      database: ${MONGO_PURCHASE_DATABASE}
       username: ${MONGO_INITDB_ROOT_USERNAME}
       password: ${MONGO_INITDB_ROOT_PASSWORD}
   jpa:
