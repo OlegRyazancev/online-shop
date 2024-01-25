@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: customer
+          uri: lb://CUSTOMER
+          predicates:
+            - Path=/api/v1/customers/**
+        - id: purchase
+          uri: lb://PURCHASE
+          predicates:
+            - Path=/api/v1/purchases/**
+        - id: organization
+          uri: lb://ORGANIZATION
+          predicates:
+            - Path=/api/v1/organizations/**
+        - id: purchase
+          uri: lb://PRODUCT
+          predicates:
+            - Path=/api/v1/products/**
+        - id: review
+          uri: lb://REVIEW
+          predicates:
+            - Path=/api/v1/reviews/**
+
+
+
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+      fetch-registry: true
+      register-with-eureka: true
+  instance:
+    preferIpAddress: true
