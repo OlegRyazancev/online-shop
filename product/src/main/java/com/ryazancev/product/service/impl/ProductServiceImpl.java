@@ -3,9 +3,13 @@ package com.ryazancev.product.service.impl;
 import com.ryazancev.clients.organization.OrganizationClient;
 import com.ryazancev.clients.organization.OrganizationDTO;
 import com.ryazancev.clients.product.*;
+import com.ryazancev.clients.review.ReviewClient;
+import com.ryazancev.clients.review.ReviewProductDTO;
+import com.ryazancev.clients.review.ReviewsProductResponse;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.exception.custom.InvalidQuantityException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import com.ryazancev.product.util.mapper.ProductMapper;
@@ -27,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     private final OrganizationClient organizationClient;
+    private final ReviewClient reviewClient;
 
     @Override
     public ProductListResponse getAll() {
@@ -50,10 +55,17 @@ public class ProductServiceImpl implements ProductService {
 
         ProductDetailedDTO productDetailedDTO = productMapper.toDetailedDTO(existing);
 
-        OrganizationDTO productOrganization = organizationClient.getById(existing.getOrganizationId());
-        productDetailedDTO.setOrganization(productOrganization);
-        //todo: get reviews (Review client)
-        //todo: count average rating (Review client)
+        OrganizationDTO organization = organizationClient.getById(existing.getOrganizationId());
+        productDetailedDTO.setOrganization(organization);
+
+        log.info(String.valueOf(existing.getId()));
+        ReviewsProductResponse response = reviewClient.getByProductId(existing.getId());
+        List<ReviewProductDTO> reviews = response.getReviews();
+        productDetailedDTO.setReviews(reviews);
+
+        Double averageRating = calculateAverageRating(reviews);
+        productDetailedDTO.setAverageRating(averageRating);
+
         return productDetailedDTO;
     }
 
@@ -89,7 +101,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDetailedDTO updateQuantity(Long productId, Integer quantity) {
         if (quantity < 0) {
-            throw new IllegalArgumentException("Quantity can not be less than 0");
+            throw new InvalidQuantityException(
+                    "Quantity can not be less than 0",
+                    HttpStatus.BAD_REQUEST
+            );
         }
         Product existing = findById(productId);
         existing.setQuantityInStock(quantity);
@@ -125,5 +140,12 @@ public class ProductServiceImpl implements ProductService {
                         "Product not found",
                         HttpStatus.NOT_FOUND
                 ));
+    }
+
+    private Double calculateAverageRating(List<ReviewProductDTO> reviews) {
+        return reviews.stream()
+                .mapToDouble(ReviewProductDTO::getRating)
+                .average()
+                .orElse(0.0);
     }
 }

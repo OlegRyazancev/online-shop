@@ -1,6 +1,7 @@
 package com.ryazancev.clients.product;
 
 import com.ryazancev.clients.organization.OrganizationDTO;
+import com.ryazancev.clients.review.ReviewProductDTO;
 import lombok.*;
 
 import java.util.List;
@@ -25,6 +26,10 @@ public class ProductDetailedDTO {
     private Integer quantityInStock;
 
     private List<String> keywords;
+
+    private List<ReviewProductDTO> reviews;
+
+    private Double averageRating;
 
     //todo: discount field
 
