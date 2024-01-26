@@ -27,6 +27,10 @@ spring:
           uri: lb://REVIEW
           predicates:
             - Path=/api/v1/reviews/**
+        - id: image
+          uri: lb://IMAGE
+          predicates:
+            - Path=/api/v1/images/**
 
 
 
