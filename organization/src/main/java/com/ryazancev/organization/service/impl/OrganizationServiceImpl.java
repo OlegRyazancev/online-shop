@@ -64,8 +64,10 @@ public class OrganizationServiceImpl implements OrganizationService {
                     HttpStatus.BAD_REQUEST
             );
         }
+
         Organization organizationToSave = organizationMapper.toEntity(organizationCreateDTO);
         Organization savedOrganization = organizationRepository.save(organizationToSave);
+        //todo: imageService upload image to Minio
         return organizationMapper.toDetailedDTO(savedOrganization);
     }
 
