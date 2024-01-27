@@ -33,6 +33,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewsCustomerResponse getByCustomerId(Long customerId) {
+
         CustomerDTO foundCustomer = customerClient.getById(customerId);
         List<Review> reviews = reviewRepository.findByCustomerId(foundCustomer.getId());
         List<ReviewCustomerDTO> reviewsDTO = reviewMapper.toCustomerDTO(reviews);
@@ -46,6 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
                         );
             }
         }
+
         return ReviewsCustomerResponse.builder()
                 .reviews(reviewsDTO)
                 .build();
@@ -53,6 +55,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewsProductResponse getByProductId(Long productId) {
+
         ProductSimpleDTO foundProduct = productClient.getById(productId);
         List<Review> reviews = reviewRepository.findByProductId(foundProduct.getId());
         List<ReviewProductDTO> reviewsDTO = reviewMapper.toProductDTO(reviews);
@@ -75,6 +78,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public ReviewDetailedDTO create(ReviewPostDTO reviewPostDTO) {
+
         try {
             customerClient.getById(reviewPostDTO.getCustomerId());
             productClient.getById(reviewPostDTO.getProductId());

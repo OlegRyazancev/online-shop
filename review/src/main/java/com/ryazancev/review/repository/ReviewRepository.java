@@ -10,5 +10,5 @@ import java.util.List;
 public interface ReviewRepository extends MongoRepository<Review, String> {
     List<Review> findByCustomerId(Long customerId);
 
-    List<Review> findByProductId(Long productId);
+    List<Review> findByProductId(Long id);
 }

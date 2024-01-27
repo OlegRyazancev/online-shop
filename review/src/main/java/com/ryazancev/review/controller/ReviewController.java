@@ -19,18 +19,24 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/customers/{customerId}")
-    public ReviewsCustomerResponse getByCustomerId(@PathVariable("customerId") Long customerId) {
-        return reviewService.getByCustomerId(customerId);
+    @GetMapping("/customers/{id}")
+    public ReviewsCustomerResponse getByCustomerId(
+            @PathVariable("id") Long id) {
+
+        return reviewService.getByCustomerId(id);
     }
 
-    @GetMapping("/products/{productId}")
-    public ReviewsProductResponse getByProductId(@PathVariable("productId") Long productId) {
-        return reviewService.getByProductId(productId);
+    @GetMapping("/products/{id}")
+    public ReviewsProductResponse getByProductId(
+            @PathVariable("id") Long id) {
+
+        return reviewService.getByProductId(id);
     }
 
     @PostMapping
-    public ReviewDetailedDTO create(@RequestBody ReviewPostDTO reviewPostDTO) {
+    public ReviewDetailedDTO create(
+            @RequestBody ReviewPostDTO reviewPostDTO) {
+
         return reviewService.create(reviewPostDTO);
     }
 }

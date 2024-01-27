@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 public class ReviewExceptionHandler {
 
     @ExceptionHandler(ReviewCreationException.class)
-    public ResponseEntity<ExceptionBody> handleReviewCreation(ReviewCreationException e) {
+    public ResponseEntity<ExceptionBody> handleReviewCreation(
+            ReviewCreationException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -27,7 +29,8 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            final ConstraintViolationException e) {
+            ConstraintViolationException e) {
+
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -36,13 +39,16 @@ public class ReviewExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.REVIEW);
+
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
     }
 
     @ExceptionHandler(OnlineShopException.class)
-    public ResponseEntity<ExceptionBody> handleOnlineShop(OnlineShopException e) {
+    public ResponseEntity<ExceptionBody> handleOnlineShop(
+            OnlineShopException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -54,7 +60,9 @@ public class ReviewExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(final Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(
+            Exception e) {
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(

@@ -9,7 +9,7 @@ public interface ReviewService {
 
     ReviewsCustomerResponse getByCustomerId(Long customerId);
 
-    ReviewsProductResponse getByProductId(Long productId);
+    ReviewsProductResponse getByProductId(Long id);
 
     ReviewDetailedDTO create(ReviewPostDTO reviewPostDTO);
 }
