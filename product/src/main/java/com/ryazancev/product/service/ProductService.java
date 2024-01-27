@@ -3,26 +3,26 @@ package com.ryazancev.product.service;
 import com.ryazancev.clients.product.*;
 import com.ryazancev.clients.review.ReviewDetailedDTO;
 import com.ryazancev.clients.review.ReviewPostDTO;
-import com.ryazancev.clients.review.ReviewProductDTO;
 import com.ryazancev.clients.review.ReviewsProductResponse;
 
 public interface ProductService {
 
     ProductListResponse getAll();
 
-    ProductDTO getById(Long productId);
+    ProductSimpleDTO getSimpleById(Long id);
 
-    ProductDetailedDTO getDetailedById(Long productId);
+    ProductDetailedDTO getDetailedById(Long id);
 
-    ProductListResponse getByOrganizationId(Long organizationId);
-
-    ProductDetailedDTO create(ProductCreateDTO productCreateDTO);
-
-    ProductDetailedDTO updateQuantity(Long productId, Integer quantity);
-
-    ProductDetailedDTO update(ProductUpdateDTO productUpdateDTO);
+    ProductListResponse getByOrganizationId(Long id);
 
     ReviewsProductResponse getReviewsByProductId(Long id);
 
     ReviewDetailedDTO createReview(ReviewPostDTO reviewPostDTO);
+
+    ProductDetailedDTO create(ProductCreateDTO productCreateDTO);
+
+    ProductDetailedDTO updateQuantity(Long id, Integer quantity);
+
+    ProductDetailedDTO update(ProductUpdateDTO productUpdateDTO);
+
 }

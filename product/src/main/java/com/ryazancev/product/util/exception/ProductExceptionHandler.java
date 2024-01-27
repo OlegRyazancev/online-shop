@@ -18,7 +18,9 @@ import java.util.stream.Collectors;
 public class ProductExceptionHandler {
 
     @ExceptionHandler(ProductCreationException.class)
-    public ResponseEntity<ExceptionBody> handleProductCreation(ProductCreationException e) {
+    public ResponseEntity<ExceptionBody> handleProductCreation(
+            ProductCreationException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -29,7 +31,9 @@ public class ProductExceptionHandler {
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ExceptionBody> handleProductNotFound(ProductNotFoundException e) {
+    public ResponseEntity<ExceptionBody> handleProductNotFound(
+            ProductNotFoundException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -40,7 +44,9 @@ public class ProductExceptionHandler {
     }
 
     @ExceptionHandler(InvalidQuantityException.class)
-    public ResponseEntity<ExceptionBody> handleInvalidQuantity(InvalidQuantityException e) {
+    public ResponseEntity<ExceptionBody> handleInvalidQuantity(
+            InvalidQuantityException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -52,7 +58,8 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            final ConstraintViolationException e) {
+            ConstraintViolationException e) {
+
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -61,13 +68,16 @@ public class ProductExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.PRODUCT);
+
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
     }
 
     @ExceptionHandler(OnlineShopException.class)
-    public ResponseEntity<ExceptionBody> handleOnlineShop(OnlineShopException e) {
+    public ResponseEntity<ExceptionBody> handleOnlineShop(
+            OnlineShopException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -79,7 +89,8 @@ public class ProductExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(final Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(

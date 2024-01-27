@@ -21,46 +21,64 @@ public class ProductController {
 
     @GetMapping
     public ProductListResponse getAll() {
+
         return productService.getAll();
     }
 
-    @GetMapping("/{productId}")
-    public ProductDTO getById(@PathVariable("productId") Long productId) {
-        return productService.getById(productId);
+    @GetMapping("/{id}")
+    public ProductSimpleDTO getSimpleProductById(
+            @PathVariable("id") Long id) {
+
+        return productService.getSimpleById(id);
     }
 
-    @GetMapping("/{productId}/details")
-    public ProductDetailedDTO getDetailedById(@PathVariable("productId") Long productId) {
-        return productService.getDetailedById(productId);
+    @GetMapping("/{id}/details")
+    public ProductDetailedDTO getDetailedProductById(
+            @PathVariable("id") Long id) {
+
+        return productService.getDetailedById(id);
     }
 
-    @GetMapping("/organizations/{organizationId}")
-    public ProductListResponse getByOrganizationId(@PathVariable("organizationId") Long organizationId) {
-        return productService.getByOrganizationId(organizationId);
+    @GetMapping("/organizations/{id}")
+    public ProductListResponse getProductsByOrganizationId(
+            @PathVariable("id") Long id) {
+
+        return productService.getByOrganizationId(id);
     }
 
     @GetMapping("/{id}/reviews")
-    public ReviewsProductResponse getReviewsByProductId(@PathVariable("id") Long id) {
+    public ReviewsProductResponse getReviewsByProductId(
+            @PathVariable("id") Long id) {
+
         return productService.getReviewsByProductId(id);
     }
 
     @PostMapping("/reviews")
-    public ReviewDetailedDTO createReview(@RequestBody ReviewPostDTO reviewPostDTO) {
+    public ReviewDetailedDTO createReview(
+            @RequestBody ReviewPostDTO reviewPostDTO) {
+
         return productService.createReview(reviewPostDTO);
     }
 
     @PostMapping
-    public ProductDetailedDTO create(@RequestBody ProductCreateDTO productCreateDTO) {
+    public ProductDetailedDTO createProduct(
+            @RequestBody ProductCreateDTO productCreateDTO) {
+
         return productService.create(productCreateDTO);
     }
 
-    @PutMapping("/{productId}/update-quantity")
-    public ProductDetailedDTO updateQuantity(@PathVariable("productId") Long productId, @RequestParam("quantity") Integer quantity) {
+    @PutMapping("/{id}/update-quantity")
+    public ProductDetailedDTO updateQuantity(
+            @PathVariable("id") Long productId,
+            @RequestParam("quantity") Integer quantity) {
+
         return productService.updateQuantity(productId, quantity);
     }
 
     @PutMapping
-    public ProductDetailedDTO update(@RequestBody ProductUpdateDTO productUpdateDTO) {
+    public ProductDetailedDTO updateProduct(
+            @RequestBody ProductUpdateDTO productUpdateDTO) {
+
         return productService.update(productUpdateDTO);
     }
 

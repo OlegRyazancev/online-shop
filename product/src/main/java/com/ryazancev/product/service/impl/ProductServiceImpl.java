@@ -33,29 +33,37 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductListResponse getAll() {
+
         List<Product> products = productRepository.findAll();
-        List<ProductDTO> productsDTO = productMapper.toListDTO(products);
+        List<ProductSimpleDTO> productsDTO = productMapper.toListDTO(products);
+
         return ProductListResponse.builder()
                 .products(productsDTO)
                 .build();
     }
 
     @Override
-    public ProductDTO getById(Long productId) {
+    public ProductSimpleDTO getSimpleById(Long productId) {
+
         Product existing = findById(productId);
+
         return productMapper.toSimpleDTO(existing);
     }
 
     @Override
     public ProductDetailedDTO getDetailedById(Long productId) {
+
         Product existing = findById(productId);
 
-        ProductDetailedDTO productDetailedDTO = productMapper.toDetailedDTO(existing);
+        ProductDetailedDTO productDetailedDTO = productMapper
+                .toDetailedDTO(existing);
 
-        OrganizationDTO organization = organizationClient.getById(existing.getOrganizationId());
+        OrganizationDTO organization = organizationClient
+                .getById(existing.getOrganizationId());
         productDetailedDTO.setOrganization(organization);
 
-        ReviewsProductResponse response = reviewClient.getByProductId(existing.getId());
+        ReviewsProductResponse response = reviewClient
+                .getByProductId(existing.getId());
         List<ReviewProductDTO> reviews = response.getReviews();
         productDetailedDTO.setReviews(reviews);
 
@@ -67,45 +75,48 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductListResponse getByOrganizationId(Long organizationId) {
-        List<Product> products = productRepository.findByOrganizationId(organizationId);
+
+        List<Product> products = productRepository
+                .findByOrganizationId(organizationId);
+
         return ProductListResponse.builder()
                 .products(productMapper.toListDTO(products))
                 .build();
-
     }
 
     @Transactional
     @Override
     public ProductDetailedDTO create(ProductCreateDTO productCreateDTO) {
 
-        if (productRepository.findByProductName(productCreateDTO.getProductName()).isPresent()) {
+        if (productRepository.findByProductName(
+                productCreateDTO.getProductName()).isPresent()) {
             throw new ProductCreationException(
                     "Organization with this name already exists",
                     HttpStatus.BAD_REQUEST
             );
         }
+
         Product productToSave = productMapper.toEntity(productCreateDTO);
         Product savedProduct = productRepository.save(productToSave);
-        ProductDetailedDTO savedProductDetailedDTO = productMapper.toDetailedDTO(savedProduct);
 
-        OrganizationDTO productOrganization = organizationClient.getById(savedProduct.getOrganizationId());
-        savedProductDetailedDTO.setOrganization(productOrganization);
-        return savedProductDetailedDTO;
+        return createProductDetailedDTO(savedProduct);
     }
 
     @Transactional
     @Override
     public ProductDetailedDTO updateQuantity(Long productId, Integer quantity) {
+
         if (quantity < 0) {
             throw new InvalidQuantityException(
                     "Quantity can not be less than 0",
                     HttpStatus.BAD_REQUEST
             );
         }
+
         Product existing = findById(productId);
         existing.setQuantityInStock(quantity);
-        return productMapper.toDetailedDTO(existing);
 
+        return productMapper.toDetailedDTO(existing);
     }
 
     @Transactional
@@ -114,33 +125,27 @@ public class ProductServiceImpl implements ProductService {
 
         Product existing = findById(productUpdateDTO.getId());
 
-        existing.setProductName(productUpdateDTO.getProductName());
-        existing.setDescription(productUpdateDTO.getDescription());
-        existing.setPrice(productUpdateDTO.getPrice());
-        existing.setQuantityInStock(productUpdateDTO.getQuantityInStock());
-        existing.setKeywords(String.join(", ", productUpdateDTO.getKeywords()));
+        updateProductFields(existing, productUpdateDTO);
 
         Product savedProduct = productRepository.save(existing);
 
-        ProductDetailedDTO savedProductDetailedDTO = productMapper.toDetailedDTO(savedProduct);
-
-        OrganizationDTO productOrganization = organizationClient.getById(existing.getOrganizationId());
-        savedProductDetailedDTO.setOrganization(productOrganization);
-
-        return savedProductDetailedDTO;
+        return createProductDetailedDTO(savedProduct);
     }
 
     @Override
     public ReviewsProductResponse getReviewsByProductId(Long id) {
+
         return reviewClient.getByProductId(id);
     }
 
     @Override
     public ReviewDetailedDTO createReview(ReviewPostDTO reviewPostDTO) {
+
         return reviewClient.create(reviewPostDTO);
     }
 
     private Product findById(Long productId) {
+
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(
                         "Product not found",
@@ -148,10 +153,34 @@ public class ProductServiceImpl implements ProductService {
                 ));
     }
 
+    private ProductDetailedDTO createProductDetailedDTO(Product savedProduct) {
+
+        ProductDetailedDTO savedProductDetailedDTO = productMapper
+                .toDetailedDTO(savedProduct);
+        OrganizationDTO productOrganization = organizationClient
+                .getById(savedProduct.getOrganizationId());
+        savedProductDetailedDTO.setOrganization(productOrganization);
+        return savedProductDetailedDTO;
+    }
+
     private Double calculateAverageRating(List<ReviewProductDTO> reviews) {
+
         return reviews.stream()
                 .mapToDouble(ReviewProductDTO::getRating)
                 .average()
                 .orElse(0.0);
+    }
+
+    private void updateProductFields(Product existing,
+                                     ProductUpdateDTO productUpdateDTO) {
+
+        existing.setProductName(productUpdateDTO.getProductName());
+        existing.setDescription(productUpdateDTO.getDescription());
+        existing.setPrice(productUpdateDTO.getPrice());
+        existing.setQuantityInStock(productUpdateDTO.getQuantityInStock());
+        existing.setKeywords(String.join(
+                ", ",
+                productUpdateDTO.getKeywords()
+        ));
     }
 }

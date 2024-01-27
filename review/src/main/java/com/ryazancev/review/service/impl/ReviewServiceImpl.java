@@ -3,7 +3,7 @@ package com.ryazancev.review.service.impl;
 import com.ryazancev.clients.customer.CustomerClient;
 import com.ryazancev.clients.customer.CustomerDTO;
 import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.ProductDTO;
+import com.ryazancev.clients.product.ProductSimpleDTO;
 import com.ryazancev.clients.review.*;
 import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
@@ -53,7 +53,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewsProductResponse getByProductId(Long productId) {
-        ProductDTO foundProduct = productClient.getById(productId);
+        ProductSimpleDTO foundProduct = productClient.getById(productId);
         List<Review> reviews = reviewRepository.findByProductId(foundProduct.getId());
         List<ReviewProductDTO> reviewsDTO = reviewMapper.toProductDTO(reviews);
 

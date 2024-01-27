@@ -1,8 +1,8 @@
 package com.ryazancev.product.util.mapper;
 
 import com.ryazancev.clients.product.ProductCreateDTO;
-import com.ryazancev.clients.product.ProductDTO;
 import com.ryazancev.clients.product.ProductDetailedDTO;
+import com.ryazancev.clients.product.ProductSimpleDTO;
 import com.ryazancev.product.model.Product;
 import org.mapstruct.*;
 
@@ -15,17 +15,25 @@ import java.util.List;
 )
 public interface ProductMapper {
 
-    ProductDTO toSimpleDTO(Product existing);
+    ProductSimpleDTO toSimpleDTO(Product existing);
 
-    List<ProductDTO> toListDTO(List<Product> products);
+    List<ProductSimpleDTO> toListDTO(List<Product> products);
 
     @Mappings({
-            @Mapping(target = "keywords", source = "keywords", qualifiedByName = "keywordsToString"),
+            @Mapping(
+                    target = "keywords",
+                    source = "keywords",
+                    qualifiedByName = "keywordsToString"
+            )
     })
     Product toEntity(ProductCreateDTO productCreateDTO);
 
     @Mappings({
-            @Mapping(target = "keywords", source = "keywords", qualifiedByName = "stringToKeywords"),
+            @Mapping(
+                    target = "keywords",
+                    source = "keywords",
+                    qualifiedByName = "stringToKeywords"
+            ),
     })
     ProductDetailedDTO toDetailedDTO(Product product);
 

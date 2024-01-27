@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface ProductClient {
     @GetMapping("api/v1/products/{productId}")
-    ProductDTO getById(@PathVariable("productId") Long productId);
+    ProductSimpleDTO getById(@PathVariable("productId") Long productId);
 
     @GetMapping("api/v1/products/{productId}/details")
     ProductDetailedDTO getDetailedById(@PathVariable("productId") Long productId);

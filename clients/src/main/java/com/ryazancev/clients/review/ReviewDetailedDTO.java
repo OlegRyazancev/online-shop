@@ -1,7 +1,7 @@
 package com.ryazancev.clients.review;
 
 import com.ryazancev.clients.customer.CustomerDTO;
-import com.ryazancev.clients.product.ProductDTO;
+import com.ryazancev.clients.product.ProductSimpleDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ public class ReviewDetailedDTO {
 
     private String body;
 
-    private ProductDTO product;
+    private ProductSimpleDTO product;
 
     private CustomerDTO customer;
 
