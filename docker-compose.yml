@@ -29,6 +29,8 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
     ports:
       - "5050:80"
     networks:
@@ -96,6 +98,8 @@ services:
     restart: unless-stopped
     ports:
       - "8079:80"
+    depends_on:
+      - mariadb
     environment:
       PMA_HOST: ${MYSQL_PMA_HOST}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -103,18 +107,39 @@ services:
       - online-shop
 
   zipkin:
-    image: openzipkin/zipkin
     container_name: zipkin
+    image: openzipkin/zipkin
+    restart: unless-stopped
     ports:
       - "9411:9411"
     networks:
       - online-shop
+
+  minio:
+    container_name: minio
+    image: minio/minio
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    command: server ~/minio --console-address :9090
+    volumes:
+      - minio_data:/minio
+    networks:
+      - online-shop
+
 
 networks:
   online-shop:
     driver: bridge
 
 volumes:
+  minio_data:
   mysql:
   postgres:
   pgadmin:
