@@ -23,34 +23,41 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper customerMapper;
 
     @Override
-    public CustomerDTO getById(Long customerId) {
-        Customer foundCustomer = findById(customerId);
+    public CustomerDTO getById(Long id) {
+
+        Customer foundCustomer = findById(id);
+
         return customerMapper.toDTO(foundCustomer);
     }
 
     @Override
-    public CustomerDetailedDTO getDetailedById(Long customerId) {
-        Customer foundCustomer = findById(customerId);
+    public CustomerDetailedDTO getDetailedById(Long id) {
+
+        Customer foundCustomer = findById(id);
+
         return customerMapper.toDetailedDTO(foundCustomer);
     }
 
     @Transactional
     @Override
-    public CustomerDetailedDTO updateBalance(Long customerId, Double balance) {
+    public CustomerDetailedDTO updateBalance(Long id, Double balance) {
+
         if (balance <= 0) {
             throw new IncorrectBalanceException(
                     "Balance must be positive",
                     HttpStatus.BAD_REQUEST
             );
         }
-        Customer existing = findById(customerId);
+        Customer existing = findById(id);
         existing.setBalance(balance);
         customerRepository.save(existing);
+
         return customerMapper.toDetailedDTO(existing);
     }
 
-    private Customer findById(Long customerId) {
-        return customerRepository.findById(customerId)
+    private Customer findById(Long id) {
+
+        return customerRepository.findById(id)
                 .orElseThrow(() ->
                         new CustomerNotFoundException(
                                 "Customer not found with this ID",

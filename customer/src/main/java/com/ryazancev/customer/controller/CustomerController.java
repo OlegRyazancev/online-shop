@@ -18,23 +18,26 @@ public class CustomerController {
     private final CustomerService customerService;
 
 
-    @GetMapping("/{customerId}")
-    public CustomerDTO getById(@PathVariable("customerId") Long customerId) {
-        return customerService.getById(customerId);
+    @GetMapping("/{id}")
+    public CustomerDTO getSimpleById(
+            @PathVariable("id") Long id) {
+
+        return customerService.getById(id);
     }
 
-    @GetMapping("/{customerId}/details")
-    public CustomerDetailedDTO getDetailedById(@PathVariable("customerId") Long customerId) {
-        return customerService.getDetailedById(customerId);
+    @GetMapping("/{id}/details")
+    public CustomerDetailedDTO getDetailedById(
+            @PathVariable("id") Long id) {
+
+        return customerService.getDetailedById(id);
     }
 
-    @PutMapping("/{customerId}/update-balance")
+    @PutMapping("/{id}/update-balance")
     public CustomerDetailedDTO updateBalance(
-            @PathVariable("customerId") Long customerId,
+            @PathVariable("id") Long id,
             @RequestParam("balance") Double balance) {
-        CustomerDetailedDTO customerWithNewBalance = customerService.updateBalance(customerId, balance);
-        log.info("Request to increase customer balance. id {}, amount: {}", customerId, balance);
-        return customerWithNewBalance;
+
+        return customerService.updateBalance(id, balance);
     }
 
     //todo: add method to watch notifications

@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 public class CustomerExceptionHandler {
 
     @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<ExceptionBody> handleCustomerNotFound(CustomerNotFoundException e) {
+    public ResponseEntity<ExceptionBody> handleCustomerNotFound(
+            CustomerNotFoundException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -28,7 +30,9 @@ public class CustomerExceptionHandler {
     }
 
     @ExceptionHandler(IncorrectBalanceException.class)
-    public ResponseEntity<ExceptionBody> handleBalance(IncorrectBalanceException e) {
+    public ResponseEntity<ExceptionBody> handleBalance(
+            IncorrectBalanceException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -40,7 +44,8 @@ public class CustomerExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            final ConstraintViolationException e) {
+            ConstraintViolationException e) {
+
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -49,13 +54,16 @@ public class CustomerExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.CUSTOMER);
+
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
     }
 
     @ExceptionHandler(OnlineShopException.class)
-    public ResponseEntity<ExceptionBody> handleOnlineShop(OnlineShopException e) {
+    public ResponseEntity<ExceptionBody> handleOnlineShop(
+            OnlineShopException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -67,7 +75,8 @@ public class CustomerExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(final Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(
