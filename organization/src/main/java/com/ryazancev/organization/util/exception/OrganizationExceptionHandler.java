@@ -56,6 +56,7 @@ public class OrganizationExceptionHandler {
 
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(OnlineShopException e) {
+       e.printStackTrace();
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(

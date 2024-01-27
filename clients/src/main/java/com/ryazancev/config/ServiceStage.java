@@ -5,5 +5,6 @@ public enum ServiceStage {
     PURCHASE,
     ORGANIZATION,
     PRODUCT,
-    REVIEW
+    REVIEW,
+    LOGO
 }

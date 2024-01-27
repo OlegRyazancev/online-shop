@@ -1,5 +1,7 @@
 package com.ryazancev.organization.service.impl;
 
+import com.ryazancev.clients.logo.LogoClient;
+import com.ryazancev.clients.logo.LogoDTO;
 import com.ryazancev.clients.organization.*;
 import com.ryazancev.clients.product.ProductClient;
 import com.ryazancev.clients.product.ProductListResponse;
@@ -27,6 +29,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationMapper organizationMapper;
 
     private final ProductClient productClient;
+    private final LogoClient logoClient;
 
     @Override
     public OrganizationsListResponse getAll() {
@@ -64,10 +67,8 @@ public class OrganizationServiceImpl implements OrganizationService {
                     HttpStatus.BAD_REQUEST
             );
         }
-
         Organization organizationToSave = organizationMapper.toEntity(organizationCreateDTO);
         Organization savedOrganization = organizationRepository.save(organizationToSave);
-        //todo: imageService upload image to Minio
         return organizationMapper.toDetailedDTO(savedOrganization);
     }
 
@@ -83,6 +84,16 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organizationMapper.toDetailedDTO(updated);
     }
 
+    @Transactional
+    @Override
+    public void uploadLogo(Long organizationId, LogoDTO logoDTO) {
+        Organization existing = findById(organizationId);
+
+        String fileName = logoClient.upload(logoDTO.getFile());
+        existing.setLogo(fileName);
+        organizationRepository.save(existing);
+    }
+
     private Organization findById(Long organizationId) {
         return organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationNotFoundException(
@@ -90,5 +101,8 @@ public class OrganizationServiceImpl implements OrganizationService {
                         HttpStatus.NOT_FOUND
                 ));
     }
-
 }
+
+
+
+

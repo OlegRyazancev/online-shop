@@ -37,7 +37,4 @@ public class Organization implements Serializable {
 
     @Column(name = "logo")
     private String logo;
-
-    //todo: add logo (logo-service)
-
 }

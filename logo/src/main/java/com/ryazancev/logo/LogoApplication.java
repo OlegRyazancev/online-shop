@@ -1,4 +1,4 @@
-package com.ryazancev.image;
+package com.ryazancev.logo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,11 +14,11 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(
         basePackages = {
                 "com.ryazancev.config",
-                "com.ryazancev.image"
+                "com.ryazancev.logo"
         })
-public class ImageApplication {
+public class LogoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ImageApplication.class, args);
+        SpringApplication.run(LogoApplication.class, args);
     }
 }

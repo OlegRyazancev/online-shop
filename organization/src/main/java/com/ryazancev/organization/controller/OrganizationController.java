@@ -1,5 +1,6 @@
 package com.ryazancev.organization.controller;
 
+import com.ryazancev.clients.logo.LogoDTO;
 import com.ryazancev.clients.organization.*;
 import com.ryazancev.organization.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,12 @@ public class OrganizationController {
     @PutMapping
     public OrganizationDetailedDTO update(@RequestBody OrganizationUpdateDTO organizationUpdateDTO) {
         return organizationService.update(organizationUpdateDTO);
+    }
+
+    @PostMapping("/{organizationId}/logo")
+    public void uploadLogo(@PathVariable("organizationId") Long organizationId,
+                            @Validated @ModelAttribute LogoDTO logoDto) {
+        organizationService.uploadLogo(organizationId, logoDto);
+        log.info("Logo uploaded successfully in organization microservice");
     }
 }

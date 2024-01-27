@@ -19,7 +19,7 @@
         <module>review</module>
         <module>organization</module>
         <module>api-gateway</module>
-        <module>image</module>
+        <module>logo</module>
     </modules>
 
     <properties>

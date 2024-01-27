@@ -1,5 +1,6 @@
 package com.ryazancev.organization.service;
 
+import com.ryazancev.clients.logo.LogoDTO;
 import com.ryazancev.clients.organization.*;
 
 public interface OrganizationService {
@@ -13,4 +14,6 @@ public interface OrganizationService {
     OrganizationDetailedDTO register(OrganizationCreateDTO organizationCreateDTO);
 
     OrganizationDetailedDTO update(OrganizationUpdateDTO organizationUpdateDTO);
+
+    void uploadLogo(Long organizationId, LogoDTO logoDTO);
 }
