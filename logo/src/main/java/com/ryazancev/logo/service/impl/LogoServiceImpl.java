@@ -24,12 +24,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LogoServiceImpl implements LogoService {
 
-
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
 
     @Override
     public String upload(MultipartFile file) {
+
         try {
             createBucket();
         } catch (Exception e) {
@@ -45,8 +45,10 @@ public class LogoServiceImpl implements LogoService {
                     HttpStatus.BAD_REQUEST
             );
         }
+
         String fileName = generateFileName(file);
         InputStream inputStream;
+
         try {
             inputStream = file.getInputStream();
         } catch (Exception e) {
@@ -55,12 +57,15 @@ public class LogoServiceImpl implements LogoService {
                     HttpStatus.BAD_REQUEST
             );
         }
+
         saveImage(inputStream, fileName);
+
         return fileName;
     }
 
     @SneakyThrows
     private void createBucket() {
+
         boolean found = minioClient.bucketExists(
                 BucketExistsArgs.builder()
                         .bucket(minioProperties.getBucket())
@@ -77,11 +82,14 @@ public class LogoServiceImpl implements LogoService {
     }
 
     private String generateFileName(MultipartFile file) {
+
         String extension = getExtension(file);
+
         return UUID.randomUUID() + "." + extension;
     }
 
     private String getExtension(MultipartFile file) {
+
         return Objects.requireNonNull(file.getOriginalFilename())
                 .substring(file.getOriginalFilename()
                         .lastIndexOf(".") + 1);
@@ -89,6 +97,7 @@ public class LogoServiceImpl implements LogoService {
 
     @SneakyThrows
     private void saveImage(InputStream inputStream, String fileName) {
+
         minioClient.putObject(PutObjectArgs.builder()
                 .stream(inputStream, inputStream.available(), -1)
                 .bucket(minioProperties.getBucket())

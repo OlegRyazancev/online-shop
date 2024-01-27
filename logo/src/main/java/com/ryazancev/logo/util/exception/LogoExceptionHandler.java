@@ -16,7 +16,9 @@ import java.util.stream.Collectors;
 public class LogoExceptionHandler {
 
     @ExceptionHandler(LogoUploadException.class)
-    public ResponseEntity<ExceptionBody> handleLogoUpload(LogoUploadException e) {
+    public ResponseEntity<ExceptionBody> handleLogoUpload(
+            LogoUploadException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -28,7 +30,8 @@ public class LogoExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            final ConstraintViolationException e) {
+            ConstraintViolationException e) {
+
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -37,13 +40,16 @@ public class LogoExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.LOGO);
+
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
     }
 
     @ExceptionHandler(OnlineShopException.class)
-    public ResponseEntity<ExceptionBody> handleOnlineShop(OnlineShopException e) {
+    public ResponseEntity<ExceptionBody> handleOnlineShop(
+            OnlineShopException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -55,7 +61,8 @@ public class LogoExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(final Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(
