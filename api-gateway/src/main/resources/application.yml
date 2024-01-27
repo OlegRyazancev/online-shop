@@ -19,21 +19,10 @@ spring:
           uri: lb://ORGANIZATION
           predicates:
             - Path=/api/v1/organizations/**
-        - id: purchase
+        - id: product
           uri: lb://PRODUCT
           predicates:
             - Path=/api/v1/products/**
-        - id: review
-          uri: lb://REVIEW
-          predicates:
-            - Path=/api/v1/reviews/**
-        - id: image
-          uri: lb://IMAGE
-          predicates:
-            - Path=/api/v1/images/**
-
-
-
 
 management:
   tracing:

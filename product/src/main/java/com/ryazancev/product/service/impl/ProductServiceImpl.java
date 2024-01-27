@@ -3,9 +3,7 @@ package com.ryazancev.product.service.impl;
 import com.ryazancev.clients.organization.OrganizationClient;
 import com.ryazancev.clients.organization.OrganizationDTO;
 import com.ryazancev.clients.product.*;
-import com.ryazancev.clients.review.ReviewClient;
-import com.ryazancev.clients.review.ReviewProductDTO;
-import com.ryazancev.clients.review.ReviewsProductResponse;
+import com.ryazancev.clients.review.*;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
@@ -45,7 +43,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getById(Long productId) {
         Product existing = findById(productId);
-
         return productMapper.toSimpleDTO(existing);
     }
 
@@ -58,7 +55,6 @@ public class ProductServiceImpl implements ProductService {
         OrganizationDTO organization = organizationClient.getById(existing.getOrganizationId());
         productDetailedDTO.setOrganization(organization);
 
-        log.info(String.valueOf(existing.getId()));
         ReviewsProductResponse response = reviewClient.getByProductId(existing.getId());
         List<ReviewProductDTO> reviews = response.getReviews();
         productDetailedDTO.setReviews(reviews);
@@ -132,6 +128,16 @@ public class ProductServiceImpl implements ProductService {
         savedProductDetailedDTO.setOrganization(productOrganization);
 
         return savedProductDetailedDTO;
+    }
+
+    @Override
+    public ReviewsProductResponse getReviewsByProductId(Long id) {
+        return reviewClient.getByProductId(id);
+    }
+
+    @Override
+    public ReviewDetailedDTO createReview(ReviewPostDTO reviewPostDTO) {
+        return reviewClient.create(reviewPostDTO);
     }
 
     private Product findById(Long productId) {

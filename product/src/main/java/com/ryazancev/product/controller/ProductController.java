@@ -1,6 +1,9 @@
 package com.ryazancev.product.controller;
 
 import com.ryazancev.clients.product.*;
+import com.ryazancev.clients.review.ReviewDetailedDTO;
+import com.ryazancev.clients.review.ReviewPostDTO;
+import com.ryazancev.clients.review.ReviewsProductResponse;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +39,16 @@ public class ProductController {
         return productService.getByOrganizationId(organizationId);
     }
 
+    @GetMapping("/{id}/reviews")
+    public ReviewsProductResponse getReviewsByProductId(@PathVariable("id") Long id) {
+        return productService.getReviewsByProductId(id);
+    }
+
+    @PostMapping("/reviews")
+    public ReviewDetailedDTO createReview(@RequestBody ReviewPostDTO reviewPostDTO) {
+        return productService.createReview(reviewPostDTO);
+    }
+
     @PostMapping
     public ProductDetailedDTO create(@RequestBody ProductCreateDTO productCreateDTO) {
         return productService.create(productCreateDTO);
@@ -51,9 +64,5 @@ public class ProductController {
         return productService.update(productUpdateDTO);
     }
 
-    //todo: add global exception handler and custom exceptions
     //todo: delete product
-
-    //todo: get Reviews and rating of a product (communicate to review service)
-    //todo: set Review and rating of a product (communicate to review service)
 }
