@@ -7,13 +7,13 @@ public interface OrganizationService {
 
     OrganizationsListResponse getAll();
 
-    OrganizationDTO getById(Long organizationId);
+    OrganizationSimpleDTO getSimpleById(Long id);
 
-    OrganizationDetailedDTO getDetailedById(Long organizationId);
+    OrganizationDetailedDTO getDetailedById(Long id);
 
     OrganizationDetailedDTO register(OrganizationCreateDTO organizationCreateDTO);
 
     OrganizationDetailedDTO update(OrganizationUpdateDTO organizationUpdateDTO);
 
-    void uploadLogo(Long organizationId, LogoDTO logoDTO);
+    void uploadLogo(Long id, LogoDTO logoDTO);
 }

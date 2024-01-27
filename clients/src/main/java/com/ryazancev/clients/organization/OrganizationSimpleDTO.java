@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrganizationDTO {
+public class OrganizationSimpleDTO {
 
     private Long id;
     private String name;

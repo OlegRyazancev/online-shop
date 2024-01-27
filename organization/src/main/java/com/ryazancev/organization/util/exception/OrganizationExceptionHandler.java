@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 public class OrganizationExceptionHandler {
 
     @ExceptionHandler(OrganizationCreationException.class)
-    public ResponseEntity<ExceptionBody> handleOrganizationCreation(OrganizationCreationException e) {
+    public ResponseEntity<ExceptionBody> handleOrganizationCreation(
+            OrganizationCreationException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -28,7 +30,9 @@ public class OrganizationExceptionHandler {
     }
 
     @ExceptionHandler(OrganizationNotFoundException.class)
-    public ResponseEntity<ExceptionBody> handleOrganizationNotFound(OrganizationNotFoundException e) {
+    public ResponseEntity<ExceptionBody> handleOrganizationNotFound(
+            OrganizationNotFoundException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -40,7 +44,8 @@ public class OrganizationExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            final ConstraintViolationException e) {
+            ConstraintViolationException e) {
+
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -49,14 +54,16 @@ public class OrganizationExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.ORGANIZATION);
+
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
     }
 
     @ExceptionHandler(OnlineShopException.class)
-    public ResponseEntity<ExceptionBody> handleOnlineShop(OnlineShopException e) {
-       e.printStackTrace();
+    public ResponseEntity<ExceptionBody> handleOnlineShop(
+            OnlineShopException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -68,7 +75,8 @@ public class OrganizationExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(final Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(

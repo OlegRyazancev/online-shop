@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface OrganizationClient {
 
     @GetMapping("api/v1/organizations/{organizationId}")
-    OrganizationDTO getById(@PathVariable("organizationId") Long organizationId);
+    OrganizationSimpleDTO getById(@PathVariable("organizationId") Long organizationId);
 
 }

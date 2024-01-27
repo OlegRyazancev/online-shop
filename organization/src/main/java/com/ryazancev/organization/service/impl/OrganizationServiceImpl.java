@@ -33,26 +33,33 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationsListResponse getAll() {
+
         List<Organization> organizations = organizationRepository.findAll();
+
         return OrganizationsListResponse.builder()
-                .organizations(organizationMapper.toDetailedListDTO(organizations))
+                .organizations(organizationMapper
+                        .toDetailedListDTO(organizations))
                 .build();
     }
 
     @Override
-    public OrganizationDTO getById(Long organizationId) {
-        Organization existing = findById(organizationId);
+    public OrganizationSimpleDTO getSimpleById(Long id) {
+
+        Organization existing = findById(id);
 
         return organizationMapper.toSimpleDTO(existing);
     }
 
     @Override
-    public OrganizationDetailedDTO getDetailedById(Long organizationId) {
-        Organization existing = findById(organizationId);
+    public OrganizationDetailedDTO getDetailedById(Long id) {
 
-        ProductListResponse orgProducts = productClient.getByOrganizationId(organizationId);
+        Organization existing = findById(id);
 
-        OrganizationDetailedDTO organizationDTO = organizationMapper.toDetailedDTO(existing);
+        ProductListResponse orgProducts = productClient
+                .getByOrganizationId(existing.getId());
+
+        OrganizationDetailedDTO organizationDTO = organizationMapper
+                .toDetailedDTO(existing);
         organizationDTO.setProducts(orgProducts.getProducts());
 
         return organizationDTO;
@@ -60,42 +67,55 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
-    public OrganizationDetailedDTO register(OrganizationCreateDTO organizationCreateDTO) {
-        if (organizationRepository.findByName(organizationCreateDTO.getName()).isPresent()) {
+    public OrganizationDetailedDTO register(
+            OrganizationCreateDTO organizationCreateDTO) {
+
+        if (organizationRepository
+                .findByName(organizationCreateDTO.getName())
+                .isPresent()) {
             throw new OrganizationCreationException(
                     "Organization with this name already exists",
                     HttpStatus.BAD_REQUEST
             );
         }
-        Organization organizationToSave = organizationMapper.toEntity(organizationCreateDTO);
-        Organization savedOrganization = organizationRepository.save(organizationToSave);
+        Organization organizationToSave = organizationMapper
+                .toEntity(organizationCreateDTO);
+        Organization savedOrganization = organizationRepository
+                .save(organizationToSave);
+
         return organizationMapper.toDetailedDTO(savedOrganization);
     }
 
     @Transactional
     @Override
-    public OrganizationDetailedDTO update(OrganizationUpdateDTO organizationUpdateDTO) {
+    public OrganizationDetailedDTO update(
+            OrganizationUpdateDTO organizationUpdateDTO) {
+
         Organization existing = findById(organizationUpdateDTO.getId());
         existing.setName(organizationUpdateDTO.getName());
         existing.setDescription(organizationUpdateDTO.getDescription());
         existing.setLogo(organizationUpdateDTO.getLogo());
 
         Organization updated = organizationRepository.save(existing);
+
         return organizationMapper.toDetailedDTO(updated);
     }
 
     @Transactional
     @Override
-    public void uploadLogo(Long organizationId, LogoDTO logoDTO) {
-        Organization existing = findById(organizationId);
+    public void uploadLogo(Long id, LogoDTO logoDTO) {
+
+        Organization existing = findById(id);
 
         String fileName = logoClient.upload(logoDTO.getFile());
+
         existing.setLogo(fileName);
         organizationRepository.save(existing);
     }
 
-    private Organization findById(Long organizationId) {
-        return organizationRepository.findById(organizationId)
+    private Organization findById(Long id) {
+
+        return organizationRepository.findById(id)
                 .orElseThrow(() -> new OrganizationNotFoundException(
                         "Organization not found",
                         HttpStatus.NOT_FOUND

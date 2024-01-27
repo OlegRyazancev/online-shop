@@ -19,33 +19,43 @@ public class OrganizationController {
 
     @GetMapping
     public OrganizationsListResponse getAll() {
+
         return organizationService.getAll();
     }
 
-    @GetMapping("/{organizationId}")
-    public OrganizationDTO getById(@PathVariable("organizationId") Long organizationId) {
-        return organizationService.getById(organizationId);
+    @GetMapping("/{id}")
+    public OrganizationSimpleDTO getSimpleById(
+            @PathVariable("id") Long id) {
+
+        return organizationService.getSimpleById(id);
     }
 
-    @GetMapping("/{organizationId}/details")
-    public OrganizationDetailedDTO getDetailedById(@PathVariable("organizationId") Long organizationId) {
-        return organizationService.getDetailedById(organizationId);
+    @GetMapping("/{id}/details")
+    public OrganizationDetailedDTO getDetailedById(
+            @PathVariable("id") Long id) {
+
+        return organizationService.getDetailedById(id);
     }
 
     @PostMapping
-    public OrganizationDetailedDTO register(@RequestBody OrganizationCreateDTO organizationCreateDTO) {
+    public OrganizationDetailedDTO register(
+            @RequestBody OrganizationCreateDTO organizationCreateDTO) {
+
         return organizationService.register(organizationCreateDTO);
     }
 
     @PutMapping
-    public OrganizationDetailedDTO update(@RequestBody OrganizationUpdateDTO organizationUpdateDTO) {
+    public OrganizationDetailedDTO update(
+            @RequestBody OrganizationUpdateDTO organizationUpdateDTO) {
+
         return organizationService.update(organizationUpdateDTO);
     }
 
-    @PostMapping("/{organizationId}/logo")
-    public void uploadLogo(@PathVariable("organizationId") Long organizationId,
-                            @Validated @ModelAttribute LogoDTO logoDto) {
-        organizationService.uploadLogo(organizationId, logoDto);
-        log.info("Logo uploaded successfully in organization microservice");
+    @PostMapping("/{id}/logo")
+    public void uploadLogo(
+            @PathVariable("id") Long id,
+            @Validated @ModelAttribute LogoDTO logoDto) {
+
+        organizationService.uploadLogo(id, logoDto);
     }
 }

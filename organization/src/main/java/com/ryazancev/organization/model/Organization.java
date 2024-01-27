@@ -16,7 +16,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Organization implements Serializable {
 
-
     @Id
     @SequenceGenerator(
             name = "organizations_id_seq",

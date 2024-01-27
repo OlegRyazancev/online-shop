@@ -12,7 +12,10 @@ public class OrganizationCreationException extends RuntimeException {
     private HttpStatus httpStatus;
 
 
-    public OrganizationCreationException(String message, HttpStatus httpStatus) {
+    public OrganizationCreationException(
+            String message,
+            HttpStatus httpStatus) {
+
         super(message);
         this.httpStatus = httpStatus;
     }

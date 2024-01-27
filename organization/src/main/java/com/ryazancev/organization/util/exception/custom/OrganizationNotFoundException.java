@@ -13,7 +13,10 @@ public class OrganizationNotFoundException extends RuntimeException {
     private HttpStatus httpStatus;
 
 
-    public OrganizationNotFoundException(String message, HttpStatus httpStatus) {
+    public OrganizationNotFoundException(
+            String message,
+            HttpStatus httpStatus) {
+
         super(message);
         this.httpStatus = httpStatus;
     }
