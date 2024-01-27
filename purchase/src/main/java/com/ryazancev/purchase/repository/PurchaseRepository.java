@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PurchaseRepository extends MongoRepository<Purchase, String> {
     List<Purchase> findByCustomerId(Long customerId);
+
 }

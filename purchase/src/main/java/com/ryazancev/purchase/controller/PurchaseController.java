@@ -15,14 +15,19 @@ import org.springframework.web.bind.annotation.*;
 public class PurchaseController {
 
     private final PurchaseService purchaseService;
+
     @PostMapping
-    public PurchaseDetailedDTO processPurchase(@RequestBody PurchasePostDTO purchasePostDTO) {
+    public PurchaseDetailedDTO processPurchase(
+            @RequestBody PurchasePostDTO purchasePostDTO) {
+
         return purchaseService.processPurchase(purchasePostDTO);
     }
 
-    @GetMapping("/customer/{customerId}")
-    public CustomerPurchasesResponse getByCustomerId(@PathVariable("customerId") Long customerId) {
-        return purchaseService.getByCustomerId(customerId);
+    @GetMapping("/customer/{id}")
+    public CustomerPurchasesResponse getByCustomerId(
+            @PathVariable("id") Long id) {
+
+        return purchaseService.getByCustomerId(id);
     }
 
 }

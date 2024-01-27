@@ -8,5 +8,6 @@ public interface PurchaseService {
 
     PurchaseDetailedDTO processPurchase(PurchasePostDTO purchase);
 
-    CustomerPurchasesResponse getByCustomerId(Long customerId);
+    CustomerPurchasesResponse getByCustomerId(Long id);
+
 }

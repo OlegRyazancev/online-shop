@@ -37,7 +37,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Transactional
     @Override
-    public PurchaseDetailedDTO processPurchase(PurchasePostDTO purchasePostDTO) {
+    public PurchaseDetailedDTO processPurchase(
+            PurchasePostDTO purchasePostDTO) {
 
         ProductDetailedDTO selectedProduct = productClient
                 .getDetailedById(purchasePostDTO.getProductId());
@@ -50,7 +51,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         if (availableCustomerBalance < selectedProductPrice) {
             throw new IncorrectBalanceException(
-                    "Customer doesn't have enough money to purchase the product",
+                    "Customer doesn't have enough money " +
+                            "to purchase the product",
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -73,12 +75,15 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchaseToSave.setPurchaseDate(LocalDateTime.now());
         purchaseToSave.setAmount(selectedProductPrice);
 
-        return purchaseMapper.toDetailedDTO(purchaseRepository.save(purchaseToSave));
+        return purchaseMapper.toDetailedDTO(
+                purchaseRepository.save(purchaseToSave));
     }
 
     @Override
-    public CustomerPurchasesResponse getByCustomerId(Long customerId) {
-        List<Purchase> purchases = purchaseRepository.findByCustomerId(customerId);
+    public CustomerPurchasesResponse getByCustomerId(Long id) {
+        List<Purchase> purchases = purchaseRepository
+                .findByCustomerId(id);
+
         if (purchases.isEmpty()) {
             throw new PurchasesNotFoundException(
                     "No purchases found for customer with this ID",

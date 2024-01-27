@@ -10,7 +10,6 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
@@ -19,7 +18,9 @@ import java.util.stream.Collectors;
 public class PurchaseExceptionHandler {
 
     @ExceptionHandler(IncorrectBalanceException.class)
-    public ResponseEntity<ExceptionBody> handleIncorrectBalance(IncorrectBalanceException e) {
+    public ResponseEntity<ExceptionBody> handleIncorrectBalance(
+            IncorrectBalanceException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -30,8 +31,9 @@ public class PurchaseExceptionHandler {
     }
 
     @ExceptionHandler(PurchasesNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ExceptionBody> handlePurchasesNotFound(PurchasesNotFoundException e) {
+    public ResponseEntity<ExceptionBody> handlePurchasesNotFound(
+            PurchasesNotFoundException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -42,7 +44,9 @@ public class PurchaseExceptionHandler {
     }
 
     @ExceptionHandler(OutOfStockException.class)
-    public ResponseEntity<ExceptionBody> handleOutOfStock(OutOfStockException e) {
+    public ResponseEntity<ExceptionBody> handleOutOfStock(
+            OutOfStockException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -54,7 +58,8 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            final ConstraintViolationException e) {
+            ConstraintViolationException e) {
+
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -63,13 +68,16 @@ public class PurchaseExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.PURCHASE);
+
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
     }
 
     @ExceptionHandler(OnlineShopException.class)
-    public ResponseEntity<ExceptionBody> handleOnlineShop(OnlineShopException e) {
+    public ResponseEntity<ExceptionBody> handleOnlineShop(
+            OnlineShopException e) {
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -81,7 +89,8 @@ public class PurchaseExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(final Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(
