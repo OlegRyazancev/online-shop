@@ -13,9 +13,9 @@ public interface ProductService {
 
     ProductDetailedDTO getDetailedById(Long id);
 
-    ProductListResponse getByOrganizationId(Long id);
+    ProductListResponse getByOrganizationId(Long organizationId);
 
-    ReviewsProductResponse getReviewsByProductId(Long id);
+    ReviewsProductResponse getReviewsByProductId(Long productId);
 
     ReviewDetailedDTO createReview(ReviewPostDTO reviewPostDTO);
 

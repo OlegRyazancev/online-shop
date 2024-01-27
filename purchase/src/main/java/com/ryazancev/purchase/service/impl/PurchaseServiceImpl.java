@@ -80,9 +80,9 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public CustomerPurchasesResponse getByCustomerId(Long id) {
+    public CustomerPurchasesResponse getByCustomerId(Long customerId) {
         List<Purchase> purchases = purchaseRepository
-                .findByCustomerId(id);
+                .findByCustomerId(customerId);
 
         if (purchases.isEmpty()) {
             throw new PurchasesNotFoundException(

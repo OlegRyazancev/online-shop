@@ -6,8 +6,8 @@ import com.ryazancev.clients.purchase.PurchasePostDTO;
 
 public interface PurchaseService {
 
-    PurchaseDetailedDTO processPurchase(PurchasePostDTO purchase);
+    PurchaseDetailedDTO processPurchase(PurchasePostDTO purchasePostDTO);
 
-    CustomerPurchasesResponse getByCustomerId(Long id);
+    CustomerPurchasesResponse getByCustomerId(Long customerId);
 
 }

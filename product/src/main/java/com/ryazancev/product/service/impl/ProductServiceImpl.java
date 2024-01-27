@@ -74,10 +74,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductListResponse getByOrganizationId(Long id) {
+    public ProductListResponse getByOrganizationId(Long organizationId) {
 
         List<Product> products = productRepository
-                .findByOrganizationId(id);
+                .findByOrganizationId(organizationId);
 
         return ProductListResponse.builder()
                 .products(productMapper.toListDTO(products))
@@ -133,9 +133,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ReviewsProductResponse getReviewsByProductId(Long id) {
+    public ReviewsProductResponse getReviewsByProductId(Long productId) {
 
-        return reviewClient.getByProductId(id);
+        return reviewClient.getByProductId(productId);
     }
 
     @Override
