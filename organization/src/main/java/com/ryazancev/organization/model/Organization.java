@@ -36,4 +36,7 @@ public class Organization implements Serializable {
 
     @Column(name = "logo")
     private String logo;
+
+    @Column(name = "owner_id")
+    private Long ownerId;
 }

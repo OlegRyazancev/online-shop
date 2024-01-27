@@ -12,5 +12,5 @@ public class OrganizationUpdateDTO {
     private Long id;
     private String name;
     private String description;
-    private String logo;
+    private Long ownerId;
 }

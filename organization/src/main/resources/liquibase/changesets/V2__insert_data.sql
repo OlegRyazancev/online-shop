@@ -1,6 +1,6 @@
-INSERT INTO organizations (name, description, logo)
-VALUES ('CompanyA', 'A global technology company', 'Logo1'),
-       ('CompanyB', 'An international consulting firm', 'Logo2'),
-       ('CompanyC', 'A leading e-commerce platform', 'Logo3'),
-       ('CompanyD', 'A healthcare services provider', 'Logo4'),
-       ('CompanyE', 'A financial institution', 'Logo5');
+INSERT INTO organizations (name, description, owner_id)
+VALUES ('CompanyA', 'A global technology company', 1),
+       ('CompanyB', 'An international consulting firm', 1),
+       ('CompanyC', 'A leading e-commerce platform', 3),
+       ('CompanyD', 'A healthcare services provider', 2),
+       ('CompanyE', 'A financial institution', 1);

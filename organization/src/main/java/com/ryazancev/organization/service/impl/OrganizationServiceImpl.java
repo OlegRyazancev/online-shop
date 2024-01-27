@@ -1,5 +1,7 @@
 package com.ryazancev.organization.service.impl;
 
+import com.ryazancev.clients.customer.CustomerClient;
+import com.ryazancev.clients.customer.CustomerDTO;
 import com.ryazancev.clients.logo.LogoClient;
 import com.ryazancev.clients.logo.LogoDTO;
 import com.ryazancev.clients.organization.*;
@@ -30,6 +32,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final ProductClient productClient;
     private final LogoClient logoClient;
+    private final CustomerClient customerClient;
 
     @Override
     public OrganizationsListResponse getAll() {
@@ -38,7 +41,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         return OrganizationsListResponse.builder()
                 .organizations(organizationMapper
-                        .toDetailedListDTO(organizations))
+                        .toSimpleListDTO(organizations))
                 .build();
     }
 
@@ -56,11 +59,17 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization existing = findById(id);
 
         ProductListResponse orgProducts = productClient
-                .getByOrganizationId(existing.getId());
+                .getProductsByOrganizationId(existing.getId());
 
         OrganizationDetailedDTO organizationDTO = organizationMapper
                 .toDetailedDTO(existing);
         organizationDTO.setProducts(orgProducts.getProducts());
+
+        if (existing.getOwnerId() != null) {
+            CustomerDTO owner = customerClient
+                    .getSimpleById(existing.getOwnerId());
+            organizationDTO.setOwner(owner);
+        }
 
         return organizationDTO;
     }
@@ -83,7 +92,15 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization savedOrganization = organizationRepository
                 .save(organizationToSave);
 
-        return organizationMapper.toDetailedDTO(savedOrganization);
+        OrganizationDetailedDTO registered = organizationMapper
+                .toDetailedDTO(savedOrganization);
+
+        CustomerDTO owner = customerClient
+                .getSimpleById(savedOrganization.getOwnerId());
+
+        registered.setOwner(owner);
+
+        return registered;
     }
 
     @Transactional
@@ -94,11 +111,21 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization existing = findById(organizationUpdateDTO.getId());
         existing.setName(organizationUpdateDTO.getName());
         existing.setDescription(organizationUpdateDTO.getDescription());
-        existing.setLogo(organizationUpdateDTO.getLogo());
+        existing.setOwnerId(organizationUpdateDTO.getOwnerId());
 
         Organization updated = organizationRepository.save(existing);
+        OrganizationDetailedDTO updatedDTO = organizationMapper
+                .toDetailedDTO(updated);
 
-        return organizationMapper.toDetailedDTO(updated);
+        CustomerDTO owner = customerClient
+                .getSimpleById(updated.getOwnerId());
+        updatedDTO.setOwner(owner);
+
+        ProductListResponse productsResponse = productClient
+                .getProductsByOrganizationId(updated.getId());
+        updatedDTO.setProducts(productsResponse.getProducts());
+
+        return updatedDTO;
     }
 
     @Transactional

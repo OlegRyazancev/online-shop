@@ -41,7 +41,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             PurchasePostDTO purchasePostDTO) {
 
         ProductDetailedDTO selectedProduct = productClient
-                .getDetailedById(purchasePostDTO.getProductId());
+                .getDetailedProductById(purchasePostDTO.getProductId());
         CustomerDetailedDTO selectedCustomer = customerClient
                 .getDetailedById(purchasePostDTO.getCustomerId());
 
@@ -63,6 +63,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             );
         }
 
+        //todo: increase money in organization's owner (for future add percent to admin)
         //todo: make async
         customerClient.updateBalance(
                 selectedCustomer.getId(),

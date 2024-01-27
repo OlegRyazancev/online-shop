@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
                 .toDetailedDTO(existing);
 
         OrganizationSimpleDTO organization = organizationClient
-                .getById(existing.getOrganizationId());
+                .getSimpleById(existing.getOrganizationId());
         productDetailedDTO.setOrganization(organization);
 
         ReviewsProductResponse response = reviewClient
@@ -158,7 +158,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDetailedDTO savedProductDetailedDTO = productMapper
                 .toDetailedDTO(savedProduct);
         OrganizationSimpleDTO productOrganization = organizationClient
-                .getById(savedProduct.getOrganizationId());
+                .getSimpleById(savedProduct.getOrganizationId());
         savedProductDetailedDTO.setOrganization(productOrganization);
         return savedProductDetailedDTO;
     }

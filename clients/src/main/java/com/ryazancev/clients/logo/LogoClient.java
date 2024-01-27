@@ -15,5 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface LogoClient {
 
     @PostMapping(value = "api/v1/logos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    String upload(@RequestPart("file") MultipartFile file);
+    String upload(
+            @RequestPart("file") MultipartFile file);
 }

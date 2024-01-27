@@ -12,16 +12,21 @@ import org.springframework.web.bind.annotation.RequestParam;
         configuration = FeignClientsConfiguration.class
 )
 public interface ProductClient {
-    @GetMapping("api/v1/products/{productId}")
-    ProductSimpleDTO getById(@PathVariable("productId") Long productId);
+    @GetMapping("api/v1/products/{id}")
+    ProductSimpleDTO getSimpleProductById(
+            @PathVariable("id") Long id);
 
-    @GetMapping("api/v1/products/{productId}/details")
-    ProductDetailedDTO getDetailedById(@PathVariable("productId") Long productId);
+    @GetMapping("api/v1/products/{id}/details")
+    ProductDetailedDTO getDetailedProductById(
+            @PathVariable("id") Long id);
 
     @GetMapping("api/v1/products/organizations/{organizationId}")
-    ProductListResponse getByOrganizationId(@PathVariable("organizationId") Long organizationId);
+    ProductListResponse getProductsByOrganizationId(
+            @PathVariable("organizationId") Long organizationId);
 
-    @PutMapping("api/v1/products/{productId}/update-quantity")
-    ProductDetailedDTO updateQuantity(@PathVariable("productId") Long productId, @RequestParam("quantity") Integer quantity);
+    @PutMapping("api/v1/products/{id}/update-quantity")
+    ProductDetailedDTO updateQuantity(
+            @PathVariable("id") Long id,
+            @RequestParam("quantity") Integer quantity);
 
 }

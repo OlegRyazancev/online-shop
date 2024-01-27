@@ -11,4 +11,5 @@ public class OrganizationCreateDTO {
 
     private String name;
     private String description;
+    private Long ownerId;
 }

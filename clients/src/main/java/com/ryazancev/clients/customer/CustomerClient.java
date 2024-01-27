@@ -13,12 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface CustomerClient {
 
-    @GetMapping("api/v1/customers/{customerId}")
-    CustomerDTO getById(@PathVariable("customerId") Long customerId);
+    @GetMapping("api/v1/customers/{id}")
+    CustomerDTO getSimpleById(
+            @PathVariable("id") Long id);
 
-    @GetMapping("api/v1/customers/{customerId}/details")
-    CustomerDetailedDTO getDetailedById(@PathVariable("customerId") Long customerId);
 
-    @PutMapping("api/v1/customers/{customerId}/update-balance")
-    CustomerDetailedDTO updateBalance(@PathVariable("customerId") Long customerId, @RequestParam("balance") Double balance);
+    @GetMapping("api/v1/customers/{id}/details")
+    CustomerDetailedDTO getDetailedById(
+            @PathVariable("id") Long id);
+
+    @PutMapping("api/v1/customers/{id}/update-balance")
+    CustomerDetailedDTO updateBalance(
+            @PathVariable("id") Long id,
+            @RequestParam("balance") Double balance);
 }

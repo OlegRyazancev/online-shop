@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface ReviewClient {
 
-    @GetMapping("api/v1/reviews/products/{productId}")
-    ReviewsProductResponse getByProductId(@PathVariable("productId") Long productId);
+    @GetMapping("api/v1/reviews/products/{id}")
+    ReviewsProductResponse getByProductId(
+            @PathVariable("id") Long id);
 
     @PostMapping("api/v1/reviews")
-    ReviewDetailedDTO create(@RequestBody ReviewPostDTO reviewPostDTO);
+    ReviewDetailedDTO create(
+            @RequestBody ReviewPostDTO reviewPostDTO);
 
 }

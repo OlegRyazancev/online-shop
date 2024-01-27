@@ -1,8 +1,8 @@
 package com.ryazancev.organization.util.mapper;
 
 import com.ryazancev.clients.organization.OrganizationCreateDTO;
-import com.ryazancev.clients.organization.OrganizationSimpleDTO;
 import com.ryazancev.clients.organization.OrganizationDetailedDTO;
+import com.ryazancev.clients.organization.OrganizationSimpleDTO;
 import com.ryazancev.organization.model.Organization;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,7 +17,7 @@ import java.util.List;
 )
 public interface OrganizationMapper {
 
-    List<OrganizationSimpleDTO> toDetailedListDTO(
+    List<OrganizationSimpleDTO> toSimpleListDTO(
             List<Organization> organization);
 
     OrganizationDetailedDTO toDetailedDTO(Organization organization);

@@ -1,5 +1,6 @@
 package com.ryazancev.clients.organization;
 
+import com.ryazancev.clients.customer.CustomerDTO;
 import com.ryazancev.clients.product.ProductSimpleDTO;
 import lombok.*;
 
@@ -17,4 +18,5 @@ public class OrganizationDetailedDTO {
     private String description;
     private String logo;
     private List<ProductSimpleDTO> products;
+    private CustomerDTO owner;
 }
