@@ -43,17 +43,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductSimpleDTO getSimpleById(Long productId) {
+    public ProductSimpleDTO getSimpleById(Long id) {
 
-        Product existing = findById(productId);
+        Product existing = findById(id);
 
         return productMapper.toSimpleDTO(existing);
     }
 
     @Override
-    public ProductDetailedDTO getDetailedById(Long productId) {
+    public ProductDetailedDTO getDetailedById(Long id) {
 
-        Product existing = findById(productId);
+        Product existing = findById(id);
 
         ProductDetailedDTO productDetailedDTO = productMapper
                 .toDetailedDTO(existing);
@@ -74,10 +74,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductListResponse getByOrganizationId(Long organizationId) {
+    public ProductListResponse getByOrganizationId(Long id) {
 
         List<Product> products = productRepository
-                .findByOrganizationId(organizationId);
+                .findByOrganizationId(id);
 
         return ProductListResponse.builder()
                 .products(productMapper.toListDTO(products))
@@ -104,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductDetailedDTO updateQuantity(Long productId, Integer quantity) {
+    public ProductDetailedDTO updateQuantity(Long id, Integer quantity) {
 
         if (quantity < 0) {
             throw new InvalidQuantityException(
@@ -113,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
             );
         }
 
-        Product existing = findById(productId);
+        Product existing = findById(id);
         existing.setQuantityInStock(quantity);
 
         return productMapper.toDetailedDTO(existing);
