@@ -1,8 +1,7 @@
 package com.ryazancev.product.util.mapper;
 
-import com.ryazancev.clients.product.dto.ProductCreateDTO;
-import com.ryazancev.clients.product.dto.ProductDetailedDTO;
-import com.ryazancev.clients.product.dto.ProductSimpleDTO;
+import com.ryazancev.clients.product.dto.ProductDTO;
+import com.ryazancev.clients.product.dto.ProductEditDTO;
 import com.ryazancev.product.model.Product;
 import org.mapstruct.*;
 
@@ -15,9 +14,16 @@ import java.util.List;
 )
 public interface ProductMapper {
 
-    ProductSimpleDTO toSimpleDTO(Product existing);
+    @Named("toSimpleDTO")
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "organization", ignore = true)
+    @Mapping(target = "price", ignore = true)
+    @Mapping(target = "quantityInStock", ignore = true)
+    @Mapping(target = "keywords", ignore = true)
+    ProductDTO toSimpleDTO(Product existing);
 
-    List<ProductSimpleDTO> toListDTO(List<Product> products);
+    @IterableMapping(qualifiedByName = "toSimpleDTO")
+    List<ProductDTO> toSimpleListDTO(List<Product> products);
 
     @Mappings({
             @Mapping(
@@ -26,7 +32,7 @@ public interface ProductMapper {
                     qualifiedByName = "keywordsToString"
             )
     })
-    Product toEntity(ProductCreateDTO productCreateDTO);
+    Product toEntity(ProductEditDTO productEditDTO);
 
     @Mappings({
             @Mapping(
@@ -35,7 +41,7 @@ public interface ProductMapper {
                     qualifiedByName = "stringToKeywords"
             ),
     })
-    ProductDetailedDTO toDetailedDTO(Product product);
+    ProductDTO toDetailedDTO(Product product);
 
     @Named("stringToKeywords")
     default List<String> stringToKeywords(String string) {

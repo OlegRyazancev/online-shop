@@ -8,7 +8,7 @@ import com.ryazancev.clients.organization.dto.OrganizationDTO;
 import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
 import com.ryazancev.clients.organization.dto.OrganizationsSimpleListResponse;
 import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.dto.ProductListResponse;
+import com.ryazancev.clients.product.dto.ProductsSimpleListResponse;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
@@ -60,7 +60,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization existing = findById(id);
 
-        ProductListResponse orgProducts = productClient
+        ProductsSimpleListResponse orgProducts = productClient
                 .getProductsByOrganizationId(existing.getId());
 
         OrganizationDTO organizationDTO = organizationMapper
@@ -123,7 +123,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .getSimpleById(updated.getOwnerId());
         updatedDTO.setOwner(owner);
 
-        ProductListResponse productsResponse = productClient
+        ProductsSimpleListResponse productsResponse = productClient
                 .getProductsByOrganizationId(updated.getId());
         updatedDTO.setProducts(productsResponse.getProducts());
 

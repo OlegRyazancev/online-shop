@@ -3,7 +3,7 @@ package com.ryazancev.review.service.impl;
 import com.ryazancev.clients.customer.CustomerClient;
 import com.ryazancev.clients.customer.dto.CustomerDTO;
 import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.dto.ProductSimpleDTO;
+import com.ryazancev.clients.product.dto.ProductDTO;
 import com.ryazancev.clients.review.dto.*;
 import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
@@ -46,7 +46,7 @@ public class ReviewServiceImpl implements ReviewService {
                 Long productId = reviews.get(i).getProductId();
                 reviewsDTO.get(i)
                         .setProduct(
-                                productClient.getSimpleProductById(productId)
+                                productClient.getSimpleById(productId)
                         );
             }
         }
@@ -59,8 +59,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewsProductResponse getByProductId(Long productId) {
 
-        ProductSimpleDTO foundProduct = productClient
-                .getSimpleProductById(productId);
+        ProductDTO foundProduct = productClient
+                .getSimpleById(productId);
         List<Review> reviews = reviewRepository
                 .findByProductId(foundProduct.getId());
         List<ReviewProductDTO> reviewsDTO = reviewMapper
@@ -87,7 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         try {
             customerClient.getSimpleById(reviewPostDTO.getCustomerId());
-            productClient.getSimpleProductById(reviewPostDTO.getProductId());
+            productClient.getSimpleById(reviewPostDTO.getProductId());
         } catch (Exception e) {
             throw new ReviewCreationException(
                     "Customer/product doesn't exists",
@@ -104,7 +104,7 @@ public class ReviewServiceImpl implements ReviewService {
         savedReviewDTO.setCustomer(customerClient
                 .getSimpleById(reviewPostDTO.getCustomerId()));
         savedReviewDTO.setProduct(productClient
-                .getSimpleProductById(reviewPostDTO.getProductId()));
+                .getSimpleById(reviewPostDTO.getProductId()));
 
         return savedReviewDTO;
     }

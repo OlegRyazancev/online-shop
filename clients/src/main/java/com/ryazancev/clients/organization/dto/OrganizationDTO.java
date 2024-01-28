@@ -2,7 +2,7 @@ package com.ryazancev.clients.organization.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.product.dto.ProductSimpleDTO;
+import com.ryazancev.clients.product.dto.ProductDTO;
 import lombok.*;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class OrganizationDTO {
 
     private String logo;
 
-    private List<ProductSimpleDTO> products;
+    private List<ProductDTO> products;
 
     private CustomerDTO owner;
 }

@@ -1,5 +1,6 @@
 package com.ryazancev.clients.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.clients.organization.dto.OrganizationDTO;
 import com.ryazancev.clients.review.dto.ReviewProductDTO;
 import lombok.*;
@@ -11,7 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductDetailedDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ProductDTO {
 
     private Long id;
 

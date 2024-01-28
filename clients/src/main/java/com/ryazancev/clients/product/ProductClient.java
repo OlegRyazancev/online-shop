@@ -1,8 +1,7 @@
 package com.ryazancev.clients.product;
 
-import com.ryazancev.clients.product.dto.ProductDetailedDTO;
-import com.ryazancev.clients.product.dto.ProductListResponse;
-import com.ryazancev.clients.product.dto.ProductSimpleDTO;
+import com.ryazancev.clients.product.dto.ProductDTO;
+import com.ryazancev.clients.product.dto.ProductsSimpleListResponse;
 import com.ryazancev.config.FeignClientsConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,19 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface ProductClient {
     @GetMapping("api/v1/products/{id}")
-    ProductSimpleDTO getSimpleProductById(
+    ProductDTO getSimpleById(
             @PathVariable("id") Long id);
 
     @GetMapping("api/v1/products/{id}/details")
-    ProductDetailedDTO getDetailedProductById(
+    ProductDTO getDetailedById(
             @PathVariable("id") Long id);
 
     @GetMapping("api/v1/products/organizations/{organizationId}")
-    ProductListResponse getProductsByOrganizationId(
+    ProductsSimpleListResponse getProductsByOrganizationId(
             @PathVariable("organizationId") Long organizationId);
 
     @PutMapping("api/v1/products/{id}/update-quantity")
-    ProductDetailedDTO updateQuantity(
+    ProductDTO updateQuantity(
             @PathVariable("id") Long id,
             @RequestParam("quantity") Integer quantity);
 

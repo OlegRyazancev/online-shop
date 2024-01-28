@@ -4,7 +4,7 @@ import com.ryazancev.clients.customer.CustomerClient;
 import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.dto.ProductDetailedDTO;
+import com.ryazancev.clients.product.dto.ProductDTO;
 import com.ryazancev.clients.purchase.dto.PurchaseDetailedDTO;
 import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
 import com.ryazancev.purchase.model.Purchase;
@@ -40,8 +40,8 @@ public class PurchaseServiceImpl implements PurchaseService {
     public PurchaseDetailedDTO processPurchase(
             PurchasePostDTO purchasePostDTO) {
 
-        ProductDetailedDTO selectedProduct = productClient
-                .getDetailedProductById(purchasePostDTO.getProductId());
+        ProductDTO selectedProduct = productClient
+                .getDetailedById(purchasePostDTO.getProductId());
         CustomerDetailedDTO selectedCustomer = customerClient
                 .getDetailedById(purchasePostDTO.getCustomerId());
 

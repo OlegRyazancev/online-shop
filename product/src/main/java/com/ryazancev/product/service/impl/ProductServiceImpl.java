@@ -2,7 +2,9 @@ package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.organization.OrganizationClient;
 import com.ryazancev.clients.organization.dto.OrganizationDTO;
-import com.ryazancev.clients.product.dto.*;
+import com.ryazancev.clients.product.dto.ProductDTO;
+import com.ryazancev.clients.product.dto.ProductEditDTO;
+import com.ryazancev.clients.product.dto.ProductsSimpleListResponse;
 import com.ryazancev.clients.review.ReviewClient;
 import com.ryazancev.clients.review.dto.ReviewDetailedDTO;
 import com.ryazancev.clients.review.dto.ReviewPostDTO;
@@ -36,18 +38,18 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewClient reviewClient;
 
     @Override
-    public ProductListResponse getAll() {
+    public ProductsSimpleListResponse getAll() {
 
         List<Product> products = productRepository.findAll();
-        List<ProductSimpleDTO> productsDTO = productMapper.toListDTO(products);
+        List<ProductDTO> productsDTO = productMapper.toSimpleListDTO(products);
 
-        return ProductListResponse.builder()
+        return ProductsSimpleListResponse.builder()
                 .products(productsDTO)
                 .build();
     }
 
     @Override
-    public ProductSimpleDTO getSimpleById(Long id) {
+    public ProductDTO getSimpleById(Long id) {
 
         Product existing = findById(id);
 
@@ -55,60 +57,61 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDetailedDTO getDetailedById(Long id) {
+    public ProductDTO getDetailedById(Long id) {
 
         Product existing = findById(id);
 
-        ProductDetailedDTO productDetailedDTO = productMapper
+        ProductDTO productDTO = productMapper
                 .toDetailedDTO(existing);
 
-        OrganizationDTO organization = organizationClient
+        OrganizationDTO organizationDTO = organizationClient
                 .getSimpleById(existing.getOrganizationId());
-        productDetailedDTO.setOrganization(organization);
+        productDTO.setOrganization(organizationDTO);
 
         ReviewsProductResponse response = reviewClient
                 .getByProductId(existing.getId());
-        List<ReviewProductDTO> reviews = response.getReviews();
-        productDetailedDTO.setReviews(reviews);
+        List<ReviewProductDTO> reviewsDTO = response.getReviews();
+        productDTO.setReviews(reviewsDTO);
 
-        Double averageRating = calculateAverageRating(reviews);
-        productDetailedDTO.setAverageRating(averageRating);
+        Double averageRating = calculateAverageRating(reviewsDTO);
+        productDTO.setAverageRating(averageRating);
 
-        return productDetailedDTO;
+        return productDTO;
     }
 
     @Override
-    public ProductListResponse getByOrganizationId(Long organizationId) {
+    public ProductsSimpleListResponse getByOrganizationId(Long organizationId) {
 
         List<Product> products = productRepository
                 .findByOrganizationId(organizationId);
 
-        return ProductListResponse.builder()
-                .products(productMapper.toListDTO(products))
+        return ProductsSimpleListResponse.builder()
+                .products(productMapper.toSimpleListDTO(products))
                 .build();
     }
 
     @Transactional
     @Override
-    public ProductDetailedDTO create(ProductCreateDTO productCreateDTO) {
+    public ProductDTO create(ProductEditDTO productEditDTO) {
 
         if (productRepository.findByProductName(
-                productCreateDTO.getProductName()).isPresent()) {
+                productEditDTO.getProductName()).isPresent()) {
             throw new ProductCreationException(
                     "Organization with this name already exists",
                     HttpStatus.BAD_REQUEST
             );
         }
 
-        Product productToSave = productMapper.toEntity(productCreateDTO);
-        Product savedProduct = productRepository.save(productToSave);
+        Product toSave = productMapper.toEntity(productEditDTO);
+        log.info("Org id: {}", toSave.getOrganizationId());
+        Product saved = productRepository.save(toSave);
 
-        return createProductDetailedDTO(savedProduct);
+        return createProductDetailedDTO(saved);
     }
 
     @Transactional
     @Override
-    public ProductDetailedDTO updateQuantity(Long id, Integer quantity) {
+    public ProductDTO updateQuantity(Long id, Integer quantity) {
 
         if (quantity < 0) {
             throw new InvalidQuantityException(
@@ -125,15 +128,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductDetailedDTO update(ProductUpdateDTO productUpdateDTO) {
+    public ProductDTO update(ProductEditDTO productEditDTO) {
 
-        Product existing = findById(productUpdateDTO.getId());
+        Product existing = findById(productEditDTO.getId());
 
-        updateProductFields(existing, productUpdateDTO);
+        updateProductFields(existing, productEditDTO);
 
-        Product savedProduct = productRepository.save(existing);
+        Product saved = productRepository.save(existing);
 
-        return createProductDetailedDTO(savedProduct);
+        return createProductDetailedDTO(saved);
     }
 
     @Override
@@ -157,14 +160,14 @@ public class ProductServiceImpl implements ProductService {
                 ));
     }
 
-    private ProductDetailedDTO createProductDetailedDTO(Product savedProduct) {
+    private ProductDTO createProductDetailedDTO(Product product) {
 
-        ProductDetailedDTO savedProductDetailedDTO = productMapper
-                .toDetailedDTO(savedProduct);
-        OrganizationDTO productOrganization = organizationClient
-                .getSimpleById(savedProduct.getOrganizationId());
-        savedProductDetailedDTO.setOrganization(productOrganization);
-        return savedProductDetailedDTO;
+        ProductDTO productDTO = productMapper
+                .toDetailedDTO(product);
+        OrganizationDTO organizationDTO = organizationClient
+                .getSimpleById(product.getOrganizationId());
+        productDTO.setOrganization(organizationDTO);
+        return productDTO;
     }
 
     private Double calculateAverageRating(List<ReviewProductDTO> reviews) {
@@ -175,16 +178,16 @@ public class ProductServiceImpl implements ProductService {
                 .orElse(0.0);
     }
 
-    private void updateProductFields(Product existing,
-                                     ProductUpdateDTO productUpdateDTO) {
+    private void updateProductFields(Product product,
+                                     ProductEditDTO productEditDTO) {
 
-        existing.setProductName(productUpdateDTO.getProductName());
-        existing.setDescription(productUpdateDTO.getDescription());
-        existing.setPrice(productUpdateDTO.getPrice());
-        existing.setQuantityInStock(productUpdateDTO.getQuantityInStock());
-        existing.setKeywords(String.join(
+        product.setProductName(productEditDTO.getProductName());
+        product.setDescription(productEditDTO.getDescription());
+        product.setPrice(productEditDTO.getPrice());
+        product.setQuantityInStock(productEditDTO.getQuantityInStock());
+        product.setKeywords(String.join(
                 ", ",
-                productUpdateDTO.getKeywords()
+                productEditDTO.getKeywords()
         ));
     }
 }
