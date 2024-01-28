@@ -2,6 +2,10 @@ package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.clients.customer.dto.CustomerDTO;
 import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
+import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
+import com.ryazancev.clients.purchase.PurchaseClient;
+import com.ryazancev.clients.purchase.dto.PurchaseDTO;
+import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
@@ -19,8 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
+
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+
+    private final PurchaseClient purchaseClient;
 
     @Override
     public CustomerDTO getById(Long id) {
@@ -53,6 +60,16 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(existing);
 
         return customerMapper.toDetailedDTO(existing);
+    }
+
+    @Override
+    public CustomerPurchasesResponse getPurchasesByCustomerId(Long id) {
+        return purchaseClient.getByCustomerId(id);
+    }
+
+    @Override
+    public PurchaseDTO processPurchase(PurchasePostDTO purchasePostDTO) {
+        return purchaseClient.processPurchase(purchasePostDTO);
     }
 
     private Customer findById(Long id) {

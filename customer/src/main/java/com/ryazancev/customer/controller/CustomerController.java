@@ -2,6 +2,9 @@ package com.ryazancev.customer.controller;
 
 import com.ryazancev.clients.customer.dto.CustomerDTO;
 import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
+import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
+import com.ryazancev.clients.purchase.dto.PurchaseDTO;
+import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
 import com.ryazancev.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +35,27 @@ public class CustomerController {
         return customerService.getDetailedById(id);
     }
 
+    @GetMapping("/{id}/purchases")
+    public CustomerPurchasesResponse getPurchasesByCustomerId(
+            @PathVariable("id") Long id) {
+
+        return customerService.getPurchasesByCustomerId(id);
+    }
+
     @PutMapping("/{id}/update-balance")
     public CustomerDetailedDTO updateBalance(
             @PathVariable("id") Long id,
             @RequestParam("balance") Double balance) {
 
         return customerService.updateBalance(id, balance);
+    }
+
+    @PostMapping("/purchases")
+    public PurchaseDTO processPurchase(
+            @RequestBody
+            @Validated PurchasePostDTO purchasePostDTO) {
+
+        return customerService.processPurchase(purchasePostDTO);
     }
 
     //todo: add method to watch notifications

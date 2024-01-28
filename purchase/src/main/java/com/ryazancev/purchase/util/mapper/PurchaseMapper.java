@@ -1,6 +1,6 @@
 package com.ryazancev.purchase.util.mapper;
 
-import com.ryazancev.clients.purchase.dto.PurchaseDetailedDTO;
+import com.ryazancev.clients.purchase.dto.PurchaseDTO;
 import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
 import com.ryazancev.purchase.model.Purchase;
 import org.mapstruct.Mapper;
@@ -16,7 +16,7 @@ public interface PurchaseMapper {
 
     Purchase toEntity(PurchasePostDTO purchasePostDTO);
 
-    List<PurchaseDetailedDTO> toDetailedListDTO(List<Purchase> purchase);
+    List<PurchaseDTO> toListDTO(List<Purchase> purchase);
 
-    PurchaseDetailedDTO toDetailedDTO(Purchase purchase);
+    PurchaseDTO toDTO(Purchase purchase);
 }

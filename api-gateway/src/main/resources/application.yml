@@ -11,10 +11,6 @@ spring:
           uri: lb://CUSTOMER
           predicates:
             - Path=/api/v1/customers/**
-        - id: purchase
-          uri: lb://PURCHASE
-          predicates:
-            - Path=/api/v1/purchases/**
         - id: organization
           uri: lb://ORGANIZATION
           predicates:

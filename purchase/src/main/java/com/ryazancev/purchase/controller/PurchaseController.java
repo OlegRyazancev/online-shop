@@ -1,7 +1,7 @@
 package com.ryazancev.purchase.controller;
 
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.dto.PurchaseDetailedDTO;
+import com.ryazancev.clients.purchase.dto.PurchaseDTO;
 import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
 import com.ryazancev.purchase.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
 
     @PostMapping
-    public PurchaseDetailedDTO processPurchase(
+    public PurchaseDTO processPurchase(
             @RequestBody PurchasePostDTO purchasePostDTO) {
 
         return purchaseService.processPurchase(purchasePostDTO);

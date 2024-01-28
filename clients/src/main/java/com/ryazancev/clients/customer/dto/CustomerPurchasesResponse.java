@@ -1,7 +1,7 @@
 package com.ryazancev.clients.customer.dto;
 
 
-import com.ryazancev.clients.purchase.dto.PurchaseDetailedDTO;
+import com.ryazancev.clients.purchase.dto.PurchaseDTO;
 import lombok.*;
 
 import java.util.List;
@@ -13,5 +13,5 @@ import java.util.List;
 @Builder
 public class CustomerPurchasesResponse {
 
-    private List<PurchaseDetailedDTO> purchases;
+    private List<PurchaseDTO> purchases;
 }

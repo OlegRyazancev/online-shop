@@ -1,11 +1,12 @@
 package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.customer.CustomerClient;
+import com.ryazancev.clients.customer.dto.CustomerDTO;
 import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.product.ProductClient;
 import com.ryazancev.clients.product.dto.ProductDTO;
-import com.ryazancev.clients.purchase.dto.PurchaseDetailedDTO;
+import com.ryazancev.clients.purchase.dto.PurchaseDTO;
 import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
@@ -37,7 +38,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Transactional
     @Override
-    public PurchaseDetailedDTO processPurchase(
+    public PurchaseDTO processPurchase(
             PurchasePostDTO purchasePostDTO) {
 
         ProductDTO selectedProduct = productClient
@@ -72,12 +73,22 @@ public class PurchaseServiceImpl implements PurchaseService {
                 selectedProduct.getId(),
                 availableProductsInStock - 1);
 
-        Purchase purchaseToSave = purchaseMapper.toEntity(purchasePostDTO);
-        purchaseToSave.setPurchaseDate(LocalDateTime.now());
-        purchaseToSave.setAmount(selectedProductPrice);
+        Purchase toSave = purchaseMapper.toEntity(purchasePostDTO);
+        toSave.setPurchaseDate(LocalDateTime.now());
+        toSave.setAmount(selectedProductPrice);
 
-        return purchaseMapper.toDetailedDTO(
-                purchaseRepository.save(purchaseToSave));
+        Purchase saved = purchaseRepository.save(toSave);
+        PurchaseDTO purchaseDTO = purchaseMapper.toDTO(saved);
+
+        CustomerDTO customerDTO = customerClient
+                .getSimpleById(saved.getCustomerId());
+        ProductDTO productDTO = productClient
+                .getSimpleById(saved.getProductId());
+
+        purchaseDTO.setCustomer(customerDTO);
+        purchaseDTO.setProduct(productDTO);
+
+        return purchaseDTO;
     }
 
     @Override
@@ -91,8 +102,16 @@ public class PurchaseServiceImpl implements PurchaseService {
                     HttpStatus.NOT_FOUND
             );
         }
+
+        List<PurchaseDTO> purchasesDTO = purchaseMapper.toListDTO(purchases);
+
+        for (int i = 0; i < purchasesDTO.size(); i++) {
+            ProductDTO productDTO = productClient
+                    .getSimpleById(purchases.get(i).getProductId());
+            purchasesDTO.get(i).setProduct(productDTO);
+        }
         return CustomerPurchasesResponse.builder()
-                .purchases(purchaseMapper.toDetailedListDTO(purchases))
+                .purchases(purchasesDTO)
                 .build();
     }
 }
