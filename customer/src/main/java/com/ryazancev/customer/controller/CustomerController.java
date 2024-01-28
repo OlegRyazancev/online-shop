@@ -4,8 +4,10 @@ import com.ryazancev.clients.customer.dto.CustomerDTO;
 import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.purchase.dto.PurchaseDTO;
-import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
+import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
+import com.ryazancev.clients.review.dto.ReviewsResponse;
 import com.ryazancev.customer.service.CustomerService;
+import com.ryazancev.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -35,13 +37,6 @@ public class CustomerController {
         return customerService.getDetailedById(id);
     }
 
-    @GetMapping("/{id}/purchases")
-    public CustomerPurchasesResponse getPurchasesByCustomerId(
-            @PathVariable("id") Long id) {
-
-        return customerService.getPurchasesByCustomerId(id);
-    }
-
     @PutMapping("/{id}/update-balance")
     public CustomerDetailedDTO updateBalance(
             @PathVariable("id") Long id,
@@ -50,12 +45,28 @@ public class CustomerController {
         return customerService.updateBalance(id, balance);
     }
 
+
+    @GetMapping("/{id}/reviews")
+    public ReviewsResponse getReviewsByCustomerId(
+            @PathVariable("id") Long id) {
+
+        return customerService.getReviewsByCustomerId(id);
+    }
+
+    @GetMapping("/{id}/purchases")
+    public CustomerPurchasesResponse getPurchasesByCustomerId(
+            @PathVariable("id") Long id) {
+
+        return customerService.getPurchasesByCustomerId(id);
+    }
+
     @PostMapping("/purchases")
     public PurchaseDTO processPurchase(
             @RequestBody
-            @Validated PurchasePostDTO purchasePostDTO) {
+            @Validated(OnCreate.class)
+            PurchaseEditDTO purchaseEditDTO) {
 
-        return customerService.processPurchase(purchasePostDTO);
+        return customerService.processPurchase(purchaseEditDTO);
     }
 
     //todo: add method to watch notifications

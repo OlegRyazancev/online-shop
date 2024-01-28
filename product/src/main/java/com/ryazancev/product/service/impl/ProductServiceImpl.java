@@ -4,12 +4,11 @@ import com.ryazancev.clients.organization.OrganizationClient;
 import com.ryazancev.clients.organization.dto.OrganizationDTO;
 import com.ryazancev.clients.product.dto.ProductDTO;
 import com.ryazancev.clients.product.dto.ProductEditDTO;
-import com.ryazancev.clients.product.dto.ProductsSimpleListResponse;
+import com.ryazancev.clients.product.dto.ProductsSimpleResponse;
 import com.ryazancev.clients.review.ReviewClient;
-import com.ryazancev.clients.review.dto.ReviewDetailedDTO;
+import com.ryazancev.clients.review.dto.ReviewDTO;
 import com.ryazancev.clients.review.dto.ReviewPostDTO;
-import com.ryazancev.clients.review.dto.ReviewProductDTO;
-import com.ryazancev.clients.review.dto.ReviewsProductResponse;
+import com.ryazancev.clients.review.dto.ReviewsResponse;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
@@ -38,12 +37,12 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewClient reviewClient;
 
     @Override
-    public ProductsSimpleListResponse getAll() {
+    public ProductsSimpleResponse getAll() {
 
         List<Product> products = productRepository.findAll();
         List<ProductDTO> productsDTO = productMapper.toSimpleListDTO(products);
 
-        return ProductsSimpleListResponse.builder()
+        return ProductsSimpleResponse.builder()
                 .products(productsDTO)
                 .build();
     }
@@ -68,9 +67,9 @@ public class ProductServiceImpl implements ProductService {
                 .getSimpleById(existing.getOrganizationId());
         productDTO.setOrganization(organizationDTO);
 
-        ReviewsProductResponse response = reviewClient
+        ReviewsResponse response = reviewClient
                 .getByProductId(existing.getId());
-        List<ReviewProductDTO> reviewsDTO = response.getReviews();
+        List<ReviewDTO> reviewsDTO = response.getReviews();
         productDTO.setReviews(reviewsDTO);
 
         Double averageRating = calculateAverageRating(reviewsDTO);
@@ -80,12 +79,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductsSimpleListResponse getByOrganizationId(Long organizationId) {
+    public ProductsSimpleResponse getByOrganizationId(Long organizationId) {
 
         List<Product> products = productRepository
                 .findByOrganizationId(organizationId);
 
-        return ProductsSimpleListResponse.builder()
+        return ProductsSimpleResponse.builder()
                 .products(productMapper.toSimpleListDTO(products))
                 .build();
     }
@@ -140,13 +139,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ReviewsProductResponse getReviewsByProductId(Long productId) {
+    public ReviewsResponse getReviewsByProductId(Long productId) {
 
         return reviewClient.getByProductId(productId);
     }
 
     @Override
-    public ReviewDetailedDTO createReview(ReviewPostDTO reviewPostDTO) {
+    public ReviewDTO createReview(ReviewPostDTO reviewPostDTO) {
 
         return reviewClient.create(reviewPostDTO);
     }
@@ -170,10 +169,10 @@ public class ProductServiceImpl implements ProductService {
         return productDTO;
     }
 
-    private Double calculateAverageRating(List<ReviewProductDTO> reviews) {
+    private Double calculateAverageRating(List<ReviewDTO> reviews) {
 
         return reviews.stream()
-                .mapToDouble(ReviewProductDTO::getRating)
+                .mapToDouble(ReviewDTO::getRating)
                 .average()
                 .orElse(0.0);
     }

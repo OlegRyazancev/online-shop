@@ -1,9 +1,8 @@
 package com.ryazancev.review.controller;
 
-import com.ryazancev.clients.review.dto.ReviewDetailedDTO;
+import com.ryazancev.clients.review.dto.ReviewDTO;
 import com.ryazancev.clients.review.dto.ReviewPostDTO;
-import com.ryazancev.clients.review.dto.ReviewsCustomerResponse;
-import com.ryazancev.clients.review.dto.ReviewsProductResponse;
+import com.ryazancev.clients.review.dto.ReviewsResponse;
 import com.ryazancev.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,21 +19,21 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/customers/{id}")
-    public ReviewsCustomerResponse getByCustomerId(
+    public ReviewsResponse getByCustomerId(
             @PathVariable("id") Long id) {
 
         return reviewService.getByCustomerId(id);
     }
 
     @GetMapping("/products/{id}")
-    public ReviewsProductResponse getByProductId(
+    public ReviewsResponse getByProductId(
             @PathVariable("id") Long id) {
 
         return reviewService.getByProductId(id);
     }
 
     @PostMapping
-    public ReviewDetailedDTO create(
+    public ReviewDTO create(
             @RequestBody ReviewPostDTO reviewPostDTO) {
 
         return reviewService.create(reviewPostDTO);

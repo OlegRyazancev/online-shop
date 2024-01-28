@@ -2,13 +2,17 @@ package com.ryazancev.review.util.exception;
 
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
+import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -37,6 +41,25 @@ public class ReviewExceptionHandler {
                         violation -> violation.getPropertyPath().toString(),
                         ConstraintViolation::getMessage
                 )));
+        exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
+        exceptionBody.setServiceStage(ServiceStage.REVIEW);
+
+        return ResponseEntity
+                .status(exceptionBody.getHttpStatus())
+                .body(exceptionBody);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException e) {
+
+        ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
+        List<FieldError> errors = e.getBindingResult().getFieldErrors();
+        exceptionBody.setErrors(errors.stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        FieldError::getDefaultMessage)));
+
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.REVIEW);
 

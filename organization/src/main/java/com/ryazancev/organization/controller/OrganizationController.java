@@ -3,7 +3,7 @@ package com.ryazancev.organization.controller;
 import com.ryazancev.clients.logo.dto.LogoDTO;
 import com.ryazancev.clients.organization.dto.OrganizationDTO;
 import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
-import com.ryazancev.clients.organization.dto.OrganizationsSimpleListResponse;
+import com.ryazancev.clients.organization.dto.OrganizationsSimpleResponse;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
@@ -22,7 +22,7 @@ public class OrganizationController {
     private final OrganizationService organizationService;
 
     @GetMapping
-    public OrganizationsSimpleListResponse getAll() {
+    public OrganizationsSimpleResponse getAll() {
 
         return organizationService.getAll();
     }

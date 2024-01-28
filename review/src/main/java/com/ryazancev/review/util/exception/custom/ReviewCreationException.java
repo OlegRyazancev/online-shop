@@ -1,4 +1,4 @@
-package com.ryazancev.review.util.exception;
+package com.ryazancev.review.util.exception.custom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

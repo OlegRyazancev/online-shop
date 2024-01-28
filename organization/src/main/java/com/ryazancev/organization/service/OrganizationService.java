@@ -3,11 +3,11 @@ package com.ryazancev.organization.service;
 import com.ryazancev.clients.logo.dto.LogoDTO;
 import com.ryazancev.clients.organization.dto.OrganizationDTO;
 import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
-import com.ryazancev.clients.organization.dto.OrganizationsSimpleListResponse;
+import com.ryazancev.clients.organization.dto.OrganizationsSimpleResponse;
 
 public interface OrganizationService {
 
-    OrganizationsSimpleListResponse getAll();
+    OrganizationsSimpleResponse getAll();
 
     OrganizationDTO getSimpleById(Long id);
 

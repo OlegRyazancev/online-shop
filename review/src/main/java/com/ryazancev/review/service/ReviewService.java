@@ -1,15 +1,14 @@
 package com.ryazancev.review.service;
 
-import com.ryazancev.clients.review.dto.ReviewDetailedDTO;
+import com.ryazancev.clients.review.dto.ReviewDTO;
 import com.ryazancev.clients.review.dto.ReviewPostDTO;
-import com.ryazancev.clients.review.dto.ReviewsCustomerResponse;
-import com.ryazancev.clients.review.dto.ReviewsProductResponse;
+import com.ryazancev.clients.review.dto.ReviewsResponse;
 
 public interface ReviewService {
 
-    ReviewsCustomerResponse getByCustomerId(Long customerId);
+    ReviewsResponse getByCustomerId(Long customerId);
 
-    ReviewsProductResponse getByProductId(Long id);
+    ReviewsResponse getByProductId(Long id);
 
-    ReviewDetailedDTO create(ReviewPostDTO reviewPostDTO);
+    ReviewDTO create(ReviewPostDTO reviewPostDTO);
 }

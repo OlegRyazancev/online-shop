@@ -2,10 +2,10 @@ package com.ryazancev.product.controller;
 
 import com.ryazancev.clients.product.dto.ProductDTO;
 import com.ryazancev.clients.product.dto.ProductEditDTO;
-import com.ryazancev.clients.product.dto.ProductsSimpleListResponse;
-import com.ryazancev.clients.review.dto.ReviewDetailedDTO;
+import com.ryazancev.clients.product.dto.ProductsSimpleResponse;
+import com.ryazancev.clients.review.dto.ReviewDTO;
 import com.ryazancev.clients.review.dto.ReviewPostDTO;
-import com.ryazancev.clients.review.dto.ReviewsProductResponse;
+import com.ryazancev.clients.review.dto.ReviewsResponse;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
@@ -24,7 +24,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ProductsSimpleListResponse getAll() {
+    public ProductsSimpleResponse getAll() {
 
         return productService.getAll();
     }
@@ -44,22 +44,24 @@ public class ProductController {
     }
 
     @GetMapping("/organizations/{id}")
-    public ProductsSimpleListResponse getProductsByOrganizationId(
+    public ProductsSimpleResponse getProductsByOrganizationId(
             @PathVariable("id") Long id) {
 
         return productService.getByOrganizationId(id);
     }
 
     @GetMapping("/{id}/reviews")
-    public ReviewsProductResponse getReviewsByProductId(
+    public ReviewsResponse getReviewsByProductId(
             @PathVariable("id") Long id) {
 
         return productService.getReviewsByProductId(id);
     }
 
     @PostMapping("/reviews")
-    public ReviewDetailedDTO createReview(
-            @RequestBody ReviewPostDTO reviewPostDTO) {
+    public ReviewDTO createReview(
+            @RequestBody
+            @Validated({OnCreate.class})
+            ReviewPostDTO reviewPostDTO) {
 
         return productService.createReview(reviewPostDTO);
     }

@@ -7,7 +7,7 @@ import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.product.ProductClient;
 import com.ryazancev.clients.product.dto.ProductDTO;
 import com.ryazancev.clients.purchase.dto.PurchaseDTO;
-import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
+import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;
@@ -39,12 +39,12 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Transactional
     @Override
     public PurchaseDTO processPurchase(
-            PurchasePostDTO purchasePostDTO) {
+            PurchaseEditDTO purchaseEditDTO) {
 
         ProductDTO selectedProduct = productClient
-                .getDetailedById(purchasePostDTO.getProductId());
+                .getDetailedById(purchaseEditDTO.getProductId());
         CustomerDetailedDTO selectedCustomer = customerClient
-                .getDetailedById(purchasePostDTO.getCustomerId());
+                .getDetailedById(purchaseEditDTO.getCustomerId());
 
         Double selectedProductPrice = selectedProduct.getPrice();
         Integer availableProductsInStock = selectedProduct.getQuantityInStock();
@@ -73,7 +73,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 selectedProduct.getId(),
                 availableProductsInStock - 1);
 
-        Purchase toSave = purchaseMapper.toEntity(purchasePostDTO);
+        Purchase toSave = purchaseMapper.toEntity(purchaseEditDTO);
         toSave.setPurchaseDate(LocalDateTime.now());
         toSave.setAmount(selectedProductPrice);
 

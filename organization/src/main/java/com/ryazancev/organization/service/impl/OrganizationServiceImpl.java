@@ -6,9 +6,9 @@ import com.ryazancev.clients.logo.LogoClient;
 import com.ryazancev.clients.logo.dto.LogoDTO;
 import com.ryazancev.clients.organization.dto.OrganizationDTO;
 import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
-import com.ryazancev.clients.organization.dto.OrganizationsSimpleListResponse;
+import com.ryazancev.clients.organization.dto.OrganizationsSimpleResponse;
 import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.dto.ProductsSimpleListResponse;
+import com.ryazancev.clients.product.dto.ProductsSimpleResponse;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
@@ -37,11 +37,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final CustomerClient customerClient;
 
     @Override
-    public OrganizationsSimpleListResponse getAll() {
+    public OrganizationsSimpleResponse getAll() {
 
         List<Organization> organizations = organizationRepository.findAll();
 
-        return OrganizationsSimpleListResponse.builder()
+        return OrganizationsSimpleResponse.builder()
                 .organizations(organizationMapper
                         .toSimpleListDTO(organizations))
                 .build();
@@ -60,7 +60,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization existing = findById(id);
 
-        ProductsSimpleListResponse orgProducts = productClient
+        ProductsSimpleResponse orgProducts = productClient
                 .getProductsByOrganizationId(existing.getId());
 
         OrganizationDTO organizationDTO = organizationMapper
@@ -123,7 +123,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .getSimpleById(updated.getOwnerId());
         updatedDTO.setOwner(owner);
 
-        ProductsSimpleListResponse productsResponse = productClient
+        ProductsSimpleResponse productsResponse = productClient
                 .getProductsByOrganizationId(updated.getId());
         updatedDTO.setProducts(productsResponse.getProducts());
 

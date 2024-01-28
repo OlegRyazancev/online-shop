@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductsSimpleListResponse {
+public class ProductsSimpleResponse {
 
     private List<ProductDTO> products;
 }

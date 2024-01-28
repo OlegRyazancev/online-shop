@@ -4,11 +4,13 @@ import com.ryazancev.clients.customer.CustomerClient;
 import com.ryazancev.clients.customer.dto.CustomerDTO;
 import com.ryazancev.clients.product.ProductClient;
 import com.ryazancev.clients.product.dto.ProductDTO;
-import com.ryazancev.clients.review.dto.*;
+import com.ryazancev.clients.review.dto.ReviewDTO;
+import com.ryazancev.clients.review.dto.ReviewPostDTO;
+import com.ryazancev.clients.review.dto.ReviewsResponse;
 import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
 import com.ryazancev.review.service.ReviewService;
-import com.ryazancev.review.util.exception.ReviewCreationException;
+import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,14 +34,14 @@ public class ReviewServiceImpl implements ReviewService {
     private final ProductClient productClient;
 
     @Override
-    public ReviewsCustomerResponse getByCustomerId(Long customerId) {
+    public ReviewsResponse getByCustomerId(Long customerId) {
 
         CustomerDTO foundCustomer = customerClient
                 .getSimpleById(customerId);
         List<Review> reviews = reviewRepository
                 .findByCustomerId(foundCustomer.getId());
-        List<ReviewCustomerDTO> reviewsDTO = reviewMapper
-                .toCustomerDTO(reviews);
+        List<ReviewDTO> reviewsDTO = reviewMapper
+                .toListDTO(reviews);
 
         if (!reviewsDTO.isEmpty()) {
             for (int i = 0; i < reviewsDTO.size(); i++) {
@@ -51,20 +53,20 @@ public class ReviewServiceImpl implements ReviewService {
             }
         }
 
-        return ReviewsCustomerResponse.builder()
+        return ReviewsResponse.builder()
                 .reviews(reviewsDTO)
                 .build();
     }
 
     @Override
-    public ReviewsProductResponse getByProductId(Long productId) {
+    public ReviewsResponse getByProductId(Long productId) {
 
         ProductDTO foundProduct = productClient
                 .getSimpleById(productId);
         List<Review> reviews = reviewRepository
                 .findByProductId(foundProduct.getId());
-        List<ReviewProductDTO> reviewsDTO = reviewMapper
-                .toProductDTO(reviews);
+        List<ReviewDTO> reviewsDTO = reviewMapper
+                .toListDTO(reviews);
 
         if (!reviewsDTO.isEmpty()) {
             for (int i = 0; i < reviewsDTO.size(); i++) {
@@ -76,14 +78,14 @@ public class ReviewServiceImpl implements ReviewService {
             }
         }
 
-        return ReviewsProductResponse.builder()
+        return ReviewsResponse.builder()
                 .reviews(reviewsDTO)
                 .build();
     }
 
     @Transactional
     @Override
-    public ReviewDetailedDTO create(ReviewPostDTO reviewPostDTO) {
+    public ReviewDTO create(ReviewPostDTO reviewPostDTO) {
 
         try {
             customerClient.getSimpleById(reviewPostDTO.getCustomerId());
@@ -94,13 +96,13 @@ public class ReviewServiceImpl implements ReviewService {
                     HttpStatus.NOT_FOUND);
         }
 
-        Review reviewToSave = reviewMapper.toEntity(reviewPostDTO);
-        reviewToSave.setCreatedAt(LocalDateTime.now());
+        Review toSave = reviewMapper.toEntity(reviewPostDTO);
+        toSave.setCreatedAt(LocalDateTime.now());
 
-        Review savedReview = reviewRepository.insert(reviewToSave);
+        Review saved = reviewRepository.insert(toSave);
 
-        ReviewDetailedDTO savedReviewDTO = reviewMapper
-                .toDetailedDTO(savedReview);
+        ReviewDTO savedReviewDTO = reviewMapper
+                .toDTO(saved);
         savedReviewDTO.setCustomer(customerClient
                 .getSimpleById(reviewPostDTO.getCustomerId()));
         savedReviewDTO.setProduct(productClient

@@ -5,7 +5,9 @@ import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.purchase.PurchaseClient;
 import com.ryazancev.clients.purchase.dto.PurchaseDTO;
-import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
+import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
+import com.ryazancev.clients.review.ReviewClient;
+import com.ryazancev.clients.review.dto.ReviewsResponse;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
@@ -28,6 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper customerMapper;
 
     private final PurchaseClient purchaseClient;
+    private final ReviewClient reviewClient;
 
     @Override
     public CustomerDTO getById(Long id) {
@@ -68,8 +71,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public PurchaseDTO processPurchase(PurchasePostDTO purchasePostDTO) {
-        return purchaseClient.processPurchase(purchasePostDTO);
+    public PurchaseDTO processPurchase(PurchaseEditDTO purchaseEditDTO) {
+
+        return purchaseClient.processPurchase(purchaseEditDTO);
+    }
+
+    @Override
+    public ReviewsResponse getReviewsByCustomerId(Long id) {
+
+        return reviewClient.getByCustomerId(id);
     }
 
     private Customer findById(Long id) {

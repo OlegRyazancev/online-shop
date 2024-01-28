@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrganizationsSimpleListResponse {
+public class OrganizationsSimpleResponse {
     private List<OrganizationDTO> organizations;
 }

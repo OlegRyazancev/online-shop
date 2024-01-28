@@ -4,7 +4,8 @@ import com.ryazancev.clients.customer.dto.CustomerDTO;
 import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.purchase.dto.PurchaseDTO;
-import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
+import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
+import com.ryazancev.clients.review.dto.ReviewsResponse;
 
 public interface CustomerService {
     CustomerDTO getById(Long id);
@@ -15,5 +16,7 @@ public interface CustomerService {
 
     CustomerPurchasesResponse getPurchasesByCustomerId(Long id);
 
-    PurchaseDTO processPurchase(PurchasePostDTO purchasePostDTO);
+    PurchaseDTO processPurchase(PurchaseEditDTO purchaseEditDTO);
+
+    ReviewsResponse getReviewsByCustomerId(Long id);
 }

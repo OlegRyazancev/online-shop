@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewsCustomerResponse {
+public class ReviewsResponse {
 
-    private List<ReviewCustomerDTO> reviews;
+    private List<ReviewDTO> reviews;
 }

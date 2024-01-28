@@ -2,7 +2,7 @@ package com.ryazancev.clients.product.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.clients.organization.dto.OrganizationDTO;
-import com.ryazancev.clients.review.dto.ReviewProductDTO;
+import com.ryazancev.clients.review.dto.ReviewDTO;
 import lombok.*;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class ProductDTO {
 
     private List<String> keywords;
 
-    private List<ReviewProductDTO> reviews;
+    private List<ReviewDTO> reviews;
 
     private Double averageRating;
 

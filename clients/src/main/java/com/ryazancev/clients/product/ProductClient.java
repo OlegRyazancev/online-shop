@@ -1,7 +1,7 @@
 package com.ryazancev.clients.product;
 
 import com.ryazancev.clients.product.dto.ProductDTO;
-import com.ryazancev.clients.product.dto.ProductsSimpleListResponse;
+import com.ryazancev.clients.product.dto.ProductsSimpleResponse;
 import com.ryazancev.config.FeignClientsConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ public interface ProductClient {
             @PathVariable("id") Long id);
 
     @GetMapping("api/v1/products/organizations/{organizationId}")
-    ProductsSimpleListResponse getProductsByOrganizationId(
+    ProductsSimpleResponse getProductsByOrganizationId(
             @PathVariable("organizationId") Long organizationId);
 
     @PutMapping("api/v1/products/{id}/update-quantity")
