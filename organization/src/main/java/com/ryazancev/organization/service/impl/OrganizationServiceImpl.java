@@ -1,12 +1,14 @@
 package com.ryazancev.organization.service.impl;
 
 import com.ryazancev.clients.customer.CustomerClient;
-import com.ryazancev.clients.customer.CustomerDTO;
+import com.ryazancev.clients.customer.dto.CustomerDTO;
 import com.ryazancev.clients.logo.LogoClient;
-import com.ryazancev.clients.logo.LogoDTO;
-import com.ryazancev.clients.organization.*;
+import com.ryazancev.clients.logo.dto.LogoDTO;
+import com.ryazancev.clients.organization.dto.OrganizationDTO;
+import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
+import com.ryazancev.clients.organization.dto.OrganizationsSimpleListResponse;
 import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.ProductListResponse;
+import com.ryazancev.clients.product.dto.ProductListResponse;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
@@ -35,18 +37,18 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final CustomerClient customerClient;
 
     @Override
-    public OrganizationsListResponse getAll() {
+    public OrganizationsSimpleListResponse getAll() {
 
         List<Organization> organizations = organizationRepository.findAll();
 
-        return OrganizationsListResponse.builder()
+        return OrganizationsSimpleListResponse.builder()
                 .organizations(organizationMapper
                         .toSimpleListDTO(organizations))
                 .build();
     }
 
     @Override
-    public OrganizationSimpleDTO getSimpleById(Long id) {
+    public OrganizationDTO getSimpleById(Long id) {
 
         Organization existing = findById(id);
 
@@ -54,14 +56,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public OrganizationDetailedDTO getDetailedById(Long id) {
+    public OrganizationDTO getDetailedById(Long id) {
 
         Organization existing = findById(id);
 
         ProductListResponse orgProducts = productClient
                 .getProductsByOrganizationId(existing.getId());
 
-        OrganizationDetailedDTO organizationDTO = organizationMapper
+        OrganizationDTO organizationDTO = organizationMapper
                 .toDetailedDTO(existing);
         organizationDTO.setProducts(orgProducts.getProducts());
 
@@ -76,27 +78,27 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
-    public OrganizationDetailedDTO register(
-            OrganizationCreateDTO organizationCreateDTO) {
+    public OrganizationDTO register(
+            OrganizationEditDTO organizationEditDTO) {
 
         if (organizationRepository
-                .findByName(organizationCreateDTO.getName())
+                .findByName(organizationEditDTO.getName())
                 .isPresent()) {
             throw new OrganizationCreationException(
                     "Organization with this name already exists",
                     HttpStatus.BAD_REQUEST
             );
         }
-        Organization organizationToSave = organizationMapper
-                .toEntity(organizationCreateDTO);
-        Organization savedOrganization = organizationRepository
-                .save(organizationToSave);
+        Organization toSave = organizationMapper
+                .toEntity(organizationEditDTO);
+        Organization saved = organizationRepository
+                .save(toSave);
 
-        OrganizationDetailedDTO registered = organizationMapper
-                .toDetailedDTO(savedOrganization);
+        OrganizationDTO registered = organizationMapper
+                .toDetailedDTO(saved);
 
         CustomerDTO owner = customerClient
-                .getSimpleById(savedOrganization.getOwnerId());
+                .getSimpleById(saved.getOwnerId());
 
         registered.setOwner(owner);
 
@@ -105,16 +107,16 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
-    public OrganizationDetailedDTO update(
-            OrganizationUpdateDTO organizationUpdateDTO) {
+    public OrganizationDTO update(
+            OrganizationEditDTO organizationEditDTO) {
 
-        Organization existing = findById(organizationUpdateDTO.getId());
-        existing.setName(organizationUpdateDTO.getName());
-        existing.setDescription(organizationUpdateDTO.getDescription());
-        existing.setOwnerId(organizationUpdateDTO.getOwnerId());
+        Organization existing = findById(organizationEditDTO.getId());
+        existing.setName(organizationEditDTO.getName());
+        existing.setDescription(organizationEditDTO.getDescription());
+        existing.setOwnerId(organizationEditDTO.getOwnerId());
 
         Organization updated = organizationRepository.save(existing);
-        OrganizationDetailedDTO updatedDTO = organizationMapper
+        OrganizationDTO updatedDTO = organizationMapper
                 .toDetailedDTO(updated);
 
         CustomerDTO owner = customerClient

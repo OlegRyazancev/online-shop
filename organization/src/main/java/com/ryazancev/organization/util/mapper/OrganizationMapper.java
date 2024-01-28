@@ -1,13 +1,9 @@
 package com.ryazancev.organization.util.mapper;
 
-import com.ryazancev.clients.organization.OrganizationCreateDTO;
-import com.ryazancev.clients.organization.OrganizationDetailedDTO;
-import com.ryazancev.clients.organization.OrganizationSimpleDTO;
+import com.ryazancev.clients.organization.dto.OrganizationDTO;
+import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
 import com.ryazancev.organization.model.Organization;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -17,17 +13,19 @@ import java.util.List;
 )
 public interface OrganizationMapper {
 
-    List<OrganizationSimpleDTO> toSimpleListDTO(
+    OrganizationDTO toDetailedDTO(Organization organization);
+
+
+    @Named("toSimpleDTO")
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "logo", ignore = true)
+    @Mapping(target = "products", ignore = true)
+    @Mapping(target = "owner", ignore = true)
+    OrganizationDTO toSimpleDTO(Organization organization);
+
+    @IterableMapping(qualifiedByName = "toSimpleDTO")
+    List<OrganizationDTO> toSimpleListDTO(
             List<Organization> organization);
 
-    OrganizationDetailedDTO toDetailedDTO(Organization organization);
-
-    OrganizationSimpleDTO toSimpleDTO(Organization organization);
-
-    @Mappings({
-            @Mapping(
-                    target = "logo",
-                    ignore = true)
-    })
-    Organization toEntity(OrganizationCreateDTO organizationCreateDTO);
+    Organization toEntity(OrganizationEditDTO organizationEditDTO);
 }

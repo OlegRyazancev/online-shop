@@ -1,5 +1,7 @@
 package com.ryazancev.clients.customer;
 
+import com.ryazancev.clients.customer.dto.CustomerDTO;
+import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.config.FeignClientsConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,5 +1,4 @@
-package com.ryazancev.clients.customer;
-
+package com.ryazancev.clients.customer.dto;
 
 import lombok.*;
 
@@ -9,9 +8,14 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Data
-public class CustomerDTO {
+public class CustomerDetailedDTO {
 
     private Long id;
 
     private String username;
+
+    private String email;
+
+    private Double balance;
+
 }

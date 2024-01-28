@@ -1,7 +1,7 @@
-package com.ryazancev.clients.product;
+package com.ryazancev.clients.product.dto;
 
-import com.ryazancev.clients.organization.OrganizationSimpleDTO;
-import com.ryazancev.clients.review.ReviewProductDTO;
+import com.ryazancev.clients.organization.dto.OrganizationDTO;
+import com.ryazancev.clients.review.dto.ReviewProductDTO;
 import lombok.*;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class ProductDetailedDTO {
 
     private String description;
 
-    private OrganizationSimpleDTO organization;
+    private OrganizationDTO organization;
 
     private Double price;
 

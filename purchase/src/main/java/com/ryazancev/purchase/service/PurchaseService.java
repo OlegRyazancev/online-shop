@@ -1,8 +1,8 @@
 package com.ryazancev.purchase.service;
 
-import com.ryazancev.clients.customer.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.PurchaseDetailedDTO;
-import com.ryazancev.clients.purchase.PurchasePostDTO;
+import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
+import com.ryazancev.clients.purchase.dto.PurchaseDetailedDTO;
+import com.ryazancev.clients.purchase.dto.PurchasePostDTO;
 
 public interface PurchaseService {
 

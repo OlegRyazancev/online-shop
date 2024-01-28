@@ -1,7 +1,7 @@
 package com.ryazancev.customer.service;
 
-import com.ryazancev.clients.customer.CustomerDTO;
-import com.ryazancev.clients.customer.CustomerDetailedDTO;
+import com.ryazancev.clients.customer.dto.CustomerDTO;
+import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 
 public interface CustomerService {
     CustomerDTO getById(Long id);

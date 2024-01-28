@@ -1,4 +1,4 @@
-package com.ryazancev.clients.organization;
+package com.ryazancev.clients.product.dto;
 
 
 import lombok.*;
@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrganizationSimpleDTO {
+public class ProductSimpleDTO {
 
     private Long id;
-    private String name;
+    private String productName;
 }

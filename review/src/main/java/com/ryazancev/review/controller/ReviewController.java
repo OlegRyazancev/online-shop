@@ -1,9 +1,9 @@
 package com.ryazancev.review.controller;
 
-import com.ryazancev.clients.review.ReviewDetailedDTO;
-import com.ryazancev.clients.review.ReviewPostDTO;
-import com.ryazancev.clients.review.ReviewsCustomerResponse;
-import com.ryazancev.clients.review.ReviewsProductResponse;
+import com.ryazancev.clients.review.dto.ReviewDetailedDTO;
+import com.ryazancev.clients.review.dto.ReviewPostDTO;
+import com.ryazancev.clients.review.dto.ReviewsCustomerResponse;
+import com.ryazancev.clients.review.dto.ReviewsProductResponse;
 import com.ryazancev.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

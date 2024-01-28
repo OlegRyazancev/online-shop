@@ -1,9 +1,9 @@
 package com.ryazancev.product.service;
 
-import com.ryazancev.clients.product.*;
-import com.ryazancev.clients.review.ReviewDetailedDTO;
-import com.ryazancev.clients.review.ReviewPostDTO;
-import com.ryazancev.clients.review.ReviewsProductResponse;
+import com.ryazancev.clients.product.dto.*;
+import com.ryazancev.clients.review.dto.ReviewDetailedDTO;
+import com.ryazancev.clients.review.dto.ReviewPostDTO;
+import com.ryazancev.clients.review.dto.ReviewsProductResponse;
 
 public interface ProductService {
 

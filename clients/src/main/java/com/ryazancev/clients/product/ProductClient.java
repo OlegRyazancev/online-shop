@@ -1,5 +1,8 @@
 package com.ryazancev.clients.product;
 
+import com.ryazancev.clients.product.dto.ProductDetailedDTO;
+import com.ryazancev.clients.product.dto.ProductListResponse;
+import com.ryazancev.clients.product.dto.ProductSimpleDTO;
 import com.ryazancev.config.FeignClientsConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

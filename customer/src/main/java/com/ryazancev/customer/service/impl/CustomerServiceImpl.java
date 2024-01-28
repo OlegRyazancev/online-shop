@@ -1,7 +1,7 @@
 package com.ryazancev.customer.service.impl;
 
-import com.ryazancev.clients.customer.CustomerDTO;
-import com.ryazancev.clients.customer.CustomerDetailedDTO;
+import com.ryazancev.clients.customer.dto.CustomerDTO;
+import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;

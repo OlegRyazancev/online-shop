@@ -1,7 +1,7 @@
 package com.ryazancev.customer.util.mapper;
 
-import com.ryazancev.clients.customer.CustomerDTO;
-import com.ryazancev.clients.customer.CustomerDetailedDTO;
+import com.ryazancev.clients.customer.dto.CustomerDTO;
+import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.customer.model.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

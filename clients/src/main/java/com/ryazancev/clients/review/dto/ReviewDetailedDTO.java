@@ -1,7 +1,7 @@
-package com.ryazancev.clients.review;
+package com.ryazancev.clients.review.dto;
 
-import com.ryazancev.clients.customer.CustomerDTO;
-import com.ryazancev.clients.product.ProductSimpleDTO;
+import com.ryazancev.clients.customer.dto.CustomerDTO;
+import com.ryazancev.clients.product.dto.ProductSimpleDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;

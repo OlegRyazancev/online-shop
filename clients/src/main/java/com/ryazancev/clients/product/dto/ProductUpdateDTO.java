@@ -1,4 +1,4 @@
-package com.ryazancev.clients.product;
+package com.ryazancev.clients.product.dto;
 
 import lombok.*;
 

@@ -1,19 +1,21 @@
 package com.ryazancev.organization.service;
 
-import com.ryazancev.clients.logo.LogoDTO;
-import com.ryazancev.clients.organization.*;
+import com.ryazancev.clients.logo.dto.LogoDTO;
+import com.ryazancev.clients.organization.dto.OrganizationDTO;
+import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
+import com.ryazancev.clients.organization.dto.OrganizationsSimpleListResponse;
 
 public interface OrganizationService {
 
-    OrganizationsListResponse getAll();
+    OrganizationsSimpleListResponse getAll();
 
-    OrganizationSimpleDTO getSimpleById(Long id);
+    OrganizationDTO getSimpleById(Long id);
 
-    OrganizationDetailedDTO getDetailedById(Long id);
+    OrganizationDTO getDetailedById(Long id);
 
-    OrganizationDetailedDTO register(OrganizationCreateDTO organizationCreateDTO);
+    OrganizationDTO register(OrganizationEditDTO organizationEditDTO);
 
-    OrganizationDetailedDTO update(OrganizationUpdateDTO organizationUpdateDTO);
+    OrganizationDTO update(OrganizationEditDTO organizationEditDTO);
 
     void uploadLogo(Long id, LogoDTO logoDTO);
 }

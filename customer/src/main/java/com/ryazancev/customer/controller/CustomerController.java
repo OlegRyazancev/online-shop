@@ -1,7 +1,7 @@
 package com.ryazancev.customer.controller;
 
-import com.ryazancev.clients.customer.CustomerDTO;
-import com.ryazancev.clients.customer.CustomerDetailedDTO;
+import com.ryazancev.clients.customer.dto.CustomerDTO;
+import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

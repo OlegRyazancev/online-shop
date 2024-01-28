@@ -1,6 +1,7 @@
-package com.ryazancev.clients.logo;
+package com.ryazancev.clients.logo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ryazancev.validation.OnCreate;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,9 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Builder
 
-public class LogoDTO  {
+public class LogoDTO {
 
     @JsonIgnore
-    @NotNull(message = "Image must be not null.")
+    @NotNull(message = "Logo must be not null",
+            groups = OnCreate.class)
     private MultipartFile file;
 }

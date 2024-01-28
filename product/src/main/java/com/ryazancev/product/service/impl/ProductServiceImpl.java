@@ -1,9 +1,13 @@
 package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.organization.OrganizationClient;
-import com.ryazancev.clients.organization.OrganizationSimpleDTO;
-import com.ryazancev.clients.product.*;
-import com.ryazancev.clients.review.*;
+import com.ryazancev.clients.organization.dto.OrganizationDTO;
+import com.ryazancev.clients.product.dto.*;
+import com.ryazancev.clients.review.ReviewClient;
+import com.ryazancev.clients.review.dto.ReviewDetailedDTO;
+import com.ryazancev.clients.review.dto.ReviewPostDTO;
+import com.ryazancev.clients.review.dto.ReviewProductDTO;
+import com.ryazancev.clients.review.dto.ReviewsProductResponse;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
@@ -58,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDetailedDTO productDetailedDTO = productMapper
                 .toDetailedDTO(existing);
 
-        OrganizationSimpleDTO organization = organizationClient
+        OrganizationDTO organization = organizationClient
                 .getSimpleById(existing.getOrganizationId());
         productDetailedDTO.setOrganization(organization);
 
@@ -157,7 +161,7 @@ public class ProductServiceImpl implements ProductService {
 
         ProductDetailedDTO savedProductDetailedDTO = productMapper
                 .toDetailedDTO(savedProduct);
-        OrganizationSimpleDTO productOrganization = organizationClient
+        OrganizationDTO productOrganization = organizationClient
                 .getSimpleById(savedProduct.getOrganizationId());
         savedProductDetailedDTO.setOrganization(productOrganization);
         return savedProductDetailedDTO;

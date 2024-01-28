@@ -1,6 +1,6 @@
-package com.ryazancev.clients.review;
+package com.ryazancev.clients.review.dto;
 
-import com.ryazancev.clients.customer.CustomerDTO;
+import com.ryazancev.clients.product.dto.ProductSimpleDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,15 +10,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewProductDTO {
+public class ReviewCustomerDTO {
 
     private String id;
 
     private String body;
 
-    private CustomerDTO customer;
+    private ProductSimpleDTO product;
 
     private Integer rating;
 
     private LocalDateTime createdAt;
+
 }
