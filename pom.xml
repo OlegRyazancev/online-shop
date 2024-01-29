@@ -20,6 +20,7 @@
         <module>organization</module>
         <module>api-gateway</module>
         <module>logo</module>
+        <module>auth</module>
     </modules>
 
     <properties>
