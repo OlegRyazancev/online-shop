@@ -11,14 +11,27 @@ spring:
           uri: lb://CUSTOMER
           predicates:
             - Path=/api/v1/customers/**
+          filters:
+            - AuthenticationFilter
+
         - id: organization
           uri: lb://ORGANIZATION
           predicates:
             - Path=/api/v1/organizations/**
+          filters:
+            - AuthenticationFilter
+
         - id: product
           uri: lb://PRODUCT
           predicates:
             - Path=/api/v1/products/**
+          filters:
+            - AuthenticationFilter
+
+        - id: auth
+          uri: lb://AUTH
+          predicates:
+            - Path=/api/v1/auth/**
 
 management:
   tracing:
