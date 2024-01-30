@@ -10,12 +10,12 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name = "user_credentials")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserCredential implements Serializable {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,10 @@ public class UserCredential implements Serializable {
     @Transient
     private String passwordConfirmation;
 
-    @CollectionTable(name = "users_roles")
+    @CollectionTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = EnumType.STRING)

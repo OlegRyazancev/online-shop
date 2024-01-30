@@ -16,7 +16,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mariadb.java.client.version>3.3.2</mariadb.java.client.version>
         <liquibase.version>4.25.0</liquibase.version>
-        <preliquibase.version>1.5.0</preliquibase.version>
         <micrometer.tracing.version>1.2.2</micrometer.tracing.version>
         <micrometer.registry.prometheus.version>1.12.2</micrometer.registry.prometheus.version>
         <opentelemetry.exporter.zipkin.version>1.34.1</opentelemetry.exporter.zipkin.version>
@@ -57,12 +56,6 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.lbruun.springboot</groupId>
-            <artifactId>preliquibase-spring-boot-starter</artifactId>
-            <version>${preliquibase.version}</version>
         </dependency>
 
         <dependency>
@@ -116,4 +109,5 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
 </project>

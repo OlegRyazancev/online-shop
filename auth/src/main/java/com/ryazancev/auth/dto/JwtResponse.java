@@ -11,6 +11,7 @@ public class JwtResponse {
 
     private Long id;
     private String email;
+    private Long customerId;
     private String accessToken;
     private String refreshToken;
 }

@@ -3,9 +3,9 @@ package com.ryazancev.auth.controller;
 
 import com.ryazancev.auth.dto.JwtRequest;
 import com.ryazancev.auth.dto.JwtResponse;
-import com.ryazancev.auth.dto.UserCredentialDTO;
+import com.ryazancev.auth.dto.UserDTO;
 import com.ryazancev.auth.service.AuthService;
-import com.ryazancev.auth.service.UserCredentialService;
+import com.ryazancev.auth.service.UserService;
 import com.ryazancev.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class AuthController {
 
 
     private final AuthService authService;
-    private final UserCredentialService userCredentialService;
+    private final UserService userService;
 
     @PostMapping("/login")
     public JwtResponse login(
@@ -34,10 +34,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserCredentialDTO register(
+    public UserDTO register(
             @Validated(OnCreate.class)
-            @RequestBody UserCredentialDTO userCredentialDTO) {
-        return userCredentialService.create(userCredentialDTO);
+            @RequestBody UserDTO userDTO) {
+        return userService.create(userDTO);
     }
 
     @PostMapping("/refresh")

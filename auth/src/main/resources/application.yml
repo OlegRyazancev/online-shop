@@ -1,0 +1,42 @@
+server:
+  port: ${AUTH_PORT}
+
+spring:
+  application:
+    name: auth
+
+  #MariaDB connection
+  datasource:
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    url: jdbc:mariadb://${MYSQL_HOST}:3306/${MYSQL_AUTH_DATABASE}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: true
+    show-sql: true
+
+  #Liquibase
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yml
+    enabled: true
+
+security:
+  jwt:
+    access: 1
+    refresh: 30
+
+#Zipkin
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+#Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
