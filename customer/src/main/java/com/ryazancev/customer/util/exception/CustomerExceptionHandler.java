@@ -2,6 +2,7 @@ package com.ryazancev.customer.util.exception;
 
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
+import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
 import com.ryazancev.customer.util.exception.custom.IncorrectBalanceException;
 import jakarta.validation.ConstraintViolation;
@@ -33,8 +34,21 @@ public class CustomerExceptionHandler {
     }
 
     @ExceptionHandler(IncorrectBalanceException.class)
-    public ResponseEntity<ExceptionBody> handleBalance(
+    public ResponseEntity<ExceptionBody> handleIncorrectBalance(
             IncorrectBalanceException e) {
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.CUSTOMER,
+                        e.getHttpStatus()
+                ));
+    }
+
+    @ExceptionHandler(CustomerCreationException.class)
+    public ResponseEntity<ExceptionBody> handleCustomerCreation(
+            CustomerCreationException e) {
 
         return ResponseEntity
                 .status(e.getHttpStatus())

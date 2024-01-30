@@ -1,7 +1,6 @@
 package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.purchase.PurchaseClient;
 import com.ryazancev.clients.purchase.dto.PurchaseDTO;
@@ -11,6 +10,7 @@ import com.ryazancev.clients.review.dto.ReviewsResponse;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
+import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
 import com.ryazancev.customer.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
@@ -35,22 +35,22 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO getById(Long id) {
 
-        Customer foundCustomer = findById(id);
+        Customer existing = findById(id);
 
-        return customerMapper.toDTO(foundCustomer);
+        return customerMapper.toSimple(existing);
     }
 
     @Override
-    public CustomerDetailedDTO getDetailedById(Long id) {
+    public CustomerDTO getDetailedById(Long id) {
 
-        Customer foundCustomer = findById(id);
+        Customer existing = findById(id);
 
-        return customerMapper.toDetailedDTO(foundCustomer);
+        return customerMapper.toDetailedDTO(existing);
     }
 
     @Transactional
     @Override
-    public CustomerDetailedDTO updateBalance(Long id, Double balance) {
+    public CustomerDTO updateBalance(Long id, Double balance) {
 
         if (balance <= 0) {
             throw new IncorrectBalanceException(
@@ -67,6 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerPurchasesResponse getPurchasesByCustomerId(Long id) {
+
         return purchaseClient.getByCustomerId(id);
     }
 
@@ -80,6 +81,22 @@ public class CustomerServiceImpl implements CustomerService {
     public ReviewsResponse getReviewsByCustomerId(Long id) {
 
         return reviewClient.getByCustomerId(id);
+    }
+
+    @Transactional
+    @Override
+    public CustomerDTO create(CustomerDTO customerDTO) {
+        if (customerRepository.findByEmail(customerDTO.getEmail()).isPresent()) {
+            throw new CustomerCreationException(
+                    "Customer with this email already exists",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        Customer toSave = customerMapper.toEntity(customerDTO);
+        Customer saved = customerRepository.save(toSave);
+
+        return customerMapper.toSimple(saved);
     }
 
     private Customer findById(Long id) {

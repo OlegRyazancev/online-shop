@@ -1,7 +1,6 @@
 package com.ryazancev.customer.controller;
 
 import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.purchase.dto.PurchaseDTO;
 import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
@@ -31,18 +30,27 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}/details")
-    public CustomerDetailedDTO getDetailedById(
+    public CustomerDTO getDetailedById(
             @PathVariable("id") Long id) {
 
         return customerService.getDetailedById(id);
     }
 
     @PutMapping("/{id}/update-balance")
-    public CustomerDetailedDTO updateBalance(
+    public CustomerDTO updateBalance(
             @PathVariable("id") Long id,
             @RequestParam("balance") Double balance) {
 
         return customerService.updateBalance(id, balance);
+    }
+
+    @PostMapping
+    public CustomerDTO createCustomer(
+            @RequestBody
+            @Validated(OnCreate.class)
+             CustomerDTO customerDTO) {
+
+        return customerService.create(customerDTO);
     }
 
 
@@ -68,6 +76,7 @@ public class CustomerController {
 
         return customerService.processPurchase(purchaseEditDTO);
     }
+
 
     //todo: add method to watch notifications
 
