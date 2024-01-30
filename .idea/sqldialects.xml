@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/auth/src/main/resources/liquibase/changesets/V1_init_tables.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/auth/src/main/resources/liquibase/changesets/V1_init_users_table.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/auth/src/main/resources/liquibase/changesets/V2_insert_into_users.sql" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/auth/src/main/resources/liquibase/changesets/V3_init_users_roles_table.sql" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/customer/src/main/resources/liquibase/changesets/V1__init_tables.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/customer/src/main/resources/liquibase/changesets/V2__insert_data.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/customer/src/main/resources/preliquibase/postgresql.sql" dialect="PostgreSQL" />
