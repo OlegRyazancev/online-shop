@@ -2,7 +2,6 @@ package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.customer.CustomerClient;
 import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.customer.dto.CustomerDetailedDTO;
 import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
 import com.ryazancev.clients.product.ProductClient;
 import com.ryazancev.clients.product.dto.ProductDTO;
@@ -43,7 +42,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         ProductDTO selectedProduct = productClient
                 .getDetailedById(purchaseEditDTO.getProductId());
-        CustomerDetailedDTO selectedCustomer = customerClient
+        CustomerDTO selectedCustomer = customerClient
                 .getDetailedById(purchaseEditDTO.getCustomerId());
 
         Double selectedProductPrice = selectedProduct.getPrice();
