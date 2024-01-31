@@ -14,4 +14,6 @@ public class JwtResponse {
     private Long customerId;
     private String accessToken;
     private String refreshToken;
+    private Boolean locked;
+    private Boolean confirmed;
 }

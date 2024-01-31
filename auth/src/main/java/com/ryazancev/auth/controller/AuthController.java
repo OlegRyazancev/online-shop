@@ -5,15 +5,13 @@ import com.ryazancev.auth.dto.JwtRequest;
 import com.ryazancev.auth.dto.JwtResponse;
 import com.ryazancev.auth.dto.UserDTO;
 import com.ryazancev.auth.service.AuthService;
+import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.service.UserService;
 import com.ryazancev.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -25,6 +23,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @PostMapping("/login")
     public JwtResponse login(
@@ -44,6 +43,11 @@ public class AuthController {
     public JwtResponse refresh(
             @RequestBody String refreshToken) {
         return authService.refresh(refreshToken);
+    }
+
+    @GetMapping("/confirm")
+    public String confirm(@RequestParam("token") String token){
+        return confirmationTokenService.confirm(token);
     }
 
 }

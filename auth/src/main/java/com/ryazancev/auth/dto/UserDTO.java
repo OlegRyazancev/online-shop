@@ -45,4 +45,9 @@ public class UserDTO {
             groups = OnCreate.class)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwordConfirmation;
+
+    private Boolean locked;
+
+    private Boolean confirmed;
+
 }

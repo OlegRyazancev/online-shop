@@ -1,6 +1,7 @@
 package com.ryazancev.auth.util.exception;
 
 import com.ryazancev.auth.util.exception.custom.AccessDeniedException;
+import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
 import com.ryazancev.auth.util.exception.custom.UserCreationException;
 import com.ryazancev.auth.util.exception.custom.UserNotFoundException;
 import com.ryazancev.config.OnlineShopException;
@@ -46,6 +47,20 @@ public class AuthExceptionHandler {
                         e.getHttpStatus()
                 ));
     }
+
+    @ExceptionHandler(ConfirmationTokenException.class)
+    public ResponseEntity<ExceptionBody> handleConfirmationToken(
+            ConfirmationTokenException e) {
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.AUTH,
+                        e.getHttpStatus()
+                ));
+    }
+
 
     @ExceptionHandler({
             AccessDeniedException.class,
