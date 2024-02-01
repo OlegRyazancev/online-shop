@@ -21,6 +21,7 @@
         <module>api-gateway</module>
         <module>logo</module>
         <module>auth</module>
+        <module>mail</module>
     </modules>
 
     <properties>
