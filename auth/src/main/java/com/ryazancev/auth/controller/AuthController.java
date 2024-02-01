@@ -3,10 +3,10 @@ package com.ryazancev.auth.controller;
 
 import com.ryazancev.auth.dto.JwtRequest;
 import com.ryazancev.auth.dto.JwtResponse;
-import com.ryazancev.auth.dto.UserDTO;
 import com.ryazancev.auth.service.AuthService;
 import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.service.UserService;
+import com.ryazancev.clients.auth.dto.UserDTO;
 import com.ryazancev.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

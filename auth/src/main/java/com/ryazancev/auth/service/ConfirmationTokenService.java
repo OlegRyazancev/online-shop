@@ -5,5 +5,5 @@ import com.ryazancev.auth.model.ConfirmationToken;
 public interface ConfirmationTokenService {
     String confirm(String token);
 
-    void saveConfirmationToken(ConfirmationToken token);
+    void save(ConfirmationToken token);
 }

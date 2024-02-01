@@ -1,4 +1,4 @@
-package com.ryazancev.auth.dto;
+package com.ryazancev.clients.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ryazancev.validation.OnCreate;

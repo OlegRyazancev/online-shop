@@ -7,5 +7,6 @@ public enum ServiceStage {
     ORGANIZATION,
     PRODUCT,
     REVIEW,
-    LOGO
+    LOGO,
+    MAIL
 }
