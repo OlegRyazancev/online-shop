@@ -1,11 +1,7 @@
 package com.ryazancev.customer.controller;
 
-import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.dto.PurchaseDTO;
-import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
-import com.ryazancev.clients.review.dto.ReviewsResponse;
 import com.ryazancev.customer.service.CustomerService;
+import com.ryazancev.dto.*;
 import com.ryazancev.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

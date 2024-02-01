@@ -1,6 +1,6 @@
 package com.ryazancev.mail.service.impl;
 
-import com.ryazancev.clients.mail.dto.MailDTO;
+import com.ryazancev.dto.MailDTO;
 import com.ryazancev.mail.service.MailService;
 import freemarker.template.Configuration;
 import jakarta.mail.internet.MimeMessage;
@@ -93,8 +93,6 @@ public class MailServiceImpl implements MailService {
                                           Properties params) {
         StringWriter writer = new StringWriter();
         Map<String, Object> model = new HashMap<>();
-
-        log.info(params.getProperty("link"));
 
         model.put("name", name);
         model.put("link", params.getProperty("link"));

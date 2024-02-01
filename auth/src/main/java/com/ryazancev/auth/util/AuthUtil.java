@@ -2,8 +2,8 @@ package com.ryazancev.auth.util;
 
 import com.ryazancev.auth.model.ConfirmationToken;
 import com.ryazancev.auth.model.User;
-import com.ryazancev.clients.mail.dto.MailDTO;
-import com.ryazancev.clients.mail.dto.MailType;
+import com.ryazancev.dto.MailDTO;
+import com.ryazancev.dto.MailType;
 
 import java.time.LocalDateTime;
 import java.util.Properties;

@@ -1,6 +1,6 @@
 package com.ryazancev.mail.controller;
 
-import com.ryazancev.clients.mail.dto.MailDTO;
+import com.ryazancev.dto.MailDTO;
 import com.ryazancev.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

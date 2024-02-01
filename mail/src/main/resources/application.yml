@@ -5,6 +5,14 @@ spring:
   application:
     name: mail
 
+  #Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: ${KAFKA_EMAIL_GROUP}
+    topic: ${KAFKA_EMAIL_TOPIC}
+
+  #Mail
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}

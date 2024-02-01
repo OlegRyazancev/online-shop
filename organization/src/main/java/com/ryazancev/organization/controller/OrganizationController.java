@@ -1,9 +1,9 @@
 package com.ryazancev.organization.controller;
 
-import com.ryazancev.clients.logo.dto.LogoDTO;
-import com.ryazancev.clients.organization.dto.OrganizationDTO;
-import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
-import com.ryazancev.clients.organization.dto.OrganizationsSimpleResponse;
+import com.ryazancev.dto.LogoDTO;
+import com.ryazancev.dto.OrganizationDTO;
+import com.ryazancev.dto.OrganizationEditDTO;
+import com.ryazancev.dto.OrganizationsSimpleResponse;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;

@@ -1,10 +1,6 @@
 package com.ryazancev.customer.service;
 
-import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.dto.PurchaseDTO;
-import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
-import com.ryazancev.clients.review.dto.ReviewsResponse;
+import com.ryazancev.dto.*;
 
 public interface CustomerService {
     CustomerDTO getById(Long id);

@@ -1,8 +1,8 @@
 package com.ryazancev.review.service;
 
-import com.ryazancev.clients.review.dto.ReviewDTO;
-import com.ryazancev.clients.review.dto.ReviewPostDTO;
-import com.ryazancev.clients.review.dto.ReviewsResponse;
+import com.ryazancev.dto.ReviewDTO;
+import com.ryazancev.dto.ReviewPostDTO;
+import com.ryazancev.dto.ReviewsResponse;
 
 public interface ReviewService {
 

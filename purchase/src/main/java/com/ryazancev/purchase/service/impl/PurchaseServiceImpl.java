@@ -1,12 +1,8 @@
 package com.ryazancev.purchase.service.impl;
 
-import com.ryazancev.clients.customer.CustomerClient;
-import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
-import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.dto.ProductDTO;
-import com.ryazancev.clients.purchase.dto.PurchaseDTO;
-import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
+import com.ryazancev.clients.CustomerClient;
+import com.ryazancev.clients.ProductClient;
+import com.ryazancev.dto.*;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;

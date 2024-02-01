@@ -1,11 +1,6 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.clients.product.dto.ProductDTO;
-import com.ryazancev.clients.product.dto.ProductEditDTO;
-import com.ryazancev.clients.product.dto.ProductsSimpleResponse;
-import com.ryazancev.clients.review.dto.ReviewDTO;
-import com.ryazancev.clients.review.dto.ReviewPostDTO;
-import com.ryazancev.clients.review.dto.ReviewsResponse;
+import com.ryazancev.dto.*;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;

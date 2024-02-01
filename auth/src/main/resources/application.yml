@@ -5,6 +5,11 @@ spring:
   application:
     name: auth
 
+  #Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    topic: ${KAFKA_EMAIL_TOPIC}
+
   #MariaDB connection
   datasource:
     username: ${MYSQL_USER}

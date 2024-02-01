@@ -6,11 +6,12 @@ import com.ryazancev.auth.repository.UserRepository;
 import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.util.AuthUtil;
 import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
-import com.ryazancev.clients.mail.MailClient;
-import com.ryazancev.clients.mail.dto.MailDTO;
+import com.ryazancev.dto.MailDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,10 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final UserRepository userRepository;
 
-    private final MailClient mailClient;
+    @Value("${spring.kafka.topic}")
+    private String topicName;
+
+    private final KafkaTemplate<String, MailDTO> kafkaTemplate;
 
     @Transactional
     @Override
@@ -58,7 +62,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
         userRepository.enableUser(email);
 
         MailDTO mailDTO = AuthUtil.createRegistrationMailDTO(email, name);
-        mailClient.sendEmail(mailDTO);
+        kafkaTemplate.send(topicName, mailDTO);
 
         return "Email confirmed successfully!";
     }

@@ -1,14 +1,9 @@
 package com.ryazancev.organization.service.impl;
 
-import com.ryazancev.clients.customer.CustomerClient;
-import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.logo.LogoClient;
-import com.ryazancev.clients.logo.dto.LogoDTO;
-import com.ryazancev.clients.organization.dto.OrganizationDTO;
-import com.ryazancev.clients.organization.dto.OrganizationEditDTO;
-import com.ryazancev.clients.organization.dto.OrganizationsSimpleResponse;
-import com.ryazancev.clients.product.ProductClient;
-import com.ryazancev.clients.product.dto.ProductsSimpleResponse;
+import com.ryazancev.clients.CustomerClient;
+import com.ryazancev.clients.LogoClient;
+import com.ryazancev.clients.ProductClient;
+import com.ryazancev.dto.*;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;

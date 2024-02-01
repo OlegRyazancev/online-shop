@@ -1,12 +1,7 @@
 package com.ryazancev.customer.service.impl;
 
-import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.customer.dto.CustomerPurchasesResponse;
-import com.ryazancev.clients.purchase.PurchaseClient;
-import com.ryazancev.clients.purchase.dto.PurchaseDTO;
-import com.ryazancev.clients.purchase.dto.PurchaseEditDTO;
-import com.ryazancev.clients.review.ReviewClient;
-import com.ryazancev.clients.review.dto.ReviewsResponse;
+import com.ryazancev.clients.PurchaseClient;
+import com.ryazancev.clients.ReviewClient;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
@@ -14,6 +9,7 @@ import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
 import com.ryazancev.customer.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
+import com.ryazancev.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

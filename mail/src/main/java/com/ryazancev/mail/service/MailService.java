@@ -1,6 +1,6 @@
 package com.ryazancev.mail.service;
 
-import com.ryazancev.clients.mail.dto.MailDTO;
+import com.ryazancev.dto.MailDTO;
 
 
 public interface MailService {

@@ -10,14 +10,15 @@ import com.ryazancev.auth.util.AuthUtil;
 import com.ryazancev.auth.util.exception.custom.UserCreationException;
 import com.ryazancev.auth.util.exception.custom.UserNotFoundException;
 import com.ryazancev.auth.util.mappers.UserMapper;
-import com.ryazancev.clients.auth.dto.UserDTO;
-import com.ryazancev.clients.customer.CustomerClient;
-import com.ryazancev.clients.customer.dto.CustomerDTO;
-import com.ryazancev.clients.mail.MailClient;
-import com.ryazancev.clients.mail.dto.MailDTO;
+import com.ryazancev.clients.CustomerClient;
+import com.ryazancev.dto.CustomerDTO;
+import com.ryazancev.dto.MailDTO;
+import com.ryazancev.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,8 +39,9 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final MailClient mailClient;
-
+    @Value("${spring.kafka.topic}")
+    private String topicName;
+    private final KafkaTemplate<String, MailDTO> kafkaTemplate;
 
     @Transactional
     @Override
@@ -89,8 +91,8 @@ public class UserServiceImpl implements UserService {
                         saved.getEmail(),
                         saved.getName(),
                         token.getToken());
-        //todo: make async
-        mailClient.sendEmail(mailDTO);
+
+        kafkaTemplate.send(topicName, mailDTO);
 
         return userMapper.toDTO(saved);
     }
