@@ -13,9 +13,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
@@ -33,14 +30,10 @@ public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
 
-    private final UserDetailsService userDetailsService;
     private final UserService userService;
 
-    public static final String SECRET =
-            "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -63,13 +56,6 @@ public class JwtTokenProvider {
                 .setExpiration(Date.from(validity))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    private List<String> resolveRoles(Set<Role> roles) {
-
-        return roles.stream()
-                .map(Enum::name)
-                .collect(Collectors.toList());
     }
 
     public String createRefreshToken(Long userId,
@@ -122,6 +108,13 @@ public class JwtTokenProvider {
         return jwtResponse;
     }
 
+    private List<String> resolveRoles(Set<Role> roles) {
+
+        return roles.stream()
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
+
     public boolean validateToken(String token) {
 
         Jws<Claims> claimsJws = Jwts.parserBuilder()
@@ -144,25 +137,5 @@ public class JwtTokenProvider {
                 .getBody()
                 .get("id")
                 .toString();
-    }
-
-    public Authentication getAuthentication(String token) {
-
-        String email = getEmail(token);
-        UserDetails userDetails =
-                userDetailsService.loadUserByUsername(email);
-
-        return new UsernamePasswordAuthenticationToken(
-                userDetails, "", userDetails.getAuthorities());
-    }
-
-    private String getEmail(String token) {
-
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
     }
 }

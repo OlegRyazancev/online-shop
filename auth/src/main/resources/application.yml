@@ -24,8 +24,9 @@ spring:
 
 security:
   jwt:
-    access: 1
-    refresh: 30
+    access: ${JWT_ACCESS}
+    refresh: ${JWT_REFRESH}
+    secret: ${JWT_SECRET}
 
 #Zipkin
 management:
