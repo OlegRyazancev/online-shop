@@ -79,10 +79,15 @@ public class PurchaseServiceImpl implements PurchaseService {
         Purchase saved = purchaseRepository.save(toSave);
         PurchaseDTO purchaseDTO = purchaseMapper.toDTO(saved);
 
-        CustomerDTO customerDTO = customerClient
-                .getSimpleById(saved.getCustomerId());
-        ProductDTO productDTO = productClient
-                .getSimpleById(saved.getProductId());
+        CustomerDTO customerDTO = CustomerDTO.builder()
+                .id(selectedCustomer.getId())
+                .username(selectedCustomer.getUsername())
+                .build();
+
+        ProductDTO productDTO = ProductDTO.builder()
+                .id(selectedProduct.getId())
+                .productName(selectedProduct.getProductName())
+                .build();
 
         purchaseDTO.setCustomer(customerDTO);
         purchaseDTO.setProduct(productDTO);
