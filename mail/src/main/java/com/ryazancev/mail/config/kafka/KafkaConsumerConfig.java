@@ -1,6 +1,6 @@
 package com.ryazancev.mail.config.kafka;
 
-import com.ryazancev.dto.MailDTO;
+import com.ryazancev.dto.customer.CustomerDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +31,9 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, MailDTO> consumerFactory() {
+    public ConsumerFactory<String, CustomerDTO> consumerFactory() {
 
-        JsonDeserializer<MailDTO> jsonDeserializer = new JsonDeserializer<>();
+        JsonDeserializer<CustomerDTO> jsonDeserializer = new JsonDeserializer<>();
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
@@ -44,10 +44,10 @@ public class KafkaConsumerConfig {
 
     @Bean
     public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, MailDTO>> messageFactory(
-            ConsumerFactory<String, MailDTO> consumerFactory) {
+            ConcurrentMessageListenerContainer<String, CustomerDTO>> messageFactory(
+            ConsumerFactory<String, CustomerDTO> consumerFactory) {
 
-        ConcurrentKafkaListenerContainerFactory<String, MailDTO> factory =
+        ConcurrentKafkaListenerContainerFactory<String, CustomerDTO> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);

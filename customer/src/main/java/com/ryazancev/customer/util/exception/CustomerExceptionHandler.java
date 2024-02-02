@@ -4,7 +4,6 @@ import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
-import com.ryazancev.customer.util.exception.custom.IncorrectBalanceException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -23,19 +22,6 @@ public class CustomerExceptionHandler {
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<ExceptionBody> handleCustomerNotFound(
             CustomerNotFoundException e) {
-
-        return ResponseEntity
-                .status(e.getHttpStatus())
-                .body(new ExceptionBody(
-                        e.getMessage(),
-                        ServiceStage.CUSTOMER,
-                        e.getHttpStatus()
-                ));
-    }
-
-    @ExceptionHandler(IncorrectBalanceException.class)
-    public ResponseEntity<ExceptionBody> handleIncorrectBalance(
-            IncorrectBalanceException e) {
 
         return ResponseEntity
                 .status(e.getHttpStatus())

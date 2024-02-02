@@ -7,9 +7,13 @@ import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
-import com.ryazancev.customer.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
-import com.ryazancev.dto.*;
+import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.customer.CustomerPurchasesResponse;
+import com.ryazancev.dto.customer.UpdateBalanceRequest;
+import com.ryazancev.dto.purchase.PurchaseDTO;
+import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.dto.review.ReviewsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -44,23 +48,6 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.toDetailedDTO(existing);
     }
 
-    @Transactional
-    @Override
-    public CustomerDTO updateBalance(Long id, Double balance) {
-
-        if (balance <= 0) {
-            throw new IncorrectBalanceException(
-                    "Balance must be positive",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-        Customer existing = findById(id);
-        existing.setBalance(balance);
-        customerRepository.save(existing);
-
-        return customerMapper.toDetailedDTO(existing);
-    }
-
     @Override
     public CustomerPurchasesResponse getPurchasesByCustomerId(Long id) {
 
@@ -81,6 +68,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
+    public void updateBalance(UpdateBalanceRequest request) {
+        Customer existing = findById(request.getCustomerId());
+        existing.setBalance(request.getBalance());
+        customerRepository.save(existing);
+    }
+
+    @Transactional
+    @Override
     public CustomerDTO create(CustomerDTO customerDTO) {
         if (customerRepository.findByEmail(customerDTO.getEmail()).isPresent()) {
             throw new CustomerCreationException(
@@ -95,6 +90,22 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.toSimple(saved);
     }
 
+    @Transactional
+    @Override
+    public CustomerDTO update(CustomerDTO customerDTO) {
+
+        Customer existing = findById(customerDTO.getId());
+
+        existing.setUsername(customerDTO.getUsername());
+        existing.setEmail(customerDTO.getEmail());
+        existing.setBalance(customerDTO.getBalance());
+
+        Customer updated = customerRepository.save(existing);
+
+        return customerMapper.toDetailedDTO(updated);
+
+    }
+
     private Customer findById(Long id) {
 
         return customerRepository.findById(id)
@@ -104,4 +115,5 @@ public class CustomerServiceImpl implements CustomerService {
                                 HttpStatus.NOT_FOUND
                         ));
     }
+
 }

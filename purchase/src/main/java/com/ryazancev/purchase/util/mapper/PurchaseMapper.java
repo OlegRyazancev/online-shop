@@ -1,7 +1,7 @@
 package com.ryazancev.purchase.util.mapper;
 
-import com.ryazancev.dto.PurchaseDTO;
-import com.ryazancev.dto.PurchaseEditDTO;
+import com.ryazancev.dto.purchase.PurchaseDTO;
+import com.ryazancev.dto.purchase.PurchaseEditDTO;
 import com.ryazancev.purchase.model.Purchase;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

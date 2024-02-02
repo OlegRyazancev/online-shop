@@ -20,6 +20,12 @@ spring:
         dialect: org.hibernate.dialect.MongoDBDialect
         format_sql: true
     show-sql: true
+  #Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    topic:
+      customer: ${KAFKA_CUSTOMER_UPDATE_TOPIC}
+      product: ${KAFKA_PRODUCT_UPDATE_TOPIC}
 
 #Zipkin
 management:

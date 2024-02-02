@@ -15,6 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mariadb.java.client.version>3.3.2</mariadb.java.client.version>
         <liquibase.version>4.25.1</liquibase.version>
+        <kafka.version>3.1.1</kafka.version>
     </properties>
 
     <dependencies>
@@ -64,6 +65,12 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-micrometer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${kafka.version}</version>
         </dependency>
 
         <dependency>

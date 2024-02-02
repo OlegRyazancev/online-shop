@@ -1,6 +1,7 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.customer;
 
 
+import com.ryazancev.dto.purchase.PurchaseDTO;
 import lombok.*;
 
 import java.util.List;

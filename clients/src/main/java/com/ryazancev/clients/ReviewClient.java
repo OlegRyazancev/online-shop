@@ -1,9 +1,9 @@
 package com.ryazancev.clients;
 
 import com.ryazancev.config.FeignClientsConfiguration;
-import com.ryazancev.dto.ReviewDTO;
-import com.ryazancev.dto.ReviewPostDTO;
-import com.ryazancev.dto.ReviewsResponse;
+import com.ryazancev.dto.review.ReviewDTO;
+import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

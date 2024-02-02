@@ -1,7 +1,7 @@
 package com.ryazancev.organization.util.mapper;
 
-import com.ryazancev.dto.OrganizationDTO;
-import com.ryazancev.dto.OrganizationEditDTO;
+import com.ryazancev.dto.organization.OrganizationDTO;
+import com.ryazancev.dto.organization.OrganizationEditDTO;
 import com.ryazancev.organization.model.Organization;
 import org.mapstruct.*;
 

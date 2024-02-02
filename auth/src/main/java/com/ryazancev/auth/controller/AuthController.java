@@ -6,7 +6,7 @@ import com.ryazancev.auth.dto.JwtResponse;
 import com.ryazancev.auth.service.AuthService;
 import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.service.UserService;
-import com.ryazancev.dto.UserDTO;
+import com.ryazancev.dto.user.UserDTO;
 import com.ryazancev.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

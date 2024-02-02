@@ -2,11 +2,17 @@ package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.OrganizationClient;
 import com.ryazancev.clients.ReviewClient;
-import com.ryazancev.dto.*;
+import com.ryazancev.dto.organization.OrganizationDTO;
+import com.ryazancev.dto.product.ProductDTO;
+import com.ryazancev.dto.product.ProductEditDTO;
+import com.ryazancev.dto.product.ProductsSimpleResponse;
+import com.ryazancev.dto.product.UpdateQuantityRequest;
+import com.ryazancev.dto.review.ReviewDTO;
+import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.exception.custom.InvalidQuantityException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import com.ryazancev.product.util.mapper.ProductMapper;
@@ -102,22 +108,7 @@ public class ProductServiceImpl implements ProductService {
         return createProductDetailedDTO(saved);
     }
 
-    @Transactional
-    @Override
-    public ProductDTO updateQuantity(Long id, Integer quantity) {
 
-        if (quantity < 0) {
-            throw new InvalidQuantityException(
-                    "Quantity can not be less than 0",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
-        Product existing = findById(id);
-        existing.setQuantityInStock(quantity);
-
-        return productMapper.toDetailedDTO(existing);
-    }
 
     @Transactional
     @Override
@@ -142,6 +133,15 @@ public class ProductServiceImpl implements ProductService {
     public ReviewDTO createReview(ReviewPostDTO reviewPostDTO) {
 
         return reviewClient.create(reviewPostDTO);
+    }
+
+    @Transactional
+    @Override
+    public void updateQuantity(UpdateQuantityRequest request) {
+
+        Product existing = findById(request.getProductId());
+        existing.setQuantityInStock(request.getQuantityInStock());
+        productRepository.save(existing);
     }
 
     private Product findById(Long productId) {

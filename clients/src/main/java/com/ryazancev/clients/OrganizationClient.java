@@ -1,7 +1,7 @@
 package com.ryazancev.clients;
 
 import com.ryazancev.config.FeignClientsConfiguration;
-import com.ryazancev.dto.OrganizationDTO;
+import com.ryazancev.dto.organization.OrganizationDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

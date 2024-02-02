@@ -1,4 +1,4 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.customer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.validation.OnCreate;
@@ -6,6 +6,7 @@ import com.ryazancev.validation.OnUpdate;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -43,6 +44,8 @@ public class CustomerDTO {
     @Digits(integer = 10,
             fraction = 2,
             message = "Balance must have at most 2 decimal places",
+            groups = {OnCreate.class, OnUpdate.class})
+    @PositiveOrZero(message = "Balance must be a positive number or zero",
             groups = {OnCreate.class, OnUpdate.class})
     private Double balance;
 

@@ -1,4 +1,4 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.review;
 
 
 import com.ryazancev.validation.OnCreate;

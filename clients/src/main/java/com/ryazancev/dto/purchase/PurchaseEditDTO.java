@@ -1,4 +1,4 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.purchase;
 
 import com.ryazancev.validation.OnCreate;
 import jakarta.validation.constraints.NotNull;

@@ -2,7 +2,11 @@ package com.ryazancev.review.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.*;
+import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.product.ProductDTO;
+import com.ryazancev.dto.review.ReviewDTO;
+import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
 import com.ryazancev.review.service.ReviewService;

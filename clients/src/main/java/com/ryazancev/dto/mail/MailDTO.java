@@ -1,4 +1,4 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.mail;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

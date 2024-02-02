@@ -1,7 +1,7 @@
 package com.ryazancev.review.util.mapper;
 
-import com.ryazancev.dto.ReviewDTO;
-import com.ryazancev.dto.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewDTO;
+import com.ryazancev.dto.review.ReviewPostDTO;
 import com.ryazancev.review.model.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

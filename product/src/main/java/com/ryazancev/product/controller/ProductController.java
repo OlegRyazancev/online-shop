@@ -1,6 +1,11 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.dto.*;
+import com.ryazancev.dto.product.ProductDTO;
+import com.ryazancev.dto.product.ProductEditDTO;
+import com.ryazancev.dto.product.ProductsSimpleResponse;
+import com.ryazancev.dto.review.ReviewDTO;
+import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
@@ -68,14 +73,6 @@ public class ProductController {
             ProductEditDTO productEditDTO) {
 
         return productService.create(productEditDTO);
-    }
-
-    @PutMapping("/{id}/update-quantity")
-    public ProductDTO updateQuantity(
-            @PathVariable("id") Long productId,
-            @RequestParam("quantity") Integer quantity) {
-
-        return productService.updateQuantity(productId, quantity);
     }
 
     @PutMapping

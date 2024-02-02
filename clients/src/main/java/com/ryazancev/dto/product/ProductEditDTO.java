@@ -1,4 +1,4 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.product;
 
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;

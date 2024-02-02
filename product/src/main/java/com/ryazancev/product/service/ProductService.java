@@ -1,6 +1,12 @@
 package com.ryazancev.product.service;
 
-import com.ryazancev.dto.*;
+import com.ryazancev.dto.product.ProductDTO;
+import com.ryazancev.dto.product.ProductEditDTO;
+import com.ryazancev.dto.product.ProductsSimpleResponse;
+import com.ryazancev.dto.product.UpdateQuantityRequest;
+import com.ryazancev.dto.review.ReviewDTO;
+import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewsResponse;
 
 public interface ProductService {
 
@@ -18,7 +24,7 @@ public interface ProductService {
 
     ProductDTO create(ProductEditDTO productEditDTO);
 
-    ProductDTO updateQuantity(Long id, Integer quantity);
+    void updateQuantity(UpdateQuantityRequest request);
 
     ProductDTO update(ProductEditDTO productEditDTO);
 

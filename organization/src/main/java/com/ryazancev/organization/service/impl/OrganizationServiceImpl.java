@@ -3,7 +3,12 @@ package com.ryazancev.organization.service.impl;
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.LogoClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.*;
+import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.logo.LogoDTO;
+import com.ryazancev.dto.organization.OrganizationDTO;
+import com.ryazancev.dto.organization.OrganizationEditDTO;
+import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
+import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
@@ -89,15 +94,15 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization saved = organizationRepository
                 .save(toSave);
 
-        OrganizationDTO registered = organizationMapper
+        OrganizationDTO savedDTO = organizationMapper
                 .toDetailedDTO(saved);
 
         CustomerDTO owner = customerClient
                 .getSimpleById(saved.getOwnerId());
 
-        registered.setOwner(owner);
+        savedDTO.setOwner(owner);
 
-        return registered;
+        return savedDTO;
     }
 
     @Transactional

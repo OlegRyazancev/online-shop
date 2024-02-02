@@ -1,9 +1,9 @@
 package com.ryazancev.organization.service;
 
-import com.ryazancev.dto.LogoDTO;
-import com.ryazancev.dto.OrganizationDTO;
-import com.ryazancev.dto.OrganizationEditDTO;
-import com.ryazancev.dto.OrganizationsSimpleResponse;
+import com.ryazancev.dto.logo.LogoDTO;
+import com.ryazancev.dto.organization.OrganizationDTO;
+import com.ryazancev.dto.organization.OrganizationEditDTO;
+import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
 
 public interface OrganizationService {
 

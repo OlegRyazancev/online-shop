@@ -2,7 +2,13 @@ package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.*;
+import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.customer.CustomerPurchasesResponse;
+import com.ryazancev.dto.customer.UpdateBalanceRequest;
+import com.ryazancev.dto.product.ProductDTO;
+import com.ryazancev.dto.product.UpdateQuantityRequest;
+import com.ryazancev.dto.purchase.PurchaseDTO;
+import com.ryazancev.dto.purchase.PurchaseEditDTO;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;
@@ -30,6 +36,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     private final ProductClient productClient;
     private final CustomerClient customerClient;
+
+    private final KafkaProducerServiceImpl kafkaProducerServiceImpl;
 
     @Transactional
     @Override
@@ -60,13 +68,9 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
 
         //todo: increase money in organization's owner (for future add percent to admin)
-        //todo: make async
-        customerClient.updateBalance(
-                selectedCustomer.getId(),
-                availableCustomerBalance - selectedProductPrice);
-        productClient.updateQuantity(
-                selectedProduct.getId(),
-                availableProductsInStock - 1);
+
+        updateCustomerBalance(selectedCustomer, selectedProduct.getPrice());
+        updateProductQuantity(selectedProduct);
 
         Purchase toSave = purchaseMapper.toEntity(purchaseEditDTO);
         toSave.setPurchaseDate(LocalDateTime.now());
@@ -108,5 +112,26 @@ public class PurchaseServiceImpl implements PurchaseService {
         return CustomerPurchasesResponse.builder()
                 .purchases(purchasesDTO)
                 .build();
+    }
+
+    private void updateCustomerBalance(CustomerDTO customer,
+                                       Double purchaseAmount) {
+
+        kafkaProducerServiceImpl.sendMessageToCustomerTopic(
+                UpdateBalanceRequest.builder()
+                        .customerId(customer.getId())
+                        .balance(customer.getBalance() - purchaseAmount)
+                        .build()
+        );
+    }
+
+    private void updateProductQuantity(ProductDTO product) {
+
+        kafkaProducerServiceImpl.sendMessageToProductTopic(
+                UpdateQuantityRequest.builder()
+                        .productId(product.getId())
+                        .quantityInStock(product.getQuantityInStock() - 1)
+                        .build()
+        );
     }
 }

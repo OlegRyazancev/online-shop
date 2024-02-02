@@ -1,4 +1,4 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.logo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ryazancev.validation.OnCreate;

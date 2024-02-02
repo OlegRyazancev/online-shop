@@ -1,8 +1,13 @@
 package com.ryazancev.customer.controller;
 
 import com.ryazancev.customer.service.CustomerService;
-import com.ryazancev.dto.*;
+import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.customer.CustomerPurchasesResponse;
+import com.ryazancev.dto.purchase.PurchaseDTO;
+import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.validation.OnCreate;
+import com.ryazancev.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -32,23 +37,23 @@ public class CustomerController {
         return customerService.getDetailedById(id);
     }
 
-    @PutMapping("/{id}/update-balance")
-    public CustomerDTO updateBalance(
-            @PathVariable("id") Long id,
-            @RequestParam("balance") Double balance) {
-
-        return customerService.updateBalance(id, balance);
-    }
-
     @PostMapping
     public CustomerDTO createCustomer(
             @RequestBody
             @Validated(OnCreate.class)
-             CustomerDTO customerDTO) {
+            CustomerDTO customerDTO) {
 
         return customerService.create(customerDTO);
     }
 
+    @PutMapping
+    public CustomerDTO updateCustomer(
+            @RequestBody
+            @Validated(OnUpdate.class)
+            CustomerDTO customerDTO) {
+
+        return customerService.update(customerDTO);
+    }
 
     @GetMapping("/{id}/reviews")
     public ReviewsResponse getReviewsByCustomerId(

@@ -1,5 +1,4 @@
-package com.ryazancev.dto;
-
+package com.ryazancev.dto.review;
 
 import lombok.*;
 
@@ -10,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductsSimpleResponse {
+public class ReviewsResponse {
 
-    private List<ProductDTO> products;
+    private List<ReviewDTO> reviews;
 }

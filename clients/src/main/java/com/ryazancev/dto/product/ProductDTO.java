@@ -1,6 +1,8 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ryazancev.dto.organization.OrganizationDTO;
+import com.ryazancev.dto.review.ReviewDTO;
 import lombok.*;
 
 import java.util.List;

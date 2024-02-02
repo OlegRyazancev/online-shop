@@ -5,6 +5,6 @@ CREATE TABLE products
     description       VARCHAR(255) NOT NULL,
     organization_id   BIGINT       NOT NULL,
     price             DOUBLE       NOT NULL CHECK ( price > 0 ),
-    quantity_in_stock INT          NOT NULL CHECK ( quantity_in_stock > 0 ),
+    quantity_in_stock INT          NOT NULL,
     keywords          TEXT         NOT NULL
 );

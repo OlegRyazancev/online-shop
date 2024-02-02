@@ -1,6 +1,8 @@
-package com.ryazancev.dto;
+package com.ryazancev.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.product.ProductDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;

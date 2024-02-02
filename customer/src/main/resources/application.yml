@@ -17,6 +17,13 @@ spring:
         format_sql: true
     show-sql: true
 
+#Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: ${KAFKA_CUSTOMER_UPDATE_GROUP}
+    topic: ${KAFKA_CUSTOMER_UPDATE_TOPIC}
+
   #Liquibase
   liquibase:
     change-log: classpath:liquibase/db.changelog.yaml
