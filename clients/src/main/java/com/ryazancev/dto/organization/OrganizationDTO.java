@@ -5,6 +5,7 @@ import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.product.ProductDTO;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
@@ -21,9 +22,14 @@ public class OrganizationDTO {
 
     private String description;
 
+    private String status;
+
     private String logo;
 
     private List<ProductDTO> products;
 
     private CustomerDTO owner;
+
+    private LocalDateTime registeredAt;
+
 }

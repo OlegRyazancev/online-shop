@@ -7,13 +7,15 @@ import com.ryazancev.admin.model.RequestStatus;
 import com.ryazancev.admin.repository.OrgRegRequestRepository;
 import com.ryazancev.admin.service.OrgRegRequestService;
 import com.ryazancev.admin.util.mapper.OrgRegRequestMapper;
-import com.ryazancev.validation.OnCreate;
+import com.ryazancev.dto.admin.RegistrationResponse;
+import com.ryazancev.dto.admin.ResponseStatus;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +28,10 @@ public class OrgRegRequestServiceImpl implements OrgRegRequestService {
 
     private final OrgRegRequestRepository orgRegRequestRepository;
     private final OrgRegRequestMapper orgRegRequestMapper;
+
+    @Value("${spring.kafka.topic.organization}")
+    private String organizationTopic;
+    private final KafkaTemplate<String, RegistrationResponse> kafkaTemplate;
 
     @Override
     public OrgRegRequestsResponse getAll() {
@@ -53,21 +59,36 @@ public class OrgRegRequestServiceImpl implements OrgRegRequestService {
 
         OrgRegRequest updated = orgRegRequestRepository.save(existing);
 
-        return orgRegRequestMapper.toDto(updated);
-        //todo: handle change status on request and also in organization service with kafka
+        sendResponseToOrganization(status, existing.getOrganizationId());
+
         //todo: send notification to user about admin's decision
+        return orgRegRequestMapper.toDto(updated);
+    }
+
+    private void sendResponseToOrganization(RequestStatus status, Long organizationId) {
+
+        RegistrationResponse response = RegistrationResponse.builder()
+                .objectToBeRegisteredId(organizationId)
+                .build();
+
+        if (status.equals(RequestStatus.ACCEPTED)) {
+            response.setStatus(ResponseStatus.ACCEPTED);
+        } else {
+            response.setStatus(ResponseStatus.REJECTED);
+        }
+
+        kafkaTemplate.send(organizationTopic, response);
     }
 
     @Transactional
     @Override
-    public void create(
-            @Validated(OnCreate.class)
-            OrgRegRequestDTO orgRegRequestDTO) {
+    public void create(Long organizationId) {
 
-        OrgRegRequest toSave = orgRegRequestMapper.toEntity(orgRegRequestDTO);
-
-        toSave.setStatus(RequestStatus.ON_REVIEW);
-        toSave.setCreatedAt(LocalDateTime.now());
+        OrgRegRequest toSave = OrgRegRequest.builder()
+                .organizationId(organizationId)
+                .status(RequestStatus.ON_REVIEW)
+                .createdAt(LocalDateTime.now())
+                .build();
 
         orgRegRequestRepository.save(toSave);
     }

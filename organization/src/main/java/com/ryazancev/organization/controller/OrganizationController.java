@@ -47,7 +47,7 @@ public class OrganizationController {
             @Validated(OnCreate.class)
             OrganizationEditDTO organizationEditDTO) {
 
-        return organizationService.register(organizationEditDTO);
+        return organizationService.makeRegistrationRequest(organizationEditDTO);
     }
 
     @PutMapping

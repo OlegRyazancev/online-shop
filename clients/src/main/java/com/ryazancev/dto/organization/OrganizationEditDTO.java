@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -33,4 +35,5 @@ public class OrganizationEditDTO {
     @NotNull(message = "Owner ID must be not null",
             groups = {OnCreate.class, OnUpdate.class})
     private Long ownerId;
+
 }

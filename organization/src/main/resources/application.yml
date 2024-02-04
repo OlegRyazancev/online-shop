@@ -5,6 +5,12 @@ spring:
   application:
     name: organization
 
+
+  #Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    topic: ${KAFKA_ADMIN_TOPIC}
+
   #PostgreSQL connection
   datasource:
     username: ${POSTGRES_USER}

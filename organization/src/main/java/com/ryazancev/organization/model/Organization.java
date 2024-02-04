@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "organizations")
@@ -39,4 +40,11 @@ public class Organization implements Serializable {
 
     @Column(name = "owner_id")
     private Long ownerId;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private OrganizationStatus status;
+
+    @Column(name = "registered_at")
+    private LocalDateTime registeredAt;
 }

@@ -3,6 +3,8 @@ package com.ryazancev.organization.service.impl;
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.LogoClient;
 import com.ryazancev.clients.ProductClient;
+import com.ryazancev.dto.admin.RegistrationRequest;
+import com.ryazancev.dto.admin.RequestType;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.logo.LogoDTO;
 import com.ryazancev.dto.organization.OrganizationDTO;
@@ -10,6 +12,7 @@ import com.ryazancev.dto.organization.OrganizationEditDTO;
 import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
 import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.organization.model.Organization;
+import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
@@ -17,10 +20,13 @@ import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundExce
 import com.ryazancev.organization.util.mapper.OrganizationMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -35,6 +41,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final ProductClient productClient;
     private final LogoClient logoClient;
     private final CustomerClient customerClient;
+
+    @Value("${spring.kafka.topic}")
+    private String adminTopic;
+
+    private final KafkaTemplate<String, RegistrationRequest> kafkaTemplate;
 
     @Override
     public OrganizationsSimpleResponse getAll() {
@@ -78,7 +89,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
-    public OrganizationDTO register(
+    public OrganizationDTO makeRegistrationRequest(
             OrganizationEditDTO organizationEditDTO) {
 
         if (organizationRepository
@@ -91,15 +102,18 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
         Organization toSave = organizationMapper
                 .toEntity(organizationEditDTO);
+
+        toSave.setStatus(OrganizationStatus.INACTIVE);
+
         Organization saved = organizationRepository
                 .save(toSave);
 
+        sendRegistrationRequestToAdmin(saved.getId());
+
         OrganizationDTO savedDTO = organizationMapper
                 .toDetailedDTO(saved);
-
         CustomerDTO owner = customerClient
                 .getSimpleById(saved.getOwnerId());
-
         savedDTO.setOwner(owner);
 
         return savedDTO;
@@ -132,6 +146,21 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
+    public void changeStatusAndRegister(Long id, OrganizationStatus status) {
+
+        Organization existing = findById(id);
+
+        existing.setStatus(status);
+        existing.setRegisteredAt(LocalDateTime.now());
+
+        //todo: send email in case of status of organization
+
+
+        organizationRepository.save(existing);
+    }
+
+    @Transactional
+    @Override
     public void uploadLogo(Long id, LogoDTO logoDTO) {
 
         Organization existing = findById(id);
@@ -149,6 +178,16 @@ public class OrganizationServiceImpl implements OrganizationService {
                         "Organization not found",
                         HttpStatus.NOT_FOUND
                 ));
+    }
+
+    private void sendRegistrationRequestToAdmin(Long organizationId) {
+
+        RegistrationRequest request = RegistrationRequest.builder()
+                .objectToBeRegisteredId(organizationId)
+                .type(RequestType.ORGANIZATION)
+                .build();
+
+        kafkaTemplate.send(adminTopic, request);
     }
 }
 

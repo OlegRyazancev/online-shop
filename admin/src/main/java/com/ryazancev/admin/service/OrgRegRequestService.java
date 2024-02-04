@@ -11,6 +11,6 @@ public interface OrgRegRequestService {
 
     OrgRegRequestDTO changeStatus(Long requestId, RequestStatus status);
 
-    void create(OrgRegRequestDTO orgRegRequestDTO);
+    void create(Long organizationId);
 
 }

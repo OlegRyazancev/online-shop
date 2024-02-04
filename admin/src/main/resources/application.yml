@@ -5,6 +5,27 @@ spring:
   application:
     name: admin
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: ${KAFKA_ADMIN_CREATE_REQUEST_GROUP}
+    topic:
+      admin: ${KAFKA_ADMIN_TOPIC}
+      organization: ${KAFKA_ORGANIZATION_TOPIC}
+
+
+  #PostgreSQL connection
+  datasource:
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_ADMIN_DATABASE}?currentSchema=${POSTGRES_ADMIN_SCHEMA}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
 
 #Zipkin
 management:
