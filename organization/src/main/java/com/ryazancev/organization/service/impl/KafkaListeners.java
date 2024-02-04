@@ -1,7 +1,6 @@
 package com.ryazancev.organization.service.impl;
 
-import com.ryazancev.dto.admin.RegistrationResponse;
-import com.ryazancev.dto.admin.ResponseStatus;
+import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +17,19 @@ public class KafkaListeners {
     private final OrganizationService organizationService;
 
     @KafkaListener(
-            topics = "${spring.kafka.topic.admin}",
+            topics = "${spring.kafka.topic.organization}",
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void completeRegistrationOfOrganization(RegistrationResponse response) {
-        log.info("Received answer message from admin with response {} ",
-                response.getStatus().name());
+    void completeRegistrationOfOrganization(RegistrationRequestDTO requestDTO) {
 
-        switch (response.getStatus()) {
+        log.info("Received answer message from admin with response {} ",
+                requestDTO.getStatus().name());
+
+        switch (requestDTO.getStatus()) {
             case ACCEPTED -> {
                 organizationService.changeStatusAndRegister(
-                        response.getObjectToBeRegisteredId(),
+                        requestDTO.getObjectToRegisterId(),
                         OrganizationStatus.ACTIVE);
 
                 log.info("Organization now is: {}",
@@ -37,7 +37,7 @@ public class KafkaListeners {
             }
             case REJECTED -> {
                 organizationService.changeStatusAndRegister(
-                        response.getObjectToBeRegisteredId(),
+                        requestDTO.getObjectToRegisterId(),
                         OrganizationStatus.INACTIVE);
 
                 log.info("Organization now is: {}",
@@ -46,10 +46,5 @@ public class KafkaListeners {
             default -> {
             }
         }
-
-
-        log.info("Creating request...");
-
-
     }
 }

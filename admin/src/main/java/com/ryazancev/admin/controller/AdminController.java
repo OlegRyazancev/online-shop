@@ -1,9 +1,9 @@
 package com.ryazancev.admin.controller;
 
-import com.ryazancev.admin.dto.OrgRegRequestDTO;
-import com.ryazancev.admin.dto.OrgRegRequestsResponse;
-import com.ryazancev.admin.model.RequestStatus;
-import com.ryazancev.admin.service.OrgRegRequestService;
+import com.ryazancev.admin.service.RegistrationRequestService;
+import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.RegistrationRequestsResponse;
+import com.ryazancev.dto.admin.RequestStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class AdminController {
 
-    private final OrgRegRequestService orgRegRequestService;
+    private final RegistrationRequestService registrationRequestService;
 
-    @GetMapping("/requests/organizations")
-    public OrgRegRequestsResponse getAllOrgRegRequests() {
+    @GetMapping("/requests")
+    public RegistrationRequestsResponse getAllRegistrationRequests() {
 
-        return orgRegRequestService.getAll();
+        return registrationRequestService.getAll();
     }
 
-    @PutMapping("/requests/organizations/{id}")
-    public OrgRegRequestDTO changeOrgRegRequestStatus(
+    @PutMapping("/requests/{id}")
+    public RegistrationRequestDTO changeRegistrationRequestStatus(
             @PathVariable("id") Long id,
-            @RequestParam String status) {
+            @RequestParam("status") String status) {
 
-        return orgRegRequestService
+        return registrationRequestService
                 .changeStatus(id, RequestStatus.valueOf(status));
     }
 
@@ -43,8 +43,6 @@ public class AdminController {
     //todo: check product registration requests
 
 
-    //todo: permit request
-    //todo: not permit
 
     //todo: send notification to user
 

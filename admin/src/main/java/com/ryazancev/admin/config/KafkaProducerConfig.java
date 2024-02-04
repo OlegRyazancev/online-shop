@@ -1,7 +1,6 @@
 package com.ryazancev.admin.config;
 
-import com.ryazancev.dto.admin.RegistrationResponse;
-import com.ryazancev.dto.admin.ResponseStatus;
+import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,14 +35,15 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, RegistrationResponse> producerFactory() {
+    public ProducerFactory<String, RegistrationRequestDTO> producerFactory() {
 
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, RegistrationResponse> kafkaTemplate(
-            ProducerFactory<String, RegistrationResponse> producerFactory) {
+    public KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate(
+            ProducerFactory<String, RegistrationRequestDTO
+                    > producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }

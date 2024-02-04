@@ -1,7 +1,6 @@
 package com.ryazancev.organization.config;
 
-import com.ryazancev.dto.admin.RegistrationResponse;
-import com.ryazancev.dto.admin.ResponseStatus;
+import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,9 +31,9 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, RegistrationResponse> consumerFactory() {
+    public ConsumerFactory<String, RegistrationRequestDTO> consumerFactory() {
 
-        JsonDeserializer<RegistrationResponse> jsonDeserializer =
+        JsonDeserializer<RegistrationRequestDTO> jsonDeserializer =
                 new JsonDeserializer<>();
 
         jsonDeserializer.addTrustedPackages("*");
@@ -47,12 +46,12 @@ public class KafkaConsumerConfig {
 
     @Bean
     public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, RegistrationResponse>>
+            ConcurrentMessageListenerContainer<String, RegistrationRequestDTO>>
     messageFactory(ConsumerFactory<
-            String, RegistrationResponse> consumerFactory) {
+            String, RegistrationRequestDTO> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<
-                String, RegistrationResponse> factory =
+                String, RegistrationRequestDTO> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);

@@ -9,7 +9,11 @@ spring:
   #Kafka
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
-    topic: ${KAFKA_ADMIN_TOPIC}
+    topic:
+      admin: ${KAFKA_ADMIN_TOPIC}
+      organization: ${KAFKA_ORGANIZATION_TOPIC}
+    consumer:
+      group-id: ${KAFKA_REGISTER_GROUP}
 
   #PostgreSQL connection
   datasource:

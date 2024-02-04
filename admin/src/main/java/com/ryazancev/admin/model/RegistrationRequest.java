@@ -1,5 +1,7 @@
 package com.ryazancev.admin.model;
 
+import com.ryazancev.dto.admin.ObjectType;
+import com.ryazancev.dto.admin.RequestStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,21 +13,26 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "org_reg_requests")
+@Table(name = "registration_requests")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrgRegRequest implements Serializable {
+public class RegistrationRequest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "organization_id")
-    private Long organizationId;
+    @Column(name = "object_to_register_id")
+    private Long objectToRegisterId;
 
-    @Column(name = "req_status")
+    @Column(name = "object_type")
+    @Enumerated(EnumType.STRING)
+    private ObjectType objectType;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private RequestStatus status;
 
     @Column(name = "created_at")

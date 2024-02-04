@@ -1,4 +1,4 @@
-package com.ryazancev.admin.model;
+package com.ryazancev.dto.admin;
 
 public enum RequestStatus {
     ON_REVIEW,

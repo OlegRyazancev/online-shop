@@ -104,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
         Product toSave = productMapper.toEntity(productEditDTO);
         log.info("Org id: {}", toSave.getOrganizationId());
         Product saved = productRepository.save(toSave);
+        //todo: make kafka async request to admin microservice to create organization
 
         return createProductDetailedDTO(saved);
     }

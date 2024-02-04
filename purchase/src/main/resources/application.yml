@@ -24,8 +24,8 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     topic:
-      customer: ${KAFKA_CUSTOMER_UPDATE_TOPIC}
-      product: ${KAFKA_PRODUCT_UPDATE_TOPIC}
+      customer: ${KAFKA_CUSTOMER_TOPIC}
+      product: ${KAFKA_PRODUCT_TOPIC}
 
 #Zipkin
 management:

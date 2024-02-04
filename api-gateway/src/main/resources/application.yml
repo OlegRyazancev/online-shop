@@ -37,6 +37,8 @@ spring:
           uri: lb://ADMIN
           predicates:
             - Path=/api/v1/admin/**
+          filters:
+            - AuthenticationFilter
 
   security:
     jwt:

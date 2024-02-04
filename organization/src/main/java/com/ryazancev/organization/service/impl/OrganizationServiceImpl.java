@@ -3,8 +3,8 @@ package com.ryazancev.organization.service.impl;
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.LogoClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.admin.RegistrationRequest;
-import com.ryazancev.dto.admin.RequestType;
+import com.ryazancev.dto.admin.ObjectType;
+import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.logo.LogoDTO;
 import com.ryazancev.dto.organization.OrganizationDTO;
@@ -42,14 +42,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final LogoClient logoClient;
     private final CustomerClient customerClient;
 
-    @Value("${spring.kafka.topic}")
+    @Value("${spring.kafka.topic.admin}")
     private String adminTopic;
-
-    private final KafkaTemplate<String, RegistrationRequest> kafkaTemplate;
+    private final KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate;
 
     @Override
     public OrganizationsSimpleResponse getAll() {
-
         List<Organization> organizations = organizationRepository.findAll();
 
         return OrganizationsSimpleResponse.builder()
@@ -182,9 +180,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private void sendRegistrationRequestToAdmin(Long organizationId) {
 
-        RegistrationRequest request = RegistrationRequest.builder()
-                .objectToBeRegisteredId(organizationId)
-                .type(RequestType.ORGANIZATION)
+        RegistrationRequestDTO request = RegistrationRequestDTO.builder()
+                .objectToRegisterId(organizationId)
+                .objectType(ObjectType.ORGANIZATION)
                 .build();
 
         kafkaTemplate.send(adminTopic, request);

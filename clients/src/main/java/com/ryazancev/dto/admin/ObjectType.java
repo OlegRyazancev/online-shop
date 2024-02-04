@@ -1,6 +1,6 @@
 package com.ryazancev.dto.admin;
 
-public enum RequestType {
+public enum ObjectType {
 
     PRODUCT,
     ORGANIZATION

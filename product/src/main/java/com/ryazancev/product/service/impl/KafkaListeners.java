@@ -20,7 +20,7 @@ public class KafkaListeners {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void consumeMail(UpdateQuantityRequest request) {
+    void updateQuantity(UpdateQuantityRequest request) {
         log.info("Received message to update quantity of: {}, set to: {}",
                 request.getProductId(),
                 request.getQuantityInStock());

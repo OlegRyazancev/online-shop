@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: ${MAIL_PORT}
 
 spring:
   application:
@@ -15,7 +15,7 @@ spring:
   #Mail
   mail:
     host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
+    port: ${MAIL_HOST_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
     properties:

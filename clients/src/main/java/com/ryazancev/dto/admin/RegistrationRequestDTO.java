@@ -1,7 +1,6 @@
-package com.ryazancev.admin.dto;
+package com.ryazancev.dto.admin;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.admin.model.RequestStatus;
 import com.ryazancev.validation.OnCreate;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -15,15 +14,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OrgRegRequestDTO {
+public class RegistrationRequestDTO {
 
     private Long id;
 
-    private Long organizationId;
+    @NotNull(groups = OnCreate.class)
+    private Long objectToRegisterId;
+
+    @NotNull(groups = OnCreate.class)
+    private ObjectType objectType;
 
     private RequestStatus status;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime reviewedAt;
+
 }
