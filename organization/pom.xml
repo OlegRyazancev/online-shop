@@ -13,11 +13,19 @@
 
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <postgresql.version>42.6.0</postgresql.version>
         <liquibase.version>4.25.0</liquibase.version>
         <preliquibase.version>1.5.0</preliquibase.version>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>

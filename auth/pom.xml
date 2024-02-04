@@ -13,8 +13,6 @@
 
 
     <properties>
-        <java.version>17</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mariadb.java.client.version>3.3.2</mariadb.java.client.version>
         <liquibase.version>4.25.0</liquibase.version>
         <micrometer.tracing.version>1.2.2</micrometer.tracing.version>
@@ -24,6 +22,15 @@
         <jjwt.version>0.11.5</jjwt.version>
         <kafka.version>3.1.1</kafka.version>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
@@ -110,7 +117,6 @@
             <version>${kafka.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.ryazancev</groupId>
             <artifactId>clients</artifactId>
@@ -118,17 +124,4 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>15</source>
-                    <target>15</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>
