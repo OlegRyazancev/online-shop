@@ -25,8 +25,9 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public CustomerDTO getSimpleById(
-            @PathVariable("id") Long id) {
-
+            @PathVariable("id") Long id,
+            @RequestHeader("loggedUsername") String username) {
+        System.out.println("Logged user: " + username);
         return customerService.getById(id);
     }
 

@@ -22,6 +22,7 @@
         <module>logo</module>
         <module>auth</module>
         <module>mail</module>
+        <module>admin</module>
     </modules>
 
     <properties>

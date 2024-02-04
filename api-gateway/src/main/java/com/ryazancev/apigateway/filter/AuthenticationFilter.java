@@ -5,7 +5,10 @@ import com.ryazancev.apigateway.util.exception.custom.UnauthorizedException;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 
 @Component
@@ -23,28 +26,38 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     @Override
     public GatewayFilter apply(Config config) {
         return (((exchange, chain) -> {
+            ServerHttpRequest request = null;
             if (validator.isSecured.test(exchange.getRequest())) {
                 if (!exchange.getRequest()
                         .getHeaders()
                         .containsKey(HttpHeaders.AUTHORIZATION)) {
                     throw new UnauthorizedException("Unauthorized");
                 }
-                String authHeader = exchange.getRequest()
+                String token = exchange.getRequest()
                         .getHeaders()
                         .get(HttpHeaders.AUTHORIZATION)
                         .get(0);
 
-                if (authHeader != null
-                        && authHeader.startsWith("Bearer ")) {
+                if (token != null
+                        && token.startsWith("Bearer ")) {
 
-                    authHeader = authHeader.substring(7);
+                    token = token.substring(7);
                 }
 
-                if (!jwtUtil.validateToken(authHeader)) {
+                if (!jwtUtil.validateToken(token)) {
                     throw new UnauthorizedException("Unauthorized request");
                 }
+                request = exchange.getRequest()
+                        .mutate()
+                        .header("loggedUsername",
+                                jwtUtil.extractUsername(token))
+                        .build();
             }
-            return chain.filter(exchange);
+            return chain.filter(exchange
+                    .mutate()
+                    .request(Objects.requireNonNull(request))
+                    .build()
+            );
         }));
     }
 
