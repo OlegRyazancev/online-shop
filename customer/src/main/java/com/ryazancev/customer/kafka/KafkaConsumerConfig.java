@@ -1,4 +1,4 @@
-package com.ryazancev.customer.config;
+package com.ryazancev.customer.kafka;
 
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

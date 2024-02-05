@@ -8,7 +8,7 @@ import com.ryazancev.dto.purchase.PurchaseEditDTO;
 import com.ryazancev.dto.review.ReviewsResponse;
 
 public interface CustomerService {
-    CustomerDTO getById(Long id);
+    CustomerDTO getSimpleById(Long id);
 
     CustomerDTO getDetailedById(Long id);
 

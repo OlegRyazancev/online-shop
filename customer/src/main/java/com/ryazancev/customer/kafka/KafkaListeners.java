@@ -1,4 +1,4 @@
-package com.ryazancev.customer.service.impl;
+package com.ryazancev.customer.kafka;
 
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;

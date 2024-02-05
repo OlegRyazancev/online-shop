@@ -7,6 +7,7 @@ import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
+import com.ryazancev.customer.util.expression.CustomExpressionService;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
@@ -32,9 +33,16 @@ public class CustomerServiceImpl implements CustomerService {
     private final PurchaseClient purchaseClient;
     private final ReviewClient reviewClient;
 
-    @Override
-    public CustomerDTO getById(Long id) {
+    private final CustomExpressionService customExpressionService;
 
+
+    @Override
+    public CustomerDTO getSimpleById(Long id) {
+
+        if (!customExpressionService.canAccessUser(id)) {
+            throw new RuntimeException("Cannot access user");
+        }
+//        todo: custom exception access denied
         Customer existing = findById(id);
 
         return customerMapper.toSimple(existing);

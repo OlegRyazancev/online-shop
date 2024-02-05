@@ -26,7 +26,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     public CustomerDTO getSimpleById(
             @PathVariable("id") Long id) {
-        return customerService.getById(id);
+        return customerService.getSimpleById(id);
     }
 
     @GetMapping("/{id}/details")
