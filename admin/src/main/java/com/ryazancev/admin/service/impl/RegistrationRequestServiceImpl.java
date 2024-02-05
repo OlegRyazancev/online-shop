@@ -3,6 +3,7 @@ package com.ryazancev.admin.service.impl;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.repository.RegistrationRequestRepository;
 import com.ryazancev.admin.service.RegistrationRequestService;
+import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.admin.util.mapper.RegistrationRequestMapper;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.admin.RegistrationRequestsResponse;
@@ -10,6 +11,7 @@ import com.ryazancev.dto.admin.RequestStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +25,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RegistrationRequestServiceImpl implements RegistrationRequestService {
 
-    @Value("${spring.kafka.topic.organization}")
+    @Value("${spring.kafka.topic.organization.register}")
     private String organizationTopic;
+
+    @Value("${spring.kafka.topic.product.register}")
+    private String productTopic;
+
     private final KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate;
 
     private final RegistrationRequestRepository registrationRequestRepository;
@@ -33,7 +39,8 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
     @Override
     public RegistrationRequestsResponse getAll() {
 
-        List<RegistrationRequest> requests = registrationRequestRepository.findAll();
+        List<RegistrationRequest> requests =
+                registrationRequestRepository.findAll();
 
         return RegistrationRequestsResponse.builder()
                 .requests(registrationRequestMapper.toDtoList(requests))
@@ -51,32 +58,46 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
         RegistrationRequest existing =
                 registrationRequestRepository.findById(requestId)
                         .orElseThrow(() ->
-                                new IllegalArgumentException(
-                                        "Request not found with this id"));
-        //todo: add custom exception
+                                new RequestNotFoundException(
+                                        "Request not found with this id",
+                                        HttpStatus.NOT_FOUND
+                                ));
         existing.setStatus(status);
         existing.setReviewedAt(LocalDateTime.now());
 
-        RegistrationRequest updated = registrationRequestRepository.save(existing);
+        RegistrationRequest updated =
+                registrationRequestRepository.save(existing);
 
         RegistrationRequestDTO requestDTO =
                 registrationRequestMapper.toDto(updated);
 
-        sendResponseToOrganization(requestDTO);
+        sendResponse(requestDTO);
 
         //todo: send notification to user about admin's decision
 
         return requestDTO;
     }
 
-    private void sendResponseToOrganization(RegistrationRequestDTO requestDTO) {
+    private void sendResponse(RegistrationRequestDTO requestDTO) {
 
         switch (requestDTO.getObjectType()) {
             case PRODUCT -> {
-                //todo:logic for product topic
+                kafkaTemplate.send(productTopic, requestDTO);
+                log.info("Request sent to product topic with: {} " +
+                                "and status {}",
+                        requestDTO.getObjectType(),
+                        requestDTO.getStatus());
             }
             case ORGANIZATION -> {
                 kafkaTemplate.send(organizationTopic, requestDTO);
+                log.info("Request sent to organization topic with: {} " +
+                                "and status {}",
+                        requestDTO.getObjectType(),
+                        requestDTO.getStatus());
+            }
+            default -> {
+                log.info("Unknown request/object type: {}",
+                        requestDTO.getObjectType());
             }
         }
 

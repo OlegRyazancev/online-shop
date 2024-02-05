@@ -22,13 +22,14 @@ public class OrganizationDTO {
 
     private String description;
 
-    private String status;
 
     private String logo;
 
     private List<ProductDTO> products;
 
     private CustomerDTO owner;
+
+    private String status;
 
     private LocalDateTime registeredAt;
 

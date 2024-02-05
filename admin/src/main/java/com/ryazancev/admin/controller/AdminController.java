@@ -38,11 +38,9 @@ public class AdminController {
     //todo: delete organization
     //todo: delete review
     //todo: delete customer
-//    todo: purchase
+    //todo: delete purchase
 
     //todo: check product registration requests
-
-
 
     //todo: send notification to user
 

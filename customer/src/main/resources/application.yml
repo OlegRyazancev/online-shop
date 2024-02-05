@@ -21,8 +21,8 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
-      group-id: ${KAFKA_UPDATE_GROUP}
-    topic: ${KAFKA_CUSTOMER_TOPIC}
+      group-id: ${KAFKA_CUSTOMER_GROUP}
+    topic: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
 
   #Liquibase
   liquibase:

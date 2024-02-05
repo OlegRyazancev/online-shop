@@ -1,5 +1,6 @@
 package com.ryazancev.product.config;
 
+import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -31,7 +32,8 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, UpdateQuantityRequest> consumerFactory() {
+    public ConsumerFactory<
+            String, UpdateQuantityRequest> updateQuantityConsumerFactory() {
 
         JsonDeserializer<UpdateQuantityRequest> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -47,11 +49,44 @@ public class KafkaConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<
             ConcurrentMessageListenerContainer<
-                    String, UpdateQuantityRequest>> messageFactory(
+                    String, UpdateQuantityRequest>>
+    updateQuantityMessageFactory(
             ConsumerFactory<String, UpdateQuantityRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String,
                 UpdateQuantityRequest> factory =
+
+                new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(consumerFactory);
+
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<
+            String, RegistrationRequestDTO> changeStatusConsumerFactory() {
+
+        JsonDeserializer<RegistrationRequestDTO> jsonDeserializer =
+                new JsonDeserializer<>();
+
+        jsonDeserializer.addTrustedPackages("*");
+
+        return new DefaultKafkaConsumerFactory<>(
+                consumerConfig(),
+                new StringDeserializer(),
+                jsonDeserializer);
+    }
+
+    @Bean
+    public KafkaListenerContainerFactory<
+            ConcurrentMessageListenerContainer<
+                    String, RegistrationRequestDTO>>
+   changeStatusMessageFactory(
+            ConsumerFactory<String, RegistrationRequestDTO> consumerFactory) {
+
+        ConcurrentKafkaListenerContainerFactory<String,
+                RegistrationRequestDTO> factory =
 
                 new ConcurrentKafkaListenerContainerFactory<>();
 

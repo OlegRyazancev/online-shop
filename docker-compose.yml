@@ -81,7 +81,6 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_PRODUCT_DATABASE} ${MYSQL_AUTH_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
@@ -145,7 +144,6 @@ services:
     networks:
       - online-shop
     restart: unless-stopped
-
 
   kafka:
     container_name: kafka

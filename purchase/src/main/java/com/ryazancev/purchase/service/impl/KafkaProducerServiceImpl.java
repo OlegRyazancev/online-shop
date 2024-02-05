@@ -16,10 +16,10 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     private final KafkaTemplate<
             String, UpdateBalanceRequest> customerKafkaTemplate;
 
-    @Value("${spring.kafka.topic.customer}")
+    @Value("${spring.kafka.topic.customer.update}")
     private String customerTopic;
 
-    @Value("${spring.kafka.topic.product}")
+    @Value("${spring.kafka.topic.product.update}")
     private String productTopic;
 
     public KafkaProducerServiceImpl(

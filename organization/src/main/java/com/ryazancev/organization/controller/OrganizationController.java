@@ -42,7 +42,7 @@ public class OrganizationController {
     }
 
     @PostMapping
-    public OrganizationDTO register(
+    public OrganizationDTO makeRegistrationRequest(
             @RequestBody
             @Validated(OnCreate.class)
             OrganizationEditDTO organizationEditDTO) {

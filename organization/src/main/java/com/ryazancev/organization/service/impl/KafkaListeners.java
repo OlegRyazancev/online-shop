@@ -17,7 +17,7 @@ public class KafkaListeners {
     private final OrganizationService organizationService;
 
     @KafkaListener(
-            topics = "${spring.kafka.topic.organization}",
+            topics = "${spring.kafka.topic.organization.register}",
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )

@@ -7,6 +7,7 @@ import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.dto.review.ReviewDTO;
 import com.ryazancev.dto.review.ReviewPostDTO;
 import com.ryazancev.dto.review.ReviewsResponse;
+import com.ryazancev.product.model.ProductStatus;
 
 public interface ProductService {
 
@@ -22,7 +23,9 @@ public interface ProductService {
 
     ReviewDTO createReview(ReviewPostDTO reviewPostDTO);
 
-    ProductDTO create(ProductEditDTO productEditDTO);
+    ProductDTO makeRegistrationRequest(ProductEditDTO productEditDTO);
+
+    void changeStatusAndRegister(Long organizationId, ProductStatus status);
 
     void updateQuantity(UpdateQuantityRequest request);
 

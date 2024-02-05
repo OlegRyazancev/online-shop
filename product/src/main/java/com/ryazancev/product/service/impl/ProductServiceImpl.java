@@ -2,6 +2,8 @@ package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.OrganizationClient;
 import com.ryazancev.clients.ReviewClient;
+import com.ryazancev.dto.admin.ObjectType;
+import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.organization.OrganizationDTO;
 import com.ryazancev.dto.product.ProductDTO;
 import com.ryazancev.dto.product.ProductEditDTO;
@@ -11,6 +13,7 @@ import com.ryazancev.dto.review.ReviewDTO;
 import com.ryazancev.dto.review.ReviewPostDTO;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.model.Product;
+import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
@@ -18,11 +21,15 @@ import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Slf4j
 @Service
@@ -35,6 +42,10 @@ public class ProductServiceImpl implements ProductService {
 
     private final OrganizationClient organizationClient;
     private final ReviewClient reviewClient;
+
+    @Value("${spring.kafka.topic.admin}")
+    private String adminTopic;
+    private final KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate;
 
     @Override
     public ProductsSimpleResponse getAll() {
@@ -91,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductDTO create(ProductEditDTO productEditDTO) {
+    public ProductDTO makeRegistrationRequest(ProductEditDTO productEditDTO) {
 
         if (productRepository.findByProductName(
                 productEditDTO.getProductName()).isPresent()) {
@@ -102,13 +113,28 @@ public class ProductServiceImpl implements ProductService {
         }
 
         Product toSave = productMapper.toEntity(productEditDTO);
-        log.info("Org id: {}", toSave.getOrganizationId());
+
+        toSave.setStatus(ProductStatus.INACTIVE);
+
         Product saved = productRepository.save(toSave);
-        //todo: make kafka async request to admin microservice to create organization
+
+        sendRegistrationRequestToAdmin(saved.getId());
 
         return createProductDetailedDTO(saved);
     }
 
+    @Transactional
+    @Override
+    public void changeStatusAndRegister(Long id,
+                                        ProductStatus status) {
+        Product existing = findById(id);
+
+        existing.setStatus(status);
+        existing.setRegisteredAt(LocalDateTime.now());
+
+        //todo: send email in case of status of product
+        productRepository.save(existing);
+    }
 
 
     @Transactional
@@ -183,5 +209,15 @@ public class ProductServiceImpl implements ProductService {
                 ", ",
                 productEditDTO.getKeywords()
         ));
+    }
+
+    private void sendRegistrationRequestToAdmin(Long productId) {
+
+        RegistrationRequestDTO requestDTO = RegistrationRequestDTO.builder()
+                .objectToRegisterId(productId)
+                .objectType(ObjectType.PRODUCT)
+                .build();
+
+        kafkaTemplate.send(adminTopic, requestDTO);
     }
 }

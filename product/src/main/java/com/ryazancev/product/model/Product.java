@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
@@ -38,6 +39,12 @@ public class Product implements Serializable {
     @Column(name = "keywords")
     private String keywords;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
+
+    @Column(name = "registered_at")
+    private LocalDateTime registeredAt;
     //todo: discount field
 }
 

@@ -9,26 +9,26 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value("${spring.kafka.topic.customer}")
-    private String customerTopicName;
+    @Value("${spring.kafka.topic.customer.update}")
+    private String customerUpdateTopicName;
 
-    @Value("${spring.kafka.topic.product}")
-    private String productTopicName;
+    @Value("${spring.kafka.topic.product.update}")
+    private String productUpdateTopicName;
 
 
     @Bean
-    public NewTopic customerEventsTopic() {
+    public NewTopic customerUpdateEventsTopic() {
 
         return TopicBuilder
-                .name(customerTopicName)
+                .name(customerUpdateTopicName)
                 .build();
     }
 
     @Bean
-    public NewTopic productEventsTopic() {
+    public NewTopic productUpdateEventsTopic() {
 
         return TopicBuilder
-                .name(productTopicName)
+                .name(productUpdateTopicName)
                 .build();
     }
 }

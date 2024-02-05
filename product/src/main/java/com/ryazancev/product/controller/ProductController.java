@@ -67,12 +67,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDTO createProduct(
+    public ProductDTO makeRegistrationRequestOfProduct(
             @RequestBody
             @Validated(OnCreate.class)
             ProductEditDTO productEditDTO) {
 
-        return productService.create(productEditDTO);
+        return productService.makeRegistrationRequest(productEditDTO);
     }
 
     @PutMapping

@@ -17,11 +17,16 @@ spring:
         format_sql: true
     show-sql: true
 
+  #Kafka
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
-      group-id: ${KAFKA_UPDATE_GROUP}
-    topic: ${KAFKA_PRODUCT_TOPIC}
+      group-id: ${KAFKA_PRODUCT_GROUP}
+    topic:
+      admin: ${KAFKA_REQUESTS_ADMIN_TOPIC}
+      product:
+        register: ${KAFKA_REGISTER_PRODUCT_TOPIC}
+        update: ${KAFKA_UPDATE_PRODUCT_TOPIC}
 
   #Liquibase
   liquibase:

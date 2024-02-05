@@ -5,6 +5,7 @@ import com.ryazancev.dto.organization.OrganizationDTO;
 import com.ryazancev.dto.review.ReviewDTO;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
@@ -32,6 +33,10 @@ public class ProductDTO {
     private List<ReviewDTO> reviews;
 
     private Double averageRating;
+
+    private String status;
+
+    private LocalDateTime registeredAt;
 
     //todo: discount field
 

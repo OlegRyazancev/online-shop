@@ -8,7 +8,7 @@ spring:
   #Kafka
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
-    topic: ${KAFKA_EMAIL_TOPIC}
+    topic: ${KAFKA_MAIL_TOPIC}
 
   #MariaDB connection
   datasource:

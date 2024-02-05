@@ -9,8 +9,8 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
-      group-id: ${KAFKA_EMAIL_GROUP}
-    topic: ${KAFKA_EMAIL_TOPIC}
+      group-id: ${KAFKA_MAIL_GROUP}
+    topic: ${KAFKA_MAIL_TOPIC}
 
   #Mail
   mail:

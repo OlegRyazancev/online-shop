@@ -9,14 +9,34 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value("${spring.kafka.topic.organization}")
+    @Value("${spring.kafka.topic.organization.register}")
     private String organizationTopicName;
+
+    @Value("${spring.kafka.topic.product.register}")
+    private String productTopicName;
+
+    @Value("${spring.kafka.topic.admin}")
+    private String adminTopicName;
 
 
     @Bean
-    public NewTopic organizationEventsTopic() {
+    public NewTopic organizationRegisterEventsTopic() {
         return TopicBuilder
                 .name(organizationTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic productRegisterEventsTopic() {
+        return TopicBuilder
+                .name(productTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic adminEventsTopic() {
+        return TopicBuilder
+                .name(adminTopicName)
                 .build();
     }
 }

@@ -152,8 +152,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         existing.setRegisteredAt(LocalDateTime.now());
 
         //todo: send email in case of status of organization
-
-
         organizationRepository.save(existing);
     }
 
@@ -180,12 +178,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private void sendRegistrationRequestToAdmin(Long organizationId) {
 
-        RegistrationRequestDTO request = RegistrationRequestDTO.builder()
+        RegistrationRequestDTO requestDTO = RegistrationRequestDTO.builder()
                 .objectToRegisterId(organizationId)
                 .objectType(ObjectType.ORGANIZATION)
                 .build();
 
-        kafkaTemplate.send(adminTopic, request);
+        kafkaTemplate.send(adminTopic, requestDTO);
     }
 }
 
