@@ -18,10 +18,25 @@ public class AdminController {
 
     private final RegistrationRequestService registrationRequestService;
 
+
     @GetMapping("/requests")
     public RegistrationRequestsResponse getAllRegistrationRequests() {
 
         return registrationRequestService.getAll();
+    }
+
+    @GetMapping("/requests/product")
+    public RegistrationRequestsResponse getProductRegistrationRequests() {
+
+        return registrationRequestService
+                .getProductRegistrationRequests();
+    }
+
+    @GetMapping("/requests/organization")
+    public RegistrationRequestsResponse getOrganizationRegistrationRequests() {
+
+        return registrationRequestService
+                .getOrganizationRegistrationRequests();
     }
 
     @PutMapping("/requests/{id}")
@@ -34,16 +49,18 @@ public class AdminController {
     }
 
 
+
+
     //todo: delete product
     //todo: delete organization
     //todo: delete review
     //todo: delete customer
     //todo: delete purchase
 
-    //todo: check product registration requests
 
     //todo: send notification to user
 
+    //todo: freeze product
     //todo: freeze organization
     //todo: freeze user
 

@@ -8,9 +8,9 @@ import com.ryazancev.dto.admin.RequestStatus;
 public interface RegistrationRequestService {
 
     RegistrationRequestsResponse getAll();
-
-    RegistrationRequestDTO changeStatus(Long requestId,
-                                        RequestStatus status);
+    RegistrationRequestsResponse getProductRegistrationRequests();
+    RegistrationRequestsResponse getOrganizationRegistrationRequests();
+    RegistrationRequestDTO changeStatus(Long requestId, RequestStatus status);
     void create(RegistrationRequestDTO registrationRequestDTO);
 
 }

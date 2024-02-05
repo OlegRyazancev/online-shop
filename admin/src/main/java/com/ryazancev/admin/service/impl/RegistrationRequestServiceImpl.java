@@ -5,6 +5,7 @@ import com.ryazancev.admin.repository.RegistrationRequestRepository;
 import com.ryazancev.admin.service.RegistrationRequestService;
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.admin.util.mapper.RegistrationRequestMapper;
+import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.admin.RegistrationRequestsResponse;
 import com.ryazancev.dto.admin.RequestStatus;
@@ -41,6 +42,30 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
 
         List<RegistrationRequest> requests =
                 registrationRequestRepository.findAll();
+
+        return RegistrationRequestsResponse.builder()
+                .requests(registrationRequestMapper.toDtoList(requests))
+                .build();
+    }
+
+    @Override
+    public RegistrationRequestsResponse getProductRegistrationRequests() {
+
+        List<RegistrationRequest> requests =
+                registrationRequestRepository
+                        .findAllByObjectType(ObjectType.PRODUCT);
+
+        return RegistrationRequestsResponse.builder()
+                .requests(registrationRequestMapper.toDtoList(requests))
+                .build();
+    }
+
+    @Override
+    public RegistrationRequestsResponse getOrganizationRegistrationRequests() {
+
+        List<RegistrationRequest> requests =
+                registrationRequestRepository
+                        .findAllByObjectType(ObjectType.ORGANIZATION);
 
         return RegistrationRequestsResponse.builder()
                 .requests(registrationRequestMapper.toDtoList(requests))

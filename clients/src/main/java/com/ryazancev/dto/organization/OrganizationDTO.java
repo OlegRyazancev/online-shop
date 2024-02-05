@@ -22,7 +22,6 @@ public class OrganizationDTO {
 
     private String description;
 
-
     private String logo;
 
     private List<ProductDTO> products;
