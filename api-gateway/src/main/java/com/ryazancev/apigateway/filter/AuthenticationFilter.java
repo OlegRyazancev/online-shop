@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -33,10 +34,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                         .containsKey(HttpHeaders.AUTHORIZATION)) {
                     throw new UnauthorizedException("Unauthorized");
                 }
-                String token = exchange.getRequest()
-                        .getHeaders()
-                        .get(HttpHeaders.AUTHORIZATION)
-                        .get(0);
+                String token = Objects.requireNonNull(
+                        exchange.getRequest()
+                                .getHeaders()
+                                .get(HttpHeaders.AUTHORIZATION)).get(0);
 
                 if (token != null
                         && token.startsWith("Bearer ")) {
@@ -47,10 +48,23 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 if (!jwtUtil.validateToken(token)) {
                     throw new UnauthorizedException("Unauthorized request");
                 }
+                List<String> roles = jwtUtil.extractRoles(token);
+
+                if (exchange.getRequest().getURI().getPath()
+                        .contains("/admin")) {
+
+                    if (!roles.contains("ROLE_ADMIN")) {
+                        throw new UnauthorizedException(
+                                "Insufficient privileges for " +
+                                        "admin microservice");
+                    }
+                }
+                String rolesString = String.join(" ", roles);
                 request = exchange.getRequest()
                         .mutate()
-                        .header("loggedUsername",
-                                jwtUtil.extractUsername(token))
+                        .header("userId", jwtUtil.extractId(token))
+                        .header("email", jwtUtil.extractEmail(token))
+                        .header("roles", rolesString)
                         .build();
             }
             return chain.filter(exchange

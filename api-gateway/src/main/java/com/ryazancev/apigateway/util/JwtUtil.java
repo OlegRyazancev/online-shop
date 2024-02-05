@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 
 @Component
@@ -38,14 +39,33 @@ public class JwtUtil {
                 .before(new Date());
     }
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
+
         return extractClaim(token, Claims::getSubject);
     }
+
+    public String extractId(String token) {
+
+        return extractClaim(
+                token,
+                claims -> claims.get("id", Long.class)
+        ).toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> extractRoles(String token) {
+        return extractClaim(
+                token,
+                claims -> claims.get("roles", List.class)
+        );
+    }
+
 
     public <T> T extractClaim(String token,
                               Function<Claims, T> claimsResolver) {
 
         final Claims claims = extractAllClaims(token);
+
         return claimsResolver.apply(claims);
     }
 
