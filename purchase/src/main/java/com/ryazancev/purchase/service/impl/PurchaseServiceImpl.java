@@ -51,7 +51,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .getBalanceByCustomerId(customerId);
 
         ProductDTO selectedProduct = productClient
-                .getDetailedById(productId);
+                .getById(productId);
         Double selectedProductPrice = selectedProduct.getPrice();
         Integer availableProductsInStock = selectedProduct.getQuantityInStock();
 

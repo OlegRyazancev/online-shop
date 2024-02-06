@@ -171,7 +171,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Long getOwnerId(Long organizationId) {
 
         Organization existing = findById(organizationId);
-
+        System.out.println("SEGNS:OENGI:SENGOISNB:OSDPMB");
         return existing.getOwnerId();
     }
 

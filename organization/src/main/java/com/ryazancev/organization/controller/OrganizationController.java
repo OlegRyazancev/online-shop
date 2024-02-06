@@ -87,7 +87,7 @@ public class OrganizationController {
         organizationService.uploadLogo(id, logoDto);
     }
 
-    @GetMapping("{id}/owner")
+    @GetMapping("/{id}/owner")
     public Long getOwnerId(@PathVariable("id") Long id) {
 
         return organizationService.getOwnerId(id);

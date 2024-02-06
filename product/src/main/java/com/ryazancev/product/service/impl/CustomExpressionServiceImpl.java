@@ -59,7 +59,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private Long getUserIdFromRequest(HttpServletRequest request) {
 
-        return Long.valueOf(request.getHeader("id"));
+        return Long.valueOf(request.getHeader("userId"));
     }
 
 }

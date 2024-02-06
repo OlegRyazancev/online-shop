@@ -34,7 +34,9 @@ public class ProductEditDTO {
             groups = {OnCreate.class, OnUpdate.class})
     private String description;
 
-    @NotNull(message = "Organization ID must not be null")
+
+    @NotNull(message = "Organization ID must not be null",
+            groups = {OnCreate.class, OnUpdate.class})
     private Long organizationId;
 
     @NotNull(message = "Price must be not null",
