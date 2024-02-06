@@ -7,7 +7,6 @@ import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
-import com.ryazancev.customer.util.expression.CustomExpressionService;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
@@ -33,19 +32,13 @@ public class CustomerServiceImpl implements CustomerService {
     private final PurchaseClient purchaseClient;
     private final ReviewClient reviewClient;
 
-    private final CustomExpressionService customExpressionService;
-
 
     @Override
     public CustomerDTO getSimpleById(Long id) {
 
-        if (!customExpressionService.canAccessUser(id)) {
-            throw new RuntimeException("Cannot access user");
-        }
-//        todo: custom exception access denied
         Customer existing = findById(id);
 
-        return customerMapper.toSimple(existing);
+        return customerMapper.toSimpleDTO(existing);
     }
 
     @Override
@@ -77,14 +70,24 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public void updateBalance(UpdateBalanceRequest request) {
+
         Customer existing = findById(request.getCustomerId());
         existing.setBalance(request.getBalance());
         customerRepository.save(existing);
     }
 
+    @Override
+    public Double getBalanceByCustomerId(Long id) {
+
+        Customer foundCustomer = findById(id);
+
+        return foundCustomer.getBalance();
+    }
+
     @Transactional
     @Override
     public CustomerDTO create(CustomerDTO customerDTO) {
+
         if (customerRepository.findByEmail(customerDTO.getEmail()).isPresent()) {
             throw new CustomerCreationException(
                     "Customer with this email already exists",
@@ -95,7 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer toSave = customerMapper.toEntity(customerDTO);
         Customer saved = customerRepository.save(toSave);
 
-        return customerMapper.toSimple(saved);
+        return customerMapper.toSimpleDTO(saved);
     }
 
     @Transactional

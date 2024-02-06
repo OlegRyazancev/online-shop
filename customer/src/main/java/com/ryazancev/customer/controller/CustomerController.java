@@ -1,6 +1,8 @@
 package com.ryazancev.customer.controller;
 
+import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.service.CustomerService;
+import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.purchase.PurchaseDTO;
@@ -21,17 +23,28 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomExpressionService customExpressionService;
 
 
     @GetMapping("/{id}")
     public CustomerDTO getSimpleById(
             @PathVariable("id") Long id) {
+
         return customerService.getSimpleById(id);
+    }
+
+    @GetMapping("/{id}/balance")
+    public Double getBalanceByCustomerId(
+            @PathVariable("id") Long id){
+
+        return customerService.getBalanceByCustomerId(id);
     }
 
     @GetMapping("/{id}/details")
     public CustomerDTO getDetailedById(
             @PathVariable("id") Long id) {
+
+        checkAccessCustomer(id);
 
         return customerService.getDetailedById(id);
     }
@@ -51,6 +64,8 @@ public class CustomerController {
             @Validated(OnUpdate.class)
             CustomerDTO customerDTO) {
 
+        checkAccessCustomer(customerDTO.getId());
+
         return customerService.update(customerDTO);
     }
 
@@ -58,12 +73,16 @@ public class CustomerController {
     public ReviewsResponse getReviewsByCustomerId(
             @PathVariable("id") Long id) {
 
+        checkAccessCustomer(id);
+
         return customerService.getReviewsByCustomerId(id);
     }
 
     @GetMapping("/{id}/purchases")
     public CustomerPurchasesResponse getPurchasesByCustomerId(
             @PathVariable("id") Long id) {
+
+        checkAccessCustomer(id);
 
         return customerService.getPurchasesByCustomerId(id);
     }
@@ -74,7 +93,16 @@ public class CustomerController {
             @Validated(OnCreate.class)
             PurchaseEditDTO purchaseEditDTO) {
 
+        checkAccessCustomer(purchaseEditDTO.getCustomerId());
+
         return customerService.processPurchase(purchaseEditDTO);
+    }
+
+    private void checkAccessCustomer(Long customerId) {
+
+        if (!customExpressionService.canAccessCustomer(customerId)) {
+            throw new AccessDeniedException();
+        }
     }
 
 

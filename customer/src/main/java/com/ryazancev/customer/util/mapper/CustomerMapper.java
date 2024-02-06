@@ -14,7 +14,7 @@ public interface CustomerMapper {
 
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "balance", ignore = true)
-    CustomerDTO toSimple(Customer customer);
+    CustomerDTO toSimpleDTO(Customer customer);
 
     CustomerDTO toDetailedDTO(Customer customer);
 

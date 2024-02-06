@@ -24,4 +24,5 @@ public interface CustomerService {
 
     void updateBalance(UpdateBalanceRequest request);
 
+    Double getBalanceByCustomerId(Long id);
 }

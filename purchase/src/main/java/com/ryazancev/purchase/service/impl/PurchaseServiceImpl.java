@@ -44,14 +44,16 @@ public class PurchaseServiceImpl implements PurchaseService {
     public PurchaseDTO processPurchase(
             PurchaseEditDTO purchaseEditDTO) {
 
-        ProductDTO selectedProduct = productClient
-                .getDetailedById(purchaseEditDTO.getProductId());
-        CustomerDTO selectedCustomer = customerClient
-                .getDetailedById(purchaseEditDTO.getCustomerId());
+        Long customerId = purchaseEditDTO.getCustomerId();
+        Long productId = purchaseEditDTO.getProductId();
 
+        Double availableCustomerBalance = customerClient
+                .getBalanceByCustomerId(customerId);
+
+        ProductDTO selectedProduct = productClient
+                .getDetailedById(productId);
         Double selectedProductPrice = selectedProduct.getPrice();
         Integer availableProductsInStock = selectedProduct.getQuantityInStock();
-        Double availableCustomerBalance = selectedCustomer.getBalance();
 
         if (availableCustomerBalance < selectedProductPrice) {
             throw new IncorrectBalanceException(
@@ -69,7 +71,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         //todo: increase money in organization's owner (for future add percent to admin)
 
-        updateCustomerBalance(selectedCustomer, selectedProduct.getPrice());
+        updateCustomerBalance(customerId,
+                availableCustomerBalance - selectedProductPrice);
         updateProductQuantity(selectedProduct);
 
         Purchase toSave = purchaseMapper.toEntity(purchaseEditDTO);
@@ -79,11 +82,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         Purchase saved = purchaseRepository.save(toSave);
         PurchaseDTO purchaseDTO = purchaseMapper.toDTO(saved);
 
-        CustomerDTO customerDTO = CustomerDTO.builder()
-                .id(selectedCustomer.getId())
-                .username(selectedCustomer.getUsername())
-                .build();
-
+        CustomerDTO customerDTO = customerClient.getSimpleById(customerId);
         ProductDTO productDTO = ProductDTO.builder()
                 .id(selectedProduct.getId())
                 .productName(selectedProduct.getProductName())
@@ -119,13 +118,13 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .build();
     }
 
-    private void updateCustomerBalance(CustomerDTO customer,
-                                       Double purchaseAmount) {
+    private void updateCustomerBalance(Long customerId,
+                                       Double updatedBalance) {
 
         kafkaProducerServiceImpl.sendMessageToCustomerTopic(
                 UpdateBalanceRequest.builder()
-                        .customerId(customer.getId())
-                        .balance(customer.getBalance() - purchaseAmount)
+                        .customerId(customerId)
+                        .balance(updatedBalance)
                         .build()
         );
     }

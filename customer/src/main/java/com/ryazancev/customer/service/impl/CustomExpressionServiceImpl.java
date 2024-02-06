@@ -1,6 +1,6 @@
-package com.ryazancev.customer.util.expression.impl;
+package com.ryazancev.customer.service.impl;
 
-import com.ryazancev.customer.util.expression.CustomExpressionService;
+import com.ryazancev.customer.service.CustomExpressionService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     private final HttpServletRequest request;
 
     @Override
-    public boolean canAccessUser(Long id) {
+    public boolean canAccessCustomer(Long id) {
+
         Long userId = Long.valueOf(request.getHeader("userId"));
         List<String> userRoles = Arrays
                 .stream(request

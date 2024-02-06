@@ -18,8 +18,8 @@ public interface CustomerClient {
     CustomerDTO getSimpleById(
             @PathVariable("id") Long id);
 
-    @GetMapping("api/v1/customers/{id}/details")
-    CustomerDTO getDetailedById(
+    @GetMapping("api/v1/customers/{id}/balance")
+    Double getBalanceByCustomerId(
             @PathVariable("id") Long id);
 
     @PostMapping("api/v1/customers")

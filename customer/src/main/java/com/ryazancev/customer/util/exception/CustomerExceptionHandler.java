@@ -2,6 +2,7 @@ package com.ryazancev.customer.util.exception;
 
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
+import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
 import jakarta.validation.ConstraintViolation;
@@ -93,6 +94,18 @@ public class CustomerExceptionHandler {
                         e.getErrors(),
                         e.getServiceStage(),
                         e.getHttpStatus()
+                ));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionBody> handleAccessDenied() {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionBody(
+                        "Access Denied",
+                        ServiceStage.CUSTOMER,
+                        HttpStatus.FORBIDDEN
                 ));
     }
 
