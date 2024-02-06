@@ -44,6 +44,9 @@ public class KafkaListeners {
                         OrganizationStatus.INACTIVE);
             }
             default -> {
+                log.info("Unknown request type({}) or status({})",
+                        requestDTO.getObjectType(),
+                        requestDTO.getStatus());
             }
         }
     }

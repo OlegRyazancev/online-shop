@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface OrganizationClient {
 
-    @GetMapping("api/v1/organizations/{id}")
+    @GetMapping("api/v1/organizations/{id}/simple")
     OrganizationDTO getSimpleById(
             @PathVariable("id") Long id);
 

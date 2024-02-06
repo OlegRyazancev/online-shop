@@ -2,6 +2,7 @@ package com.ryazancev.organization.util.exception;
 
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
+import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
 import jakarta.validation.ConstraintViolation;
@@ -80,6 +81,18 @@ public class OrganizationExceptionHandler {
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionBody> handleAccessDenied() {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionBody(
+                        "Access Denied",
+                        ServiceStage.ORGANIZATION,
+                        HttpStatus.FORBIDDEN
+                ));
     }
 
     @ExceptionHandler(OnlineShopException.class)

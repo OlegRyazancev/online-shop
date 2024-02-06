@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface CustomerClient {
 
-    @GetMapping("api/v1/customers/{id}")
+    @GetMapping("api/v1/customers/{id}/simple")
     CustomerDTO getSimpleById(
             @PathVariable("id") Long id);
 

@@ -4,7 +4,9 @@ import com.ryazancev.dto.logo.LogoDTO;
 import com.ryazancev.dto.organization.OrganizationDTO;
 import com.ryazancev.dto.organization.OrganizationEditDTO;
 import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
+import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.service.OrganizationService;
+import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrganizationController {
 
     private final OrganizationService organizationService;
+    private final CustomExpressionService customExpressionService;
 
     @GetMapping
     public OrganizationsSimpleResponse getAll() {
@@ -27,15 +30,15 @@ public class OrganizationController {
         return organizationService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/simple")
     public OrganizationDTO getSimpleById(
             @PathVariable("id") Long id) {
 
         return organizationService.getSimpleById(id);
     }
 
-    @GetMapping("/{id}/details")
-    public OrganizationDTO getDetailedById(
+    @GetMapping("/{id}")
+    public OrganizationDTO getById(
             @PathVariable("id") Long id) {
 
         return organizationService.getDetailedById(id);
@@ -47,6 +50,12 @@ public class OrganizationController {
             @Validated(OnCreate.class)
             OrganizationEditDTO organizationEditDTO) {
 
+        if (!customExpressionService
+                .canAccessUser(organizationEditDTO.getOwnerId())) {
+
+            throw new AccessDeniedException();
+        }
+
         return organizationService.makeRegistrationRequest(organizationEditDTO);
     }
 
@@ -56,6 +65,12 @@ public class OrganizationController {
             @Validated(OnUpdate.class)
             OrganizationEditDTO organizationEditDTO) {
 
+        if (!customExpressionService
+                .canAccessOrganization(organizationEditDTO.getId())) {
+
+            throw new AccessDeniedException();
+        }
+
         return organizationService.update(organizationEditDTO);
     }
 
@@ -64,6 +79,10 @@ public class OrganizationController {
             @PathVariable("id") Long id,
             @Validated(OnCreate.class)
             @ModelAttribute LogoDTO logoDto) {
+
+        if (!customExpressionService.canAccessOrganization(id)) {
+            throw new AccessDeniedException();
+        }
 
         organizationService.uploadLogo(id, logoDto);
     }
