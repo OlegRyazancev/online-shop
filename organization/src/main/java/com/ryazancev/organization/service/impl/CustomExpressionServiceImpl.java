@@ -25,6 +25,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         Long currentUserId = getUserIdFromRequest();
         List<String> userRoles = getUserRolesFromRequest();
 
+        log.info("user Id = {}, user roles = {}", currentUserId, userRoles);
+
         return organizationRepository
                 .isOrganizationOwner(currentUserId, organizationId)
                 || userRoles.contains("ROLE_ADMIN");

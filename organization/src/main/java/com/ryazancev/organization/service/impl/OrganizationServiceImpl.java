@@ -167,6 +167,14 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationRepository.save(existing);
     }
 
+    @Override
+    public Long getOwnerId(Long organizationId) {
+
+        Organization existing = findById(organizationId);
+
+        return existing.getOwnerId();
+    }
+
     private Organization findById(Long id) {
 
         return organizationRepository.findById(id)

@@ -19,4 +19,6 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
             """, nativeQuery = true)
     Boolean isOrganizationOwner(@Param("userId") Long userId,
                                 @Param("organizationId") Long organizationId);
+
+
 }

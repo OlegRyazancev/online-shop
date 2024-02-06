@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
         configuration = FeignClientsConfiguration.class
 )
 public interface ProductClient {
-    @GetMapping("api/v1/products/{id}")
+    @GetMapping("api/v1/products/{id}/simple")
     ProductDTO getSimpleById(
             @PathVariable("id") Long id);
 
-    @GetMapping("api/v1/products/{id}/details")
-    ProductDTO getDetailedById(
+    @GetMapping("api/v1/products/{id}")
+    ProductDTO getById(
             @PathVariable("id") Long id);
 
     @GetMapping("api/v1/products/organizations/{organizationId}")

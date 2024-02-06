@@ -26,22 +26,15 @@ public class CustomerController {
     private final CustomExpressionService customExpressionService;
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/simple")
     public CustomerDTO getSimpleById(
             @PathVariable("id") Long id) {
 
         return customerService.getSimpleById(id);
     }
 
-    @GetMapping("/{id}/balance")
-    public Double getBalanceByCustomerId(
-            @PathVariable("id") Long id){
-
-        return customerService.getBalanceByCustomerId(id);
-    }
-
-    @GetMapping("/{id}/details")
-    public CustomerDTO getDetailedById(
+    @GetMapping("/{id}")
+    public CustomerDTO getById(
             @PathVariable("id") Long id) {
 
         checkAccessCustomer(id);
@@ -96,6 +89,13 @@ public class CustomerController {
         checkAccessCustomer(purchaseEditDTO.getCustomerId());
 
         return customerService.processPurchase(purchaseEditDTO);
+    }
+
+    @GetMapping("/{id}/balance")
+    public Double getBalanceByCustomerId(
+            @PathVariable("id") Long id){
+
+        return customerService.getBalanceByCustomerId(id);
     }
 
     private void checkAccessCustomer(Long customerId) {

@@ -21,4 +21,6 @@ public interface OrganizationService {
     void changeStatusAndRegister(Long organizationId, OrganizationStatus status);
 
     void uploadLogo(Long id, LogoDTO logoDTO);
+
+    Long getOwnerId(Long organizationId);
 }

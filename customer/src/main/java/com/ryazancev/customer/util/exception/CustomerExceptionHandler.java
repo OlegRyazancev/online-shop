@@ -83,6 +83,18 @@ public class CustomerExceptionHandler {
                 .body(exceptionBody);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionBody> handleAccessDenied() {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionBody(
+                        "Access Denied",
+                        ServiceStage.CUSTOMER,
+                        HttpStatus.FORBIDDEN
+                ));
+    }
+
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
@@ -94,18 +106,6 @@ public class CustomerExceptionHandler {
                         e.getErrors(),
                         e.getServiceStage(),
                         e.getHttpStatus()
-                ));
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ExceptionBody> handleAccessDenied() {
-
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .body(new ExceptionBody(
-                        "Access Denied",
-                        ServiceStage.CUSTOMER,
-                        HttpStatus.FORBIDDEN
                 ));
     }
 

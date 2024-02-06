@@ -2,6 +2,7 @@ package com.ryazancev.product.util.exception;
 
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
+import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import jakarta.validation.ConstraintViolation;
@@ -80,6 +81,18 @@ public class ProductExceptionHandler {
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
                 .body(exceptionBody);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionBody> handleAccessDenied() {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionBody(
+                        "Access Denied",
+                        ServiceStage.PRODUCT,
+                        HttpStatus.FORBIDDEN
+                ));
     }
 
     @ExceptionHandler(OnlineShopException.class)
