@@ -7,6 +7,7 @@ import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
 import com.ryazancev.purchase.util.exception.custom.PurchasesNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,12 +18,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class PurchaseExceptionHandler {
 
     @ExceptionHandler(IncorrectBalanceException.class)
     public ResponseEntity<ExceptionBody> handleIncorrectBalance(
             IncorrectBalanceException e) {
+
+        log.error("Incorrect balance exception");
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -37,6 +41,8 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handlePurchasesNotFound(
             PurchasesNotFoundException e) {
 
+        log.error("Purchases not found exception");
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -50,6 +56,8 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOutOfStock(
             OutOfStockException e) {
 
+        log.error("Out of stock exception");
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -62,6 +70,8 @@ public class PurchaseExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
+
+        log.error("Constraint violation exception");
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -80,6 +90,8 @@ public class PurchaseExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
+
+        log.error("Method argument not valid exception");
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -100,6 +112,10 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
+        log.error("Online shop exception");
+
+        e.printStackTrace();
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -112,6 +128,8 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+
+        log.error(e.getClass().getSimpleName());
 
         e.printStackTrace();
 

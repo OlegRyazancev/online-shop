@@ -9,6 +9,7 @@ import com.ryazancev.dto.product.ProductDTO;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.dto.purchase.PurchaseDTO;
 import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.purchase.kafka.PurchaseProducerService;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;
@@ -37,7 +38,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final ProductClient productClient;
     private final CustomerClient customerClient;
 
-    private final KafkaProducerServiceImpl kafkaProducerServiceImpl;
+    private final PurchaseProducerService purchaseProducerService;
 
     @Transactional
     @Override
@@ -121,7 +122,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private void updateCustomerBalance(Long customerId,
                                        Double updatedBalance) {
 
-        kafkaProducerServiceImpl.sendMessageToCustomerTopic(
+        purchaseProducerService.sendMessageToCustomerTopic(
                 UpdateBalanceRequest.builder()
                         .customerId(customerId)
                         .balance(updatedBalance)
@@ -131,7 +132,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     private void updateProductQuantity(ProductDTO product) {
 
-        kafkaProducerServiceImpl.sendMessageToProductTopic(
+        purchaseProducerService.sendMessageToProductTopic(
                 UpdateQuantityRequest.builder()
                         .productId(product.getId())
                         .quantityInStock(product.getQuantityInStock() - 1)

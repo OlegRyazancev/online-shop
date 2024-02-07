@@ -1,8 +1,8 @@
 package com.ryazancev.customer.controller;
 
 import com.ryazancev.customer.model.Customer;
-import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.service.CustomerService;
+import com.ryazancev.customer.service.expression.CustomExpressionService;
 import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
 import com.ryazancev.dto.customer.CustomerDTO;
@@ -93,7 +93,10 @@ public class CustomerController {
         }
     }
 
+    //todo: add method to watch notifications
+
 //    Endpoints only  for feign clients
+
     @GetMapping("/{id}/simple")
     public CustomerDTO getSimpleById(
             @PathVariable("id") Long id) {
@@ -121,10 +124,4 @@ public class CustomerController {
 
         return customerMapper.toSimpleDTO(created);
     }
-
-
-
-
-    //todo: add method to watch notifications
-
 }

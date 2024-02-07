@@ -1,11 +1,9 @@
 package com.ryazancev.purchase.util.exception.custom;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-@AllArgsConstructor
 @Getter
 @Setter
 public class OutOfStockException extends RuntimeException {

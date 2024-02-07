@@ -8,6 +8,7 @@ import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -19,12 +20,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class AuthExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionBody> handleUserNotFound(
             UserNotFoundException e) {
+
+        log.error("User not found exception");
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -39,6 +43,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleUserCreation(
             UserCreationException e) {
 
+        log.error("User creation exception");
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -51,6 +57,8 @@ public class AuthExceptionHandler {
     @ExceptionHandler(ConfirmationTokenException.class)
     public ResponseEntity<ExceptionBody> handleConfirmationToken(
             ConfirmationTokenException e) {
+
+        log.error("Confirmation token exception");
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -67,6 +75,8 @@ public class AuthExceptionHandler {
             org.springframework.security.access.AccessDeniedException.class})
     public ResponseEntity<ExceptionBody> handleAccessDenied() {
 
+        log.error("Access denied exception");
+
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ExceptionBody(
@@ -79,6 +89,8 @@ public class AuthExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
+
+        log.error("Constraint violation exception");
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -98,6 +110,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
 
+        log.error("Method argument not valid exception");
+
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
         exceptionBody.setErrors(errors.stream()
@@ -113,22 +127,10 @@ public class AuthExceptionHandler {
                 .body(exceptionBody);
     }
 
-    @ExceptionHandler(OnlineShopException.class)
-    public ResponseEntity<ExceptionBody> handleOnlineShop(
-            OnlineShopException e) {
-
-        return ResponseEntity
-                .status(e.getHttpStatus())
-                .body(new ExceptionBody(
-                        e.getMessage(),
-                        e.getErrors(),
-                        e.getServiceStage(),
-                        e.getHttpStatus()
-                ));
-    }
-
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ExceptionBody> handleAuthentication() {
+
+        log.error("Authentication exception");
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
@@ -140,9 +142,31 @@ public class AuthExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(OnlineShopException.class)
+    public ResponseEntity<ExceptionBody> handleOnlineShop(
+            OnlineShopException e) {
+
+        log.error("Online shop exception");
+
+        e.printStackTrace();
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        e.getErrors(),
+                        e.getServiceStage(),
+                        e.getHttpStatus()
+                ));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
-e.printStackTrace();
+
+        log.error(e.getClass().getSimpleName());
+
+        e.printStackTrace();
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(

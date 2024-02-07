@@ -5,6 +5,7 @@ import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,12 +16,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Slf4j
 @RestControllerAdvice
 public class AdminExceptionHandler {
 
     @ExceptionHandler(RequestNotFoundException.class)
     public ResponseEntity<ExceptionBody> handleRequestNotFound(
             RequestNotFoundException e) {
+
+        log.error("Request not found exception");
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -31,10 +36,11 @@ public class AdminExceptionHandler {
                 ));
     }
 
-
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
+
+        log.error("Constraint violation exception");
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -53,6 +59,8 @@ public class AdminExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
+
+        log.error("Method argument not valid exception");
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -73,6 +81,10 @@ public class AdminExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
+        log.error("Online shop exception");
+
+        e.printStackTrace();
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -83,9 +95,10 @@ public class AdminExceptionHandler {
                 ));
     }
 
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+
+        log.error(e.getClass().getSimpleName());
 
         e.printStackTrace();
 

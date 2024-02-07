@@ -4,7 +4,7 @@ import com.ryazancev.dto.logo.LogoDTO;
 import com.ryazancev.dto.organization.OrganizationDTO;
 import com.ryazancev.dto.organization.OrganizationEditDTO;
 import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
-import com.ryazancev.organization.service.CustomExpressionService;
+import com.ryazancev.organization.expression.CustomExpressionService;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import com.ryazancev.validation.OnCreate;
@@ -30,13 +30,6 @@ public class OrganizationController {
         return organizationService.getAll();
     }
 
-    @GetMapping("/{id}/simple")
-    public OrganizationDTO getSimpleById(
-            @PathVariable("id") Long id) {
-
-        return organizationService.getSimpleById(id);
-    }
-
     @GetMapping("/{id}")
     public OrganizationDTO getById(
             @PathVariable("id") Long id) {
@@ -56,7 +49,8 @@ public class OrganizationController {
             throw new AccessDeniedException();
         }
 
-        return organizationService.makeRegistrationRequest(organizationEditDTO);
+        return organizationService
+                .makeRegistrationRequest(organizationEditDTO);
     }
 
     @PutMapping
@@ -85,6 +79,16 @@ public class OrganizationController {
         }
 
         organizationService.uploadLogo(id, logoDto);
+    }
+
+
+//    Endpoints only  for feign clients
+
+    @GetMapping("/{id}/simple")
+    public OrganizationDTO getSimpleById(
+            @PathVariable("id") Long id) {
+
+        return organizationService.getSimpleById(id);
     }
 
     @GetMapping("/{id}/owner")

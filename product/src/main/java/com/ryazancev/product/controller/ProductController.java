@@ -6,7 +6,7 @@ import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.dto.review.ReviewDTO;
 import com.ryazancev.dto.review.ReviewPostDTO;
 import com.ryazancev.dto.review.ReviewsResponse;
-import com.ryazancev.product.service.CustomExpressionService;
+import com.ryazancev.product.expression.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import com.ryazancev.validation.OnCreate;
@@ -32,12 +32,6 @@ public class ProductController {
         return productService.getAll();
     }
 
-    @GetMapping("/{id}/simple")
-    public ProductDTO getSimpleById(
-            @PathVariable("id") Long id) {
-
-        return productService.getSimpleById(id);
-    }
 
     @GetMapping("/{id}")
     public ProductDTO getById(
@@ -76,7 +70,7 @@ public class ProductController {
             ProductEditDTO productEditDTO) {
 
         if (!customExpressionService
-                .canAccessOrganization(productEditDTO.getOrganizationId())){
+                .canAccessOrganization(productEditDTO.getOrganizationId())) {
 
             throw new AccessDeniedException();
         }
@@ -101,4 +95,14 @@ public class ProductController {
     }
 
     //todo: delete product
+
+
+    //  Endpoints only for feign clients
+    @GetMapping("/{id}/simple")
+    public ProductDTO getSimpleById(
+            @PathVariable("id") Long id) {
+
+        return productService.getSimpleById(id);
+    }
+
 }
