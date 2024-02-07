@@ -1,8 +1,10 @@
 package com.ryazancev.customer.controller;
 
+import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
+import com.ryazancev.customer.util.mapper.CustomerMapper;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.purchase.PurchaseDTO;
@@ -24,14 +26,8 @@ public class CustomerController {
 
     private final CustomerService customerService;
     private final CustomExpressionService customExpressionService;
+    private final CustomerMapper customerMapper;
 
-
-    @GetMapping("/{id}/simple")
-    public CustomerDTO getSimpleById(
-            @PathVariable("id") Long id) {
-
-        return customerService.getSimpleById(id);
-    }
 
     @GetMapping("/{id}")
     public CustomerDTO getById(
@@ -39,17 +35,12 @@ public class CustomerController {
 
         checkAccessCustomer(id);
 
-        return customerService.getDetailedById(id);
+        Customer customer = customerService.getById(id);
+
+        return customerMapper.toDetailedDTO(customer);
     }
 
-    @PostMapping
-    public CustomerDTO createCustomer(
-            @RequestBody
-            @Validated(OnCreate.class)
-            CustomerDTO customerDTO) {
 
-        return customerService.create(customerDTO);
-    }
 
     @PutMapping
     public CustomerDTO updateCustomer(
@@ -59,7 +50,10 @@ public class CustomerController {
 
         checkAccessCustomer(customerDTO.getId());
 
-        return customerService.update(customerDTO);
+        Customer customer = customerMapper.toEntity(customerDTO);
+        Customer updated = customerService.update(customer);
+
+        return customerMapper.toDetailedDTO(updated);
     }
 
     @GetMapping("/{id}/reviews")
@@ -91,12 +85,6 @@ public class CustomerController {
         return customerService.processPurchase(purchaseEditDTO);
     }
 
-    @GetMapping("/{id}/balance")
-    public Double getBalanceByCustomerId(
-            @PathVariable("id") Long id){
-
-        return customerService.getBalanceByCustomerId(id);
-    }
 
     private void checkAccessCustomer(Long customerId) {
 
@@ -104,6 +92,37 @@ public class CustomerController {
             throw new AccessDeniedException();
         }
     }
+
+//    Endpoints only  for feign clients
+    @GetMapping("/{id}/simple")
+    public CustomerDTO getSimpleById(
+            @PathVariable("id") Long id) {
+
+        Customer customer = customerService.getById(id);
+
+        return customerMapper.toSimpleDTO(customer);
+    }
+
+    @GetMapping("/{id}/balance")
+    public Double getBalanceById(
+            @PathVariable("id") Long id){
+
+        return customerService.getBalanceByCustomerId(id);
+    }
+
+    @PostMapping
+    public CustomerDTO createCustomer(
+            @RequestBody
+            @Validated(OnCreate.class)
+            CustomerDTO customerDTO) {
+
+        Customer customer = customerMapper.toEntity(customerDTO);
+        Customer created = customerService.create(customer);
+
+        return customerMapper.toSimpleDTO(created);
+    }
+
+
 
 
     //todo: add method to watch notifications

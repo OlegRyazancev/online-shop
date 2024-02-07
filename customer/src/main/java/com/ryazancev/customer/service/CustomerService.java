@@ -1,6 +1,6 @@
 package com.ryazancev.customer.service;
 
-import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.customer.model.Customer;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.dto.purchase.PurchaseDTO;
@@ -8,13 +8,9 @@ import com.ryazancev.dto.purchase.PurchaseEditDTO;
 import com.ryazancev.dto.review.ReviewsResponse;
 
 public interface CustomerService {
-    CustomerDTO getSimpleById(Long id);
+    Customer getById(Long id);
 
-    CustomerDTO getDetailedById(Long id);
-
-    CustomerDTO create(CustomerDTO customerDTO);
-
-    CustomerDTO update(CustomerDTO customerDTO);
+    Customer update(Customer customer);
 
     CustomerPurchasesResponse getPurchasesByCustomerId(Long id);
 
@@ -22,7 +18,9 @@ public interface CustomerService {
 
     ReviewsResponse getReviewsByCustomerId(Long id);
 
-    void updateBalance(UpdateBalanceRequest request);
-
     Double getBalanceByCustomerId(Long id);
+
+    Customer updateBalance(UpdateBalanceRequest request);
+
+    Customer create(Customer customer);
 }

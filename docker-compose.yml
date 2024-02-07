@@ -4,154 +4,139 @@ services:
   postgres:
     container_name: postgres
     image: postgres:latest
-    env_file:
-      - .env
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
-    ports:
-      - "5432:5432"
     networks:
       - online-shop
-    restart: unless-stopped
+    volumes:
+      - postgres:/data/postgres
 
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:8.2
-    env_file:
-      - .env
+    ports:
+      - "5050:80"
+    restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin:/var/lib/pgadmin
     depends_on:
       - postgres
-    ports:
-      - "5050:80"
     networks:
       - online-shop
-    restart: unless-stopped
+    volumes:
+      - pgadmin:/var/lib/pgadmin
 
   mongodb:
     container_name: mongodb
     image: mongo:latest
-    env_file:
-      - .env
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    volumes:
-      - mongodb:/data/db
-    ports:
-      - "27017:27017"
     networks:
       - online-shop
-    restart: unless-stopped
+    volumes:
+      - mongodb:/data/db
 
   mongo-express:
     container_name: mongo-express
     image: mongo-express:latest
-    env_file:
-      - .env
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
     environment:
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       ME_CONFIG_BASICAUTH_USERNAME: ${MONGOEXPRESS_LOGIN}
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGOEXPRESS_PASSWORD}
-    ports:
-      - "8081:8081"
     depends_on:
       - mongodb
     networks:
       - online-shop
-    restart: unless-stopped
 
   mariadb:
     container_name: mariadb
     image: mariadb:11.2.2
-    env_file:
-      - .env
     ports:
       - "3306:3306"
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    volumes:
-      - mysql:/var/lib/mysql
     networks:
       - online-shop
-    restart: unless-stopped
+    volumes:
+      - mysql:/var/lib/mysql
 
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin:5.2.1
-    env_file:
-      - .env
     ports:
       - "8079:80"
-    depends_on:
-      - mariadb
+    restart: unless-stopped
     environment:
       PMA_HOST: ${MYSQL_PMA_HOST}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - mariadb
     networks:
       - online-shop
-    restart: unless-stopped
 
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin:latest
     ports:
       - "9411:9411"
+    restart: unless-stopped
     networks:
       - online-shop
-    restart: unless-stopped
 
 
   minio:
     container_name: minio
     image: minio/minio:latest
-    env_file:
-      - .env
     ports:
       - "9090:9090"
       - "9000:9000"
+    restart: unless-stopped
     environment:
       MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
     command: server ~/minio --console-address :9090
-    volumes:
-      - minio_data:/minio
     networks:
       - online-shop
-    restart: unless-stopped
+    volumes:
+      - minio_data:/minio
 
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "22181:2181"
+    restart: unless-stopped
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "22181:2181"
     networks:
       - online-shop
-    restart: unless-stopped
 
   kafka:
     container_name: kafka
     image: confluentinc/cp-kafka:latest
-    depends_on:
-      - zookeeper
     ports:
       - "29092:29092"
+    restart: unless-stopped
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -159,22 +144,42 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
     networks:
       - online-shop
-    restart: unless-stopped
 
   kafka-ui:
     container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
     ports:
       - "9093:8080"
+    restart: unless-stopped
     environment:
       DYNAMIC_CONFIG_ENABLED: 'true'
       KAFKA_CLUSTERS_0_NAME: online-shop-cluster
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
     networks:
       - online-shop
-    restart: unless-stopped
+
+  redis:
+    container_name: redis
+    image: redis:7.2.4-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    networks:
+      - online-shop
+    volumes:
+      - redis:/data
+
+  redisinsight:
+    container_name: redis-insight
+    image: redislabs/redisinsight:latest
+    ports:
+      - "8001:8001"
+    networks:
+      - online-shop
 
 
 networks:
@@ -182,6 +187,7 @@ networks:
     driver: bridge
 
 volumes:
+  redis:
   minio_data:
   mysql:
   postgres:

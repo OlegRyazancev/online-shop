@@ -48,7 +48,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         Long productId = purchaseEditDTO.getProductId();
 
         Double availableCustomerBalance = customerClient
-                .getBalanceByCustomerId(customerId);
+                .getBalanceById(customerId);
 
         ProductDTO selectedProduct = productClient
                 .getById(productId);

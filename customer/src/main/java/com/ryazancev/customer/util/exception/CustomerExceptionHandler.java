@@ -99,6 +99,8 @@ public class CustomerExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
+        e.printStackTrace();
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(

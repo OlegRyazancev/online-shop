@@ -19,7 +19,7 @@ public interface CustomerClient {
             @PathVariable("id") Long id);
 
     @GetMapping("api/v1/customers/{id}/balance")
-    Double getBalanceByCustomerId(
+    Double getBalanceById(
             @PathVariable("id") Long id);
 
     @PostMapping("api/v1/customers")

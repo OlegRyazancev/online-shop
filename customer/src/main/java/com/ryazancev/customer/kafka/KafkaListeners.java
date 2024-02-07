@@ -1,5 +1,6 @@
 package com.ryazancev.customer.kafka;
 
+import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,15 @@ public class KafkaListeners {
             containerFactory = "messageFactory"
     )
     void consumeMail(UpdateBalanceRequest request) {
-        log.info("Received message to update customer: {}, set balance to: {}",
-                request.getCustomerId(),
-                request.getBalance());
+        log.info("Received message to update customer: {}",
+                request.getCustomerId());
 
         log.info("Updating customer...");
 
-        customerService.updateBalance(request);
+        Customer customer =
+                customerService.updateBalance(request);
 
-        log.info("Customer successfully updated");
+        log.info("Customer successfully updated. Actual balance: {}",
+                customer.getBalance());
     }
 }

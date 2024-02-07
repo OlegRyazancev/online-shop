@@ -7,8 +7,6 @@ import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
-import com.ryazancev.customer.util.mapper.CustomerMapper;
-import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.dto.purchase.PurchaseDTO;
@@ -16,6 +14,8 @@ import com.ryazancev.dto.purchase.PurchaseEditDTO;
 import com.ryazancev.dto.review.ReviewsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,26 +27,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper;
 
     private final PurchaseClient purchaseClient;
     private final ReviewClient reviewClient;
 
 
     @Override
-    public CustomerDTO getSimpleById(Long id) {
+    @Cacheable(
+            value = "Customer::getById", key = "#id"
+    )
+    public Customer getById(Long id) {
 
-        Customer existing = findById(id);
-
-        return customerMapper.toSimpleDTO(existing);
-    }
-
-    @Override
-    public CustomerDTO getDetailedById(Long id) {
-
-        Customer existing = findById(id);
-
-        return customerMapper.toDetailedDTO(existing);
+        return findById(id);
     }
 
     @Override
@@ -69,51 +61,61 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
-    public void updateBalance(UpdateBalanceRequest request) {
+    @CachePut(
+            value = "Customer::getById",
+            key = "#request.customerId"
+    )
+    public Customer updateBalance(UpdateBalanceRequest request) {
 
         Customer existing = findById(request.getCustomerId());
         existing.setBalance(request.getBalance());
-        customerRepository.save(existing);
+
+        return customerRepository.save(existing);
     }
 
     @Override
     public Double getBalanceByCustomerId(Long id) {
 
-        Customer foundCustomer = findById(id);
+        Customer found = findById(id);
 
-        return foundCustomer.getBalance();
+        return found.getBalance();
     }
 
     @Transactional
     @Override
-    public CustomerDTO create(CustomerDTO customerDTO) {
+    @Cacheable(
+            value = "Customer::getById",
+            condition = "#customer.id!=null",
+            key = "#customer.id"
+    )
+    public Customer create(Customer customer) {
 
-        if (customerRepository.findByEmail(customerDTO.getEmail()).isPresent()) {
+        if (customerRepository.findByEmail(customer.getEmail()).isPresent()) {
             throw new CustomerCreationException(
                     "Customer with this email already exists",
                     HttpStatus.BAD_REQUEST
             );
         }
+        customerRepository.save(customer);
 
-        Customer toSave = customerMapper.toEntity(customerDTO);
-        Customer saved = customerRepository.save(toSave);
-
-        return customerMapper.toSimpleDTO(saved);
+        return customer;
     }
 
     @Transactional
     @Override
-    public CustomerDTO update(CustomerDTO customerDTO) {
+    @CachePut(
+            value = "Customer::getById",
+            key = "#customer.id"
+    )
+    public Customer update(Customer customer) {
 
-        Customer existing = findById(customerDTO.getId());
+        Customer existing = findById(customer.getId());
 
-        existing.setUsername(customerDTO.getUsername());
-        existing.setEmail(customerDTO.getEmail());
-        existing.setBalance(customerDTO.getBalance());
+        existing.setUsername(customer.getUsername());
+        existing.setEmail(customer.getEmail());
+        existing.setBalance(customer.getBalance());
 
-        Customer updated = customerRepository.save(existing);
-
-        return customerMapper.toDetailedDTO(updated);
+        return customerRepository.save(existing);
 
     }
 
