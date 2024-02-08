@@ -41,14 +41,17 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!canAccessOrganization(organizationId)) {
             return false;
         }
+        log.info("User is organization owner");
 
+        List<String> userRoles = getRolesFromRequest(request);
         ProductsSimpleResponse productsResponse =
                 productClient.getProductsByOrganizationId(organizationId);
 
         return productsResponse.getProducts()
                 .stream()
                 .anyMatch(productDTO ->
-                        productDTO.getId().equals(productId));
+                        productDTO.getId().equals(productId))
+                || userRoles.contains("ROLE_ADMIN");
     }
 
 

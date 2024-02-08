@@ -2,6 +2,8 @@ package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
+import com.ryazancev.clients.params.DetailedType;
+import com.ryazancev.clients.params.ReviewsType;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
@@ -52,7 +54,11 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .getBalanceById(customerId);
 
         ProductDTO selectedProduct = productClient
-                .getById(productId);
+                .getById(
+                        productId,
+                        DetailedType.DETAILED.getType(),
+                        ReviewsType.NO_REVIEWS.getType()
+                );
         Double selectedProductPrice = selectedProduct.getPrice();
         Integer availableProductsInStock = selectedProduct.getQuantityInStock();
 
@@ -111,7 +117,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         for (int i = 0; i < purchasesDTO.size(); i++) {
             ProductDTO productDTO = productClient
-                    .getSimpleById(purchases.get(i).getProductId());
+                    .getById(
+                            purchases.get(i).getProductId(),
+                            DetailedType.SIMPLE.getType(),
+                            ReviewsType.NO_REVIEWS.getType()
+                    );
             purchasesDTO.get(i).setProduct(productDTO);
         }
         return CustomerPurchasesResponse.builder()

@@ -17,6 +17,17 @@ spring:
         format_sql: true
     show-sql: true
 
+  #Redis
+  cache:
+    type: redis
+    cache-names: redis-cache
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+      password: ${REDIS_PASSWORD}
+
+
   #Kafka
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}

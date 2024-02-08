@@ -2,6 +2,8 @@ package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.OrganizationClient;
 import com.ryazancev.clients.ReviewClient;
+import com.ryazancev.clients.params.DetailedType;
+import com.ryazancev.clients.params.ReviewsType;
 import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.organization.OrganizationDTO;
@@ -59,35 +61,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO getSimpleById(Long id) {
+    public ProductDTO getById(Long id,
+                              DetailedType detailed,
+                              ReviewsType reviews) {
 
         Product existing = findById(id);
 
-        return productMapper.toSimpleDTO(existing);
+        if (detailed.equals(DetailedType.SIMPLE)) {
+            return productMapper.toSimpleDTO(existing);
+        } else {
+            ProductDTO productDTO = productMapper.toDetailedDTO(existing);
+
+            OrganizationDTO organizationDTO = organizationClient
+                    .getSimpleById(existing.getOrganizationId());
+            productDTO.setOrganization(organizationDTO);
+
+            if (reviews.equals(ReviewsType.WITH_REVIEWS)) {
+               log.info("before review client");
+                ReviewsResponse response = reviewClient
+                        .getByProductId(existing.getId());
+                log.info("after review client");
+                List<ReviewDTO> reviewsDTO = response.getReviews();
+                productDTO.setReviews(reviewsDTO);
+
+                Double averageRating = calculateAverageRating(reviewsDTO);
+                productDTO.setAverageRating(averageRating);
+            }
+            return productDTO;
+        }
     }
 
-    @Override
-    public ProductDTO getDetailedById(Long id) {
-
-        Product existing = findById(id);
-
-        ProductDTO productDTO = productMapper
-                .toDetailedDTO(existing);
-
-        OrganizationDTO organizationDTO = organizationClient
-                .getSimpleById(existing.getOrganizationId());
-        productDTO.setOrganization(organizationDTO);
-
-        ReviewsResponse response = reviewClient
-                .getByProductId(existing.getId());
-        List<ReviewDTO> reviewsDTO = response.getReviews();
-        productDTO.setReviews(reviewsDTO);
-
-        Double averageRating = calculateAverageRating(reviewsDTO);
-        productDTO.setAverageRating(averageRating);
-
-        return productDTO;
-    }
 
     @Override
     public ProductsSimpleResponse getByOrganizationId(Long organizationId) {
@@ -148,12 +151,6 @@ public class ProductServiceImpl implements ProductService {
         Product saved = productRepository.save(existing);
 
         return createProductDetailedDTO(saved);
-    }
-
-    @Override
-    public ReviewsResponse getReviewsByProductId(Long productId) {
-
-        return reviewClient.getByProductId(productId);
     }
 
     @Override

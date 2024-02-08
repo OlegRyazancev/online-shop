@@ -1,11 +1,12 @@
 package com.ryazancev.product.controller;
 
+import com.ryazancev.clients.params.DetailedType;
+import com.ryazancev.clients.params.ReviewsType;
 import com.ryazancev.dto.product.ProductDTO;
 import com.ryazancev.dto.product.ProductEditDTO;
 import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.dto.review.ReviewDTO;
 import com.ryazancev.dto.review.ReviewPostDTO;
-import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.expression.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
@@ -35,9 +36,18 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ProductDTO getById(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") Long id,
+            @RequestParam(
+                    value = "detailLevel",
+                    defaultValue = "simple") String detailLevel,
+            @RequestParam(
+                    value = "includeReviews",
+                    defaultValue = "no_reviews") String includeReviews) {
 
-        return productService.getDetailedById(id);
+        return productService
+                .getById(id,
+                        DetailedType.fromString(detailLevel),
+                        ReviewsType.fromString(includeReviews));
     }
 
     @GetMapping("/organizations/{id}")
@@ -45,13 +55,6 @@ public class ProductController {
             @PathVariable("id") Long id) {
 
         return productService.getByOrganizationId(id);
-    }
-
-    @GetMapping("/{id}/reviews")
-    public ReviewsResponse getReviewsByProductId(
-            @PathVariable("id") Long id) {
-
-        return productService.getReviewsByProductId(id);
     }
 
     @PostMapping("/reviews")
@@ -95,14 +98,5 @@ public class ProductController {
     }
 
     //todo: delete product
-
-
-    //  Endpoints only for feign clients
-    @GetMapping("/{id}/simple")
-    public ProductDTO getSimpleById(
-            @PathVariable("id") Long id) {
-
-        return productService.getSimpleById(id);
-    }
 
 }
