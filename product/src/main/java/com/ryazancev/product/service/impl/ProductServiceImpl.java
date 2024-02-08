@@ -24,6 +24,9 @@ import com.ryazancev.product.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -45,11 +48,16 @@ public class ProductServiceImpl implements ProductService {
     private final OrganizationClient organizationClient;
     private final ReviewClient reviewClient;
 
+
     @Value("${spring.kafka.topic.admin}")
     private String adminTopic;
+
     private final KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate;
 
     @Override
+    @Cacheable(
+            value = "Product::getAll"
+    )
     public ProductsSimpleResponse getAll() {
 
         List<Product> products = productRepository.findAll();
@@ -77,10 +85,8 @@ public class ProductServiceImpl implements ProductService {
             productDTO.setOrganization(organizationDTO);
 
             if (reviews.equals(ReviewsType.WITH_REVIEWS)) {
-               log.info("before review client");
                 ReviewsResponse response = reviewClient
                         .getByProductId(existing.getId());
-                log.info("after review client");
                 List<ReviewDTO> reviewsDTO = response.getReviews();
                 productDTO.setReviews(reviewsDTO);
 
@@ -93,6 +99,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+    @Cacheable(
+            value = "Product::getByOrganizationId",
+            key = "#organizationId"
+    )
     public ProductsSimpleResponse getByOrganizationId(Long organizationId) {
 
         List<Product> products = productRepository
@@ -105,6 +115,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(
+                            value = "Product::getAll",
+                            allEntries = true
+                    ),
+                    @CacheEvict(
+                            value = "Product::getByOrganizationId",
+                            key = "#productEditDTO.organizationId"
+                    )
+            }
+    )
     public ProductDTO makeRegistrationRequest(ProductEditDTO productEditDTO) {
 
         if (productRepository.findByProductName(
@@ -142,6 +164,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(
+                            value = "Product::getAll",
+                            allEntries = true
+                    ),
+                    @CacheEvict(
+                            value = "Product::getByOrganizationId",
+                            condition = "#productEditDTO.id!=null",
+                            key = "#productEditDTO.organizationId"
+                    ),
+            })
     public ProductDTO update(ProductEditDTO productEditDTO) {
 
         Product existing = findById(productEditDTO.getId());
@@ -186,6 +220,7 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setOrganization(organizationDTO);
         return productDTO;
     }
+
 
     private Double calculateAverageRating(List<ReviewDTO> reviews) {
 

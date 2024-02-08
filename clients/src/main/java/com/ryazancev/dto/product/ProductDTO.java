@@ -5,6 +5,7 @@ import com.ryazancev.dto.organization.OrganizationDTO;
 import com.ryazancev.dto.review.ReviewDTO;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductDTO {
+public class ProductDTO implements Serializable {
 
     private Long id;
 
