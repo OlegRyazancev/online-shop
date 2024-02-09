@@ -32,8 +32,8 @@ public class ProductMessageListeners {
 
         productService.updateQuantity(
                 request.getProductId(),
-                request.getQuantityInStock()
-        );
+                request.getQuantityInStock());
+
 
         log.info("Product successfully updated");
     }

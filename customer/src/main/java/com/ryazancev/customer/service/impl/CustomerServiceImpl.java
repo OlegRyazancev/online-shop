@@ -97,7 +97,6 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
         customerRepository.save(customer);
-
         return customer;
     }
 
