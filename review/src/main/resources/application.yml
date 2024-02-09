@@ -5,17 +5,8 @@ spring:
   application:
     name: review
 
-  #Redis
-  cache:
-    type: redis
-    cache-names: redis-cache
+  #MongoDB connection
   data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
-      password: ${REDIS_PASSWORD}
-
-    #MongoDB connection
     mongodb:
       host: ${MONGO_HOST}
       port: 27017

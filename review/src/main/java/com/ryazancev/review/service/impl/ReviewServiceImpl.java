@@ -36,7 +36,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewsResponse getByCustomerId(Long customerId) {
 
-
         CustomerDTO foundCustomer = customerClient
                 .getSimpleById(customerId);
         List<Review> reviews = reviewRepository
