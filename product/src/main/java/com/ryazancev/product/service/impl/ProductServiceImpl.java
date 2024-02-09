@@ -6,6 +6,7 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -60,8 +61,12 @@ public class ProductServiceImpl implements ProductService {
     )
     public List<Product> getByOrganizationId(Long organizationId) {
 
-        return productRepository
-                .findByOrganizationId(organizationId);
+        return productRepository.findByOrganizationId(organizationId)
+                .orElseThrow(() ->
+                        new OrganizationNotFoundException(
+                                "Organization not found",
+                                HttpStatus.NOT_FOUND)
+                );
     }
 
     @Transactional
@@ -98,9 +103,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    @CacheEvict(
-            value = "Product::getById",
-            key = "#id"
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "Product::getById",
+                    key = "#id"
+            ),
+            @CacheEvict(
+                    value = "Product::getAll",
+                    allEntries = true
+            )}
     )
     public void changeStatusAndRegister(Long id,
                                         ProductStatus status) {

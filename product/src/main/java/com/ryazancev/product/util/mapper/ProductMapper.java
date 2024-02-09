@@ -53,5 +53,4 @@ public interface ProductMapper {
     default String keywordsToString(List<String> stringList) {
         return String.join(", ", stringList);
     }
-
 }

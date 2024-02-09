@@ -169,10 +169,8 @@ public class ProductController {
     public ProductsSimpleResponse getProductsByOrganizationId(
             @PathVariable("id") Long id) {
 
-        OrganizationDTO organizationDTO = organizationClient.getSimpleById(id);
-
         List<Product> organizationProducts =
-                productService.getByOrganizationId(organizationDTO.getId());
+                productService.getByOrganizationId(id);
 
         return ProductsSimpleResponse.builder()
                 .products(productMapper.toSimpleListDTO(

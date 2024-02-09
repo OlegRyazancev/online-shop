@@ -13,6 +13,10 @@ import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundExce
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -37,12 +41,17 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate;
 
     @Override
+    @Cacheable(value = "Organization::getAll")
     public List<Organization> getAll() {
 
         return organizationRepository.findAll();
     }
 
     @Override
+    @Cacheable(
+            value = "Organization::getById",
+            key = "#id"
+    )
     public Organization getById(Long id) {
 
         return findById(id);
@@ -50,6 +59,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
+    @CacheEvict(
+            value = "Organization::getAll",
+            allEntries = true
+    )
     public Organization makeRegistrationRequest(
             Organization organization) {
 
@@ -84,6 +97,18 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(
+                            value = "Organization::getAll",
+                            allEntries = true
+                    )},
+            put = {
+                    @CachePut(
+                            value = "Organization::getById",
+                            key = "#organization.id"
+                    )}
+    )
     public Organization update(Organization organization) {
 
         Organization existing = findById(organization.getId());
@@ -97,6 +122,17 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(
+                            value = "Organization::getAll",
+                            allEntries = true
+                    ),
+                    @CacheEvict(
+                            value = "Organization::getById",
+                            key = "#id"
+                    )}
+    )
     public void changeStatusAndRegister(Long id,
                                         OrganizationStatus status) {
 
@@ -111,6 +147,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Transactional
     @Override
+    @CacheEvict(
+            value = "Organization::getById",
+            key = "#id"
+    )
     public void uploadLogo(Long id, LogoDTO logoDTO) {
 
         Organization existing = findById(id);
@@ -122,6 +162,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @Cacheable(
+            value = "Organization::getOwnerId",
+            key = "#organizationId"
+    )
     public Long getOwnerId(Long organizationId) {
 
         Organization existing = findById(organizationId);
