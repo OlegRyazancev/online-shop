@@ -10,8 +10,6 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import java.io.Serializable;
-
 @Setter
 @Getter
 @AllArgsConstructor
@@ -19,7 +17,7 @@ import java.io.Serializable;
 @Builder
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CustomerDTO implements Serializable {
+public class CustomerDTO {
 
     @NotNull(message = "Id must not be null",
             groups = {OnUpdate.class})

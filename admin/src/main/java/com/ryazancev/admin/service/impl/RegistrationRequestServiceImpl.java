@@ -24,7 +24,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RegistrationRequestServiceImpl implements RegistrationRequestService {
+public class RegistrationRequestServiceImpl
+        implements RegistrationRequestService {
 
     @Value("${spring.kafka.topic.organization.register}")
     private String organizationTopic;
@@ -71,9 +72,6 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
                 .requests(registrationRequestMapper.toDtoList(requests))
                 .build();
     }
-
-    //todo: GET BY PRODUCT OBJECT TYPE
-    //todo: GET BY ORGANIZATION OBJECT TYPE
 
     @Transactional
     @Override

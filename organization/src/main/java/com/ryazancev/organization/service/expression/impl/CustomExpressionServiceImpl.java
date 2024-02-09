@@ -1,7 +1,7 @@
-package com.ryazancev.organization.expression.impl;
+package com.ryazancev.organization.service.expression.impl;
 
-import com.ryazancev.organization.expression.CustomExpressionService;
 import com.ryazancev.organization.repository.OrganizationRepository;
+import com.ryazancev.organization.service.expression.CustomExpressionService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

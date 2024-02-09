@@ -2,12 +2,9 @@ package com.ryazancev.dto.organization;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.dto.customer.CustomerDTO;
-import com.ryazancev.dto.product.ProductDTO;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Setter
 @Getter
@@ -15,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OrganizationDTO implements Serializable {
+public class OrganizationDTO {
 
     private Long id;
 
@@ -24,8 +21,6 @@ public class OrganizationDTO implements Serializable {
     private String description;
 
     private String logo;
-
-    private List<ProductDTO> products;
 
     private CustomerDTO owner;
 

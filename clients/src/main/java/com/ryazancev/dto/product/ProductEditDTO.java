@@ -5,7 +5,6 @@ import com.ryazancev.validation.OnUpdate;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Setter
@@ -13,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductEditDTO implements Serializable {
+public class ProductEditDTO {
 
     @NotNull(message = "Id must be not null",
             groups = OnUpdate.class)

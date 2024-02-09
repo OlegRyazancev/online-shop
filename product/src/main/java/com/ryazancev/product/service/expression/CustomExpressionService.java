@@ -1,4 +1,4 @@
-package com.ryazancev.product.expression;
+package com.ryazancev.product.service.expression;
 
 public interface CustomExpressionService {
 

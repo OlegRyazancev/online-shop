@@ -5,7 +5,6 @@ import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.product.ProductDTO;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Setter
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ReviewDTO implements Serializable {
+public class ReviewDTO {
 
     private String id;
 

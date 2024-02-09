@@ -6,4 +6,3 @@ create table if not exists customers
     balance  double precision not null
 );
 
--- todo: change size

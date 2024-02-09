@@ -1,9 +1,9 @@
-package com.ryazancev.product.expression.impl;
+package com.ryazancev.product.service.expression.impl;
 
 import com.ryazancev.clients.OrganizationClient;
-import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.product.ProductsSimpleResponse;
-import com.ryazancev.product.expression.CustomExpressionService;
+import com.ryazancev.product.model.Product;
+import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.service.expression.CustomExpressionService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final HttpServletRequest request;
     private final OrganizationClient organizationClient;
-    private final ProductClient productClient;
+    private final ProductService productService;
 
     @Override
     public boolean canAccessOrganization(Long organizationId) {
@@ -44,10 +44,10 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         log.info("User is organization owner");
 
         List<String> userRoles = getRolesFromRequest(request);
-        ProductsSimpleResponse productsResponse =
-                productClient.getProductsByOrganizationId(organizationId);
+        List<Product> products =
+                productService.getByOrganizationId(organizationId);
 
-        return productsResponse.getProducts()
+        return products
                 .stream()
                 .anyMatch(productDTO ->
                         productDTO.getId().equals(productId))

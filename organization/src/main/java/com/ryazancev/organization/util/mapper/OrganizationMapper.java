@@ -19,7 +19,6 @@ public interface OrganizationMapper {
     @Named("toSimpleDTO")
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "logo", ignore = true)
-    @Mapping(target = "products", ignore = true)
     @Mapping(target = "owner", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     OrganizationDTO toSimpleDTO(Organization organization);

@@ -10,9 +10,9 @@ import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.dto.review.ReviewDTO;
 import com.ryazancev.dto.review.ReviewPostDTO;
 import com.ryazancev.dto.review.ReviewsResponse;
-import com.ryazancev.product.expression.CustomExpressionService;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.service.expression.CustomExpressionService;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.validation.OnCreate;
@@ -39,8 +39,6 @@ public class ProductController {
     private final OrganizationClient organizationClient;
     private final ReviewClient reviewClient;
 
-
-    //todo:get reviews by product id
     @GetMapping
     public ProductsSimpleResponse getAll() {
 
@@ -58,8 +56,8 @@ public class ProductController {
         Product product = productService.getById(id);
         ProductDTO productDTO = productMapper.toDetailedDTO(product);
 
-        OrganizationDTO organizationDTO = organizationClient
-                .getSimpleById(product.getOrganizationId());
+        OrganizationDTO organizationDTO = organizationClient.getSimpleById(
+                product.getOrganizationId());
         productDTO.setOrganization(organizationDTO);
 
         Double avgRating = reviewClient.getAverageRatingByProductId(id);
@@ -68,19 +66,6 @@ public class ProductController {
         return productDTO;
     }
 
-
-    @GetMapping("/organizations/{id}")
-    public ProductsSimpleResponse getProductsByOrganizationId(
-            @PathVariable("id") Long id) {
-
-        List<Product> organizationProducts =
-                productService.getByOrganizationId(id);
-
-        return ProductsSimpleResponse.builder()
-                .products(productMapper.toSimpleListDTO(
-                        organizationProducts))
-                .build();
-    }
 
     @PostMapping
     public ProductDTO makeRegistrationRequestOfProduct(
@@ -100,8 +85,9 @@ public class ProductController {
         ProductDTO productDTO = productMapper.toDetailedDTO(saved);
 
 
-        OrganizationDTO organizationDTO = organizationClient
-                .getSimpleById(product.getOrganizationId());
+        OrganizationDTO organizationDTO =
+                organizationClient.getSimpleById(
+                        product.getOrganizationId());
         productDTO.setOrganization(organizationDTO);
 
         return productDTO;
@@ -125,8 +111,9 @@ public class ProductController {
         Product updated = productService.update(product);
         ProductDTO productDTO = productMapper.toDetailedDTO(updated);
 
-        OrganizationDTO organizationDTO = organizationClient
-                .getSimpleById(updated.getOrganizationId());
+        OrganizationDTO organizationDTO =
+                organizationClient.getSimpleById(
+                        updated.getOrganizationId());
         productDTO.setOrganization(organizationDTO);
 
         Double avgRating = reviewClient
@@ -176,5 +163,20 @@ public class ProductController {
                 .quantityInStock(product.getQuantityInStock())
                 .build();
 
+    }
+
+    @GetMapping("/organizations/{id}")
+    public ProductsSimpleResponse getProductsByOrganizationId(
+            @PathVariable("id") Long id) {
+
+        OrganizationDTO organizationDTO = organizationClient.getSimpleById(id);
+
+        List<Product> organizationProducts =
+                productService.getByOrganizationId(organizationDTO.getId());
+
+        return ProductsSimpleResponse.builder()
+                .products(productMapper.toSimpleListDTO(
+                        organizationProducts))
+                .build();
     }
 }

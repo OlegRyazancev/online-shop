@@ -1,22 +1,20 @@
 package com.ryazancev.organization.service;
 
 import com.ryazancev.dto.logo.LogoDTO;
-import com.ryazancev.dto.organization.OrganizationDTO;
-import com.ryazancev.dto.organization.OrganizationEditDTO;
-import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
+import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
+
+import java.util.List;
 
 public interface OrganizationService {
 
-    OrganizationsSimpleResponse getAll();
+    List<Organization> getAll();
 
-    OrganizationDTO getSimpleById(Long id);
+    Organization getById(Long id);
 
-    OrganizationDTO getDetailedById(Long id);
+    Organization makeRegistrationRequest(Organization organization);
 
-    OrganizationDTO makeRegistrationRequest(OrganizationEditDTO organizationEditDTO);
-
-    OrganizationDTO update(OrganizationEditDTO organizationEditDTO);
+    Organization update(Organization organization);
 
     void changeStatusAndRegister(Long organizationId, OrganizationStatus status);
 

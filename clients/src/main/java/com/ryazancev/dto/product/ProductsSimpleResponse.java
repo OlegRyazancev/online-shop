@@ -3,7 +3,6 @@ package com.ryazancev.dto.product;
 
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Setter
@@ -11,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductsSimpleResponse implements Serializable {
+public class ProductsSimpleResponse {
 
     private List<ProductDTO> products;
 }

@@ -2,7 +2,6 @@ package com.ryazancev.dto.review;
 
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Setter
@@ -10,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewsResponse implements Serializable {
+public class ReviewsResponse {
 
     private List<ReviewDTO> reviews;
 }

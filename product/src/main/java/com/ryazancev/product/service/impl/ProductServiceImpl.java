@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//TODO: REFACTOR (make mapper to controller)
 @Slf4j
 @Service
 @Transactional(readOnly = true)

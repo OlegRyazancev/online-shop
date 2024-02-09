@@ -20,7 +20,6 @@ public interface ProductMapper {
     @Mapping(target = "price", ignore = true)
     @Mapping(target = "quantityInStock", ignore = true)
     @Mapping(target = "keywords", ignore = true)
-    @Mapping(target = "status", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     ProductDTO toSimpleDTO(Product existing);
 

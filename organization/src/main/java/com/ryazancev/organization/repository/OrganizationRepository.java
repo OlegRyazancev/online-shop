@@ -11,6 +11,8 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
 
     Optional<Organization> findByName(String name);
 
+    Optional<Organization> findByDescription(String description);
+
     @Query(value = """
             SELECT EXISTS(SELECT 1
                           FROM organizations
