@@ -1,7 +1,6 @@
-package com.ryazancev.purchase.kafka;
+package com.ryazancev.product.kafka.config;
 
-import com.ryazancev.dto.customer.UpdateBalanceRequest;
-import com.ryazancev.dto.product.UpdateQuantityRequest;
+import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class PurchaseProducerConfig {
+public class ProductProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -36,32 +35,15 @@ public class PurchaseProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<
-            String, UpdateBalanceRequest> customerProducerFactory() {
+    public ProducerFactory<String, RegistrationRequestDTO> producerFactory() {
 
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, UpdateBalanceRequest> customerKafkaTemplate(
-            ProducerFactory<
-                    String, UpdateBalanceRequest> customerProducerFactory) {
+    public KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate(
+            ProducerFactory<String, RegistrationRequestDTO> producerFactory) {
 
-        return new KafkaTemplate<>(customerProducerFactory);
-    }
-
-    @Bean
-    public ProducerFactory<
-            String, UpdateQuantityRequest> productProducerFactory() {
-
-        return new DefaultKafkaProducerFactory<>(producerConfig());
-    }
-
-    @Bean
-    public KafkaTemplate<String, UpdateQuantityRequest> productKafkaTemplate(
-            ProducerFactory<
-                    String, UpdateQuantityRequest> productProducerFactory) {
-
-        return new KafkaTemplate<>(productProducerFactory);
+        return new KafkaTemplate<>(producerFactory);
     }
 }

@@ -1,4 +1,4 @@
-package com.ryazancev.purchase.kafka;
+package com.ryazancev.purchase.kafka.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;

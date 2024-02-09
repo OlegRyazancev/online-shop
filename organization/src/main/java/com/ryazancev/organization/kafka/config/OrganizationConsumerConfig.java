@@ -1,4 +1,4 @@
-package com.ryazancev.organization.kafka;
+package com.ryazancev.organization.kafka.config;
 
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

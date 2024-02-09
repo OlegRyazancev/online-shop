@@ -1,6 +1,6 @@
-package com.ryazancev.mail.kafka;
+package com.ryazancev.customer.kafka.config;
 
-import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class MailConsumerConfig {
+public class CustomerConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -31,9 +31,11 @@ public class MailConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, CustomerDTO> consumerFactory() {
+    public ConsumerFactory<String, UpdateBalanceRequest> consumerFactory() {
 
-        JsonDeserializer<CustomerDTO> jsonDeserializer = new JsonDeserializer<>();
+        JsonDeserializer<UpdateBalanceRequest> jsonDeserializer =
+                new JsonDeserializer<>();
+
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
@@ -44,10 +46,13 @@ public class MailConsumerConfig {
 
     @Bean
     public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, CustomerDTO>> messageFactory(
-            ConsumerFactory<String, CustomerDTO> consumerFactory) {
+            ConcurrentMessageListenerContainer<
+                    String, UpdateBalanceRequest>> messageFactory(
+            ConsumerFactory<String, UpdateBalanceRequest> consumerFactory) {
 
-        ConcurrentKafkaListenerContainerFactory<String, CustomerDTO> factory =
+        ConcurrentKafkaListenerContainerFactory<String,
+                UpdateBalanceRequest> factory =
+
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);

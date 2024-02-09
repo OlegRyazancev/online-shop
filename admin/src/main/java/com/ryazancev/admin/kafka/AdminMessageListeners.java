@@ -1,6 +1,8 @@
 package com.ryazancev.admin.kafka;
 
+import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.RegistrationRequestService;
+import com.ryazancev.admin.util.mapper.RegistrationRequestMapper;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,20 +16,23 @@ public class AdminMessageListeners {
 
 
     private final RegistrationRequestService registrationRequestService;
+    private final RegistrationRequestMapper registrationRequestMapper;
 
     @KafkaListener(
             topics = "${spring.kafka.topic.admin}",
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void createRegistrationRequest(RegistrationRequestDTO request) {
+    void createRegistrationRequest(RegistrationRequestDTO requestDTO) {
 
         log.info("Received message to register organization/product with id {}," +
                         "and type: {}",
-                request.getObjectToRegisterId(),
-                request.getObjectType().name());
+                requestDTO.getObjectToRegisterId(),
+                requestDTO.getObjectType().name());
 
         log.info("Creating request...");
+        RegistrationRequest request =
+                registrationRequestMapper.toEntity(requestDTO);
 
         registrationRequestService.create(request);
 

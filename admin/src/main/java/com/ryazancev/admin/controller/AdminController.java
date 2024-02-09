@@ -1,6 +1,8 @@
 package com.ryazancev.admin.controller;
 
+import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.RegistrationRequestService;
+import com.ryazancev.admin.util.mapper.RegistrationRequestMapper;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.admin.RegistrationRequestsResponse;
 import com.ryazancev.dto.admin.RequestStatus;
@@ -8,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -17,26 +21,42 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final RegistrationRequestService registrationRequestService;
+    private final RegistrationRequestMapper registrationRequestMapper;
 
 
     @GetMapping("/requests")
     public RegistrationRequestsResponse getAllRegistrationRequests() {
 
-        return registrationRequestService.getAll();
+        List<RegistrationRequest> requests =
+                registrationRequestService.getAll();
+
+        return RegistrationRequestsResponse.builder()
+                .requests(registrationRequestMapper.toDtoList(requests))
+                .build();
     }
 
     @GetMapping("/requests/product")
     public RegistrationRequestsResponse getProductRegistrationRequests() {
 
-        return registrationRequestService
-                .getProductRegistrationRequests();
+        List<RegistrationRequest> productRequests =
+                registrationRequestService.getProductRegistrationRequests();
+
+        return RegistrationRequestsResponse.builder()
+                .requests(registrationRequestMapper.toDtoList(productRequests))
+                .build();
     }
 
     @GetMapping("/requests/organization")
     public RegistrationRequestsResponse getOrganizationRegistrationRequests() {
 
-        return registrationRequestService
-                .getOrganizationRegistrationRequests();
+        List<RegistrationRequest> organizationRequests =
+                registrationRequestService
+                        .getOrganizationRegistrationRequests();
+
+        return RegistrationRequestsResponse.builder()
+                .requests(registrationRequestMapper
+                        .toDtoList(organizationRequests))
+                .build();
     }
 
     @PutMapping("/requests/{id}")
@@ -44,11 +64,11 @@ public class AdminController {
             @PathVariable("id") Long id,
             @RequestParam("status") String status) {
 
-        return registrationRequestService
+        RegistrationRequest request = registrationRequestService
                 .changeStatus(id, RequestStatus.valueOf(status));
+
+        return registrationRequestMapper.toDto(request);
     }
-
-
 
 
     //todo: delete product

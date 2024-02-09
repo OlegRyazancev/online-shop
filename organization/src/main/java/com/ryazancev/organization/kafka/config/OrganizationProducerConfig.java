@@ -1,4 +1,4 @@
-package com.ryazancev.admin.kafka;
+package com.ryazancev.organization.kafka.config;
 
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class AdminProducerConfig {
+public class OrganizationProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -42,8 +42,7 @@ public class AdminProducerConfig {
 
     @Bean
     public KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate(
-            ProducerFactory<String, RegistrationRequestDTO
-                    > producerFactory) {
+            ProducerFactory<String, RegistrationRequestDTO> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }

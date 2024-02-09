@@ -1,4 +1,4 @@
-package com.ryazancev.product.kafka;
+package com.ryazancev.organization.kafka.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,16 +7,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
-public class ProductTopicConfig {
+public class OrganizationTopicConfig {
 
     @Value("${spring.kafka.topic.admin}")
     private String adminTopicName;
 
-    @Value("${spring.kafka.topic.product.register}")
-    private String registerProductTopicName;
-
-    @Value("${spring.kafka.topic.product.update}")
-    private String updateProductTopicName;
+    @Value("${spring.kafka.topic.organization.register}")
+    private String organizationRegisterTopicName;
 
 
     @Bean
@@ -27,17 +24,9 @@ public class ProductTopicConfig {
     }
 
     @Bean
-    public NewTopic updateProductTopic() {
+    public NewTopic organizationRegisterEventsTopic() {
         return TopicBuilder
-                .name(updateProductTopicName)
-                .build();
-    }
-
-
-    @Bean
-    public NewTopic registerProductTopic() {
-        return TopicBuilder
-                .name(registerProductTopicName)
+                .name(organizationRegisterTopicName)
                 .build();
     }
 }

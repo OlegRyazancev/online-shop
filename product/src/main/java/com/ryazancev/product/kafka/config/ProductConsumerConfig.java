@@ -1,4 +1,4 @@
-package com.ryazancev.product.kafka;
+package com.ryazancev.product.kafka.config;
 
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.product.UpdateQuantityRequest;

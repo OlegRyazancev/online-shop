@@ -1,16 +1,17 @@
 package com.ryazancev.admin.service;
 
 
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
-import com.ryazancev.dto.admin.RegistrationRequestsResponse;
+import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.dto.admin.RequestStatus;
+
+import java.util.List;
 
 public interface RegistrationRequestService {
 
-    RegistrationRequestsResponse getAll();
-    RegistrationRequestsResponse getProductRegistrationRequests();
-    RegistrationRequestsResponse getOrganizationRegistrationRequests();
-    RegistrationRequestDTO changeStatus(Long requestId, RequestStatus status);
-    void create(RegistrationRequestDTO registrationRequestDTO);
+    List<RegistrationRequest> getAll();
+    List<RegistrationRequest> getProductRegistrationRequests();
+    List<RegistrationRequest> getOrganizationRegistrationRequests();
+    RegistrationRequest changeStatus(Long requestId, RequestStatus status);
+    void create(RegistrationRequest registrationRequest);
 
 }
