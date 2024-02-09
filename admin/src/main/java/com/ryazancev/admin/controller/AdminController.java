@@ -8,7 +8,6 @@ import com.ryazancev.dto.admin.RegistrationRequestsResponse;
 import com.ryazancev.dto.admin.RequestStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/admin")
 @RequiredArgsConstructor
-@Validated
 public class AdminController {
 
     private final RegistrationRequestService registrationRequestService;

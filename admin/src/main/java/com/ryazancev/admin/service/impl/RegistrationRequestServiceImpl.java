@@ -9,6 +9,9 @@ import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RequestStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,12 +30,14 @@ public class RegistrationRequestServiceImpl
     private final AdminProducerService adminProducerService;
 
     @Override
+    @Cacheable(value = "Admin::getAll")
     public List<RegistrationRequest> getAll() {
 
         return registrationRequestRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "Admin::getProductRegRequests")
     public List<RegistrationRequest> getProductRegistrationRequests() {
 
         return registrationRequestRepository
@@ -40,6 +45,7 @@ public class RegistrationRequestServiceImpl
     }
 
     @Override
+    @Cacheable(value = "Admin::getOrganizationRegRequests")
     public List<RegistrationRequest> getOrganizationRegistrationRequests() {
 
         return registrationRequestRepository
@@ -48,6 +54,19 @@ public class RegistrationRequestServiceImpl
 
     @Transactional
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(
+                            value = "Admin::getAll",
+                            allEntries = true),
+                    @CacheEvict(
+                            value = "Admin::getProductRegRequests",
+                            allEntries = true),
+                    @CacheEvict(
+                            value = "Admin::getOrganizationRegRequests",
+                            allEntries = true)
+            }
+    )
     public RegistrationRequest changeStatus(Long requestId,
                                             RequestStatus status) {
 
@@ -74,11 +93,24 @@ public class RegistrationRequestServiceImpl
 
     @Transactional
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(
+                            value = "Admin::getAll",
+                            allEntries = true),
+                    @CacheEvict(
+                            value = "Admin::getProductRegRequests",
+                            allEntries = true),
+                    @CacheEvict(
+                            value = "Admin::getOrganizationRegRequests",
+                            allEntries = true)
+            }
+    )
     public void create(RegistrationRequest registrationRequest) {
 
         registrationRequest.setCreatedAt(LocalDateTime.now());
         registrationRequest.setStatus(RequestStatus.ON_REVIEW);
-
+        //todo:send notification to Admin that new request here
         registrationRequestRepository.save(registrationRequest);
     }
 }
