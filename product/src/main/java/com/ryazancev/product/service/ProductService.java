@@ -1,36 +1,25 @@
 package com.ryazancev.product.service;
 
-import com.ryazancev.clients.params.DetailedType;
-import com.ryazancev.clients.params.ReviewsType;
-import com.ryazancev.dto.product.ProductDTO;
-import com.ryazancev.dto.product.ProductEditDTO;
-import com.ryazancev.dto.product.ProductsSimpleResponse;
-import com.ryazancev.dto.product.UpdateQuantityRequest;
-import com.ryazancev.dto.review.ReviewDTO;
-import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
+
+import java.util.List;
 
 public interface ProductService {
 
-    ProductsSimpleResponse getAll();
+    List<Product> getAll();
 
-    ProductDTO getById(Long id,
-                       DetailedType detailed,
-                       ReviewsType reviews);
+    Product getById(Long id);
 
-    ProductsSimpleResponse getByOrganizationId(Long organizationId);
+    List<Product> getByOrganizationId(Long organizationId);
 
-    ReviewDTO createReview(ReviewPostDTO reviewPostDTO);
+    Product makeRegistrationRequest(Product product);
 
-    ProductDTO makeRegistrationRequest(ProductEditDTO productEditDTO);
+    Product update(Product product);
 
     void changeStatusAndRegister(Long organizationId, ProductStatus status);
 
-    void updateQuantity(UpdateQuantityRequest request);
-
-    ProductDTO update(ProductEditDTO productEditDTO);
-
-
+    void updateQuantity(Long productId, Integer quantityInStock);
 
 
 }

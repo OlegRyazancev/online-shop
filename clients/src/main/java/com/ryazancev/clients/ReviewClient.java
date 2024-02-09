@@ -27,4 +27,12 @@ public interface ReviewClient {
     @PostMapping("api/v1/reviews")
     ReviewDTO create(
             @RequestBody ReviewPostDTO reviewPostDTO);
-    }
+
+    @GetMapping("api/v1/reviews/products/{id}/average-rating")
+    Double getAverageRatingByProductId(
+            @PathVariable("id") Long productId);
+}
+
+
+
+

@@ -2,7 +2,6 @@ package com.ryazancev.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.dto.organization.OrganizationDTO;
-import com.ryazancev.dto.review.ReviewDTO;
 import lombok.*;
 
 import java.io.Serializable;
@@ -30,8 +29,6 @@ public class ProductDTO implements Serializable {
     private Integer quantityInStock;
 
     private List<String> keywords;
-
-    private List<ReviewDTO> reviews;
 
     private Double averageRating;
 

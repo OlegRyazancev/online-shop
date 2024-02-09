@@ -1,21 +1,28 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.clients.params.DetailedType;
-import com.ryazancev.clients.params.ReviewsType;
+import com.ryazancev.clients.OrganizationClient;
+import com.ryazancev.clients.ReviewClient;
+import com.ryazancev.dto.organization.OrganizationDTO;
+import com.ryazancev.dto.product.PriceQuantityResponse;
 import com.ryazancev.dto.product.ProductDTO;
 import com.ryazancev.dto.product.ProductEditDTO;
 import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.dto.review.ReviewDTO;
 import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.expression.CustomExpressionService;
+import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
+import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,45 +32,54 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
+
     private final CustomExpressionService customExpressionService;
 
+    private final OrganizationClient organizationClient;
+    private final ReviewClient reviewClient;
+
+
+    //todo:get reviews by product id
     @GetMapping
     public ProductsSimpleResponse getAll() {
 
-        return productService.getAll();
-    }
+        List<Product> products = productService.getAll();
 
+        return ProductsSimpleResponse.builder()
+                .products(productMapper.toSimpleListDTO(products))
+                .build();
+    }
 
     @GetMapping("/{id}")
     public ProductDTO getById(
-            @PathVariable("id") Long id,
-            @RequestParam(
-                    value = "detailLevel",
-                    defaultValue = "simple") String detailLevel,
-            @RequestParam(
-                    value = "includeReviews",
-                    defaultValue = "no_reviews") String includeReviews) {
+            @PathVariable("id") Long id) {
 
-        return productService
-                .getById(id,
-                        DetailedType.fromString(detailLevel),
-                        ReviewsType.fromString(includeReviews));
+        Product product = productService.getById(id);
+        ProductDTO productDTO = productMapper.toDetailedDTO(product);
+
+        OrganizationDTO organizationDTO = organizationClient
+                .getSimpleById(product.getOrganizationId());
+        productDTO.setOrganization(organizationDTO);
+
+        Double avgRating = reviewClient.getAverageRatingByProductId(id);
+        productDTO.setAverageRating(avgRating);
+
+        return productDTO;
     }
+
 
     @GetMapping("/organizations/{id}")
     public ProductsSimpleResponse getProductsByOrganizationId(
             @PathVariable("id") Long id) {
 
-        return productService.getByOrganizationId(id);
-    }
+        List<Product> organizationProducts =
+                productService.getByOrganizationId(id);
 
-    @PostMapping("/reviews")
-    public ReviewDTO createReview(
-            @RequestBody
-            @Validated({OnCreate.class})
-            ReviewPostDTO reviewPostDTO) {
-
-        return productService.createReview(reviewPostDTO);
+        return ProductsSimpleResponse.builder()
+                .products(productMapper.toSimpleListDTO(
+                        organizationProducts))
+                .build();
     }
 
     @PostMapping
@@ -73,11 +89,22 @@ public class ProductController {
             ProductEditDTO productEditDTO) {
 
         if (!customExpressionService
-                .canAccessOrganization(productEditDTO.getOrganizationId())) {
+                .canAccessOrganization(
+                        productEditDTO.getOrganizationId())) {
 
             throw new AccessDeniedException();
         }
-        return productService.makeRegistrationRequest(productEditDTO);
+
+        Product product = productMapper.toEntity(productEditDTO);
+        Product saved = productService.makeRegistrationRequest(product);
+        ProductDTO productDTO = productMapper.toDetailedDTO(saved);
+
+
+        OrganizationDTO organizationDTO = organizationClient
+                .getSimpleById(product.getOrganizationId());
+        productDTO.setOrganization(organizationDTO);
+
+        return productDTO;
     }
 
     @PutMapping
@@ -94,9 +121,60 @@ public class ProductController {
             throw new AccessDeniedException();
         }
 
-        return productService.update(productEditDTO);
+        Product product = productMapper.toEntity(productEditDTO);
+        Product updated = productService.update(product);
+        ProductDTO productDTO = productMapper.toDetailedDTO(updated);
+
+        OrganizationDTO organizationDTO = organizationClient
+                .getSimpleById(updated.getOrganizationId());
+        productDTO.setOrganization(organizationDTO);
+
+        Double avgRating = reviewClient
+                .getAverageRatingByProductId(updated.getId());
+        productDTO.setAverageRating(avgRating);
+
+
+        return productDTO;
     }
+
+    @GetMapping("/{id}/reviews")
+    public ReviewsResponse getReviewsByProductId(
+            @PathVariable("id") Long id) {
+
+        return reviewClient.getByProductId(id);
+    }
+
+    @PostMapping("/reviews")
+    public ReviewDTO createReview(
+            @RequestBody
+            @Validated({OnCreate.class})
+            ReviewPostDTO reviewPostDTO) {
+
+        return reviewClient.create(reviewPostDTO);
+    }
+
 
     //todo: delete product
 
+    @GetMapping("/{id}/simple")
+    public ProductDTO getSimpleById(
+            @PathVariable("id") Long id) {
+
+        Product product = productService.getById(id);
+
+        return productMapper.toSimpleDTO(product);
+    }
+
+    @GetMapping("/{id}/price-quantity")
+    public PriceQuantityResponse getPriceAndQuantityByProductId(
+            @PathVariable("id") Long productId) {
+
+        Product product = productService.getById(productId);
+
+        return PriceQuantityResponse.builder()
+                .price(product.getPrice())
+                .quantityInStock(product.getQuantityInStock())
+                .build();
+
+    }
 }

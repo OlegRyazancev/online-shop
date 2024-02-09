@@ -2,11 +2,10 @@ package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.clients.params.DetailedType;
-import com.ryazancev.clients.params.ReviewsType;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
+import com.ryazancev.dto.product.PriceQuantityResponse;
 import com.ryazancev.dto.product.ProductDTO;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.dto.purchase.PurchaseDTO;
@@ -53,14 +52,12 @@ public class PurchaseServiceImpl implements PurchaseService {
         Double availableCustomerBalance = customerClient
                 .getBalanceById(customerId);
 
-        ProductDTO selectedProduct = productClient
-                .getById(
-                        productId,
-                        DetailedType.DETAILED.getType(),
-                        ReviewsType.NO_REVIEWS.getType()
-                );
-        Double selectedProductPrice = selectedProduct.getPrice();
-        Integer availableProductsInStock = selectedProduct.getQuantityInStock();
+       PriceQuantityResponse priceQuantityResponse = productClient
+                .getPriceAndQuantityByProductId(productId);
+        Double selectedProductPrice = 
+                priceQuantityResponse.getPrice();
+        Integer availableProductsInStock = 
+                priceQuantityResponse.getQuantityInStock();
 
         if (availableCustomerBalance < selectedProductPrice) {
             throw new IncorrectBalanceException(
@@ -80,7 +77,9 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         updateCustomerBalance(customerId,
                 availableCustomerBalance - selectedProductPrice);
-        updateProductQuantity(selectedProduct);
+
+
+        updateProductQuantity(productId, availableProductsInStock);
 
         Purchase toSave = purchaseMapper.toEntity(purchaseEditDTO);
         toSave.setPurchaseDate(LocalDateTime.now());
@@ -90,15 +89,23 @@ public class PurchaseServiceImpl implements PurchaseService {
         PurchaseDTO purchaseDTO = purchaseMapper.toDTO(saved);
 
         CustomerDTO customerDTO = customerClient.getSimpleById(customerId);
-        ProductDTO productDTO = ProductDTO.builder()
-                .id(selectedProduct.getId())
-                .productName(selectedProduct.getProductName())
-                .build();
+        ProductDTO productDTO = productClient.getSimpleById(productId);
 
         purchaseDTO.setCustomer(customerDTO);
         purchaseDTO.setProduct(productDTO);
 
         return purchaseDTO;
+    }
+
+    private void updateProductQuantity(Long productId,
+                                       Integer availableProductsInStock) {
+
+        purchaseProducerService.sendMessageToProductTopic(
+                UpdateQuantityRequest.builder()
+                        .productId(productId)
+                        .quantityInStock(availableProductsInStock - 1)
+                        .build()
+        );
     }
 
     @Override
@@ -117,11 +124,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         for (int i = 0; i < purchasesDTO.size(); i++) {
             ProductDTO productDTO = productClient
-                    .getById(
-                            purchases.get(i).getProductId(),
-                            DetailedType.SIMPLE.getType(),
-                            ReviewsType.NO_REVIEWS.getType()
-                    );
+                    .getSimpleById(purchases.get(i).getProductId());
             purchasesDTO.get(i).setProduct(productDTO);
         }
         return CustomerPurchasesResponse.builder()
@@ -140,13 +143,4 @@ public class PurchaseServiceImpl implements PurchaseService {
         );
     }
 
-    private void updateProductQuantity(ProductDTO product) {
-
-        purchaseProducerService.sendMessageToProductTopic(
-                UpdateQuantityRequest.builder()
-                        .productId(product.getId())
-                        .quantityInStock(product.getQuantityInStock() - 1)
-                        .build()
-        );
-    }
 }

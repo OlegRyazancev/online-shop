@@ -30,7 +30,10 @@ public class ProductMessageListeners {
 
         log.info("Updating product...");
 
-        productService.updateQuantity(request);
+        productService.updateQuantity(
+                request.getProductId(),
+                request.getQuantityInStock()
+        );
 
         log.info("Product successfully updated");
     }

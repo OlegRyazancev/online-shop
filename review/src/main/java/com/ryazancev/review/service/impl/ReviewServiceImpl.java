@@ -2,9 +2,8 @@ package com.ryazancev.review.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.clients.params.DetailedType;
-import com.ryazancev.clients.params.ReviewsType;
 import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.product.ProductDTO;
 import com.ryazancev.dto.review.ReviewDTO;
 import com.ryazancev.dto.review.ReviewPostDTO;
 import com.ryazancev.dto.review.ReviewsResponse;
@@ -37,7 +36,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewsResponse getByCustomerId(Long customerId) {
 
-        System.out.println(DetailedType.SIMPLE.getType());
 
         CustomerDTO foundCustomer = customerClient
                 .getSimpleById(customerId);
@@ -50,12 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
             for (int i = 0; i < reviewsDTO.size(); i++) {
                 Long productId = reviews.get(i).getProductId();
                 reviewsDTO.get(i)
-                        .setProduct(
-                                productClient.getById(
-                                        productId,
-                                        DetailedType.SIMPLE.getType(),
-                                        ReviewsType.NO_REVIEWS.getType())
-                        );
+                        .setProduct(productClient.getSimpleById(productId));
             }
         }
 
@@ -67,9 +60,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewsResponse getByProductId(Long productId) {
 
+        ProductDTO productDTO = productClient.getSimpleById(productId);
 
         List<Review> reviews = reviewRepository
-                .findByProductId(productId);
+                .findByProductId(productDTO.getId());
         List<ReviewDTO> reviewsDTO = reviewMapper
                 .toListDTO(reviews);
 
@@ -94,10 +88,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         try {
             customerClient.getSimpleById(reviewPostDTO.getCustomerId());
-            productClient.getById(
-                    reviewPostDTO.getProductId(),
-                    DetailedType.SIMPLE.getType(),
-                    ReviewsType.NO_REVIEWS.getType());
+            productClient.getSimpleById(reviewPostDTO.getProductId());
         } catch (Exception e) {
             throw new ReviewCreationException(
                     "Customer/product doesn't exists",
@@ -114,10 +105,19 @@ public class ReviewServiceImpl implements ReviewService {
         savedReviewDTO.setCustomer(customerClient
                 .getSimpleById(reviewPostDTO.getCustomerId()));
         savedReviewDTO.setProduct(productClient
-                .getById(reviewPostDTO.getProductId(),
-                        DetailedType.SIMPLE.getType(),
-                        ReviewsType.NO_REVIEWS.getType()));
+                .getSimpleById(reviewPostDTO.getProductId()));
 
         return savedReviewDTO;
+    }
+
+    @Override
+    public Double getAverageRatingByProductId(Long productId) {
+
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+
+        return reviews.stream()
+                .mapToDouble(Review::getRating)
+                .average()
+                .orElse(0.0);
     }
 }

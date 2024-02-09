@@ -32,6 +32,13 @@ public class ReviewController {
         return reviewService.getByProductId(id);
     }
 
+    @GetMapping("/products/{id}/average-rating")
+    public Double getAverageRatingByProductId(
+            @PathVariable("id") Long productId) {
+
+        return reviewService.getAverageRatingByProductId(productId);
+    }
+
     @PostMapping
     public ReviewDTO create(
             @RequestBody ReviewPostDTO reviewPostDTO) {

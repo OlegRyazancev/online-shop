@@ -11,4 +11,6 @@ public interface ReviewService {
     ReviewsResponse getByProductId(Long id);
 
     ReviewDTO create(ReviewPostDTO reviewPostDTO);
+
+    Double getAverageRatingByProductId(Long productId);
 }
