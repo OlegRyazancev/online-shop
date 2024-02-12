@@ -10,7 +10,7 @@ public interface OrganizationService {
 
     List<Organization> getAll();
 
-    Organization getById(Long id);
+    Organization getById(Long id, boolean statusCheck);
 
     Organization makeRegistrationRequest(Organization organization);
 
@@ -21,4 +21,6 @@ public interface OrganizationService {
     void uploadLogo(Long id, LogoDTO logoDTO);
 
     Long getOwnerId(Long organizationId);
+
+    String markOrganizationAsDeleted(Long id);
 }

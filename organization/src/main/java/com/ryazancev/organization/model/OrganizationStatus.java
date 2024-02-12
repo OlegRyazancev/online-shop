@@ -4,6 +4,6 @@ public enum OrganizationStatus {
 
     ACTIVE,
     INACTIVE,
-    FROZEN
-
+    FROZEN,
+    DELETED
 }

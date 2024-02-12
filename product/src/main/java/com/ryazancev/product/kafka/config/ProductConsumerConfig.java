@@ -3,6 +3,7 @@ package com.ryazancev.product.kafka.config;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +24,7 @@ public class ProductConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    public Map<String, Object> consumerConfig() {
+    public Map<String, Object> baseConsumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -41,7 +42,7 @@ public class ProductConsumerConfig {
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
-                consumerConfig(),
+                baseConsumerConfig(),
                 new StringDeserializer(),
                 jsonDeserializer);
     }
@@ -72,7 +73,7 @@ public class ProductConsumerConfig {
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
-                consumerConfig(),
+                baseConsumerConfig(),
                 new StringDeserializer(),
                 jsonDeserializer);
     }
@@ -90,6 +91,40 @@ public class ProductConsumerConfig {
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);
+
+        return factory;
+    }
+
+    @Bean
+    public Map<String, Object> deleteConsumerConfig() {
+
+        Map<String, Object> props = new HashMap<>();
+
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapServers);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                LongDeserializer.class);
+
+        return props;
+    }
+
+    @Bean
+    public ConsumerFactory<String, Long> deleteConsumerFactory() {
+
+        return new DefaultKafkaConsumerFactory<>(deleteConsumerConfig());
+    }
+
+    @Bean
+    public KafkaListenerContainerFactory<
+            ConcurrentMessageListenerContainer<String,
+                    Long>> deleteMessageFactory(
+            ConsumerFactory<String, Long> deleteConsumerFactory) {
+
+        ConcurrentKafkaListenerContainerFactory<String, Long> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(deleteConsumerFactory);
 
         return factory;
     }

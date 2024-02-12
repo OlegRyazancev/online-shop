@@ -69,11 +69,7 @@ public class AdminController {
     }
 
 
-    //todo: delete product
-    //todo: delete organization
-    //todo: delete review
     //todo: delete customer
-    //todo: delete purchase
 
 
     //todo: send notification to user

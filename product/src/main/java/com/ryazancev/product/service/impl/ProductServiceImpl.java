@@ -46,9 +46,13 @@ public class ProductServiceImpl implements ProductService {
             value = "Product::getById",
             key = "#id"
     )
-    public Product getById(Long id) {
+    public Product getById(Long id, boolean statusCheck) {
+        if (statusCheck) {
 
-        return findById(id);
+            return findByIdWithStatusCheck(id);
+        }else {
+            return findById(id);
+        }
     }
 
     @Override
@@ -112,7 +116,7 @@ public class ProductServiceImpl implements ProductService {
     )
     public void changeStatusAndRegister(Long id,
                                         ProductStatus status) {
-        Product existing = findById(id);
+        Product existing = findByIdWithStatusCheck(id);
 
         existing.setStatus(status);
         existing.setRegisteredAt(LocalDateTime.now());
@@ -144,7 +148,7 @@ public class ProductServiceImpl implements ProductService {
     )
     public Product update(Product product) {
 
-        Product existing = findById(product.getId());
+        Product existing = findByIdWithStatusCheck(product.getId());
 
         existing.setProductName(product.getProductName());
         existing.setDescription(product.getDescription());
@@ -163,7 +167,7 @@ public class ProductServiceImpl implements ProductService {
     )
     public void updateQuantity(Long productId, Integer quantityInStock) {
 
-        Product existing = findById(productId);
+        Product existing = findByIdWithStatusCheck(productId);
         existing.setQuantityInStock(quantityInStock);
 
         productRepository.save(existing);
@@ -187,9 +191,8 @@ public class ProductServiceImpl implements ProductService {
     })
     public void markProductAsDeleted(Long id) {
 
-        Product product = findById(id);
+        Product product = findByIdWithStatusCheck(id);
 
-        product.setProductName("DELETED");
         product.setDescription("DELETED");
         product.setPrice(0.0);
         product.setKeywords("DELETED");
@@ -200,13 +203,9 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
-    private Product findById(Long productId) {
+    private Product findByIdWithStatusCheck(Long productId) {
 
-        Product found = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(
-                        "Product not found",
-                        HttpStatus.NOT_FOUND
-                ));
+        Product found = findById(productId);
 
         if (found.getStatus().equals(ProductStatus.DELETED)) {
             throw new DeletedProductException(
@@ -215,6 +214,15 @@ public class ProductServiceImpl implements ProductService {
         }
         //todo: check if product is frozen
         return found;
+    }
+
+    private Product findById(Long productId) {
+
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(
+                        "Product not found",
+                        HttpStatus.NOT_FOUND
+                ));
     }
 
     private void sendRegistrationRequestToAdmin(Long productId) {

@@ -2,6 +2,7 @@ package com.ryazancev.organization.kafka.config;
 
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ public class OrganizationProducerConfig {
     private String bootstrapServers;
 
 
-    public Map<String, Object> producerConfig() {
+    public Map<String, Object> adminProducerConfig() {
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -35,14 +36,41 @@ public class OrganizationProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, RegistrationRequestDTO> producerFactory() {
+    public ProducerFactory<String,
+            RegistrationRequestDTO> adminProducerFactory() {
 
-        return new DefaultKafkaProducerFactory<>(producerConfig());
+        return new DefaultKafkaProducerFactory<>(adminProducerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate(
+    public KafkaTemplate<String, RegistrationRequestDTO> adminKafkaTemplate(
             ProducerFactory<String, RegistrationRequestDTO> producerFactory) {
+
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    public Map<String, Object> productProducerConfig() {
+        Map<String, Object> props = new HashMap<>();
+
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapServers);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                LongSerializer.class);
+
+        return props;
+    }
+
+    @Bean
+    public ProducerFactory<String, Long> productProducerFactory() {
+
+        return new DefaultKafkaProducerFactory<>(productProducerConfig());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Long> productKafkaTemplate(
+            ProducerFactory<String, Long> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }

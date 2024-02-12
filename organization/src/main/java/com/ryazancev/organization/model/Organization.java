@@ -29,10 +29,10 @@ public class Organization implements Serializable {
     )
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "description", unique = true)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "logo")

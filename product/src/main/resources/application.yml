@@ -39,6 +39,7 @@ spring:
       product:
         register: ${KAFKA_REGISTER_PRODUCT_TOPIC}
         update: ${KAFKA_UPDATE_PRODUCT_TOPIC}
+        delete: ${KAFKA_DELETE_PRODUCT_TOPIC}
 
   #Liquibase
   liquibase:

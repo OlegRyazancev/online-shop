@@ -38,7 +38,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public boolean canAccessProduct(Long productId) {
 
-        Product product = productService.getById(productId);
+        boolean statusCheck = true;
+
+        Product product = productService.getById(productId, statusCheck);
         Long organizationId = product.getOrganizationId();
 
         if (!canAccessOrganization(organizationId)) {

@@ -53,7 +53,9 @@ public class ProductController {
     public ProductDTO getById(
             @PathVariable("id") Long id) {
 
-        Product product = productService.getById(id);
+        boolean statusCheck = true;
+
+        Product product = productService.getById(id, statusCheck);
         ProductDTO productDTO = productMapper.toDetailedDTO(product);
 
         OrganizationDTO organizationDTO = organizationClient.getSimpleById(
@@ -145,7 +147,9 @@ public class ProductController {
     public ProductDTO getSimpleById(
             @PathVariable("id") Long id) {
 
-        Product product = productService.getById(id);
+        boolean statusCheck = false;
+
+        Product product = productService.getById(id, statusCheck);
 
         return productMapper.toSimpleDTO(product);
     }
@@ -154,7 +158,9 @@ public class ProductController {
     public PriceQuantityResponse getPriceAndQuantityByProductId(
             @PathVariable("id") Long productId) {
 
-        Product product = productService.getById(productId);
+        boolean statusCheck = true;
+
+        Product product = productService.getById(productId, statusCheck);
 
         return PriceQuantityResponse.builder()
                 .price(product.getPrice())

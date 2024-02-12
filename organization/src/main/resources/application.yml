@@ -13,6 +13,7 @@ spring:
       admin: ${KAFKA_REQUESTS_ADMIN_TOPIC}
       organization:
         register: ${KAFKA_REGISTER_ORGANIZATION_TOPIC}
+      product: ${KAFKA_DELETE_PRODUCT_TOPIC}
     consumer:
       group-id: ${KAFKA_ORGANIZATION_GROUP}
 

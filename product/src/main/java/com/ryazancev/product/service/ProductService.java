@@ -9,7 +9,7 @@ public interface ProductService {
 
     List<Product> getAll();
 
-    Product getById(Long id);
+    Product getById(Long id, boolean statusCheck);
 
     List<Product> getByOrganizationId(Long organizationId);
 

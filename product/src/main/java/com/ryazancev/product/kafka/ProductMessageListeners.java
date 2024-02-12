@@ -2,12 +2,15 @@ package com.ryazancev.product.kafka;
 
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
+import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -68,7 +71,26 @@ public class ProductMessageListeners {
             default -> {
             }
         }
+    }
 
+    @KafkaListener(
+            topics = "${spring.kafka.topic.product.delete}",
+            groupId = "${spring.kafka.consumer.group-id}",
+            containerFactory = "deleteMessageFactory"
+    )
 
+    public void deleteProductsByOrganizationId(Long organizationId) {
+
+        log.info("Received message from organization to delete " +
+                        "product where organization id: {}",
+                organizationId);
+
+        List<Product> products = productService
+                .getByOrganizationId(organizationId);
+
+        products.forEach(product ->
+                productService.markProductAsDeleted(product.getId()));
+
+        log.info("Products successfully deleted");
     }
 }

@@ -4,21 +4,21 @@ import com.ryazancev.clients.LogoClient;
 import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.logo.LogoDTO;
+import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
+import com.ryazancev.organization.util.exception.custom.DeletedOrganizationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,10 +35,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final LogoClient logoClient;
 
-    @Value("${spring.kafka.topic.admin}")
-    private String adminTopic;
+    private final OrganizationProducerService organizationProducerService;
 
-    private final KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate;
 
     @Override
     @Cacheable(value = "Organization::getAll")
@@ -52,9 +50,12 @@ public class OrganizationServiceImpl implements OrganizationService {
             value = "Organization::getById",
             key = "#id"
     )
-    public Organization getById(Long id) {
-
-        return findById(id);
+    public Organization getById(Long id, boolean statusCheck) {
+        if (statusCheck) {
+            return findByIdWithStatusChecks(id);
+        } else {
+            return findById(id);
+        }
     }
 
     @Transactional
@@ -111,7 +112,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     )
     public Organization update(Organization organization) {
 
-        Organization existing = findById(organization.getId());
+        Organization existing = findByIdWithStatusChecks(organization.getId());
 
         existing.setName(organization.getName());
         existing.setDescription(organization.getDescription());
@@ -136,7 +137,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void changeStatusAndRegister(Long id,
                                         OrganizationStatus status) {
 
-        Organization existing = findById(id);
+        Organization existing = findByIdWithStatusChecks(id);
 
         existing.setStatus(status);
         existing.setRegisteredAt(LocalDateTime.now());
@@ -153,7 +154,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     )
     public void uploadLogo(Long id, LogoDTO logoDTO) {
 
-        Organization existing = findById(id);
+        Organization existing = findByIdWithStatusChecks(id);
 
         String fileName = logoClient.upload(logoDTO.getFile());
 
@@ -168,9 +169,54 @@ public class OrganizationServiceImpl implements OrganizationService {
     )
     public Long getOwnerId(Long organizationId) {
 
-        Organization existing = findById(organizationId);
+        Organization existing = findByIdWithStatusChecks(organizationId);
 
         return existing.getOwnerId();
+    }
+
+    @Override
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "Organization::getById",
+                    key = "#id"
+            ),
+            @CacheEvict(
+                    value = "Organization::getAll",
+                    allEntries = true
+            ),
+            @CacheEvict(
+                    value = "Organization::getOwnerId",
+                    key = "#id"
+            )
+    })
+    public String markOrganizationAsDeleted(Long id) {
+
+        Organization found = findByIdWithStatusChecks(id);
+
+        found.setLogo("DELETED");
+        found.setDescription("DELETED");
+        found.setStatus(OrganizationStatus.DELETED);
+
+        organizationProducerService.sendMessageToProductTopic(id);
+        organizationRepository.save(found);
+
+        return "Organization successfully deleted";
+    }
+
+    private Organization findByIdWithStatusChecks(Long id) {
+
+        Organization found = findById(id);
+
+        if (found.getStatus().equals(OrganizationStatus.DELETED)) {
+
+            throw new DeletedOrganizationException(
+                    "Can not get deleted organization",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        //todo: add check if organization is frozen
+        return found;
     }
 
     private Organization findById(Long id) {
@@ -189,7 +235,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .objectType(ObjectType.ORGANIZATION)
                 .build();
 
-        kafkaTemplate.send(adminTopic, requestDTO);
+        organizationProducerService.sendMessageToAdminTopic(requestDTO);
     }
 }
 

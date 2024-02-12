@@ -52,7 +52,10 @@ public class OrganizationController {
     public OrganizationDTO getById(
             @PathVariable("id") Long id) {
 
-        Organization organization = organizationService.getById(id);
+        boolean statusCheck = true;
+
+        Organization organization =
+                organizationService.getById(id, statusCheck);
         OrganizationDTO organizationDTO =
                 organizationMapper.toDetailedDTO(organization);
 
@@ -135,6 +138,12 @@ public class OrganizationController {
         organizationService.uploadLogo(id, logoDto);
     }
 
+    @DeleteMapping("/{id}")
+    public String DeleteOrganizationById(@PathVariable("id") Long id) {
+
+        return organizationService.markOrganizationAsDeleted(id);
+    }
+
 
 //    Endpoints only  for feign clients
 
@@ -142,7 +151,10 @@ public class OrganizationController {
     public OrganizationDTO getSimpleById(
             @PathVariable("id") Long id) {
 
-        Organization organization = organizationService.getById(id);
+        boolean statusCheck = false;
+
+        Organization organization =
+                organizationService.getById(id, statusCheck);
 
         return organizationMapper.toSimpleDTO(organization);
     }

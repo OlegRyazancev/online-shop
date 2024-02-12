@@ -15,6 +15,9 @@ public class OrganizationTopicConfig {
     @Value("${spring.kafka.topic.organization.register}")
     private String organizationRegisterTopicName;
 
+    @Value("${spring.kafka.topic.product}")
+    private String productDeleteTopicName;
+
 
     @Bean
     public NewTopic adminEventsTopic() {
@@ -27,6 +30,13 @@ public class OrganizationTopicConfig {
     public NewTopic organizationRegisterEventsTopic() {
         return TopicBuilder
                 .name(organizationRegisterTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic productDeleteEventsTopic() {
+        return TopicBuilder
+                .name(productDeleteTopicName)
                 .build();
     }
 }
