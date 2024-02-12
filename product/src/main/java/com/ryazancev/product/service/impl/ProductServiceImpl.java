@@ -2,22 +2,22 @@ package com.ryazancev.product.service.impl;
 
 import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.exception.custom.DeletedProductException;
 import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,10 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    @Value("${spring.kafka.topic.admin}")
-    private String adminTopic;
-
-    private final KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate;
+    private final ProductProducerService productProducerService;
 
     @Override
     @Cacheable(value = "Product::getAll")
@@ -69,8 +66,8 @@ public class ProductServiceImpl implements ProductService {
                 );
     }
 
-    @Transactional
     @Override
+    @Transactional
     @Caching(
             evict = {
                     @CacheEvict(
@@ -101,8 +98,8 @@ public class ProductServiceImpl implements ProductService {
         return saved;
     }
 
-    @Transactional
     @Override
+    @Transactional
     @Caching(evict = {
             @CacheEvict(
                     value = "Product::getById",
@@ -125,8 +122,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    @Transactional
     @Override
+    @Transactional
     @Caching(
             evict = {
                     @CacheEvict(
@@ -158,8 +155,8 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(existing);
     }
 
-    @Transactional
     @Override
+    @Transactional
     @CacheEvict(
             value = "Product::getById",
             key = "#productId"
@@ -172,13 +169,52 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(existing);
     }
 
+
+    @Override
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "Product::getAll",
+                    allEntries = true),
+            @CacheEvict(
+                    value = "Product::getByOrganizationId",
+                    allEntries = true
+            ),
+            @CacheEvict(
+                    value = "Product::getById",
+                    key = "#id"
+            )
+    })
+    public void markProductAsDeleted(Long id) {
+
+        Product product = findById(id);
+
+        product.setProductName("DELETED");
+        product.setDescription("DELETED");
+        product.setPrice(0.0);
+        product.setKeywords("DELETED");
+        product.setQuantityInStock(0);
+        product.setStatus(ProductStatus.DELETED);
+
+        productProducerService.sendMessageToReviewTopic(id);
+        productRepository.save(product);
+    }
+
     private Product findById(Long productId) {
 
-        return productRepository.findById(productId)
+        Product found = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(
                         "Product not found",
                         HttpStatus.NOT_FOUND
                 ));
+
+        if (found.getStatus().equals(ProductStatus.DELETED)) {
+            throw new DeletedProductException(
+                    "Can not get deleted product",
+                    HttpStatus.BAD_REQUEST);
+        }
+        //todo: check if product is frozen
+        return found;
     }
 
     private void sendRegistrationRequestToAdmin(Long productId) {
@@ -188,6 +224,6 @@ public class ProductServiceImpl implements ProductService {
                 .objectType(ObjectType.PRODUCT)
                 .build();
 
-        kafkaTemplate.send(adminTopic, requestDTO);
+        productProducerService.sendMessageToAdminTopic(requestDTO);
     }
 }

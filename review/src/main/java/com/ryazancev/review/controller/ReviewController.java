@@ -18,21 +18,21 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/customers/{id}")
+    @GetMapping("/customer/{id}")
     public ReviewsResponse getByCustomerId(
             @PathVariable("id") Long id) {
 
         return reviewService.getByCustomerId(id);
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/product/{id}")
     public ReviewsResponse getByProductId(
             @PathVariable("id") Long id) {
 
         return reviewService.getByProductId(id);
     }
 
-    @GetMapping("/products/{id}/average-rating")
+    @GetMapping("/product/{id}/average-rating")
     public Double getAverageRatingByProductId(
             @PathVariable("id") Long productId) {
 

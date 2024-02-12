@@ -81,8 +81,8 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
     }
 
-    @Transactional
     @Override
+    @Transactional
     public ReviewDTO create(ReviewPostDTO reviewPostDTO) {
 
         try {
@@ -118,5 +118,16 @@ public class ReviewServiceImpl implements ReviewService {
                 .mapToDouble(Review::getRating)
                 .average()
                 .orElse(0.0);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByProductId(Long productId) {
+
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+
+        reviewRepository.deleteAll(reviews);
+        log.info("Reviews {} successfully deleted for product ID {}",
+                reviews.size(), productId);
     }
 }

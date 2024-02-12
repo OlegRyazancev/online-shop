@@ -35,6 +35,7 @@ spring:
       group-id: ${KAFKA_PRODUCT_GROUP}
     topic:
       admin: ${KAFKA_REQUESTS_ADMIN_TOPIC}
+      review: ${KAFKA_DELETE_REVIEW_TOPIC}
       product:
         register: ${KAFKA_REGISTER_PRODUCT_TOPIC}
         update: ${KAFKA_UPDATE_PRODUCT_TOPIC}

@@ -36,12 +36,15 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public boolean canAccessProduct(Long productId, Long organizationId) {
+    public boolean canAccessProduct(Long productId) {
+
+        Product product = productService.getById(productId);
+        Long organizationId = product.getOrganizationId();
 
         if (!canAccessOrganization(organizationId)) {
             return false;
         }
-        log.info("User is organization owner");
+        log.info("User is organization owner, or user is admin");
 
         List<String> userRoles = getRolesFromRequest(request);
         List<Product> products =

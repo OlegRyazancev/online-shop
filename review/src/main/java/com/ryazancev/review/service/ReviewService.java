@@ -13,4 +13,6 @@ public interface ReviewService {
     ReviewDTO create(ReviewPostDTO reviewPostDTO);
 
     Double getAverageRatingByProductId(Long productId);
+
+    void deleteByProductId(Long productId);
 }

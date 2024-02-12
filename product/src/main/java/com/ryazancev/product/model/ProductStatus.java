@@ -4,5 +4,6 @@ public enum ProductStatus {
 
     ACTIVE,
     INACTIVE,
-    FROZEN
+    FROZEN,
+    DELETED
 }

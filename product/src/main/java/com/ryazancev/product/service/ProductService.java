@@ -21,5 +21,5 @@ public interface ProductService {
 
     void updateQuantity(Long productId, Integer quantityInStock);
 
-
+    void markProductAsDeleted(Long id);
 }

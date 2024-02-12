@@ -100,9 +100,7 @@ public class ProductController {
             ProductEditDTO productEditDTO) {
 
         if (!customExpressionService
-                .canAccessProduct(
-                        productEditDTO.getId(),
-                        productEditDTO.getOrganizationId())) {
+                .canAccessProduct(productEditDTO.getId())) {
 
             throw new AccessDeniedException();
         }
@@ -176,5 +174,15 @@ public class ProductController {
                 .products(productMapper.toSimpleListDTO(
                         organizationProducts))
                 .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProductById(@PathVariable("id") Long id) {
+
+        if (!customExpressionService.canAccessProduct(id)) {
+
+            throw new AccessDeniedException();
+        }
+        productService.markProductAsDeleted(id);
     }
 }

@@ -18,9 +18,13 @@ public class ProductTopicConfig {
     @Value("${spring.kafka.topic.product.update}")
     private String updateProductTopicName;
 
+    @Value("${spring.kafka.topic.review}")
+    private String deleteReviewTopicName;
+
 
     @Bean
     public NewTopic adminEventsTopic() {
+
         return TopicBuilder
                 .name(adminTopicName)
                 .build();
@@ -28,16 +32,25 @@ public class ProductTopicConfig {
 
     @Bean
     public NewTopic updateProductTopic() {
+
         return TopicBuilder
                 .name(updateProductTopicName)
                 .build();
     }
 
-
     @Bean
     public NewTopic registerProductTopic() {
+
         return TopicBuilder
                 .name(registerProductTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic deleteReviewTopic() {
+
+        return TopicBuilder
+                .name(deleteReviewTopicName)
                 .build();
     }
 }

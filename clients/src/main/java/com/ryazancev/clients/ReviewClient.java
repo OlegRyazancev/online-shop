@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface ReviewClient {
 
-    @GetMapping("api/v1/reviews/products/{id}")
+    @GetMapping("api/v1/reviews/product/{id}")
     ReviewsResponse getByProductId(
             @PathVariable("id") Long id);
 
-    @GetMapping("api/v1/reviews/customers/{id}")
+    @GetMapping("api/v1/reviews/customer/{id}")
     ReviewsResponse getByCustomerId(
             @PathVariable("id") Long id);
 
@@ -28,9 +28,10 @@ public interface ReviewClient {
     ReviewDTO create(
             @RequestBody ReviewPostDTO reviewPostDTO);
 
-    @GetMapping("api/v1/reviews/products/{id}/average-rating")
+    @GetMapping("api/v1/reviews/product/{id}/average-rating")
     Double getAverageRatingByProductId(
             @PathVariable("id") Long productId);
+
 }
 
 

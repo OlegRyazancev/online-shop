@@ -55,7 +55,6 @@ public class ProductConsumerConfig {
 
         ConcurrentKafkaListenerContainerFactory<String,
                 UpdateQuantityRequest> factory =
-
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);

@@ -1,4 +1,4 @@
-package com.ryazancev.auth.config.kafka;
+package com.ryazancev.auth.kafka;
 
 import com.ryazancev.dto.mail.MailDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
