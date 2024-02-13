@@ -1,7 +1,7 @@
 package com.ryazancev.admin.util.mapper;
 
 import com.ryazancev.admin.model.RegistrationRequest;
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -11,9 +11,9 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AdminMapper {
 
-    List<RegistrationRequestDTO> toDtoList(List<RegistrationRequest> requests);
+    List<RegistrationRequestDto> toDtoList(List<RegistrationRequest> requests);
 
-    RegistrationRequestDTO toDto(RegistrationRequest request);
+    RegistrationRequestDto toDto(RegistrationRequest request);
 
-    RegistrationRequest toEntity(RegistrationRequestDTO requestDTO);
+    RegistrationRequest toEntity(RegistrationRequestDto requestDTO);
 }

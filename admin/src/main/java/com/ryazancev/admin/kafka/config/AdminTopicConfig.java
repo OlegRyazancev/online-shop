@@ -18,14 +18,14 @@ public class AdminTopicConfig {
     @Value("${spring.kafka.topic.admin}")
     private String adminTopicName;
 
-    @Value("${spring.kafka.topic.organization.freeze}")
-    private String organizationFreezeTopic;
+    @Value("${spring.kafka.topic.organization.change-status}")
+    private String organizationChangeStatusTopic;
 
-    @Value("${spring.kafka.topic.product.freeze}")
-    private String productFreezeTopic;
+    @Value("${spring.kafka.topic.product.change-status}")
+    private String productChangeStatusTopic;
 
-    @Value("${spring.kafka.topic.user.freeze}")
-    private String userFreezeTopic;
+    @Value("${spring.kafka.topic.user.change-status}")
+    private String userChangeStatusTopic;
 
 
     @Bean
@@ -50,23 +50,23 @@ public class AdminTopicConfig {
     }
 
     @Bean
-    public NewTopic organizationFreezeEventsTopic() {
+    public NewTopic organizationChangeStatusEventsTopic() {
         return TopicBuilder
-                .name(organizationFreezeTopic)
+                .name(organizationChangeStatusTopic)
                 .build();
     }
 
     @Bean
-    public NewTopic productFreezeEventsTopic() {
+    public NewTopic productChangeStatusEventsTopic() {
         return TopicBuilder
-                .name(productFreezeTopic)
+                .name(productChangeStatusTopic)
                 .build();
     }
 
     @Bean
-    public NewTopic userFreezeEventsTopic() {
+    public NewTopic userChangeStatusEventsTopic() {
         return TopicBuilder
-                .name(userFreezeTopic)
+                .name(userChangeStatusTopic)
                 .build();
     }
 }

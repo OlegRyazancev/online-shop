@@ -1,6 +1,6 @@
 package com.ryazancev.product.kafka;
 
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ProductProducerService {
 
-    private final KafkaTemplate<String, RegistrationRequestDTO>
+    private final KafkaTemplate<String, RegistrationRequestDto>
             adminKafkaTemplate;
     private final KafkaTemplate<String, Long> reviewKafkaTemplate;
 
@@ -24,7 +24,7 @@ public class ProductProducerService {
 
     public ProductProducerService(
             @Qualifier("adminKafkaTemplate")
-            KafkaTemplate<String, RegistrationRequestDTO> adminKafkaTemplate,
+            KafkaTemplate<String, RegistrationRequestDto> adminKafkaTemplate,
             @Qualifier("reviewKafkaTemplate")
             KafkaTemplate<String, Long> reviewKafkaTemplate) {
 
@@ -32,7 +32,7 @@ public class ProductProducerService {
         this.reviewKafkaTemplate = reviewKafkaTemplate;
     }
 
-    public void sendMessageToAdminTopic(RegistrationRequestDTO requestDTO) {
+    public void sendMessageToAdminTopic(RegistrationRequestDto requestDTO) {
         try {
             adminKafkaTemplate.send(adminTopic, requestDTO);
             log.info("Message to {} was successfully send", adminTopic);

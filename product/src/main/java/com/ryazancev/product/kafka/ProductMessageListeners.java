@@ -1,6 +1,8 @@
 package com.ryazancev.product.kafka;
 
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.ObjectRequest;
+import com.ryazancev.dto.admin.ObjectStatus;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
@@ -44,9 +46,9 @@ public class ProductMessageListeners {
     @KafkaListener(
             topics = "${spring.kafka.topic.product.register}",
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "changeStatusMessageFactory"
+            containerFactory = "changeRegistrationStatusMessageFactory"
     )
-    public void changeStatusAndRegister(RegistrationRequestDTO requestDTO) {
+    public void changeStatusAndRegister(RegistrationRequestDto requestDTO) {
 
         log.info("Received answer message from admin with response {}",
                 requestDTO.getStatus());
@@ -98,18 +100,24 @@ public class ProductMessageListeners {
     }
 
     @KafkaListener(
-            topics = "${spring.kafka.topic.product.freeze}",
+            topics = "${spring.kafka.topic.product.change-status}",
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "longValueMessageFactory"
+            containerFactory = "changeObjectStatusMessageFactory"
     )
-    public void freezeProduct(Long productId) {
+    public void changeProductStatus(ObjectRequest request) {
 
-        log.info("Received message from admin to freeze " +
-                        "product with id: {}",
-                productId);
+        log.info("Received message from admin to change status of " +
+                        "product with id: {}, to {}",
+                request.getObjectId(),
+                request.getObjectStatus());
 
-        productService.changeStatus(productId, ProductStatus.FROZEN);
+        ProductStatus status =
+                (request.getObjectStatus() == ObjectStatus.ACTIVATE)
+                        ? ProductStatus.ACTIVE
+                        : ProductStatus.FROZEN;
 
-        log.info("Product successfully froze");
+        productService.changeStatus(request.getObjectId(), status);
+
+        log.info("Product status successfully changed to: {}", status);
     }
 }

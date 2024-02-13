@@ -12,5 +12,5 @@ import java.util.List;
 @Builder
 public class RegistrationRequestsResponse {
 
-    private List<RegistrationRequestDTO> requests;
+    private List<RegistrationRequestDto> requests;
 }

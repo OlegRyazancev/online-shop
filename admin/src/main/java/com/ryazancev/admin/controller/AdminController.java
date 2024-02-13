@@ -1,10 +1,10 @@
 package com.ryazancev.admin.controller;
 
-import com.ryazancev.admin.dto.FreezeRequest;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.AdminService;
 import com.ryazancev.admin.util.mapper.AdminMapper;
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.ObjectRequest;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.dto.admin.RegistrationRequestsResponse;
 import com.ryazancev.dto.admin.RequestStatus;
 import lombok.RequiredArgsConstructor;
@@ -59,30 +59,27 @@ public class AdminController {
     }
 
     @PutMapping("/requests/{id}")
-    public RegistrationRequestDTO changeRegistrationRequestStatus(
+    public RegistrationRequestDto changeRegistrationRequestStatus(
             @PathVariable("id") Long id,
             @RequestParam("status") String status) {
 
         RegistrationRequest request = adminService
-                .changeStatus(id, RequestStatus.valueOf(status));
+                .changeRegistrationStatus(id, RequestStatus.valueOf(status));
 
         return adminMapper.toDto(request);
     }
 
     @PutMapping("/freeze")
-    public String freezeObject(@RequestBody FreezeRequest request) {
+    public String changeObjectStatus(@RequestBody ObjectRequest request) {
 
-        return adminService.freezeObject(request);
+        return adminService.changeObjectStatus(request);
     }
-
 
     //todo: delete customer
 
 
     //todo: send notification to user
 
-    //todo: freeze product
-    //todo: freeze organization
     //todo: freeze user
 
 }

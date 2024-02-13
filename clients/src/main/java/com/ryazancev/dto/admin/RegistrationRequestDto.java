@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RegistrationRequestDTO {
+public class RegistrationRequestDto {
 
     private Long id;
 

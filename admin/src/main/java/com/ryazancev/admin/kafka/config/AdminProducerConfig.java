@@ -1,8 +1,8 @@
 package com.ryazancev.admin.kafka.config;
 
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.ObjectRequest;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,21 +37,21 @@ public class AdminProducerConfig {
 
     @Bean
     public ProducerFactory<String,
-            RegistrationRequestDTO> registerProducerFactory() {
+            RegistrationRequestDto> registerProducerFactory() {
 
         return new DefaultKafkaProducerFactory<>(registerProducerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, RegistrationRequestDTO> registerKafkaTemplate(
-            ProducerFactory<String, RegistrationRequestDTO
+    public KafkaTemplate<String, RegistrationRequestDto> registerKafkaTemplate(
+            ProducerFactory<String, RegistrationRequestDto
                     > producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
 
-    public Map<String, Object> freezeProducerConfig() {
+    public Map<String, Object> changeStatusProducerConfig() {
 
         Map<String, Object> props = new HashMap<>();
 
@@ -60,20 +60,20 @@ public class AdminProducerConfig {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                LongSerializer.class);
+                JsonSerializer.class);
 
         return props;
     }
 
     @Bean
-    public ProducerFactory<String, Long> freezeProducerFactory() {
+    public ProducerFactory<String, ObjectRequest> changeStatusProducerFactory() {
 
-        return new DefaultKafkaProducerFactory<>(freezeProducerConfig());
+        return new DefaultKafkaProducerFactory<>(changeStatusProducerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, Long> freezeKafkaTemplate(
-            ProducerFactory<String, Long> producerFactory) {
+    public KafkaTemplate<String, ObjectRequest> changeStatusKafkaTemplate(
+            ProducerFactory<String, ObjectRequest> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }

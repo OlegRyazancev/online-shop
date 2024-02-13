@@ -1,11 +1,11 @@
 package com.ryazancev.admin.service.impl;
 
-import com.ryazancev.admin.dto.FreezeRequest;
 import com.ryazancev.admin.kafka.AdminProducerService;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.repository.AdminRepository;
 import com.ryazancev.admin.service.AdminService;
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
+import com.ryazancev.dto.admin.ObjectRequest;
 import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RequestStatus;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +68,8 @@ public class AdminServiceImpl
                             allEntries = true)
             }
     )
-    public RegistrationRequest changeStatus(Long requestId,
-                                            RequestStatus status) {
+    public RegistrationRequest changeRegistrationStatus(Long requestId,
+                                                        RequestStatus status) {
 
         RegistrationRequest existing =
                 adminRepository.findById(requestId)
@@ -92,16 +92,16 @@ public class AdminServiceImpl
     }
 
     @Override
-    public String freezeObject(FreezeRequest request) {
+    public String changeObjectStatus(ObjectRequest request) {
 
-        adminProducerService.sendMessageToFreezeObject(request);
+        adminProducerService.sendMessageToChangeObjectStatus(request);
 
         return String.format(
-                "Request to freeze %s with id: %s successfully sent",
+                "Request to %s %s with id: %s successfully sent",
+                request.getObjectStatus().name(),
                 request.getObjectType().name(),
                 request.getObjectId());
     }
-
 
     @Transactional
     @Override

@@ -18,8 +18,8 @@ public class ProductTopicConfig {
     @Value("${spring.kafka.topic.product.update}")
     private String updateProductTopicName;
 
-    @Value("${spring.kafka.topic.product.freeze}")
-    private String freezeProductTopicName;
+    @Value("${spring.kafka.topic.product.change-status}")
+    private String changeStatusProductTopicName;
 
     @Value("${spring.kafka.topic.review}")
     private String deleteReviewTopicName;
@@ -53,7 +53,7 @@ public class ProductTopicConfig {
     public NewTopic freezeProductTopic() {
 
         return TopicBuilder
-                .name(freezeProductTopicName)
+                .name(changeStatusProductTopicName)
                 .build();
     }
 

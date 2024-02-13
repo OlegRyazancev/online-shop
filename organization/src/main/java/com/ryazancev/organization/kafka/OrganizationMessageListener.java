@@ -1,6 +1,8 @@
 package com.ryazancev.organization.kafka;
 
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.ObjectRequest;
+import com.ryazancev.dto.admin.ObjectStatus;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ public class OrganizationMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "registrationMessageFactory"
     )
-    void completeRegistrationOfOrganization(RegistrationRequestDTO requestDTO) {
+    void completeRegistrationOfOrganization(RegistrationRequestDto requestDTO) {
 
         log.info("Received answer message from admin with response {} ",
                 requestDTO.getStatus().name());
@@ -55,20 +57,24 @@ public class OrganizationMessageListener {
     }
 
     @KafkaListener(
-            topics = "${spring.kafka.topic.organization.freeze}",
+            topics = "${spring.kafka.topic.organization.change-status}",
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "freezeMessageFactory"
+            containerFactory = "changeStatusMessageFactory"
     )
-    public void freezeOrganization(Long organizationId) {
+    public void changeOrganizationStatus(ObjectRequest request) {
 
-        log.info("Received message from admin to freeze " +
-                        "organization with id: {}",
-                organizationId);
+        log.info("Received message from admin to change status of " +
+                        "organization with id: {}, to {}",
+                request.getObjectId(),
+                request.getObjectStatus());
 
-        organizationService.changeStatus(
-                organizationId,
-                OrganizationStatus.FROZEN);
+        OrganizationStatus status =
+                (request.getObjectStatus() == ObjectStatus.ACTIVATE)
+                        ? OrganizationStatus.ACTIVE
+                        : OrganizationStatus.FROZEN;
 
-        log.info("Organization successfully froze");
+        organizationService.changeStatus(request.getObjectId(), status);
+
+        log.info("Organization status successfully changed to: {}", status);
     }
 }

@@ -1,8 +1,8 @@
 package com.ryazancev.organization.kafka.config;
 
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.ObjectRequest;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,15 +26,17 @@ public class OrganizationConsumerConfig {
     public Map<String, Object> registrationConsumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapServers);
 
         return props;
     }
 
     @Bean
-    public ConsumerFactory<String, RegistrationRequestDTO> registrationConsumerFactory() {
+    public ConsumerFactory<String, RegistrationRequestDto> registrationConsumerFactory() {
 
-        JsonDeserializer<RegistrationRequestDTO> jsonDeserializer =
+        JsonDeserializer<RegistrationRequestDto> jsonDeserializer =
                 new JsonDeserializer<>();
 
         jsonDeserializer.addTrustedPackages("*");
@@ -47,12 +49,12 @@ public class OrganizationConsumerConfig {
 
     @Bean
     public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, RegistrationRequestDTO>>
+            ConcurrentMessageListenerContainer<String, RegistrationRequestDto>>
     registrationMessageFactory(ConsumerFactory<
-            String, RegistrationRequestDTO> consumerFactory) {
+            String, RegistrationRequestDto> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<
-                String, RegistrationRequestDTO> factory =
+                String, RegistrationRequestDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);
@@ -60,37 +62,44 @@ public class OrganizationConsumerConfig {
         return factory;
     }
 
-    public Map<String, Object> freezeConsumerConfig() {
+    public Map<String, Object> changeStatusConsumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
 
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapServers);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                LongDeserializer.class);
 
         return props;
     }
 
     @Bean
-    public ConsumerFactory<String, Long> freezeConsumerFactory() {
+    public ConsumerFactory<String, ObjectRequest> changeStatusConsumerFactory() {
 
-        return new DefaultKafkaConsumerFactory<>(freezeConsumerConfig());
+        JsonDeserializer<ObjectRequest> jsonDeserializer =
+                new JsonDeserializer<>();
+
+        jsonDeserializer.addTrustedPackages("*");
+
+        return new DefaultKafkaConsumerFactory<>(
+                changeStatusConsumerConfig(),
+                new StringDeserializer(),
+                jsonDeserializer);
     }
 
     @Bean
     public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String,
-                    Long>> freezeMessageFactory(
-            ConsumerFactory<String, Long> freezeConsumerFactory) {
+            ConcurrentMessageListenerContainer<
+                    String, ObjectRequest>> changeStatusMessageFactory(
+            ConsumerFactory<String, ObjectRequest>
+                    consumerFactory) {
 
-        ConcurrentKafkaListenerContainerFactory<String, Long> factory =
+        ConcurrentKafkaListenerContainerFactory<String, ObjectRequest> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(freezeConsumerFactory);
+
+        factory.setConsumerFactory(consumerFactory);
 
         return factory;
     }
+
 
 }

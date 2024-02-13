@@ -1,6 +1,7 @@
 package com.ryazancev.product.kafka.config;
 
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.ObjectRequest;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
@@ -64,10 +65,10 @@ public class ProductConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<
-            String, RegistrationRequestDTO> changeStatusConsumerFactory() {
+    public ConsumerFactory<String, RegistrationRequestDto>
+    changeRegistrationStatusConsumerFactory() {
 
-        JsonDeserializer<RegistrationRequestDTO> jsonDeserializer =
+        JsonDeserializer<RegistrationRequestDto> jsonDeserializer =
                 new JsonDeserializer<>();
 
         jsonDeserializer.addTrustedPackages("*");
@@ -79,14 +80,13 @@ public class ProductConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<
-                    String, RegistrationRequestDTO>>
-   changeStatusMessageFactory(
-            ConsumerFactory<String, RegistrationRequestDTO> consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, RegistrationRequestDto>>
+    changeRegistrationStatusMessageFactory(ConsumerFactory<
+            String, RegistrationRequestDto> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String,
-                RegistrationRequestDTO> factory =
+                RegistrationRequestDto> factory =
 
                 new ConcurrentKafkaListenerContainerFactory<>();
 
@@ -125,6 +125,37 @@ public class ProductConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(longValueConsumerFactory);
+
+        return factory;
+    }
+
+
+    @Bean
+    public ConsumerFactory<
+            String, ObjectRequest> changeObjectStatusConsumerFactory() {
+
+        JsonDeserializer<ObjectRequest> jsonDeserializer =
+                new JsonDeserializer<>();
+
+        jsonDeserializer.addTrustedPackages("*");
+
+        return new DefaultKafkaConsumerFactory<>(
+                baseConsumerConfig(),
+                new StringDeserializer(),
+                jsonDeserializer);
+    }
+
+    @Bean
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, ObjectRequest>>
+    changeObjectStatusMessageFactory(ConsumerFactory<
+            String, ObjectRequest> consumerFactory) {
+
+        ConcurrentKafkaListenerContainerFactory<
+                String, ObjectRequest> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(consumerFactory);
 
         return factory;
     }

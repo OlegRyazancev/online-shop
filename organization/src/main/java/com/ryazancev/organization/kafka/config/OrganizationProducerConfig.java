@@ -1,6 +1,6 @@
 package com.ryazancev.organization.kafka.config;
 
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -37,14 +37,14 @@ public class OrganizationProducerConfig {
 
     @Bean
     public ProducerFactory<String,
-            RegistrationRequestDTO> adminProducerFactory() {
+            RegistrationRequestDto> adminProducerFactory() {
 
         return new DefaultKafkaProducerFactory<>(adminProducerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, RegistrationRequestDTO> adminKafkaTemplate(
-            ProducerFactory<String, RegistrationRequestDTO> producerFactory) {
+    public KafkaTemplate<String, RegistrationRequestDto> adminKafkaTemplate(
+            ProducerFactory<String, RegistrationRequestDto> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }

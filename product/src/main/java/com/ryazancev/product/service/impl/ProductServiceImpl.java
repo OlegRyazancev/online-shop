@@ -1,7 +1,7 @@
 package com.ryazancev.product.service.impl;
 
 import com.ryazancev.dto.admin.ObjectType;
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
@@ -248,7 +248,7 @@ public class ProductServiceImpl implements ProductService {
 
     private void sendRegistrationRequestToAdmin(Long productId) {
 
-        RegistrationRequestDTO requestDTO = RegistrationRequestDTO.builder()
+        RegistrationRequestDto requestDTO = RegistrationRequestDto.builder()
                 .objectToRegisterId(productId)
                 .objectType(ObjectType.PRODUCT)
                 .build();

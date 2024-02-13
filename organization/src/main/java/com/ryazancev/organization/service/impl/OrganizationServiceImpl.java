@@ -2,7 +2,7 @@ package com.ryazancev.organization.service.impl;
 
 import com.ryazancev.clients.LogoClient;
 import com.ryazancev.dto.admin.ObjectType;
-import com.ryazancev.dto.admin.RegistrationRequestDTO;
+import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.dto.logo.LogoDTO;
 import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
@@ -250,7 +250,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private void sendRegistrationRequestToAdmin(Long organizationId) {
 
-        RegistrationRequestDTO requestDTO = RegistrationRequestDTO.builder()
+        RegistrationRequestDto requestDTO = RegistrationRequestDto.builder()
                 .objectToRegisterId(organizationId)
                 .objectType(ObjectType.ORGANIZATION)
                 .build();
