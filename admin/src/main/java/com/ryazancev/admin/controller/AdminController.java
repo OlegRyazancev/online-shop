@@ -1,8 +1,9 @@
 package com.ryazancev.admin.controller;
 
+import com.ryazancev.admin.dto.FreezeRequest;
 import com.ryazancev.admin.model.RegistrationRequest;
-import com.ryazancev.admin.service.RegistrationRequestService;
-import com.ryazancev.admin.util.mapper.RegistrationRequestMapper;
+import com.ryazancev.admin.service.AdminService;
+import com.ryazancev.admin.util.mapper.AdminMapper;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import com.ryazancev.dto.admin.RegistrationRequestsResponse;
 import com.ryazancev.dto.admin.RequestStatus;
@@ -18,18 +19,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final RegistrationRequestService registrationRequestService;
-    private final RegistrationRequestMapper registrationRequestMapper;
+    private final AdminService adminService;
+    private final AdminMapper adminMapper;
 
 
     @GetMapping("/requests")
     public RegistrationRequestsResponse getAllRegistrationRequests() {
 
         List<RegistrationRequest> requests =
-                registrationRequestService.getAll();
+                adminService.getAll();
 
         return RegistrationRequestsResponse.builder()
-                .requests(registrationRequestMapper.toDtoList(requests))
+                .requests(adminMapper.toDtoList(requests))
                 .build();
     }
 
@@ -37,10 +38,10 @@ public class AdminController {
     public RegistrationRequestsResponse getProductRegistrationRequests() {
 
         List<RegistrationRequest> productRequests =
-                registrationRequestService.getProductRegistrationRequests();
+                adminService.getProductRegistrationRequests();
 
         return RegistrationRequestsResponse.builder()
-                .requests(registrationRequestMapper.toDtoList(productRequests))
+                .requests(adminMapper.toDtoList(productRequests))
                 .build();
     }
 
@@ -48,11 +49,11 @@ public class AdminController {
     public RegistrationRequestsResponse getOrganizationRegistrationRequests() {
 
         List<RegistrationRequest> organizationRequests =
-                registrationRequestService
+                adminService
                         .getOrganizationRegistrationRequests();
 
         return RegistrationRequestsResponse.builder()
-                .requests(registrationRequestMapper
+                .requests(adminMapper
                         .toDtoList(organizationRequests))
                 .build();
     }
@@ -62,10 +63,16 @@ public class AdminController {
             @PathVariable("id") Long id,
             @RequestParam("status") String status) {
 
-        RegistrationRequest request = registrationRequestService
+        RegistrationRequest request = adminService
                 .changeStatus(id, RequestStatus.valueOf(status));
 
-        return registrationRequestMapper.toDto(request);
+        return adminMapper.toDto(request);
+    }
+
+    @PutMapping("/freeze")
+    public String freezeObject(@RequestBody FreezeRequest request) {
+
+        return adminService.freezeObject(request);
     }
 
 

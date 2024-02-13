@@ -141,8 +141,6 @@ public class ProductController {
     }
 
 
-    //todo: delete product
-
     @GetMapping("/{id}/simple")
     public ProductDTO getSimpleById(
             @PathVariable("id") Long id) {
@@ -183,12 +181,12 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductById(@PathVariable("id") Long id) {
+    public String deleteProductById(@PathVariable("id") Long id) {
 
         if (!customExpressionService.canAccessProduct(id)) {
 
             throw new AccessDeniedException();
         }
-        productService.markProductAsDeleted(id);
+        return productService.markProductAsDeleted(id);
     }
 }

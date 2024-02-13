@@ -17,9 +17,12 @@ public interface ProductService {
 
     Product update(Product product);
 
-    void changeStatusAndRegister(Long organizationId, ProductStatus status);
+    void changeStatus(Long productId, ProductStatus status);
+
+    void register(Long productId);
 
     void updateQuantity(Long productId, Integer quantityInStock);
 
-    void markProductAsDeleted(Long id);
+    String markProductAsDeleted(Long id);
+
 }

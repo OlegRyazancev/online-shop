@@ -53,15 +53,18 @@ public class ProductMessageListeners {
 
         switch (requestDTO.getStatus()) {
             case ACCEPTED -> {
-                productService.changeStatusAndRegister(
+                productService.changeStatus(
                         requestDTO.getObjectToRegisterId(),
                         ProductStatus.ACTIVE);
+
+                productService.register(
+                        requestDTO.getObjectToRegisterId());
 
                 log.info("Product now is: {}",
                         ProductStatus.ACTIVE);
             }
             case REJECTED -> {
-                productService.changeStatusAndRegister(
+                productService.changeStatus(
                         requestDTO.getObjectToRegisterId(),
                         ProductStatus.INACTIVE);
 
@@ -76,7 +79,7 @@ public class ProductMessageListeners {
     @KafkaListener(
             topics = "${spring.kafka.topic.product.delete}",
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "deleteMessageFactory"
+            containerFactory = "longValueMessageFactory"
     )
 
     public void deleteProductsByOrganizationId(Long organizationId) {
@@ -92,5 +95,21 @@ public class ProductMessageListeners {
                 productService.markProductAsDeleted(product.getId()));
 
         log.info("Products successfully deleted");
+    }
+
+    @KafkaListener(
+            topics = "${spring.kafka.topic.product.freeze}",
+            groupId = "${spring.kafka.consumer.group-id}",
+            containerFactory = "longValueMessageFactory"
+    )
+    public void freezeProduct(Long productId) {
+
+        log.info("Received message from admin to freeze " +
+                        "product with id: {}",
+                productId);
+
+        productService.changeStatus(productId, ProductStatus.FROZEN);
+
+        log.info("Product successfully froze");
     }
 }

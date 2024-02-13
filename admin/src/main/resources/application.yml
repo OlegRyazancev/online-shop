@@ -11,10 +11,14 @@ spring:
       group-id: ${KAFKA_ADMIN_GROUP}
     topic:
       admin: ${KAFKA_REQUESTS_ADMIN_TOPIC}
+      user:
+        freeze: ${KAFKA_FREEZE_USER_TOPIC}
       organization:
         register: ${KAFKA_REGISTER_ORGANIZATION_TOPIC}
+        freeze: ${KAFKA_FREEZE_ORGANIZATION_TOPIC}
       product:
         register: ${KAFKA_REGISTER_PRODUCT_TOPIC}
+        freeze: ${KAFKA_FREEZE_PRODUCT_TOPIC}
 
 
   #PostgreSQL connection

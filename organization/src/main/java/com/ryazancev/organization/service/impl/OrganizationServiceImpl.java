@@ -134,14 +134,34 @@ public class OrganizationServiceImpl implements OrganizationService {
                             key = "#id"
                     )}
     )
-    public void changeStatusAndRegister(Long id,
-                                        OrganizationStatus status) {
+    public void changeStatus(Long id,
+                             OrganizationStatus status) {
 
         Organization existing = findByIdWithStatusChecks(id);
 
         existing.setStatus(status);
-        existing.setRegisteredAt(LocalDateTime.now());
 
+        organizationRepository.save(existing);
+    }
+
+    @Override
+    @Transactional
+    @Caching(
+            evict = {
+                    @CacheEvict(
+                            value = "Organization::getAll",
+                            allEntries = true
+                    ),
+                    @CacheEvict(
+                            value = "Organization::getById",
+                            key = "#id"
+                    )}
+    )
+    public void register(Long id) {
+
+        Organization existing = findByIdWithStatusChecks(id);
+
+        existing.setRegisteredAt(LocalDateTime.now());
         //todo: send email in case of status of organization
         organizationRepository.save(existing);
     }

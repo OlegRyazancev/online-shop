@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface RegistrationRequestMapper {
+public interface AdminMapper {
 
     List<RegistrationRequestDTO> toDtoList(List<RegistrationRequest> requests);
 

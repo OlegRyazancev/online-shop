@@ -35,6 +35,4 @@ public class ProductDTO {
 
     private LocalDateTime registeredAt;
 
-    //todo: discount field
-
 }

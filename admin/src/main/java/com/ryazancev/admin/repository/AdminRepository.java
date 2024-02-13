@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RegistrationRequestRepository
+public interface AdminRepository
         extends JpaRepository<RegistrationRequest, Long> {
 
     List<RegistrationRequest> findAllByObjectType(ObjectType objectType);

@@ -16,7 +16,9 @@ public interface OrganizationService {
 
     Organization update(Organization organization);
 
-    void changeStatusAndRegister(Long organizationId, OrganizationStatus status);
+    void changeStatus(Long organizationId, OrganizationStatus status);
+
+    void register(Long organizationId);
 
     void uploadLogo(Long id, LogoDTO logoDTO);
 

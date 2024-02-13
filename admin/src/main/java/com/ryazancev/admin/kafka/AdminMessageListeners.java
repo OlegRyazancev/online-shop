@@ -1,8 +1,8 @@
 package com.ryazancev.admin.kafka;
 
 import com.ryazancev.admin.model.RegistrationRequest;
-import com.ryazancev.admin.service.RegistrationRequestService;
-import com.ryazancev.admin.util.mapper.RegistrationRequestMapper;
+import com.ryazancev.admin.service.AdminService;
+import com.ryazancev.admin.util.mapper.AdminMapper;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 public class AdminMessageListeners {
 
 
-    private final RegistrationRequestService registrationRequestService;
-    private final RegistrationRequestMapper registrationRequestMapper;
+    private final AdminService adminService;
+    private final AdminMapper adminMapper;
 
     @KafkaListener(
             topics = "${spring.kafka.topic.admin}",
@@ -32,9 +32,9 @@ public class AdminMessageListeners {
 
         log.info("Creating request...");
         RegistrationRequest request =
-                registrationRequestMapper.toEntity(requestDTO);
+                adminMapper.toEntity(requestDTO);
 
-        registrationRequestService.create(request);
+        adminService.create(request);
 
         log.info("Request successfully created");
     }

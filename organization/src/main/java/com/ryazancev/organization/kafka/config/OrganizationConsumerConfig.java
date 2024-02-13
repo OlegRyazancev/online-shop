@@ -2,6 +2,7 @@ package com.ryazancev.organization.kafka.config;
 
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,7 @@ public class OrganizationConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    public Map<String, Object> consumerConfig() {
+    public Map<String, Object> registrationConsumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -31,7 +32,7 @@ public class OrganizationConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, RegistrationRequestDTO> consumerFactory() {
+    public ConsumerFactory<String, RegistrationRequestDTO> registrationConsumerFactory() {
 
         JsonDeserializer<RegistrationRequestDTO> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -39,7 +40,7 @@ public class OrganizationConsumerConfig {
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
-                consumerConfig(),
+                registrationConsumerConfig(),
                 new StringDeserializer(),
                 jsonDeserializer);
     }
@@ -47,7 +48,7 @@ public class OrganizationConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<
             ConcurrentMessageListenerContainer<String, RegistrationRequestDTO>>
-    messageFactory(ConsumerFactory<
+    registrationMessageFactory(ConsumerFactory<
             String, RegistrationRequestDTO> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<
@@ -55,6 +56,39 @@ public class OrganizationConsumerConfig {
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);
+
+        return factory;
+    }
+
+    public Map<String, Object> freezeConsumerConfig() {
+
+        Map<String, Object> props = new HashMap<>();
+
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapServers);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                LongDeserializer.class);
+
+        return props;
+    }
+
+    @Bean
+    public ConsumerFactory<String, Long> freezeConsumerFactory() {
+
+        return new DefaultKafkaConsumerFactory<>(freezeConsumerConfig());
+    }
+
+    @Bean
+    public KafkaListenerContainerFactory<
+            ConcurrentMessageListenerContainer<String,
+                    Long>> freezeMessageFactory(
+            ConsumerFactory<String, Long> freezeConsumerFactory) {
+
+        ConcurrentKafkaListenerContainerFactory<String, Long> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(freezeConsumerFactory);
 
         return factory;
     }

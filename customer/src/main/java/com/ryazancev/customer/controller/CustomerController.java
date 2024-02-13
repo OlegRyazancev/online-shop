@@ -40,8 +40,6 @@ public class CustomerController {
         return customerMapper.toDetailedDTO(customer);
     }
 
-
-
     @PutMapping
     public CustomerDTO updateCustomer(
             @RequestBody
@@ -124,4 +122,6 @@ public class CustomerController {
 
         return customerMapper.toSimpleDTO(created);
     }
+
+    
 }

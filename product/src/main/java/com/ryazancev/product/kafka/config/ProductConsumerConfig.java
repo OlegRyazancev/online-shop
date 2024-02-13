@@ -96,7 +96,7 @@ public class ProductConsumerConfig {
     }
 
     @Bean
-    public Map<String, Object> deleteConsumerConfig() {
+    public Map<String, Object> longValueConsumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
 
@@ -111,20 +111,20 @@ public class ProductConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, Long> deleteConsumerFactory() {
+    public ConsumerFactory<String, Long> longValueConsumerFactory() {
 
-        return new DefaultKafkaConsumerFactory<>(deleteConsumerConfig());
+        return new DefaultKafkaConsumerFactory<>(longValueConsumerConfig());
     }
 
     @Bean
     public KafkaListenerContainerFactory<
             ConcurrentMessageListenerContainer<String,
-                    Long>> deleteMessageFactory(
-            ConsumerFactory<String, Long> deleteConsumerFactory) {
+                    Long>> longValueMessageFactory(
+            ConsumerFactory<String, Long> longValueConsumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(deleteConsumerFactory);
+        factory.setConsumerFactory(longValueConsumerFactory);
 
         return factory;
     }

@@ -19,7 +19,7 @@ public class OrganizationMessageListener {
     @KafkaListener(
             topics = "${spring.kafka.topic.organization.register}",
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "messageFactory"
+            containerFactory = "registrationMessageFactory"
     )
     void completeRegistrationOfOrganization(RegistrationRequestDTO requestDTO) {
 
@@ -28,15 +28,18 @@ public class OrganizationMessageListener {
 
         switch (requestDTO.getStatus()) {
             case ACCEPTED -> {
-                organizationService.changeStatusAndRegister(
+                organizationService.changeStatus(
                         requestDTO.getObjectToRegisterId(),
                         OrganizationStatus.ACTIVE);
+                organizationService.register(
+                        requestDTO.getObjectToRegisterId()
+                );
 
                 log.info("Organization now is: {}",
                         OrganizationStatus.ACTIVE);
             }
             case REJECTED -> {
-                organizationService.changeStatusAndRegister(
+                organizationService.changeStatus(
                         requestDTO.getObjectToRegisterId(),
                         OrganizationStatus.INACTIVE);
 
@@ -49,5 +52,23 @@ public class OrganizationMessageListener {
                         requestDTO.getStatus());
             }
         }
+    }
+
+    @KafkaListener(
+            topics = "${spring.kafka.topic.organization.freeze}",
+            groupId = "${spring.kafka.consumer.group-id}",
+            containerFactory = "freezeMessageFactory"
+    )
+    public void freezeOrganization(Long organizationId) {
+
+        log.info("Received message from admin to freeze " +
+                        "organization with id: {}",
+                organizationId);
+
+        organizationService.changeStatus(
+                organizationId,
+                OrganizationStatus.FROZEN);
+
+        log.info("Organization successfully froze");
     }
 }

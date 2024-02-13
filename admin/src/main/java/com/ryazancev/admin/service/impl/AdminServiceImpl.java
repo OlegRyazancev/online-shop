@@ -1,9 +1,10 @@
 package com.ryazancev.admin.service.impl;
 
+import com.ryazancev.admin.dto.FreezeRequest;
 import com.ryazancev.admin.kafka.AdminProducerService;
 import com.ryazancev.admin.model.RegistrationRequest;
-import com.ryazancev.admin.repository.RegistrationRequestRepository;
-import com.ryazancev.admin.service.RegistrationRequestService;
+import com.ryazancev.admin.repository.AdminRepository;
+import com.ryazancev.admin.service.AdminService;
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RequestStatus;
@@ -23,24 +24,24 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RegistrationRequestServiceImpl
-        implements RegistrationRequestService {
+public class AdminServiceImpl
+        implements AdminService {
 
-    private final RegistrationRequestRepository registrationRequestRepository;
+    private final AdminRepository adminRepository;
     private final AdminProducerService adminProducerService;
 
     @Override
     @Cacheable(value = "Admin::getAll")
     public List<RegistrationRequest> getAll() {
 
-        return registrationRequestRepository.findAll();
+        return adminRepository.findAll();
     }
 
     @Override
     @Cacheable(value = "Admin::getProductRegRequests")
     public List<RegistrationRequest> getProductRegistrationRequests() {
 
-        return registrationRequestRepository
+        return adminRepository
                 .findAllByObjectType(ObjectType.PRODUCT);
     }
 
@@ -48,7 +49,7 @@ public class RegistrationRequestServiceImpl
     @Cacheable(value = "Admin::getOrganizationRegRequests")
     public List<RegistrationRequest> getOrganizationRegistrationRequests() {
 
-        return registrationRequestRepository
+        return adminRepository
                 .findAllByObjectType(ObjectType.ORGANIZATION);
     }
 
@@ -71,7 +72,7 @@ public class RegistrationRequestServiceImpl
                                             RequestStatus status) {
 
         RegistrationRequest existing =
-                registrationRequestRepository.findById(requestId)
+                adminRepository.findById(requestId)
                         .orElseThrow(() ->
                                 new RequestNotFoundException(
                                         "Request not found with this id",
@@ -81,13 +82,24 @@ public class RegistrationRequestServiceImpl
         existing.setReviewedAt(LocalDateTime.now());
 
         RegistrationRequest updated =
-                registrationRequestRepository.save(existing);
+                adminRepository.save(existing);
 
-        adminProducerService.sendResponse(updated);
+        adminProducerService.sendRegisterResponse(updated);
 
         //todo: send notification to user about admin's decision
 
         return updated;
+    }
+
+    @Override
+    public String freezeObject(FreezeRequest request) {
+
+        adminProducerService.sendMessageToFreezeObject(request);
+
+        return String.format(
+                "Request to freeze %s with id: %s successfully sent",
+                request.getObjectType().name(),
+                request.getObjectId());
     }
 
 
@@ -111,7 +123,7 @@ public class RegistrationRequestServiceImpl
         registrationRequest.setCreatedAt(LocalDateTime.now());
         registrationRequest.setStatus(RequestStatus.ON_REVIEW);
         //todo:send notification to Admin that new request here
-        registrationRequestRepository.save(registrationRequest);
+        adminRepository.save(registrationRequest);
     }
 }
 

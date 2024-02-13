@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
         if (statusCheck) {
 
             return findByIdWithStatusCheck(id);
-        }else {
+        } else {
             return findById(id);
         }
     }
@@ -114,13 +114,32 @@ public class ProductServiceImpl implements ProductService {
                     allEntries = true
             )}
     )
-    public void changeStatusAndRegister(Long id,
-                                        ProductStatus status) {
+    public void changeStatus(Long id,
+                             ProductStatus status) {
         Product existing = findByIdWithStatusCheck(id);
 
         existing.setStatus(status);
-        existing.setRegisteredAt(LocalDateTime.now());
 
+        productRepository.save(existing);
+    }
+
+    @Override
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(
+                    value = "Product::getById",
+                    key = "#id"
+            ),
+            @CacheEvict(
+                    value = "Product::getAll",
+                    allEntries = true
+            )}
+    )
+    public void register(Long id) {
+
+        Product existing = findByIdWithStatusCheck(id);
+
+        existing.setRegisteredAt(LocalDateTime.now());
         //todo: send email in case of status of product
         productRepository.save(existing);
     }
@@ -143,8 +162,7 @@ public class ProductServiceImpl implements ProductService {
                     @CachePut(
                             value = "Product::getById",
                             key = "#product.id"
-                    )
-            }
+                    )}
     )
     public Product update(Product product) {
 
@@ -189,7 +207,7 @@ public class ProductServiceImpl implements ProductService {
                     key = "#id"
             )
     })
-    public void markProductAsDeleted(Long id) {
+    public String markProductAsDeleted(Long id) {
 
         Product product = findByIdWithStatusCheck(id);
 
@@ -201,7 +219,10 @@ public class ProductServiceImpl implements ProductService {
 
         productProducerService.sendMessageToReviewTopic(id);
         productRepository.save(product);
+
+        return "Product was successfully deleted";
     }
+
 
     private Product findByIdWithStatusCheck(Long productId) {
 

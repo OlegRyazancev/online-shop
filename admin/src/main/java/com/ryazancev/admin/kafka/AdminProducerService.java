@@ -1,53 +1,112 @@
 package com.ryazancev.admin.kafka;
 
 
+import com.ryazancev.admin.dto.FreezeRequest;
 import com.ryazancev.admin.model.RegistrationRequest;
-import com.ryazancev.admin.util.mapper.RegistrationRequestMapper;
+import com.ryazancev.admin.util.mapper.AdminMapper;
 import com.ryazancev.dto.admin.RegistrationRequestDTO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class AdminProducerService {
 
+    private final KafkaTemplate<String,
+            RegistrationRequestDTO> registerKafkaTemplate;
+    private final KafkaTemplate<String, Long> freezeKafkaTemplate;
+
+    private final AdminMapper adminMapper;
+
     @Value("${spring.kafka.topic.organization.register}")
-    private String organizationTopic;
+    private String organizationRegisterTopic;
+
 
     @Value("${spring.kafka.topic.product.register}")
-    private String productTopic;
+    private String productRegisterTopic;
 
-    private final KafkaTemplate<String, RegistrationRequestDTO> kafkaTemplate;
-    private final RegistrationRequestMapper registrationRequestMapper;
+    @Value("${spring.kafka.topic.organization.freeze}")
+    private String organizationFreezeTopic;
 
-    public void sendResponse(RegistrationRequest request) {
+    @Value("${spring.kafka.topic.product.freeze}")
+    private String productFreezeTopic;
+
+    @Value("${spring.kafka.topic.user.freeze}")
+    private String userFreezeTopic;
+
+    public AdminProducerService(
+            @Qualifier("registerKafkaTemplate")
+            KafkaTemplate<String, RegistrationRequestDTO> registerKafkaTemplate,
+            @Qualifier("freezeKafkaTemplate")
+            KafkaTemplate<String, Long> freezeKafkaTemplate,
+            AdminMapper adminMapper) {
+
+        this.registerKafkaTemplate = registerKafkaTemplate;
+        this.freezeKafkaTemplate = freezeKafkaTemplate;
+        this.adminMapper = adminMapper;
+    }
+
+    public void sendRegisterResponse(RegistrationRequest request) {
         RegistrationRequestDTO requestDTO =
-                registrationRequestMapper.toDto(request);
+                adminMapper.toDto(request);
 
         switch (requestDTO.getObjectType()) {
 
-            case PRODUCT->{
-                kafkaTemplate.send(productTopic, requestDTO);
+            case PRODUCT -> {
+                registerKafkaTemplate.send(productRegisterTopic, requestDTO);
                 log.info(
                         "Request sent to product topic with: {} and status {}",
                         requestDTO.getObjectType(),
                         requestDTO.getStatus()
                 );
             }
-            case ORGANIZATION->{
-                kafkaTemplate.send(organizationTopic, requestDTO);
+            case ORGANIZATION -> {
+                registerKafkaTemplate.send(organizationRegisterTopic, requestDTO);
                 log.info("Request sent to organization topic with: " +
                                 "{} and status {}",
                         requestDTO.getObjectType(),
                         requestDTO.getStatus());
             }
-            default->{
+            default -> {
                 log.info("Unknown request/object type: {}",
                         requestDTO.getObjectType());
+            }
+        }
+    }
+
+    public void sendMessageToFreezeObject(FreezeRequest freezeRequest) {
+
+        switch (freezeRequest.getObjectType()) {
+            case PRODUCT -> {
+                log.info("Request to freeze product with id: {} " +
+                                "successfully sent",
+                        freezeRequest.getObjectId());
+
+                freezeKafkaTemplate.send(
+                        productFreezeTopic, freezeRequest.getObjectId());
+            }
+            case ORGANIZATION -> {
+                freezeKafkaTemplate.send(
+                        organizationFreezeTopic, freezeRequest.getObjectId());
+
+                log.info("Request to freeze organization with id: {} " +
+                                "successfully sent",
+                        freezeRequest.getObjectId());
+            }
+            case USER -> {
+                freezeKafkaTemplate.send(
+                        userFreezeTopic, freezeRequest.getObjectId());
+
+                log.info("Request to freeze user with id: {} " +
+                                "successfully sent",
+                        freezeRequest.getObjectId());
+            }
+            default -> {
+                log.info("Unknown request/object type: {}",
+                        freezeRequest.getObjectType());
             }
         }
     }
