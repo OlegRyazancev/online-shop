@@ -1,7 +1,7 @@
 package com.ryazancev.dto.organization;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.customer.CustomerDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OrganizationDTO {
+public class OrganizationDto {
 
     private Long id;
 
@@ -22,7 +22,7 @@ public class OrganizationDTO {
 
     private String logo;
 
-    private CustomerDTO owner;
+    private CustomerDto owner;
 
     private String status;
 

@@ -1,7 +1,7 @@
 package com.ryazancev.customer.util.mapper;
 
 import com.ryazancev.customer.model.Customer;
-import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.customer.CustomerDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -14,9 +14,9 @@ public interface CustomerMapper {
 
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "balance", ignore = true)
-    CustomerDTO toSimpleDTO(Customer customer);
+    CustomerDto toSimpleDto(Customer customer);
 
-    CustomerDTO toDetailedDTO(Customer customer);
+    CustomerDto toDetailedDto(Customer customer);
 
-    Customer toEntity(CustomerDTO customerDTO);
+    Customer toEntity(CustomerDto customerDto);
 }

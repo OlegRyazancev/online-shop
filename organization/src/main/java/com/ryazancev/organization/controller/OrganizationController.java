@@ -2,10 +2,10 @@ package com.ryazancev.organization.controller;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.customer.CustomerDTO;
-import com.ryazancev.dto.logo.LogoDTO;
-import com.ryazancev.dto.organization.OrganizationDTO;
-import com.ryazancev.dto.organization.OrganizationEditDTO;
+import com.ryazancev.dto.customer.CustomerDto;
+import com.ryazancev.dto.logo.LogoDto;
+import com.ryazancev.dto.organization.OrganizationDto;
+import com.ryazancev.dto.organization.OrganizationEditDto;
 import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
 import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.organization.model.Organization;
@@ -45,12 +45,12 @@ public class OrganizationController {
 
         return OrganizationsSimpleResponse.builder()
                 .organizations(
-                        organizationMapper.toSimpleListDTO(organizations))
+                        organizationMapper.toSimpleListDto(organizations))
                 .build();
     }
 
     @GetMapping("/{id}")
-    public OrganizationDTO getById(
+    public OrganizationDto getById(
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
@@ -59,61 +59,61 @@ public class OrganizationController {
 
         Organization organization =
                 organizationService.getById(id, statusCheck);
-        OrganizationDTO organizationDTO =
-                organizationMapper.toDetailedDTO(organization);
+        OrganizationDto organizationDto =
+                organizationMapper.toDetailedDto(organization);
 
-        CustomerDTO owner =
+        CustomerDto owner =
                 customerClient.getSimpleById(organization.getOwnerId());
-        organizationDTO.setOwner(owner);
+        organizationDto.setOwner(owner);
 
-        return organizationDTO;
+        return organizationDto;
     }
 
     @PostMapping
-    public OrganizationDTO makeRegistrationRequest(
+    public OrganizationDto makeRegistrationRequest(
             @RequestBody
             @Validated(OnCreate.class)
-            OrganizationEditDTO organizationEditDTO) {
+            OrganizationEditDto organizationEditDto) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessUser(organizationEditDTO);
+        customExpressionService.checkAccessUser(organizationEditDto);
 
         Organization organization =
-                organizationMapper.toEntity(organizationEditDTO);
+                organizationMapper.toEntity(organizationEditDto);
         Organization saved =
                 organizationService.makeRegistrationRequest(organization);
-        OrganizationDTO organizationDTO =
-                organizationMapper.toDetailedDTO(saved);
+        OrganizationDto organizationDto =
+                organizationMapper.toDetailedDto(saved);
 
-        CustomerDTO owner = customerClient.getSimpleById(
+        CustomerDto owner = customerClient.getSimpleById(
                 organization.getOwnerId());
-        organizationDTO.setOwner(owner);
+        organizationDto.setOwner(owner);
 
-        return organizationDTO;
+        return organizationDto;
     }
 
     @PutMapping
-    public OrganizationDTO update(
+    public OrganizationDto update(
             @RequestBody
             @Validated(OnUpdate.class)
-            OrganizationEditDTO organizationEditDTO) {
+            OrganizationEditDto organizationEditDto) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService
-                .checkAccessOrganization(organizationEditDTO.getId());
+                .checkAccessOrganization(organizationEditDto.getId());
 
         Organization organization =
-                organizationMapper.toEntity(organizationEditDTO);
+                organizationMapper.toEntity(organizationEditDto);
         Organization updated = organizationService.update(organization);
-        OrganizationDTO organizationDTO =
-                organizationMapper.toDetailedDTO(updated);
+        OrganizationDto organizationDto =
+                organizationMapper.toDetailedDto(updated);
 
-        CustomerDTO owner =
+        CustomerDto owner =
                 customerClient.getSimpleById(updated.getOwnerId());
-        organizationDTO.setOwner(owner);
+        organizationDto.setOwner(owner);
 
 
-        return organizationDTO;
+        return organizationDto;
     }
 
     @GetMapping("/{id}/products")
@@ -129,7 +129,7 @@ public class OrganizationController {
     public void uploadLogo(
             @PathVariable("id") Long id,
             @Validated(OnCreate.class)
-            @ModelAttribute LogoDTO logoDto) {
+            @ModelAttribute LogoDto logoDto) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessOrganization(id);
@@ -151,7 +151,7 @@ public class OrganizationController {
 //    Endpoints only  for feign clients
 
     @GetMapping("/{id}/simple")
-    public OrganizationDTO getSimpleById(
+    public OrganizationDto getSimpleById(
             @PathVariable("id") Long id) {
 
         boolean statusCheck = false;
@@ -159,7 +159,7 @@ public class OrganizationController {
         Organization organization =
                 organizationService.getById(id, statusCheck);
 
-        return organizationMapper.toSimpleDTO(organization);
+        return organizationMapper.toSimpleDto(organization);
     }
 
     @GetMapping("/{id}/owner")

@@ -2,8 +2,8 @@ package com.ryazancev.clients;
 
 import com.ryazancev.config.FeignClientsConfiguration;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
-import com.ryazancev.dto.purchase.PurchaseDTO;
-import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.dto.purchase.PurchaseEditDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +21,6 @@ public interface PurchaseClient {
             @PathVariable("id") Long id);
 
     @PostMapping("api/v1/purchases")
-    PurchaseDTO processPurchase(
-            @RequestBody PurchaseEditDTO purchaseEditDTO);
+    PurchaseDto processPurchase(
+            @RequestBody PurchaseEditDto purchaseEditDto);
 }

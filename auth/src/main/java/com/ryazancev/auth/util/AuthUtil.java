@@ -2,7 +2,7 @@ package com.ryazancev.auth.util;
 
 import com.ryazancev.auth.model.ConfirmationToken;
 import com.ryazancev.auth.model.User;
-import com.ryazancev.dto.mail.MailDTO;
+import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.dto.mail.MailType;
 
 import java.time.LocalDateTime;
@@ -14,13 +14,13 @@ public class AuthUtil {
     private static final String CONFIRMATION_LINK_PREFIX =
             "http://localhost:8080/api/v1/auth/confirm?token=";
 
-    public static MailDTO createConfirmationMailDTO(
+    public static MailDto createConfirmationMailDto(
             String email, String name, String token) {
 
         Properties properties = new Properties();
         properties.setProperty("link", CONFIRMATION_LINK_PREFIX + token);
 
-        return MailDTO.builder()
+        return MailDto.builder()
                 .email(email)
                 .name(name)
                 .type(MailType.CONFIRMATION)
@@ -28,9 +28,9 @@ public class AuthUtil {
                 .build();
     }
 
-    public static MailDTO createRegistrationMailDTO(String email, String name) {
+    public static MailDto createRegistrationMailDto(String email, String name) {
 
-        return MailDTO.builder()
+        return MailDto.builder()
                 .email(email)
                 .name(name)
                 .type(MailType.REGISTRATION)

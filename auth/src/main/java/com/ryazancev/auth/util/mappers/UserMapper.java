@@ -1,8 +1,8 @@
 package com.ryazancev.auth.util.mappers;
 
 import com.ryazancev.auth.model.User;
-import com.ryazancev.dto.customer.CustomerDTO;
-import com.ryazancev.dto.user.UserDTO;
+import com.ryazancev.dto.customer.CustomerDto;
+import com.ryazancev.dto.user.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -13,11 +13,11 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface UserMapper {
 
-    User toEntity(UserDTO userDTO);
+    User toEntity(UserDto userDto);
 
-    UserDTO toDTO(User user);
+    UserDto toDto(User user);
 
     @Mapping(target = "username", source = "name")
     @Mapping(target = "balance", constant = "0.00")
-    CustomerDTO toCustomerDTO(User user);
+    CustomerDto toCustomerDto(User user);
 }

@@ -1,6 +1,6 @@
 package com.ryazancev.auth.kafka.config;
 
-import com.ryazancev.dto.mail.MailDTO;
+import com.ryazancev.dto.mail.MailDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,14 +35,14 @@ public class AuthProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, MailDTO> producerFactory() {
+    public ProducerFactory<String, MailDto> producerFactory() {
 
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, MailDTO> kafkaTemplate(
-            ProducerFactory<String, MailDTO> producerFactory) {
+    public KafkaTemplate<String, MailDto> kafkaTemplate(
+            ProducerFactory<String, MailDto> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }

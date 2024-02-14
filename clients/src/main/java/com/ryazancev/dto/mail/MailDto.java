@@ -11,7 +11,7 @@ import java.util.Properties;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MailDTO {
+public class MailDto {
 
     @NotNull(message = "Email must not be null")
     private String email;

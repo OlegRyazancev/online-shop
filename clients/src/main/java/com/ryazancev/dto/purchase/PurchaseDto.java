@@ -1,8 +1,8 @@
 package com.ryazancev.dto.purchase;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.dto.customer.CustomerDTO;
-import com.ryazancev.dto.product.ProductDTO;
+import com.ryazancev.dto.customer.CustomerDto;
+import com.ryazancev.dto.product.ProductDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PurchaseDTO {
+public class PurchaseDto {
 
     private String id;
-    private CustomerDTO customer;
-    private ProductDTO product;
+    private CustomerDto customer;
+    private ProductDto product;
     private Double amount;
     private LocalDateTime purchaseDate;
 }

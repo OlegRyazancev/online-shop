@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrganizationEditDTO {
+public class OrganizationEditDto {
 
     @NotNull(message = "Id must be not null",
             groups = OnUpdate.class)

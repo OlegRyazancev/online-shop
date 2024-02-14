@@ -3,7 +3,7 @@ package com.ryazancev.organization.service.impl;
 import com.ryazancev.clients.LogoClient;
 import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
-import com.ryazancev.dto.logo.LogoDTO;
+import com.ryazancev.dto.logo.LogoDto;
 import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
@@ -177,13 +177,13 @@ public class OrganizationServiceImpl implements OrganizationService {
             value = "Organization::getById",
             key = "#id"
     )
-    public void uploadLogo(Long id, LogoDTO logoDTO) {
+    public void uploadLogo(Long id, LogoDto logoDto) {
 
         Organization existing = findById(id);
 
         organizationStatusValidator.validateAllStatus(existing);
 
-        String fileName = logoClient.upload(logoDTO.getFile());
+        String fileName = logoClient.upload(logoDto.getFile());
 
         existing.setLogo(fileName);
         organizationRepository.save(existing);
@@ -244,12 +244,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private void sendRegistrationRequestToAdmin(Long organizationId) {
 
-        RegistrationRequestDto requestDTO = RegistrationRequestDto.builder()
+        RegistrationRequestDto requestDto = RegistrationRequestDto.builder()
                 .objectToRegisterId(organizationId)
                 .objectType(ObjectType.ORGANIZATION)
                 .build();
 
-        organizationProducerService.sendMessageToAdminTopic(requestDTO);
+        organizationProducerService.sendMessageToAdminTopic(requestDto);
     }
 }
 

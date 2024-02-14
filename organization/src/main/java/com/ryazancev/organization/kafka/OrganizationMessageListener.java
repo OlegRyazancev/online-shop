@@ -23,18 +23,18 @@ public class OrganizationMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "registrationMessageFactory"
     )
-    void completeRegistrationOfOrganization(RegistrationRequestDto requestDTO) {
+    void completeRegistrationOfOrganization(RegistrationRequestDto requestDto) {
 
         log.info("Received answer message from admin with response {} ",
-                requestDTO.getStatus().name());
+                requestDto.getStatus().name());
 
-        switch (requestDTO.getStatus()) {
+        switch (requestDto.getStatus()) {
             case ACCEPTED -> {
                 organizationService.changeStatus(
-                        requestDTO.getObjectToRegisterId(),
+                        requestDto.getObjectToRegisterId(),
                         OrganizationStatus.ACTIVE);
                 organizationService.register(
-                        requestDTO.getObjectToRegisterId()
+                        requestDto.getObjectToRegisterId()
                 );
 
                 log.info("Organization now is: {}",
@@ -42,7 +42,7 @@ public class OrganizationMessageListener {
             }
             case REJECTED -> {
                 organizationService.changeStatus(
-                        requestDTO.getObjectToRegisterId(),
+                        requestDto.getObjectToRegisterId(),
                         OrganizationStatus.INACTIVE);
 
                 log.info("Organization now is: {}",
@@ -50,8 +50,8 @@ public class OrganizationMessageListener {
             }
             default -> {
                 log.info("Unknown request type({}) or status({})",
-                        requestDTO.getObjectType(),
-                        requestDTO.getStatus());
+                        requestDto.getObjectType(),
+                        requestDto.getStatus());
             }
         }
     }

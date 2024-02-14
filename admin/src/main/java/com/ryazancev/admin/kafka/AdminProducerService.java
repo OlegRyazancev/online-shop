@@ -57,29 +57,29 @@ public class AdminProducerService {
     }
 
     public void sendRegisterResponse(RegistrationRequest request) {
-        RegistrationRequestDto requestDTO =
+        RegistrationRequestDto requestDto =
                 adminMapper.toDto(request);
 
-        switch (requestDTO.getObjectType()) {
+        switch (requestDto.getObjectType()) {
 
             case PRODUCT -> {
-                registerKafkaTemplate.send(productRegisterTopic, requestDTO);
+                registerKafkaTemplate.send(productRegisterTopic, requestDto);
                 log.info(
                         "Request sent to product topic with: {} and status {}",
-                        requestDTO.getObjectType(),
-                        requestDTO.getStatus()
+                        requestDto.getObjectType(),
+                        requestDto.getStatus()
                 );
             }
             case ORGANIZATION -> {
-                registerKafkaTemplate.send(organizationRegisterTopic, requestDTO);
+                registerKafkaTemplate.send(organizationRegisterTopic, requestDto);
                 log.info("Request sent to organization topic with: " +
                                 "{} and status {}",
-                        requestDTO.getObjectType(),
-                        requestDTO.getStatus());
+                        requestDto.getObjectType(),
+                        requestDto.getStatus());
             }
             default -> {
                 log.info("Unknown request/object type: {}",
-                        requestDTO.getObjectType());
+                        requestDto.getObjectType());
             }
         }
     }

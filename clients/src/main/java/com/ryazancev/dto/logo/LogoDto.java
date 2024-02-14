@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Builder
 
-public class LogoDTO {
+public class LogoDto {
 
     @JsonIgnore
     @NotNull(message = "Logo must be not null",

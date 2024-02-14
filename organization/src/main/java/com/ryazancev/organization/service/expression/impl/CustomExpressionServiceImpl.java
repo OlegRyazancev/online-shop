@@ -1,6 +1,6 @@
 package com.ryazancev.organization.service.expression.impl;
 
-import com.ryazancev.dto.organization.OrganizationEditDTO;
+import com.ryazancev.dto.organization.OrganizationEditDto;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.expression.CustomExpressionService;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
@@ -32,9 +32,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessUser(OrganizationEditDTO organizationEditDTO) {
+    public void checkAccessUser(OrganizationEditDto organizationEditDto) {
 
-        if (!canAccessUser(organizationEditDTO.getOwnerId())) {
+        if (!canAccessUser(organizationEditDto.getOwnerId())) {
             throw new AccessDeniedException(
                     "You have no permissions to access to this customer",
                     HttpStatus.FORBIDDEN);

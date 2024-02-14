@@ -2,13 +2,13 @@ package com.ryazancev.product.controller;
 
 import com.ryazancev.clients.OrganizationClient;
 import com.ryazancev.clients.ReviewClient;
-import com.ryazancev.dto.organization.OrganizationDTO;
+import com.ryazancev.dto.organization.OrganizationDto;
 import com.ryazancev.dto.product.PriceQuantityResponse;
-import com.ryazancev.dto.product.ProductDTO;
-import com.ryazancev.dto.product.ProductEditDTO;
+import com.ryazancev.dto.product.ProductDto;
+import com.ryazancev.dto.product.ProductEditDto;
 import com.ryazancev.dto.product.ProductsSimpleResponse;
-import com.ryazancev.dto.review.ReviewDTO;
-import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewDto;
+import com.ryazancev.dto.review.ReviewPostDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ProductService;
@@ -48,12 +48,12 @@ public class ProductController {
         List<Product> products = productService.getAll();
 
         return ProductsSimpleResponse.builder()
-                .products(productMapper.toSimpleListDTO(products))
+                .products(productMapper.toSimpleListDto(products))
                 .build();
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getById(
+    public ProductDto getById(
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
@@ -61,66 +61,66 @@ public class ProductController {
         boolean statusCheck = true;
 
         Product product = productService.getById(id, statusCheck);
-        ProductDTO productDTO = productMapper.toDetailedDTO(product);
+        ProductDto productDto = productMapper.toDetailedDto(product);
 
-        OrganizationDTO organizationDTO = organizationClient.getSimpleById(
+        OrganizationDto organizationDto = organizationClient.getSimpleById(
                 product.getOrganizationId());
-        productDTO.setOrganization(organizationDTO);
+        productDto.setOrganization(organizationDto);
 
         Double avgRating = reviewClient.getAverageRatingByProductId(id);
-        productDTO.setAverageRating(avgRating);
+        productDto.setAverageRating(avgRating);
 
-        return productDTO;
+        return productDto;
     }
 
 
     @PostMapping
-    public ProductDTO makeRegistrationRequestOfProduct(
+    public ProductDto makeRegistrationRequestOfProduct(
             @RequestBody
             @Validated(OnCreate.class)
-            ProductEditDTO productEditDTO) {
+            ProductEditDto productEditDto) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessOrganization(productEditDTO);
+        customExpressionService.checkAccessOrganization(productEditDto);
 
-        Product product = productMapper.toEntity(productEditDTO);
+        Product product = productMapper.toEntity(productEditDto);
         Product saved = productService.makeRegistrationRequest(product);
-        ProductDTO productDTO = productMapper.toDetailedDTO(saved);
+        ProductDto productDto = productMapper.toDetailedDto(saved);
 
 
-        OrganizationDTO organizationDTO =
+        OrganizationDto organizationDto =
                 organizationClient.getSimpleById(
                         product.getOrganizationId());
-        productDTO.setOrganization(organizationDTO);
+        productDto.setOrganization(organizationDto);
 
-        return productDTO;
+        return productDto;
     }
 
 
     @PutMapping
-    public ProductDTO updateProduct(
+    public ProductDto updateProduct(
             @RequestBody
             @Validated(OnUpdate.class)
-            ProductEditDTO productEditDTO) {
+            ProductEditDto productEditDto) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessProduct(productEditDTO.getId());
+        customExpressionService.checkAccessProduct(productEditDto.getId());
 
-        Product product = productMapper.toEntity(productEditDTO);
+        Product product = productMapper.toEntity(productEditDto);
         Product updated = productService.update(product);
-        ProductDTO productDTO = productMapper.toDetailedDTO(updated);
+        ProductDto productDto = productMapper.toDetailedDto(updated);
 
-        OrganizationDTO organizationDTO =
+        OrganizationDto organizationDto =
                 organizationClient.getSimpleById(
                         updated.getOrganizationId());
-        productDTO.setOrganization(organizationDTO);
+        productDto.setOrganization(organizationDto);
 
         Double avgRating = reviewClient
                 .getAverageRatingByProductId(updated.getId());
-        productDTO.setAverageRating(avgRating);
+        productDto.setAverageRating(avgRating);
 
 
-        return productDTO;
+        return productDto;
     }
 
     @DeleteMapping("/{id}")
@@ -142,28 +142,28 @@ public class ProductController {
     }
 
     @PostMapping("/reviews")
-    public ReviewDTO createReview(
+    public ReviewDto createReview(
             @RequestBody
             @Validated({OnCreate.class})
-            ReviewPostDTO reviewPostDTO) {
+            ReviewPostDto reviewPostDto) {
 
         customExpressionService.checkIfAccountLocked();
 
-        return reviewClient.create(reviewPostDTO);
+        return reviewClient.create(reviewPostDto);
     }
 
     //    Endpoints only  for feign clients
 
 
     @GetMapping("/{id}/simple")
-    public ProductDTO getSimpleById(
+    public ProductDto getSimpleById(
             @PathVariable("id") Long id) {
 
         boolean statusCheck = false;
 
         Product product = productService.getById(id, statusCheck);
 
-        return productMapper.toSimpleDTO(product);
+        return productMapper.toSimpleDto(product);
     }
 
     @GetMapping("/{id}/price-quantity")
@@ -190,7 +190,7 @@ public class ProductController {
                 productService.getByOrganizationId(id);
 
         return ProductsSimpleResponse.builder()
-                .products(productMapper.toSimpleListDTO(
+                .products(productMapper.toSimpleListDto(
                         organizationProducts))
                 .build();
     }

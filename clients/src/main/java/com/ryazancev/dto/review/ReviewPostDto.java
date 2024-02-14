@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewPostDTO {
+public class ReviewPostDto {
 
     @NotNull(message = "Body must not be null",
             groups = OnCreate.class)

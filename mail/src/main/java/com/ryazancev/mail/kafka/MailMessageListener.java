@@ -1,6 +1,6 @@
 package com.ryazancev.mail.kafka;
 
-import com.ryazancev.dto.mail.MailDTO;
+import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +20,13 @@ public class MailMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void consumeMail(MailDTO mailDTO) {
+    void consumeMail(MailDto mailDto) {
         log.info("Received message to send email to: {}, email type: {}",
-                mailDTO.getEmail(), mailDTO.getType().name());
+                mailDto.getEmail(), mailDto.getType().name());
         log.info("Sending message...");
 
-        mailService.sendEmail(mailDTO);
+        mailService.sendEmail(mailDto);
 
-        log.info("Mail successfully send to: {}", mailDTO.getEmail());
+        log.info("Mail successfully send to: {}", mailDto.getEmail());
     }
 }

@@ -1,6 +1,6 @@
 package com.ryazancev.mail.service.impl;
 
-import com.ryazancev.dto.mail.MailDTO;
+import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.mail.service.MailService;
 import freemarker.template.Configuration;
 import jakarta.mail.internet.MimeMessage;
@@ -25,17 +25,17 @@ public class MailServiceImpl implements MailService {
     private final JavaMailSender mailSender;
 
     @Override
-    public void sendEmail(MailDTO mailDTO) {
-        switch (mailDTO.getType()) {
-            case REGISTRATION -> sendRegistrationEmail(mailDTO);
-            case CONFIRMATION -> sendConfirmationEmail(mailDTO);
+    public void sendEmail(MailDto mailDto) {
+        switch (mailDto.getType()) {
+            case REGISTRATION -> sendRegistrationEmail(mailDto);
+            case CONFIRMATION -> sendConfirmationEmail(mailDto);
             default -> {
             }
         }
     }
 
     @SneakyThrows
-    private void sendRegistrationEmail(MailDTO mailDTO) {
+    private void sendRegistrationEmail(MailDto mailDto) {
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper =
@@ -46,16 +46,16 @@ public class MailServiceImpl implements MailService {
                 );
         helper.setSubject(
                 "Thank you for registration, "
-                        + mailDTO.getName()
+                        + mailDto.getName()
                         + "!");
-        helper.setTo(mailDTO.getEmail());
-        String emailContent = getRegistrationEmailContent(mailDTO.getName());
+        helper.setTo(mailDto.getEmail());
+        String emailContent = getRegistrationEmailContent(mailDto.getName());
         helper.setText(emailContent, true);
         mailSender.send(message);
     }
 
     @SneakyThrows
-    private void sendConfirmationEmail(MailDTO mailDTO) {
+    private void sendConfirmationEmail(MailDto mailDto) {
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper =
@@ -65,11 +65,11 @@ public class MailServiceImpl implements MailService {
                         "UTF-8"
                 );
         helper.setSubject("Please, confirm your email address");
-        helper.setTo(mailDTO.getEmail());
+        helper.setTo(mailDto.getEmail());
 
         String emailContent = getConfirmationContent(
-                mailDTO.getName(),
-                mailDTO.getProperties()
+                mailDto.getName(),
+                mailDto.getProperties()
         );
         helper.setText(emailContent, true);
         mailSender.send(message);

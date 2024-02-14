@@ -12,5 +12,5 @@ import java.util.List;
 @Builder
 public class ProductsSimpleResponse {
 
-    private List<ProductDTO> products;
+    private List<ProductDto> products;
 }

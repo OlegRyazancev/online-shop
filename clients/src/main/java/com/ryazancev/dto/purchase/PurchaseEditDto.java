@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PurchaseEditDTO {
+public class PurchaseEditDto {
 
     @NotNull(message = "Customer ID must be not null",
             groups = OnCreate.class)

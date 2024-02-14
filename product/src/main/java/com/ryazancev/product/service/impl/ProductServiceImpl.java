@@ -241,11 +241,11 @@ public class ProductServiceImpl implements ProductService {
 
     private void sendRegistrationRequestToAdmin(Long productId) {
 
-        RegistrationRequestDto requestDTO = RegistrationRequestDto.builder()
+        RegistrationRequestDto requestDto = RegistrationRequestDto.builder()
                 .objectToRegisterId(productId)
                 .objectType(ObjectType.PRODUCT)
                 .build();
 
-        productProducerService.sendMessageToAdminTopic(requestDTO);
+        productProducerService.sendMessageToAdminTopic(requestDto);
     }
 }

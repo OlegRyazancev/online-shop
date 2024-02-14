@@ -1,7 +1,7 @@
 package com.ryazancev.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.dto.organization.OrganizationDTO;
+import com.ryazancev.dto.organization.OrganizationDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductDTO {
+public class ProductDto {
 
     private Long id;
 
@@ -21,7 +21,7 @@ public class ProductDTO {
 
     private String description;
 
-    private OrganizationDTO organization;
+    private OrganizationDto organization;
 
     private Double price;
 

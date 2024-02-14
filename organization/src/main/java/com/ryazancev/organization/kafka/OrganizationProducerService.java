@@ -32,9 +32,9 @@ public class OrganizationProducerService {
         this.productKafkaTemplate = productKafkaTemplate;
     }
 
-    public void sendMessageToAdminTopic(RegistrationRequestDto requestDTO) {
+    public void sendMessageToAdminTopic(RegistrationRequestDto requestDto) {
         try {
-            adminKafkaTemplate.send(adminTopic, requestDTO);
+            adminKafkaTemplate.send(adminTopic, requestDto);
             log.info("Message to {} was successfully send", adminTopic);
         } catch (Exception e) {
             log.info("Message to {} was not send", adminTopic);

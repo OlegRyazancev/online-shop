@@ -9,8 +9,8 @@ import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
-import com.ryazancev.dto.purchase.PurchaseDTO;
-import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,9 +48,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public PurchaseDTO processPurchase(PurchaseEditDTO purchaseEditDTO) {
+    public PurchaseDto processPurchase(PurchaseEditDto purchaseEditDto) {
 
-        return purchaseClient.processPurchase(purchaseEditDTO);
+        return purchaseClient.processPurchase(purchaseEditDto);
     }
 
     @Override
@@ -76,9 +76,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Double getBalanceByCustomerId(Long id) {
 
-        Customer found = findById(id);
+        Customer existing = findById(id);
 
-        return found.getBalance();
+        return existing.getBalance();
     }
 
     @Transactional

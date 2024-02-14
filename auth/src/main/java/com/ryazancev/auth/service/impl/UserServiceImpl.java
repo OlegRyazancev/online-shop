@@ -11,9 +11,9 @@ import com.ryazancev.auth.util.exception.custom.UserCreationException;
 import com.ryazancev.auth.util.exception.custom.UserNotFoundException;
 import com.ryazancev.auth.util.mappers.UserMapper;
 import com.ryazancev.clients.CustomerClient;
-import com.ryazancev.dto.customer.CustomerDTO;
-import com.ryazancev.dto.mail.MailDTO;
-import com.ryazancev.dto.user.UserDTO;
+import com.ryazancev.dto.customer.CustomerDto;
+import com.ryazancev.dto.mail.MailDto;
+import com.ryazancev.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,28 +42,28 @@ public class UserServiceImpl implements UserService {
     @Value("${spring.kafka.topic.mail}")
     private String mailTopicName;
 
-    private final KafkaTemplate<String, MailDTO> kafkaTemplate;
+    private final KafkaTemplate<String, MailDto> kafkaTemplate;
 
     @Transactional
     @Override
-    public UserDTO create(UserDTO userDTO) {
+    public UserDto create(UserDto userDto) {
 
         if (userRepository.findByEmail(
-                userDTO.getEmail()).isPresent()) {
+                userDto.getEmail()).isPresent()) {
             throw new UserCreationException(
                     "User with this email already exists",
                     HttpStatus.BAD_REQUEST
             );
         }
-        if (!userDTO.getPassword().equals(
-                userDTO.getPasswordConfirmation())) {
+        if (!userDto.getPassword().equals(
+                userDto.getPasswordConfirmation())) {
             throw new UserCreationException(
                     "Password and password confirmation do not equals",
                     HttpStatus.BAD_REQUEST
             );
         }
 
-        User user = userMapper.toEntity(userDTO);
+        User user = userMapper.toEntity(userDto);
 
         log.info("User email {}", user.getEmail());
 
@@ -74,9 +74,9 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = Set.of(Role.ROLE_USER);
         user.setRoles(roles);
 
-        CustomerDTO createdCustomer =
+        CustomerDto createdCustomer =
                 customerClient.createCustomer(
-                        userMapper.toCustomerDTO(user));
+                        userMapper.toCustomerDto(user));
         user.setCustomerId(createdCustomer.getId());
 
 
@@ -87,15 +87,15 @@ public class UserServiceImpl implements UserService {
         confirmationTokenService.save(token);
 
 
-        MailDTO mailDTO = AuthUtil
-                .createConfirmationMailDTO(
+        MailDto mailDto = AuthUtil
+                .createConfirmationMailDto(
                         saved.getEmail(),
                         saved.getName(),
                         token.getToken());
 
-        kafkaTemplate.send(mailTopicName, mailDTO);
+        kafkaTemplate.send(mailTopicName, mailDto);
 
-        return userMapper.toDTO(saved);
+        return userMapper.toDto(saved);
     }
 
 

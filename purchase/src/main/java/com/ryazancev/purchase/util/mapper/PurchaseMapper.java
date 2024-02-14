@@ -1,7 +1,7 @@
 package com.ryazancev.purchase.util.mapper;
 
-import com.ryazancev.dto.purchase.PurchaseDTO;
-import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.purchase.model.Purchase;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -14,9 +14,9 @@ import java.util.List;
 )
 public interface PurchaseMapper {
 
-    Purchase toEntity(PurchaseEditDTO purchaseEditDTO);
+    Purchase toEntity(PurchaseEditDto purchaseEditDto);
 
-    List<PurchaseDTO> toListDTO(List<Purchase> purchase);
+    List<PurchaseDto> toListDto(List<Purchase> purchase);
 
-    PurchaseDTO toDTO(Purchase purchase);
+    PurchaseDto toDto(Purchase purchase);
 }

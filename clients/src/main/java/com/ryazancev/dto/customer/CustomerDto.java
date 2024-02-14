@@ -1,10 +1,12 @@
-package com.ryazancev.dto.user;
+package com.ryazancev.dto.customer;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,18 +15,21 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTO {
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CustomerDto {
 
     @NotNull(message = "Id must not be null",
-            groups = OnUpdate.class)
+            groups = {OnUpdate.class})
     private Long id;
 
-    @NotNull(message = "Name must not be null",
+
+    @NotNull(message = "Username must not be null",
             groups = {OnCreate.class, OnUpdate.class})
     @Length(max = 255,
-            message = "Name length must be smaller than 255 symbols",
+            message = "Username length must be smaller than 255 symbols",
             groups = {OnCreate.class, OnUpdate.class})
-    private String name;
+    private String username;
 
     @NotNull(message = "Email must not be null",
             groups = {OnCreate.class, OnUpdate.class})
@@ -36,18 +41,12 @@ public class UserDTO {
             groups = {OnCreate.class, OnUpdate.class})
     private String email;
 
-    @NotNull(message = "Password must be not null",
+    @Digits(integer = 10,
+            fraction = 2,
+            message = "Balance must have at most 2 decimal places",
             groups = {OnCreate.class, OnUpdate.class})
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
-    @NotNull(message = "Password confirmation must be not null",
-            groups = OnCreate.class)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String passwordConfirmation;
-
-    private Boolean locked;
-
-    private Boolean confirmed;
+    @PositiveOrZero(message = "Balance must be a positive number or zero",
+            groups = {OnCreate.class, OnUpdate.class})
+    private Double balance;
 
 }

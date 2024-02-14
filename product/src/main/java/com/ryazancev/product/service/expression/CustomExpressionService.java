@@ -1,12 +1,12 @@
 package com.ryazancev.product.service.expression;
 
-import com.ryazancev.dto.product.ProductEditDTO;
+import com.ryazancev.dto.product.ProductEditDto;
 
 public interface CustomExpressionService {
 
     void checkAccessProduct(Long id);
 
-    void checkAccessOrganization(ProductEditDTO productEditDTO);
+    void checkAccessOrganization(ProductEditDto productEditDto);
 
     void checkIfAccountLocked();
 }

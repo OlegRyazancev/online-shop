@@ -1,8 +1,8 @@
 package com.ryazancev.purchase.controller;
 
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
-import com.ryazancev.dto.purchase.PurchaseDTO;
-import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.purchase.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +17,10 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
 
     @PostMapping
-    public PurchaseDTO processPurchase(
-            @RequestBody PurchaseEditDTO purchaseEditDTO) {
+    public PurchaseDto processPurchase(
+            @RequestBody PurchaseEditDto purchaseEditDto) {
 
-        return purchaseService.processPurchase(purchaseEditDTO);
+        return purchaseService.processPurchase(purchaseEditDto);
     }
 
     @GetMapping("/customer/{id}")

@@ -1,7 +1,7 @@
 package com.ryazancev.product.service.expression.impl;
 
 import com.ryazancev.clients.OrganizationClient;
-import com.ryazancev.dto.product.ProductEditDTO;
+import com.ryazancev.dto.product.ProductEditDto;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.service.expression.CustomExpressionService;
@@ -34,9 +34,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         }
     }
 
-    public void checkAccessOrganization(ProductEditDTO productEditDTO) {
+    public void checkAccessOrganization(ProductEditDto productEditDto) {
 
-        if (!canAccessOrganization(productEditDTO.getOrganizationId())) {
+        if (!canAccessOrganization(productEditDto.getOrganizationId())) {
 
             throw new AccessDeniedException(
                     "You have no permissions to access to this organization",
@@ -76,8 +76,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             return products
                     .stream()
-                    .anyMatch(productDTO ->
-                            productDTO.getId().equals(productId))
+                    .anyMatch(productDto ->
+                            productDto.getId().equals(productId))
                     || userRoles.contains("ROLE_ADMIN");
         }
 

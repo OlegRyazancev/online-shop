@@ -1,6 +1,6 @@
 package com.ryazancev.organization.service;
 
-import com.ryazancev.dto.logo.LogoDTO;
+import com.ryazancev.dto.logo.LogoDto;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 
@@ -20,7 +20,7 @@ public interface OrganizationService {
 
     void register(Long organizationId);
 
-    void uploadLogo(Long id, LogoDTO logoDTO);
+    void uploadLogo(Long id, LogoDto logoDto);
 
     Long getOwnerId(Long organizationId);
 

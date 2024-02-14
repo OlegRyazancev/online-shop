@@ -2,14 +2,14 @@ package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.dto.product.PriceQuantityResponse;
-import com.ryazancev.dto.product.ProductDTO;
+import com.ryazancev.dto.product.ProductDto;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
-import com.ryazancev.dto.purchase.PurchaseDTO;
-import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.purchase.kafka.PurchaseProducerService;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
@@ -43,11 +43,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Transactional
     @Override
-    public PurchaseDTO processPurchase(
-            PurchaseEditDTO purchaseEditDTO) {
+    public PurchaseDto processPurchase(
+            PurchaseEditDto purchaseEditDto) {
 
-        Long customerId = purchaseEditDTO.getCustomerId();
-        Long productId = purchaseEditDTO.getProductId();
+        Long customerId = purchaseEditDto.getCustomerId();
+        Long productId = purchaseEditDto.getProductId();
 
         Double availableCustomerBalance = customerClient
                 .getBalanceById(customerId);
@@ -79,20 +79,20 @@ public class PurchaseServiceImpl implements PurchaseService {
                 availableCustomerBalance - selectedProductPrice);
         updateProductQuantity(productId, availableProductsInStock);
 
-        Purchase toSave = purchaseMapper.toEntity(purchaseEditDTO);
+        Purchase toSave = purchaseMapper.toEntity(purchaseEditDto);
         toSave.setPurchaseDate(LocalDateTime.now());
         toSave.setAmount(selectedProductPrice);
 
         Purchase saved = purchaseRepository.save(toSave);
-        PurchaseDTO purchaseDTO = purchaseMapper.toDTO(saved);
+        PurchaseDto purchaseDto = purchaseMapper.toDto(saved);
 
-        CustomerDTO customerDTO = customerClient.getSimpleById(customerId);
-        ProductDTO productDTO = productClient.getSimpleById(productId);
+        CustomerDto customerDto = customerClient.getSimpleById(customerId);
+        ProductDto productDto = productClient.getSimpleById(productId);
 
-        purchaseDTO.setCustomer(customerDTO);
-        purchaseDTO.setProduct(productDTO);
+        purchaseDto.setCustomer(customerDto);
+        purchaseDto.setProduct(productDto);
 
-        return purchaseDTO;
+        return purchaseDto;
     }
 
     private void updateProductQuantity(Long productId,
@@ -118,15 +118,15 @@ public class PurchaseServiceImpl implements PurchaseService {
             );
         }
 
-        List<PurchaseDTO> purchasesDTO = purchaseMapper.toListDTO(purchases);
+        List<PurchaseDto> purchasesDto = purchaseMapper.toListDto(purchases);
 
-        for (int i = 0; i < purchasesDTO.size(); i++) {
-            ProductDTO productDTO = productClient
+        for (int i = 0; i < purchasesDto.size(); i++) {
+            ProductDto productDto = productClient
                     .getSimpleById(purchases.get(i).getProductId());
-            purchasesDTO.get(i).setProduct(productDTO);
+            purchasesDto.get(i).setProduct(productDto);
         }
         return CustomerPurchasesResponse.builder()
-                .purchases(purchasesDTO)
+                .purchases(purchasesDto)
                 .build();
     }
 

@@ -1,7 +1,7 @@
 package com.ryazancev.review.util.mapper;
 
-import com.ryazancev.dto.review.ReviewDTO;
-import com.ryazancev.dto.review.ReviewPostDTO;
+import com.ryazancev.dto.review.ReviewDto;
+import com.ryazancev.dto.review.ReviewPostDto;
 import com.ryazancev.review.model.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -14,9 +14,9 @@ import java.util.List;
 )
 public interface ReviewMapper {
 
-    List<ReviewDTO> toListDTO(List<Review> reviews);
+    List<ReviewDto> toListDto(List<Review> reviews);
 
-    Review toEntity(ReviewPostDTO reviewPostDTO);
+    Review toEntity(ReviewPostDto reviewPostDto);
 
-    ReviewDTO toDTO(Review savedReview);
+    ReviewDto toDto(Review savedReview);
 }

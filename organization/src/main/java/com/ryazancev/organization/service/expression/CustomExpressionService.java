@@ -1,10 +1,10 @@
 package com.ryazancev.organization.service.expression;
 
-import com.ryazancev.dto.organization.OrganizationEditDTO;
+import com.ryazancev.dto.organization.OrganizationEditDto;
 
 public interface CustomExpressionService {
 
-    void checkAccessUser(OrganizationEditDTO organizationEditDTO);
+    void checkAccessUser(OrganizationEditDto organizationEditDto);
 
     void checkAccessOrganization(Long id);
 

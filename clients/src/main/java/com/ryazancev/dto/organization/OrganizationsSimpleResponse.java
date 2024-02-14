@@ -10,5 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrganizationsSimpleResponse {
-    private List<OrganizationDTO> organizations;
+    private List<OrganizationDto> organizations;
 }

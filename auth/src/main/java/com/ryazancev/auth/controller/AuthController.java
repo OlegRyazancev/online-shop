@@ -6,7 +6,7 @@ import com.ryazancev.auth.dto.JwtResponse;
 import com.ryazancev.auth.service.AuthService;
 import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.service.UserService;
-import com.ryazancev.dto.user.UserDTO;
+import com.ryazancev.dto.user.UserDto;
 import com.ryazancev.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +33,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserDTO register(
+    public UserDto register(
             @Validated(OnCreate.class)
-            @RequestBody UserDTO userDTO) {
-        return userService.create(userDTO);
+            @RequestBody UserDto userDto) {
+        return userService.create(userDto);
     }
 
     @PostMapping("/refresh")

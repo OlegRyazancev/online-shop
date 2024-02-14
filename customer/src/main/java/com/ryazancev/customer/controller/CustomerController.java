@@ -4,10 +4,10 @@ import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.service.expression.CustomExpressionService;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
-import com.ryazancev.dto.customer.CustomerDTO;
+import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
-import com.ryazancev.dto.purchase.PurchaseDTO;
-import com.ryazancev.dto.purchase.PurchaseEditDTO;
+import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
@@ -29,7 +29,7 @@ public class CustomerController {
 
 
     @GetMapping("/{id}")
-    public CustomerDTO getById(
+    public CustomerDto getById(
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
@@ -37,22 +37,22 @@ public class CustomerController {
 
         Customer customer = customerService.getById(id);
 
-        return customerMapper.toDetailedDTO(customer);
+        return customerMapper.toDetailedDto(customer);
     }
 
     @PutMapping
-    public CustomerDTO updateCustomer(
+    public CustomerDto updateCustomer(
             @RequestBody
             @Validated(OnUpdate.class)
-            CustomerDTO customerDTO) {
+            CustomerDto customerDto) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessCustomer(customerDTO.getId());
+        customExpressionService.checkAccessCustomer(customerDto.getId());
 
-        Customer customer = customerMapper.toEntity(customerDTO);
+        Customer customer = customerMapper.toEntity(customerDto);
         Customer updated = customerService.update(customer);
 
-        return customerMapper.toDetailedDTO(updated);
+        return customerMapper.toDetailedDto(updated);
     }
 
     @GetMapping("/{id}/reviews")
@@ -76,16 +76,16 @@ public class CustomerController {
     }
 
     @PostMapping("/purchases")
-    public PurchaseDTO processPurchase(
+    public PurchaseDto processPurchase(
             @RequestBody
             @Validated(OnCreate.class)
-            PurchaseEditDTO purchaseEditDTO) {
+            PurchaseEditDto purchaseEditDto) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService
-                .checkAccessCustomer(purchaseEditDTO.getCustomerId());
+                .checkAccessCustomer(purchaseEditDto.getCustomerId());
 
-        return customerService.processPurchase(purchaseEditDTO);
+        return customerService.processPurchase(purchaseEditDto);
     }
 
 
@@ -94,12 +94,12 @@ public class CustomerController {
 //    Endpoints only  for feign clients
 
     @GetMapping("/{id}/simple")
-    public CustomerDTO getSimpleById(
+    public CustomerDto getSimpleById(
             @PathVariable("id") Long id) {
 
         Customer customer = customerService.getById(id);
 
-        return customerMapper.toSimpleDTO(customer);
+        return customerMapper.toSimpleDto(customer);
     }
 
     @GetMapping("/{id}/balance")
@@ -110,15 +110,15 @@ public class CustomerController {
     }
 
     @PostMapping
-    public CustomerDTO createCustomer(
+    public CustomerDto createCustomer(
             @RequestBody
             @Validated(OnCreate.class)
-            CustomerDTO customerDTO) {
+            CustomerDto customerDto) {
 
-        Customer customer = customerMapper.toEntity(customerDTO);
+        Customer customer = customerMapper.toEntity(customerDto);
         Customer created = customerService.create(customer);
 
-        return customerMapper.toSimpleDTO(created);
+        return customerMapper.toSimpleDto(created);
     }
 
 

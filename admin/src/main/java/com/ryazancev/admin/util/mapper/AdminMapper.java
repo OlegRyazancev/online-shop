@@ -15,5 +15,5 @@ public interface AdminMapper {
 
     RegistrationRequestDto toDto(RegistrationRequest request);
 
-    RegistrationRequest toEntity(RegistrationRequestDto requestDTO);
+    RegistrationRequest toEntity(RegistrationRequestDto requestDto);
 }

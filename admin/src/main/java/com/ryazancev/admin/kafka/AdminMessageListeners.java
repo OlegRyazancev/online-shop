@@ -23,16 +23,16 @@ public class AdminMessageListeners {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void createRegistrationRequest(RegistrationRequestDto requestDTO) {
+    void createRegistrationRequest(RegistrationRequestDto requestDto) {
 
         log.info("Received message to register organization/product with id {}," +
                         "and type: {}",
-                requestDTO.getObjectToRegisterId(),
-                requestDTO.getObjectType().name());
+                requestDto.getObjectToRegisterId(),
+                requestDto.getObjectType().name());
 
         log.info("Creating request...");
         RegistrationRequest request =
-                adminMapper.toEntity(requestDTO);
+                adminMapper.toEntity(requestDto);
 
         adminService.create(request);
 

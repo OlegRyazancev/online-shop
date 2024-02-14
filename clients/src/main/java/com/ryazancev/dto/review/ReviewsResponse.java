@@ -11,5 +11,5 @@ import java.util.List;
 @Builder
 public class ReviewsResponse {
 
-    private List<ReviewDTO> reviews;
+    private List<ReviewDto> reviews;
 }

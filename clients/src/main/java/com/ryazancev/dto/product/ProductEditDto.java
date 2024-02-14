@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductEditDTO {
+public class ProductEditDto {
 
     @NotNull(message = "Id must be not null",
             groups = OnUpdate.class)

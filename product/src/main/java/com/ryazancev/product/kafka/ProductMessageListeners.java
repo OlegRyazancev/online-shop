@@ -48,26 +48,26 @@ public class ProductMessageListeners {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "changeRegistrationStatusMessageFactory"
     )
-    public void changeStatusAndRegister(RegistrationRequestDto requestDTO) {
+    public void changeStatusAndRegister(RegistrationRequestDto requestDto) {
 
         log.info("Received answer message from admin with response {}",
-                requestDTO.getStatus());
+                requestDto.getStatus());
 
-        switch (requestDTO.getStatus()) {
+        switch (requestDto.getStatus()) {
             case ACCEPTED -> {
                 productService.changeStatus(
-                        requestDTO.getObjectToRegisterId(),
+                        requestDto.getObjectToRegisterId(),
                         ProductStatus.ACTIVE);
 
                 productService.register(
-                        requestDTO.getObjectToRegisterId());
+                        requestDto.getObjectToRegisterId());
 
                 log.info("Product now is: {}",
                         ProductStatus.ACTIVE);
             }
             case REJECTED -> {
                 productService.changeStatus(
-                        requestDTO.getObjectToRegisterId(),
+                        requestDto.getObjectToRegisterId(),
                         ProductStatus.INACTIVE);
 
                 log.info("Product now is: {}",

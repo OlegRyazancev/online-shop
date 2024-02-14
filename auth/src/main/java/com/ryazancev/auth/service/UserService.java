@@ -1,11 +1,11 @@
 package com.ryazancev.auth.service;
 
 import com.ryazancev.auth.model.User;
-import com.ryazancev.dto.user.UserDTO;
+import com.ryazancev.dto.user.UserDto;
 
 public interface UserService {
 
-    UserDTO create(UserDTO userDTO);
+    UserDto create(UserDto userDto);
 
     User getByEmail(String username);
 
