@@ -85,9 +85,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ReviewDTO create(ReviewPostDTO reviewPostDTO) {
 
+        CustomerDTO selectedCustomerDto;
+        ProductDTO selectedProductDto;
+
         try {
-            customerClient.getSimpleById(reviewPostDTO.getCustomerId());
-            productClient.getSimpleById(reviewPostDTO.getProductId());
+            selectedCustomerDto = customerClient
+                    .getSimpleById(reviewPostDTO.getCustomerId());
+            selectedProductDto = productClient
+                    .getSimpleById(reviewPostDTO.getProductId());
         } catch (Exception e) {
             throw new ReviewCreationException(
                     "Customer/product doesn't exists",
@@ -101,10 +106,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         ReviewDTO savedReviewDTO = reviewMapper
                 .toDTO(saved);
-        savedReviewDTO.setCustomer(customerClient
-                .getSimpleById(reviewPostDTO.getCustomerId()));
-        savedReviewDTO.setProduct(productClient
-                .getSimpleById(reviewPostDTO.getProductId()));
+        savedReviewDTO.setCustomer(selectedCustomerDto);
+        savedReviewDTO.setProduct(selectedProductDto);
 
         return savedReviewDTO;
     }

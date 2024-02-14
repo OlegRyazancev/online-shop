@@ -2,7 +2,10 @@ package com.ryazancev.product.util.exception;
 
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
-import com.ryazancev.product.util.exception.custom.*;
+import com.ryazancev.product.util.exception.custom.AccessDeniedException;
+import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
+import com.ryazancev.product.util.exception.custom.ProductCreationException;
+import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -55,21 +58,6 @@ public class ProductExceptionHandler {
             ProductNotFoundException e) {
 
         log.error("Product not found exception");
-
-        return ResponseEntity
-                .status(e.getHttpStatus())
-                .body(new ExceptionBody(
-                        e.getMessage(),
-                        ServiceStage.PRODUCT,
-                        e.getHttpStatus()
-                ));
-    }
-
-    @ExceptionHandler(DeletedProductException.class)
-    public ResponseEntity<ExceptionBody> handleDeletedProduct(
-            DeletedProductException e) {
-
-        log.error("Deleted product exception");
 
         return ResponseEntity
                 .status(e.getHttpStatus())

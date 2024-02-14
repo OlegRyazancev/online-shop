@@ -7,10 +7,10 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.exception.custom.DeletedProductException;
 import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
+import com.ryazancev.product.util.validator.ProductStatusValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -31,6 +31,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductStatusValidator productStatusValidator;
 
     private final ProductProducerService productProducerService;
 
@@ -47,12 +48,13 @@ public class ProductServiceImpl implements ProductService {
             key = "#id"
     )
     public Product getById(Long id, boolean statusCheck) {
-        if (statusCheck) {
+        Product existing = findById(id);
 
-            return findByIdWithStatusCheck(id);
-        } else {
-            return findById(id);
+        if (statusCheck) {
+            productStatusValidator.validateInactiveStatus(existing);
+            productStatusValidator.validateDeletedStatus(existing);
         }
+        return existing;
     }
 
     @Override
@@ -116,7 +118,8 @@ public class ProductServiceImpl implements ProductService {
     )
     public void changeStatus(Long id,
                              ProductStatus status) {
-        Product existing = findByIdWithStatusCheck(id);
+
+        Product existing = findById(id);
 
         existing.setStatus(status);
 
@@ -137,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
     )
     public void register(Long id) {
 
-        Product existing = findByIdWithStatusCheck(id);
+        Product existing = findById(id);
 
         existing.setRegisteredAt(LocalDateTime.now());
         //todo: send email in case of status of product
@@ -166,7 +169,9 @@ public class ProductServiceImpl implements ProductService {
     )
     public Product update(Product product) {
 
-        Product existing = findByIdWithStatusCheck(product.getId());
+        Product existing = findById(product.getId());
+
+        productStatusValidator.validateAllStatus(existing);
 
         existing.setProductName(product.getProductName());
         existing.setDescription(product.getDescription());
@@ -185,7 +190,7 @@ public class ProductServiceImpl implements ProductService {
     )
     public void updateQuantity(Long productId, Integer quantityInStock) {
 
-        Product existing = findByIdWithStatusCheck(productId);
+        Product existing = findById(productId);
         existing.setQuantityInStock(quantityInStock);
 
         productRepository.save(existing);
@@ -209,32 +214,20 @@ public class ProductServiceImpl implements ProductService {
     })
     public String markProductAsDeleted(Long id) {
 
-        Product product = findByIdWithStatusCheck(id);
+        Product existing = findById(id);
 
-        product.setDescription("DELETED");
-        product.setPrice(0.0);
-        product.setKeywords("DELETED");
-        product.setQuantityInStock(0);
-        product.setStatus(ProductStatus.DELETED);
+        productStatusValidator.validateAllStatus(existing);
+
+        existing.setDescription("DELETED");
+        existing.setPrice(0.0);
+        existing.setKeywords("DELETED");
+        existing.setQuantityInStock(0);
+        existing.setStatus(ProductStatus.DELETED);
 
         productProducerService.sendMessageToReviewTopic(id);
-        productRepository.save(product);
+        productRepository.save(existing);
 
         return "Product was successfully deleted";
-    }
-
-
-    private Product findByIdWithStatusCheck(Long productId) {
-
-        Product found = findById(productId);
-
-        if (found.getStatus().equals(ProductStatus.DELETED)) {
-            throw new DeletedProductException(
-                    "Can not get deleted product",
-                    HttpStatus.BAD_REQUEST);
-        }
-        //todo: check if product is frozen
-        return found;
     }
 
     private Product findById(Long productId) {

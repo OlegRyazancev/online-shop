@@ -77,8 +77,6 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         updateCustomerBalance(customerId,
                 availableCustomerBalance - selectedProductPrice);
-
-
         updateProductQuantity(productId, availableProductsInStock);
 
         Purchase toSave = purchaseMapper.toEntity(purchaseEditDTO);

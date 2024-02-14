@@ -14,6 +14,7 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.service.expression.CustomExpressionService;
 import com.ryazancev.product.util.mapper.ProductMapper;
+import com.ryazancev.product.util.validator.ProductStatusValidator;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
+    private final ProductStatusValidator productStatusValidator;
 
     private final CustomExpressionService customExpressionService;
 
@@ -171,6 +173,7 @@ public class ProductController {
         boolean statusCheck = true;
 
         Product product = productService.getById(productId, statusCheck);
+        productStatusValidator.validateFrozenStatus(product);
 
         return PriceQuantityResponse.builder()
                 .price(product.getPrice())

@@ -9,9 +9,9 @@ import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.util.exception.custom.DeletedOrganizationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
+import com.ryazancev.organization.util.validator.OrganizationStatusValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -32,10 +32,10 @@ import java.util.List;
 public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository organizationRepository;
+    private final OrganizationProducerService organizationProducerService;
+    private final OrganizationStatusValidator organizationStatusValidator;
 
     private final LogoClient logoClient;
-
-    private final OrganizationProducerService organizationProducerService;
 
 
     @Override
@@ -51,11 +51,14 @@ public class OrganizationServiceImpl implements OrganizationService {
             key = "#id"
     )
     public Organization getById(Long id, boolean statusCheck) {
+        Organization existing = findById(id);
+
         if (statusCheck) {
-            return findByIdWithStatusChecks(id);
-        } else {
-            return findById(id);
+            organizationStatusValidator.validateInactiveStatus(existing);
+            organizationStatusValidator.validateDeletedStatus(existing);
         }
+
+        return existing;
     }
 
     @Transactional
@@ -112,7 +115,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     )
     public Organization update(Organization organization) {
 
-        Organization existing = findByIdWithStatusChecks(organization.getId());
+        Organization existing = findById(organization.getId());
+
+        organizationStatusValidator.validateAllStatus(existing);
 
         existing.setName(organization.getName());
         existing.setDescription(organization.getDescription());
@@ -137,7 +142,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void changeStatus(Long id,
                              OrganizationStatus status) {
 
-        Organization existing = findByIdWithStatusChecks(id);
+        Organization existing = findById(id);
 
         existing.setStatus(status);
 
@@ -159,7 +164,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     )
     public void register(Long id) {
 
-        Organization existing = findByIdWithStatusChecks(id);
+        Organization existing = findById(id);
 
         existing.setRegisteredAt(LocalDateTime.now());
         //todo: send email in case of status of organization
@@ -174,7 +179,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     )
     public void uploadLogo(Long id, LogoDTO logoDTO) {
 
-        Organization existing = findByIdWithStatusChecks(id);
+        Organization existing = findById(id);
+
+        organizationStatusValidator.validateAllStatus(existing);
 
         String fileName = logoClient.upload(logoDTO.getFile());
 
@@ -189,7 +196,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     )
     public Long getOwnerId(Long organizationId) {
 
-        Organization existing = findByIdWithStatusChecks(organizationId);
+        Organization existing = findById(organizationId);
 
         return existing.getOwnerId();
     }
@@ -212,31 +219,18 @@ public class OrganizationServiceImpl implements OrganizationService {
     })
     public String markOrganizationAsDeleted(Long id) {
 
-        Organization found = findByIdWithStatusChecks(id);
+        Organization existing = findById(id);
 
-        found.setLogo("DELETED");
-        found.setDescription("DELETED");
-        found.setStatus(OrganizationStatus.DELETED);
+     organizationStatusValidator.validateAllStatus(existing);
+
+        existing.setLogo("DELETED");
+        existing.setDescription("DELETED");
+        existing.setStatus(OrganizationStatus.DELETED);
 
         organizationProducerService.sendMessageToProductTopic(id);
-        organizationRepository.save(found);
+        organizationRepository.save(existing);
 
         return "Organization successfully deleted";
-    }
-
-    private Organization findByIdWithStatusChecks(Long id) {
-
-        Organization found = findById(id);
-
-        if (found.getStatus().equals(OrganizationStatus.DELETED)) {
-
-            throw new DeletedOrganizationException(
-                    "Can not get deleted organization",
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        //todo: add check if organization is frozen
-        return found;
     }
 
     private Organization findById(Long id) {
