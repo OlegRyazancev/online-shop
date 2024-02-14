@@ -62,9 +62,14 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 String rolesString = String.join(" ", roles);
                 request = exchange.getRequest()
                         .mutate()
-                        .header("userId", jwtUtil.extractId(token))
-                        .header("email", jwtUtil.extractEmail(token))
-                        .header("roles", rolesString)
+                        .header("userId",
+                                jwtUtil.extractId(token))
+                        .header("email",
+                                jwtUtil.extractEmail(token))
+                        .header("roles",
+                                rolesString)
+                        .header("locked",
+                                jwtUtil.extractLocked(token))
                         .build();
             }
             return chain.filter(exchange

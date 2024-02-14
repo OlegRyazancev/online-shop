@@ -122,16 +122,17 @@ public class ProductExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ExceptionBody> handleAccessDenied() {
+    public ResponseEntity<ExceptionBody> handleAccessDenied(
+            AccessDeniedException e) {
 
         log.error("Access denied exception");
 
         return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
+                .status(e.getHttpStatus())
                 .body(new ExceptionBody(
-                        "Access Denied",
+                        e.getMessage(),
                         ServiceStage.PRODUCT,
-                        HttpStatus.FORBIDDEN
+                        e.getHttpStatus()
                 ));
     }
 

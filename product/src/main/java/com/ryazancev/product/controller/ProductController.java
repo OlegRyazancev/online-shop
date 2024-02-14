@@ -13,7 +13,6 @@ import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.service.expression.CustomExpressionService;
-import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
@@ -42,6 +41,8 @@ public class ProductController {
     @GetMapping
     public ProductsSimpleResponse getAll() {
 
+        customExpressionService.checkIfAccountLocked();
+
         List<Product> products = productService.getAll();
 
         return ProductsSimpleResponse.builder()
@@ -52,6 +53,8 @@ public class ProductController {
     @GetMapping("/{id}")
     public ProductDTO getById(
             @PathVariable("id") Long id) {
+
+        customExpressionService.checkIfAccountLocked();
 
         boolean statusCheck = true;
 
@@ -75,7 +78,8 @@ public class ProductController {
             @Validated(OnCreate.class)
             ProductEditDTO productEditDTO) {
 
-        checkAccessOrganization(productEditDTO);
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessOrganization(productEditDTO);
 
         Product product = productMapper.toEntity(productEditDTO);
         Product saved = productService.makeRegistrationRequest(product);
@@ -91,14 +95,14 @@ public class ProductController {
     }
 
 
-
     @PutMapping
     public ProductDTO updateProduct(
             @RequestBody
             @Validated(OnUpdate.class)
             ProductEditDTO productEditDTO) {
 
-        checkAccessProduct(productEditDTO.getId());
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessProduct(productEditDTO.getId());
 
         Product product = productMapper.toEntity(productEditDTO);
         Product updated = productService.update(product);
@@ -120,7 +124,8 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public String deleteProductById(@PathVariable("id") Long id) {
 
-        checkAccessProduct(id);
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessProduct(id);
 
         return productService.markProductAsDeleted(id);
     }
@@ -128,6 +133,8 @@ public class ProductController {
     @GetMapping("/{id}/reviews")
     public ReviewsResponse getReviewsByProductId(
             @PathVariable("id") Long id) {
+
+        customExpressionService.checkIfAccountLocked();
 
         return reviewClient.getByProductId(id);
     }
@@ -138,40 +145,10 @@ public class ProductController {
             @Validated({OnCreate.class})
             ReviewPostDTO reviewPostDTO) {
 
+        customExpressionService.checkIfAccountLocked();
+
         return reviewClient.create(reviewPostDTO);
     }
-
-    @GetMapping("/organizations/{id}")
-    public ProductsSimpleResponse getProductsByOrganizationId(
-            @PathVariable("id") Long id) {
-
-        List<Product> organizationProducts =
-                productService.getByOrganizationId(id);
-
-        return ProductsSimpleResponse.builder()
-                .products(productMapper.toSimpleListDTO(
-                        organizationProducts))
-                .build();
-    }
-
-    private void checkAccessProduct(Long id) {
-
-        if (!customExpressionService.canAccessProduct(id)) {
-
-            throw new AccessDeniedException();
-        }
-    }
-
-    private void checkAccessOrganization(ProductEditDTO productEditDTO) {
-
-        if (!customExpressionService
-                .canAccessOrganization(
-                        productEditDTO.getOrganizationId())) {
-
-            throw new AccessDeniedException();
-        }
-    }
-
 
     //    Endpoints only  for feign clients
 
@@ -201,4 +178,17 @@ public class ProductController {
                 .build();
 
     }
+
+    @GetMapping("/organizations/{id}")
+    public ProductsSimpleResponse getProductsByOrganizationId(
+            @PathVariable("id") Long id) {
+
+        List<Product> organizationProducts =
+                productService.getByOrganizationId(id);
+
+        return ProductsSimpleResponse.builder()
+                .products(productMapper.toSimpleListDTO(
+                        organizationProducts))
+                .build();
     }
+}

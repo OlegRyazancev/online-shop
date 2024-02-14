@@ -60,6 +60,14 @@ public class JwtUtil {
         );
     }
 
+    public String extractLocked(String token){
+
+        return extractClaim(
+                token,
+                claims -> claims.get("locked", Boolean.class)
+        ).toString();
+    }
+
 
     public <T> T extractClaim(String token,
                               Function<Claims, T> claimsResolver) {

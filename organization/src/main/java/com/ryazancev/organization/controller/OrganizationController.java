@@ -11,7 +11,6 @@ import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.service.expression.CustomExpressionService;
-import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import com.ryazancev.organization.util.mapper.OrganizationMapper;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
@@ -40,6 +39,8 @@ public class OrganizationController {
     @GetMapping
     public OrganizationsSimpleResponse getAll() {
 
+        customExpressionService.checkIfAccountLocked();
+
         List<Organization> organizations = organizationService.getAll();
 
         return OrganizationsSimpleResponse.builder()
@@ -51,6 +52,8 @@ public class OrganizationController {
     @GetMapping("/{id}")
     public OrganizationDTO getById(
             @PathVariable("id") Long id) {
+
+        customExpressionService.checkIfAccountLocked();
 
         boolean statusCheck = true;
 
@@ -72,7 +75,8 @@ public class OrganizationController {
             @Validated(OnCreate.class)
             OrganizationEditDTO organizationEditDTO) {
 
-        checkAccessUser(organizationEditDTO);
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessUser(organizationEditDTO);
 
         Organization organization =
                 organizationMapper.toEntity(organizationEditDTO);
@@ -94,7 +98,9 @@ public class OrganizationController {
             @Validated(OnUpdate.class)
             OrganizationEditDTO organizationEditDTO) {
 
-        checkAccessOrganization(organizationEditDTO.getId());
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService
+                .checkAccessOrganization(organizationEditDTO.getId());
 
         Organization organization =
                 organizationMapper.toEntity(organizationEditDTO);
@@ -114,6 +120,8 @@ public class OrganizationController {
     public ProductsSimpleResponse getProductsByOrganizationId(
             @PathVariable("id") Long id) {
 
+        customExpressionService.checkIfAccountLocked();
+
         return productClient.getProductsByOrganizationId(id);
     }
 
@@ -123,7 +131,8 @@ public class OrganizationController {
             @Validated(OnCreate.class)
             @ModelAttribute LogoDTO logoDto) {
 
-        checkAccessOrganization(id);
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessOrganization(id);
 
         organizationService.uploadLogo(id, logoDto);
     }
@@ -132,24 +141,10 @@ public class OrganizationController {
     public String deleteOrganizationById(
             @PathVariable("id") Long id) {
 
-        checkAccessOrganization(id);
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessOrganization(id);
 
         return organizationService.markOrganizationAsDeleted(id);
-    }
-
-    private void checkAccessOrganization(Long id) {
-
-        if (!customExpressionService.canAccessOrganization(id)) {
-            throw new AccessDeniedException();
-        }
-    }
-
-    private void checkAccessUser(OrganizationEditDTO organizationEditDTO) {
-
-        if (!customExpressionService
-                .canAccessUser(organizationEditDTO.getOwnerId())) {
-            throw new AccessDeniedException();
-        }
     }
 
 

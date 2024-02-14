@@ -1,8 +1,12 @@
 package com.ryazancev.organization.service.expression;
 
+import com.ryazancev.dto.organization.OrganizationEditDTO;
+
 public interface CustomExpressionService {
 
-    boolean canAccessOrganization(Long organizationId);
+    void checkAccessUser(OrganizationEditDTO organizationEditDTO);
 
-    boolean canAccessUser(Long userId);
+    void checkAccessOrganization(Long id);
+
+    void checkIfAccountLocked();
 }

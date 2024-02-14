@@ -3,7 +3,6 @@ package com.ryazancev.customer.controller;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.service.expression.CustomExpressionService;
-import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
 import com.ryazancev.dto.customer.CustomerDTO;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
@@ -33,7 +32,8 @@ public class CustomerController {
     public CustomerDTO getById(
             @PathVariable("id") Long id) {
 
-        checkAccessCustomer(id);
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessCustomer(id);
 
         Customer customer = customerService.getById(id);
 
@@ -46,7 +46,8 @@ public class CustomerController {
             @Validated(OnUpdate.class)
             CustomerDTO customerDTO) {
 
-        checkAccessCustomer(customerDTO.getId());
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessCustomer(customerDTO.getId());
 
         Customer customer = customerMapper.toEntity(customerDTO);
         Customer updated = customerService.update(customer);
@@ -58,7 +59,8 @@ public class CustomerController {
     public ReviewsResponse getReviewsByCustomerId(
             @PathVariable("id") Long id) {
 
-        checkAccessCustomer(id);
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessCustomer(id);
 
         return customerService.getReviewsByCustomerId(id);
     }
@@ -67,7 +69,8 @@ public class CustomerController {
     public CustomerPurchasesResponse getPurchasesByCustomerId(
             @PathVariable("id") Long id) {
 
-        checkAccessCustomer(id);
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessCustomer(id);
 
         return customerService.getPurchasesByCustomerId(id);
     }
@@ -78,18 +81,13 @@ public class CustomerController {
             @Validated(OnCreate.class)
             PurchaseEditDTO purchaseEditDTO) {
 
-        checkAccessCustomer(purchaseEditDTO.getCustomerId());
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService
+                .checkAccessCustomer(purchaseEditDTO.getCustomerId());
 
         return customerService.processPurchase(purchaseEditDTO);
     }
 
-
-    private void checkAccessCustomer(Long customerId) {
-
-        if (!customExpressionService.canAccessCustomer(customerId)) {
-            throw new AccessDeniedException();
-        }
-    }
 
     //todo: add method to watch notifications
 
@@ -106,7 +104,7 @@ public class CustomerController {
 
     @GetMapping("/{id}/balance")
     public Double getBalanceById(
-            @PathVariable("id") Long id){
+            @PathVariable("id") Long id) {
 
         return customerService.getBalanceByCustomerId(id);
     }
@@ -123,5 +121,5 @@ public class CustomerController {
         return customerMapper.toSimpleDTO(created);
     }
 
-    
+
 }
