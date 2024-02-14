@@ -45,6 +45,5 @@ public class Product implements Serializable {
 
     @Column(name = "registered_at")
     private LocalDateTime registeredAt;
-    //todo: discount field
 }
 

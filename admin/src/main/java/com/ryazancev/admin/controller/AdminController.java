@@ -87,10 +87,6 @@ public class AdminController {
     }
 
     //todo: delete customer
-
-
     //todo: send notification to user
-
-    //todo: freeze user
 
 }
