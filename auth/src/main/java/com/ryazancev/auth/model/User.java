@@ -50,4 +50,7 @@ public class User implements Serializable {
 
     @Column(name = "confirmed")
     private Boolean confirmed;
+
+    @Column(name = "deleted_at")
+    private Boolean deletedAt;
 }

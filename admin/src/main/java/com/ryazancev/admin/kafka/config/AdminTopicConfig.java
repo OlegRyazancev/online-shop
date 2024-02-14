@@ -24,8 +24,8 @@ public class AdminTopicConfig {
     @Value("${spring.kafka.topic.product.change-status}")
     private String productChangeStatusTopic;
 
-    @Value("${spring.kafka.topic.user.change-status}")
-    private String userChangeStatusTopic;
+    @Value("${spring.kafka.topic.user.toggle-lock}")
+    private String userToggleLockTopic;
 
 
     @Bean
@@ -64,9 +64,9 @@ public class AdminTopicConfig {
     }
 
     @Bean
-    public NewTopic userChangeStatusEventsTopic() {
+    public NewTopic userToggleLockEventsTopic() {
         return TopicBuilder
-                .name(userChangeStatusTopic)
+                .name(userToggleLockTopic)
                 .build();
     }
 }

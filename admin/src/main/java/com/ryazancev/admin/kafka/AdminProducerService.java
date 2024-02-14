@@ -5,6 +5,7 @@ import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.util.mapper.AdminMapper;
 import com.ryazancev.dto.admin.ObjectRequest;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
+import com.ryazancev.dto.admin.UserLockRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,13 +18,16 @@ public class AdminProducerService {
 
     private final KafkaTemplate<String,
             RegistrationRequestDto> registerKafkaTemplate;
-    private final KafkaTemplate<String, ObjectRequest> changeStatusKafkaTemplate;
+    private final KafkaTemplate<String,
+            ObjectRequest> changeStatusKafkaTemplate;
+
+    private final KafkaTemplate<String,
+            UserLockRequest> toggleUserLockKafkaTemplate;
 
     private final AdminMapper adminMapper;
 
     @Value("${spring.kafka.topic.organization.register}")
     private String organizationRegisterTopic;
-
 
     @Value("${spring.kafka.topic.product.register}")
     private String productRegisterTopic;
@@ -34,18 +38,21 @@ public class AdminProducerService {
     @Value("${spring.kafka.topic.product.change-status}")
     private String productChangeStatusTopic;
 
-    @Value("${spring.kafka.topic.user.change-status}")
-    private String userChangeStatusTopic;
+    @Value("${spring.kafka.topic.user.toggle-lock}")
+    private String toggleUserLockTopic;
 
     public AdminProducerService(
             @Qualifier("registerKafkaTemplate")
             KafkaTemplate<String, RegistrationRequestDto> registerKafkaTemplate,
             @Qualifier("changeStatusKafkaTemplate")
             KafkaTemplate<String, ObjectRequest> changeStatusKafkaTemplate,
+            @Qualifier("toggleUserLockKafkaTemplate")
+            KafkaTemplate<String, UserLockRequest> toggleUserLockKafkaTemplate,
             AdminMapper adminMapper) {
 
         this.registerKafkaTemplate = registerKafkaTemplate;
         this.changeStatusKafkaTemplate = changeStatusKafkaTemplate;
+        this.toggleUserLockKafkaTemplate = toggleUserLockKafkaTemplate;
         this.adminMapper = adminMapper;
     }
 
@@ -98,19 +105,14 @@ public class AdminProducerService {
                         objectRequest.getObjectStatus(),
                         objectRequest.getObjectId());
             }
-            case USER -> {
-                changeStatusKafkaTemplate.send(
-                        userChangeStatusTopic, objectRequest);
-
-                log.info("Request to change user status to " +
-                                "{} with id: {} successfully sent",
-                        objectRequest.getObjectStatus(),
-                        objectRequest.getObjectId());
-            }
             default -> {
                 log.info("Unknown request/object type: {}",
                         objectRequest.getObjectType());
             }
         }
+    }
+
+    public void sendMessageToToggleUserLock(UserLockRequest request) {
+        toggleUserLockKafkaTemplate.send(toggleUserLockTopic, request);
     }
 }

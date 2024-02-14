@@ -8,7 +8,12 @@ spring:
   #Kafka
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
-    topic: ${KAFKA_MAIL_TOPIC}
+    consumer:
+      group-id: ${KAFKA_AUTH_GROUP}
+    topic:
+      mail: ${KAFKA_MAIL_TOPIC}
+      user:
+        toggle-lock: ${KAFKA_TOGGLE_LOCK_USER_TOPIC}
 
   #MariaDB connection
   datasource:

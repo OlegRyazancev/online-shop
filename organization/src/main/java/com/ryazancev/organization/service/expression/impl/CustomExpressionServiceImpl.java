@@ -22,6 +22,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     @Override
     public boolean canAccessOrganization(Long organizationId) {
+
         Long currentUserId = getUserIdFromRequest();
         List<String> userRoles = getUserRolesFromRequest();
 
@@ -34,6 +35,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     @Override
     public boolean canAccessUser(Long userId) {
+
         Long currentUserId = getUserIdFromRequest();
         List<String> userRoles = getUserRolesFromRequest();
 
@@ -44,10 +46,12 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     private Long getUserIdFromRequest() {
+
         return Long.valueOf(request.getHeader("userId"));
     }
 
     private List<String> getUserRolesFromRequest() {
+
         return Arrays.asList(request.getHeader("roles").split(" "));
     }
 }

@@ -6,7 +6,8 @@ CREATE TABLE users
     password    VARCHAR(255) NOT NULL,
     customer_id BIGINT       NOT NULL,
     locked      BOOL,
-    confirmed   BOOL
+    confirmed   BOOL,
+    deleted_at  TIMESTAMP
 );
 
 

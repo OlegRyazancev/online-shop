@@ -75,12 +75,7 @@ public class ProductController {
             @Validated(OnCreate.class)
             ProductEditDTO productEditDTO) {
 
-        if (!customExpressionService
-                .canAccessOrganization(
-                        productEditDTO.getOrganizationId())) {
-
-            throw new AccessDeniedException();
-        }
+        checkAccessOrganization(productEditDTO);
 
         Product product = productMapper.toEntity(productEditDTO);
         Product saved = productService.makeRegistrationRequest(product);
@@ -95,17 +90,15 @@ public class ProductController {
         return productDTO;
     }
 
+
+
     @PutMapping
     public ProductDTO updateProduct(
             @RequestBody
             @Validated(OnUpdate.class)
             ProductEditDTO productEditDTO) {
 
-        if (!customExpressionService
-                .canAccessProduct(productEditDTO.getId())) {
-
-            throw new AccessDeniedException();
-        }
+        checkAccessProduct(productEditDTO.getId());
 
         Product product = productMapper.toEntity(productEditDTO);
         Product updated = productService.update(product);
@@ -124,6 +117,14 @@ public class ProductController {
         return productDTO;
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteProductById(@PathVariable("id") Long id) {
+
+        checkAccessProduct(id);
+
+        return productService.markProductAsDeleted(id);
+    }
+
     @GetMapping("/{id}/reviews")
     public ReviewsResponse getReviewsByProductId(
             @PathVariable("id") Long id) {
@@ -139,6 +140,40 @@ public class ProductController {
 
         return reviewClient.create(reviewPostDTO);
     }
+
+    @GetMapping("/organizations/{id}")
+    public ProductsSimpleResponse getProductsByOrganizationId(
+            @PathVariable("id") Long id) {
+
+        List<Product> organizationProducts =
+                productService.getByOrganizationId(id);
+
+        return ProductsSimpleResponse.builder()
+                .products(productMapper.toSimpleListDTO(
+                        organizationProducts))
+                .build();
+    }
+
+    private void checkAccessProduct(Long id) {
+
+        if (!customExpressionService.canAccessProduct(id)) {
+
+            throw new AccessDeniedException();
+        }
+    }
+
+    private void checkAccessOrganization(ProductEditDTO productEditDTO) {
+
+        if (!customExpressionService
+                .canAccessOrganization(
+                        productEditDTO.getOrganizationId())) {
+
+            throw new AccessDeniedException();
+        }
+    }
+
+
+    //    Endpoints only  for feign clients
 
 
     @GetMapping("/{id}/simple")
@@ -166,27 +201,4 @@ public class ProductController {
                 .build();
 
     }
-
-    @GetMapping("/organizations/{id}")
-    public ProductsSimpleResponse getProductsByOrganizationId(
-            @PathVariable("id") Long id) {
-
-        List<Product> organizationProducts =
-                productService.getByOrganizationId(id);
-
-        return ProductsSimpleResponse.builder()
-                .products(productMapper.toSimpleListDTO(
-                        organizationProducts))
-                .build();
     }
-
-    @DeleteMapping("/{id}")
-    public String deleteProductById(@PathVariable("id") Long id) {
-
-        if (!customExpressionService.canAccessProduct(id)) {
-
-            throw new AccessDeniedException();
-        }
-        return productService.markProductAsDeleted(id);
-    }
-}

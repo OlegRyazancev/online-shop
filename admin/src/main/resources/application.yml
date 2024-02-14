@@ -12,7 +12,7 @@ spring:
     topic:
       admin: ${KAFKA_REQUESTS_ADMIN_TOPIC}
       user:
-        change-status: ${KAFKA_CHANGE_STATUS_USER_TOPIC}
+        toggle-lock: ${KAFKA_TOGGLE_LOCK_USER_TOPIC}
       organization:
         register: ${KAFKA_REGISTER_ORGANIZATION_TOPIC}
         change-status: ${KAFKA_CHANGE_STATUS_ORGANIZATION_TOPIC}

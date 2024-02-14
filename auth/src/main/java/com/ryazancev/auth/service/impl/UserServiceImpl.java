@@ -39,8 +39,9 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${spring.kafka.topic}")
-    private String topicName;
+    @Value("${spring.kafka.topic.mail}")
+    private String mailTopicName;
+
     private final KafkaTemplate<String, MailDTO> kafkaTemplate;
 
     @Transactional
@@ -92,7 +93,7 @@ public class UserServiceImpl implements UserService {
                         saved.getName(),
                         token.getToken());
 
-        kafkaTemplate.send(topicName, mailDTO);
+        kafkaTemplate.send(mailTopicName, mailDTO);
 
         return userMapper.toDTO(saved);
     }
@@ -118,4 +119,18 @@ public class UserServiceImpl implements UserService {
                                 HttpStatus.NOT_FOUND));
     }
 
+    @Override
+    @Transactional
+    public void toggleUserLock(String username, boolean lock) {
+
+        User existing = userRepository.findByEmail(username)
+                .orElseThrow(()->
+                        new UserNotFoundException(
+                                "User not found",
+                                HttpStatus.NOT_FOUND));
+
+        existing.setLocked(lock);
+
+        userRepository.save(existing);
+    }
 }

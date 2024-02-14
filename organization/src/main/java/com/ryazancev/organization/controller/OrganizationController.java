@@ -72,11 +72,7 @@ public class OrganizationController {
             @Validated(OnCreate.class)
             OrganizationEditDTO organizationEditDTO) {
 
-        if (!customExpressionService
-                .canAccessUser(organizationEditDTO.getOwnerId())) {
-
-            throw new AccessDeniedException();
-        }
+        checkAccessUser(organizationEditDTO);
 
         Organization organization =
                 organizationMapper.toEntity(organizationEditDTO);
@@ -98,11 +94,7 @@ public class OrganizationController {
             @Validated(OnUpdate.class)
             OrganizationEditDTO organizationEditDTO) {
 
-        if (!customExpressionService
-                .canAccessOrganization(organizationEditDTO.getId())) {
-
-            throw new AccessDeniedException();
-        }
+        checkAccessOrganization(organizationEditDTO.getId());
 
         Organization organization =
                 organizationMapper.toEntity(organizationEditDTO);
@@ -131,17 +123,33 @@ public class OrganizationController {
             @Validated(OnCreate.class)
             @ModelAttribute LogoDTO logoDto) {
 
-        if (!customExpressionService.canAccessOrganization(id)) {
-            throw new AccessDeniedException();
-        }
+        checkAccessOrganization(id);
 
         organizationService.uploadLogo(id, logoDto);
     }
 
     @DeleteMapping("/{id}")
-    public String DeleteOrganizationById(@PathVariable("id") Long id) {
+    public String deleteOrganizationById(
+            @PathVariable("id") Long id) {
+
+        checkAccessOrganization(id);
 
         return organizationService.markOrganizationAsDeleted(id);
+    }
+
+    private void checkAccessOrganization(Long id) {
+
+        if (!customExpressionService.canAccessOrganization(id)) {
+            throw new AccessDeniedException();
+        }
+    }
+
+    private void checkAccessUser(OrganizationEditDTO organizationEditDTO) {
+
+        if (!customExpressionService
+                .canAccessUser(organizationEditDTO.getOwnerId())) {
+            throw new AccessDeniedException();
+        }
     }
 
 

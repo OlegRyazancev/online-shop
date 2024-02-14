@@ -8,6 +8,7 @@ import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.dto.admin.ObjectRequest;
 import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.admin.RequestStatus;
+import com.ryazancev.dto.admin.UserLockRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -24,8 +25,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class AdminServiceImpl
-        implements AdminService {
+public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
     private final AdminProducerService adminProducerService;
@@ -98,9 +98,20 @@ public class AdminServiceImpl
 
         return String.format(
                 "Request to %s %s with id: %s successfully sent",
-                request.getObjectStatus().name(),
-                request.getObjectType().name(),
+                request.getObjectStatus().name().toLowerCase(),
+                request.getObjectType().name().toLowerCase(),
                 request.getObjectId());
+    }
+
+    @Override
+    public String toggleUserLock(UserLockRequest request) {
+
+        adminProducerService.sendMessageToToggleUserLock(request);
+
+        return String.format(
+                "Request to set locked to: %b of user: %s successfully sent",
+                request.isLock(),
+                request.getUsername());
     }
 
     @Transactional

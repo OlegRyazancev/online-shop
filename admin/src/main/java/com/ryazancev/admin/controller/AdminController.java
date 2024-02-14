@@ -3,12 +3,10 @@ package com.ryazancev.admin.controller;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.AdminService;
 import com.ryazancev.admin.util.mapper.AdminMapper;
-import com.ryazancev.dto.admin.ObjectRequest;
-import com.ryazancev.dto.admin.RegistrationRequestDto;
-import com.ryazancev.dto.admin.RegistrationRequestsResponse;
-import com.ryazancev.dto.admin.RequestStatus;
+import com.ryazancev.dto.admin.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/admin")
 @RequiredArgsConstructor
+@Validated
 public class AdminController {
 
     private final AdminService adminService;
@@ -69,10 +68,22 @@ public class AdminController {
         return adminMapper.toDto(request);
     }
 
-    @PutMapping("/freeze")
-    public String changeObjectStatus(@RequestBody ObjectRequest request) {
+    @PutMapping("/change-object-status")
+    public String changeObjectStatus(
+            @Validated
+            @RequestBody
+            ObjectRequest request) {
 
         return adminService.changeObjectStatus(request);
+    }
+
+    @PutMapping("/toggle-user-lock")
+    public String toggleUserLock(
+            @Validated
+            @RequestBody
+            UserLockRequest request) {
+
+        return adminService.toggleUserLock(request);
     }
 
     //todo: delete customer

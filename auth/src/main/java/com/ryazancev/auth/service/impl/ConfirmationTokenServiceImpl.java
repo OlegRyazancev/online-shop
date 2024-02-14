@@ -26,8 +26,8 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final UserRepository userRepository;
 
-    @Value("${spring.kafka.topic}")
-    private String topicName;
+    @Value("${spring.kafka.topic.mail}")
+    private String mailTopicName;
 
     private final KafkaTemplate<String, MailDTO> kafkaTemplate;
 
@@ -62,7 +62,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
         userRepository.enableUser(email);
 
         MailDTO mailDTO = AuthUtil.createRegistrationMailDTO(email, name);
-        kafkaTemplate.send(topicName, mailDTO);
+        kafkaTemplate.send(mailTopicName, mailDTO);
 
         return "Email confirmed successfully!";
     }

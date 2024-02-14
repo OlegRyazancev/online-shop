@@ -2,6 +2,7 @@ package com.ryazancev.admin.kafka.config;
 
 import com.ryazancev.dto.admin.ObjectRequest;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
+import com.ryazancev.dto.admin.UserLockRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,7 @@ public class AdminProducerConfig {
     private String bootstrapServers;
 
 
-    public Map<String, Object> registerProducerConfig() {
+    public Map<String, Object> jsonProducerConfig() {
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -36,45 +37,41 @@ public class AdminProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String,
-            RegistrationRequestDto> registerProducerFactory() {
+    public KafkaTemplate<String, RegistrationRequestDto>
+    registerKafkaTemplate() {
 
-        return new DefaultKafkaProducerFactory<>(registerProducerConfig());
+        return createKafkaTemplate(
+                createProducerFactory(RegistrationRequestDto.class));
     }
 
     @Bean
-    public KafkaTemplate<String, RegistrationRequestDto> registerKafkaTemplate(
-            ProducerFactory<String, RegistrationRequestDto
-                    > producerFactory) {
+    public KafkaTemplate<String, ObjectRequest>
+    changeStatusKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createProducerFactory(ObjectRequest.class));
+    }
+
+    @Bean
+    public KafkaTemplate<String, UserLockRequest>
+    toggleUserLockKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createProducerFactory(UserLockRequest.class));
+    }
+
+    private <T> ProducerFactory<String, T>
+    createProducerFactory(Class<T> valueType) {
+
+        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
+    }
+
+
+    private <T> KafkaTemplate<String, T>
+    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
 
 
-    public Map<String, Object> changeStatusProducerConfig() {
-
-        Map<String, Object> props = new HashMap<>();
-
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapServers);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class);
-
-        return props;
-    }
-
-    @Bean
-    public ProducerFactory<String, ObjectRequest> changeStatusProducerFactory() {
-
-        return new DefaultKafkaProducerFactory<>(changeStatusProducerConfig());
-    }
-
-    @Bean
-    public KafkaTemplate<String, ObjectRequest> changeStatusKafkaTemplate(
-            ProducerFactory<String, ObjectRequest> producerFactory) {
-
-        return new KafkaTemplate<>(producerFactory);
-    }
 }

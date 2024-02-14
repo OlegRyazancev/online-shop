@@ -1,4 +1,4 @@
-package com.ryazancev.auth.kafka;
+package com.ryazancev.auth.kafka.config;
 
 import com.ryazancev.dto.mail.MailDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class KafkaProducerConfig {
+public class AuthProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;

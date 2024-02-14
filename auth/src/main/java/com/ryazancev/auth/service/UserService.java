@@ -10,4 +10,6 @@ public interface UserService {
     User getByEmail(String username);
 
     User getById(Long id);
+
+    void toggleUserLock(String username, boolean lock);
 }
