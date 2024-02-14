@@ -46,7 +46,7 @@ public class User implements Serializable {
     private Long customerId;
 
     @Column(name = "locked")
-    private Boolean locked;
+    private boolean locked;
 
     @Column(name = "confirmed")
     private Boolean confirmed;

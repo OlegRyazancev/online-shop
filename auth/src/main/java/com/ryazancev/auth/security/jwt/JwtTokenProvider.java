@@ -39,12 +39,14 @@ public class JwtTokenProvider {
     public String createAccessToken(Long userId,
                                     String email,
                                     Long customerId,
+                                    boolean isLocked,
                                     Set<Role> roles) {
 
         Claims claims = Jwts.claims().setSubject(email);
 
         claims.put("id", userId);
         claims.put("customerId", customerId);
+        claims.put("locked", isLocked);
         claims.put("roles", resolveRoles(roles));
 
         Instant validity = Instant.now()
@@ -59,12 +61,14 @@ public class JwtTokenProvider {
 
     public String createRefreshToken(Long userId,
                                      String email,
-                                     Long customerId) {
+                                     Long customerId,
+                                     boolean isLocked) {
 
         Claims claims = Jwts.claims().setSubject(email);
 
         claims.put("id", userId);
         claims.put("customerId", customerId);
+        claims.put("locked", isLocked);
 
         Instant validity = Instant.now()
                 .plus(jwtProperties.getRefresh(), ChronoUnit.DAYS);
@@ -95,13 +99,15 @@ public class JwtTokenProvider {
                         userId,
                         user.getEmail(),
                         user.getCustomerId(),
+                        user.isLocked(),
                         user.getRoles()
                 ));
         jwtResponse.setRefreshToken(
                 createRefreshToken(
                         userId,
                         user.getEmail(),
-                        user.getCustomerId()
+                        user.getCustomerId(),
+                        user.isLocked()
                 ));
 
         return jwtResponse;

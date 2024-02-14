@@ -36,19 +36,21 @@ public class AuthServiceImpl implements AuthService {
         jwtResponse.setId(user.getId());
         jwtResponse.setEmail(user.getEmail());
         jwtResponse.setCustomerId(user.getCustomerId());
-        jwtResponse.setLocked(user.getLocked());
+        jwtResponse.setLocked(user.isLocked());
         jwtResponse.setConfirmed(user.getConfirmed());
         jwtResponse.setAccessToken(
                 jwtTokenProvider.createAccessToken(
                         user.getId(),
                         user.getEmail(),
                         user.getCustomerId(),
+                        user.isLocked(),
                         user.getRoles()));
         jwtResponse.setRefreshToken(
                 jwtTokenProvider.createRefreshToken(
                         user.getId(),
                         user.getEmail(),
-                        user.getCustomerId()));
+                        user.getCustomerId(),
+                        user.isLocked()));
 
         return jwtResponse;
     }
