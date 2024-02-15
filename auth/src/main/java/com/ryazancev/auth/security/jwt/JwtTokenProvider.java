@@ -13,6 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -85,7 +86,9 @@ public class JwtTokenProvider {
         JwtResponse jwtResponse = new JwtResponse();
 
         if (!validateToken(refreshToken)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException(
+                    "Invalid refresh token",
+                    HttpStatus.BAD_REQUEST);
         }
 
         Long userId = Long.valueOf(getId(refreshToken));

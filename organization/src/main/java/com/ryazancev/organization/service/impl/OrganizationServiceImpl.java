@@ -221,7 +221,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization existing = findById(id);
 
-     organizationStatusValidator.validateAllStatus(existing);
+        organizationStatusValidator.validateAllStatus(existing);
 
         existing.setLogo("DELETED");
         existing.setDescription("DELETED");

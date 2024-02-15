@@ -88,6 +88,15 @@ public class CustomerController {
         return customerService.processPurchase(purchaseEditDto);
     }
 
+    @DeleteMapping("{id}")
+    public String deleteCustomerById(@PathVariable("id") Long id) {
+
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessCustomer(id);
+
+        return customerService.markCustomerAsDeleted(id);
+    }
+
 
     //todo: add method to watch notifications
 
@@ -120,6 +129,4 @@ public class CustomerController {
 
         return customerMapper.toSimpleDto(created);
     }
-
-
 }

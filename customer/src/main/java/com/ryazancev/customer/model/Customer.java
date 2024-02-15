@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "customers")
@@ -26,7 +27,10 @@ public class Customer implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @Column (name = "balance")
+    @Column(name = "balance")
     private Double balance;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
 }

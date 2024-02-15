@@ -6,11 +6,15 @@ import com.ryazancev.auth.model.User;
 import com.ryazancev.auth.security.jwt.JwtTokenProvider;
 import com.ryazancev.auth.service.AuthService;
 import com.ryazancev.auth.service.UserService;
+import com.ryazancev.auth.util.exception.custom.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+
+import java.time.format.DateTimeFormatter;
 
 
 @Slf4j
@@ -32,6 +36,20 @@ public class AuthServiceImpl implements AuthService {
                         loginRequest.getPassword()));
         User user = userService
                 .getByEmail(loginRequest.getEmail());
+
+        if (user.getDeletedAt() != null) {
+
+            DateTimeFormatter formatter = DateTimeFormatter
+                    .ofPattern("dd.MM.yyyy HH:mm");
+            String formattedDate = user.getDeletedAt().format(formatter);
+
+            throw new AccessDeniedException(
+                    String.format(
+                            "Access denied. Sorry %s, but this " +
+                                    "account was deleted at %s",
+                            user.getEmail(),
+                            formattedDate), HttpStatus.FORBIDDEN);
+        }
 
         jwtResponse.setId(user.getId());
         jwtResponse.setEmail(user.getEmail());

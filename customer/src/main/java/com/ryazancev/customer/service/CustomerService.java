@@ -23,4 +23,6 @@ public interface CustomerService {
     Customer updateBalance(UpdateBalanceRequest request);
 
     Customer create(Customer customer);
+
+    String markCustomerAsDeleted(Long id);
 }

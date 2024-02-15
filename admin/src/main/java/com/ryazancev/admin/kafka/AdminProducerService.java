@@ -63,19 +63,43 @@ public class AdminProducerService {
         switch (requestDto.getObjectType()) {
 
             case PRODUCT -> {
-                registerKafkaTemplate.send(productRegisterTopic, requestDto);
-                log.info(
-                        "Request sent to product topic with: {} and status {}",
-                        requestDto.getObjectType(),
-                        requestDto.getStatus()
-                );
+
+                try {
+                    registerKafkaTemplate.send(
+                            productRegisterTopic,
+                            requestDto);
+
+                    log.info(
+                            "Request sent to product topic with: {} and status {}",
+                            requestDto.getObjectType(),
+                            requestDto.getStatus()
+                    );
+                } catch (Exception e) {
+                    log.info("Request to product topic with: {} and " +
+                                    "status {} was not sent",
+                            requestDto.getObjectType(),
+                            requestDto.getStatus());
+                }
+
             }
             case ORGANIZATION -> {
-                registerKafkaTemplate.send(organizationRegisterTopic, requestDto);
-                log.info("Request sent to organization topic with: " +
-                                "{} and status {}",
-                        requestDto.getObjectType(),
-                        requestDto.getStatus());
+
+                try {
+                    registerKafkaTemplate.send(
+                            organizationRegisterTopic,
+                            requestDto);
+
+                    log.info("Request sent to organization topic with: " +
+                                    "{} and status {}",
+                            requestDto.getObjectType(),
+                            requestDto.getStatus());
+                } catch (Exception e) {
+                    log.info("Request to organization topic with: {} and " +
+                                    "status {} was not sent",
+                            requestDto.getObjectType(),
+                            requestDto.getStatus());
+                }
+
             }
             default -> {
                 log.info("Unknown request/object type: {}",
@@ -88,22 +112,36 @@ public class AdminProducerService {
 
         switch (objectRequest.getObjectType()) {
             case PRODUCT -> {
-                changeStatusKafkaTemplate.send(
-                        productChangeStatusTopic, objectRequest);
 
-                log.info("Request to change product status to " +
-                                "{} with id: {} successfully sent",
-                        objectRequest.getObjectStatus(),
-                        objectRequest.getObjectId());
+                try{
+                    changeStatusKafkaTemplate.send(
+                            productChangeStatusTopic, objectRequest);
+
+                    log.info("Request to change product status to " +
+                                    "{} with id: {} successfully sent",
+                            objectRequest.getObjectStatus(),
+                            objectRequest.getObjectId());
+                } catch (Exception e){
+                    log.info("Request to change product status " +
+                            "was not successfully sent");
+                }
+
             }
             case ORGANIZATION -> {
-                changeStatusKafkaTemplate.send(
-                        organizationChangeStatusTopic, objectRequest);
 
-                log.info("Request to change organization status to " +
-                                "{} with id: {} successfully sent",
-                        objectRequest.getObjectStatus(),
-                        objectRequest.getObjectId());
+                try{
+                    changeStatusKafkaTemplate.send(
+                            organizationChangeStatusTopic, objectRequest);
+
+                    log.info("Request to change organization status to " +
+                                    "{} with id: {} successfully sent",
+                            objectRequest.getObjectStatus(),
+                            objectRequest.getObjectId());
+                }catch (Exception e){
+                    log.info("Request to change organization status " +
+                            "was not successfully sent");
+                }
+
             }
             default -> {
                 log.info("Unknown request/object type: {}",
@@ -113,6 +151,19 @@ public class AdminProducerService {
     }
 
     public void sendMessageToToggleUserLock(UserLockRequest request) {
-        toggleUserLockKafkaTemplate.send(toggleUserLockTopic, request);
+
+        try {
+            toggleUserLockKafkaTemplate.send(toggleUserLockTopic, request);
+
+            log.info("Request to toggle user: {} lock {} " +
+                            "was successfully sent",
+                    request.getUsername(),
+                    request.isLock());
+        } catch (Exception e) {
+            log.info("Request to toggle user: {} lock {} " +
+                            "was not successfully sent",
+                    request.getUsername(),
+                    request.isLock());
+        }
     }
 }

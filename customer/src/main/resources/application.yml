@@ -32,7 +32,11 @@ spring:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       group-id: ${KAFKA_CUSTOMER_GROUP}
-    topic: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
+    topic:
+      customer:
+        update: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
+      user:
+        delete: ${KAFKA_DELETE_USER_TOPIC}
 
   #Liquibase
   liquibase:

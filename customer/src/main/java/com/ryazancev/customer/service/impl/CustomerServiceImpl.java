@@ -2,6 +2,7 @@ package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.clients.PurchaseClient;
 import com.ryazancev.clients.ReviewClient;
+import com.ryazancev.customer.kafka.CustomerProducerService;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
@@ -14,11 +15,14 @@ import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -27,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerProducerService customerProducerService;
 
     private final PurchaseClient purchaseClient;
     private final ReviewClient reviewClient;
@@ -115,6 +120,26 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setBalance(customer.getBalance());
 
         return customerRepository.save(existing);
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(
+            value = "Customer::getById",
+            key = "#id"
+    )
+    public String markCustomerAsDeleted(Long id) {
+
+        Customer existing = findById(id);
+
+        existing.setUsername("DELETED");
+        existing.setBalance(0.0);
+        existing.setDeletedAt(LocalDateTime.now());
+
+        customerProducerService.sendMessageToAuthTopic(id);
+        customerRepository.save(existing);
+
+        return "Customer was successfully deleted";
 
     }
 

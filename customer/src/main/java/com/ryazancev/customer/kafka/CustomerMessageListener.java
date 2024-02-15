@@ -17,11 +17,11 @@ public class CustomerMessageListener {
     private final CustomerService customerService;
 
     @KafkaListener(
-            topics = "${spring.kafka.topic}",
+            topics = "${spring.kafka.topic.customer.update}",
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void consumeMail(UpdateBalanceRequest request) {
+    void updateCustomerBalance(UpdateBalanceRequest request) {
         log.info("Received message to update customer: {}",
                 request.getCustomerId());
 

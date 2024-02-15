@@ -69,13 +69,27 @@ public class AuthExceptionHandler {
                 ));
     }
 
-
-    @ExceptionHandler({
-            AccessDeniedException.class,
-            org.springframework.security.access.AccessDeniedException.class})
-    public ResponseEntity<ExceptionBody> handleAccessDenied() {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionBody> handleConfirmationToken(
+            AccessDeniedException e) {
 
         log.error("Access denied exception");
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.AUTH,
+                        e.getHttpStatus()
+                ));
+    }
+
+
+    @ExceptionHandler(
+            org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<ExceptionBody> handleAccessDeniedSecurity() {
+
+        log.error("Access denied security exception");
 
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)

@@ -2,6 +2,7 @@ package com.ryazancev.auth.kafka.config;
 
 import com.ryazancev.dto.admin.UserLockRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ public class AuthConsumerConfig {
 
     @Bean
     public ConsumerFactory
-            <String, UserLockRequest> consumerFactory() {
+            <String, UserLockRequest> userLockConsumerFactory() {
 
         JsonDeserializer<UserLockRequest> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -48,7 +49,7 @@ public class AuthConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory
             <ConcurrentMessageListenerContainer
-                    <String, UserLockRequest>> messageFactory(
+                    <String, UserLockRequest>> userLockMessageFactory(
             ConsumerFactory
                     <String, UserLockRequest>
                     consumerFactory) {
@@ -58,6 +59,29 @@ public class AuthConsumerConfig {
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);
+
+        return factory;
+    }
+
+
+    @Bean
+    public ConsumerFactory<String, Long> longValueConsumerFactory() {
+
+        return new DefaultKafkaConsumerFactory<>(
+                consumerConfig(),
+                new StringDeserializer(),
+                new LongDeserializer());
+    }
+
+    @Bean
+    public KafkaListenerContainerFactory<
+            ConcurrentMessageListenerContainer<String,
+                    Long>> longValueMessageFactory(
+            ConsumerFactory<String, Long> longValueConsumerFactory) {
+
+        ConcurrentKafkaListenerContainerFactory<String, Long> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(longValueConsumerFactory);
 
         return factory;
     }

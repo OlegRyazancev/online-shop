@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -124,12 +125,29 @@ public class UserServiceImpl implements UserService {
     public void toggleUserLock(String username, boolean lock) {
 
         User existing = userRepository.findByEmail(username)
-                .orElseThrow(()->
+                .orElseThrow(() ->
                         new UserNotFoundException(
                                 "User not found",
                                 HttpStatus.NOT_FOUND));
 
         existing.setLocked(lock);
+
+        userRepository.save(existing);
+    }
+
+    @Override
+    @Transactional
+    public void markUserAsDeletedByCustomerId(Long customerId) {
+
+        User existing = userRepository.findByCustomerId(customerId).
+                orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User not found",
+                                HttpStatus.NOT_FOUND
+                        ));
+
+        existing.setName("DELETED");
+        existing.setDeletedAt(LocalDateTime.now());
 
         userRepository.save(existing);
     }

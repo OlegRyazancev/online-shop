@@ -15,6 +15,8 @@ public interface UserRepository
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByCustomerId(Long customerId);
+
     @Modifying
     @Query(value = """
             UPDATE users u

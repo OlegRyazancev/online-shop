@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -52,5 +53,5 @@ public class User implements Serializable {
     private Boolean confirmed;
 
     @Column(name = "deleted_at")
-    private Boolean deletedAt;
+    private LocalDateTime deletedAt;
 }

@@ -17,7 +17,7 @@ public class AuthMessageListeners {
     @KafkaListener(
             topics = "${spring.kafka.topic.user.toggle-lock}",
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "messageFactory"
+            containerFactory = "userLockMessageFactory"
     )
     void toggleUserLock(UserLockRequest request) {
 
@@ -34,5 +34,22 @@ public class AuthMessageListeners {
 
             log.info("User was successfully unlocked");
         }
+    }
+
+    @KafkaListener(
+            topics = "${spring.kafka.topic.user.delete}",
+            groupId = "${spring.kafka.consumer.group-id}",
+            containerFactory = "longValueMessageFactory"
+    )
+    void markUserAsDeleted(Long customerId) {
+
+        log.info("Received message to delete user where customerId: {}",
+                customerId);
+
+        userService.markUserAsDeletedByCustomerId(customerId);
+
+        log.info("User was successfully deleted");
+
+
     }
 }

@@ -35,9 +35,9 @@ public class ProductProducerService {
     public void sendMessageToAdminTopic(RegistrationRequestDto requestDto) {
         try {
             adminKafkaTemplate.send(adminTopic, requestDto);
-            log.info("Message to {} was successfully send", adminTopic);
+            log.info("Message to {} was successfully sent", adminTopic);
         } catch (Exception e) {
-            log.info("Message to {} was not send", adminTopic);
+            log.info("Message to {} was not sent", adminTopic);
             e.printStackTrace();
         }
     }
@@ -45,9 +45,9 @@ public class ProductProducerService {
     public void sendMessageToReviewTopic(Long productId) {
         try {
             reviewKafkaTemplate.send(reviewTopic, productId);
-            log.info("Message to {} was successfully send", reviewTopic);
+            log.info("Message to {} was successfully sent", reviewTopic);
         } catch (Exception e) {
-            log.info("Message to {} was not send", reviewTopic);
+            log.info("Message to {} was not sent", reviewTopic);
             e.printStackTrace();
 
         }
