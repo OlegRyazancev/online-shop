@@ -22,17 +22,22 @@ public class AdminConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
     public Map<String, Object> consumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
+
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
         return props;
     }
 
     @Bean
-    public ConsumerFactory
-            <String, RegistrationRequestDto> consumerFactory() {
+    public ConsumerFactory<String, RegistrationRequestDto>
+    consumerFactory() {
 
         JsonDeserializer<RegistrationRequestDto> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -46,12 +51,10 @@ public class AdminConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory
-            <ConcurrentMessageListenerContainer
-                    <String, RegistrationRequestDto>> messageFactory(
-            ConsumerFactory
-                    <String, RegistrationRequestDto>
-                    consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, RegistrationRequestDto>>
+    messageFactory(ConsumerFactory<
+            String, RegistrationRequestDto> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<
                 String, RegistrationRequestDto> factory =

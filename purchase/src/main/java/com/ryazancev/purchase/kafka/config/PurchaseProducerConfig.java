@@ -22,7 +22,7 @@ public class PurchaseProducerConfig {
     private String bootstrapServers;
 
 
-    public Map<String, Object> producerConfig() {
+    public Map<String, Object> jsonProducerConfig() {
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -36,32 +36,31 @@ public class PurchaseProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<
-            String, UpdateBalanceRequest> customerProducerFactory() {
+    public KafkaTemplate<String, UpdateBalanceRequest>
+    customerKafkaTemplate() {
 
-        return new DefaultKafkaProducerFactory<>(producerConfig());
+        return createKafkaTemplate(
+                createProducerFactory(UpdateBalanceRequest.class));
     }
 
     @Bean
-    public KafkaTemplate<String, UpdateBalanceRequest> customerKafkaTemplate(
-            ProducerFactory<
-                    String, UpdateBalanceRequest> customerProducerFactory) {
+    public KafkaTemplate<String, UpdateQuantityRequest>
+    productKafkaTemplate() {
 
-        return new KafkaTemplate<>(customerProducerFactory);
+        return createKafkaTemplate(
+                createProducerFactory(UpdateQuantityRequest.class));
     }
 
-    @Bean
-    public ProducerFactory<
-            String, UpdateQuantityRequest> productProducerFactory() {
+    private <T> ProducerFactory<String, T>
+    createProducerFactory(Class<T> valueType) {
 
-        return new DefaultKafkaProducerFactory<>(producerConfig());
+        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
     }
 
-    @Bean
-    public KafkaTemplate<String, UpdateQuantityRequest> productKafkaTemplate(
-            ProducerFactory<
-                    String, UpdateQuantityRequest> productProducerFactory) {
 
-        return new KafkaTemplate<>(productProducerFactory);
+    private <T> KafkaTemplate<String, T>
+    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
+
+        return new KafkaTemplate<>(producerFactory);
     }
 }

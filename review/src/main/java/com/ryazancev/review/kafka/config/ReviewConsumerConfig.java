@@ -21,6 +21,9 @@ public class ReviewConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
     @Bean
     public Map<String, Object> consumerConfig() {
 
@@ -28,6 +31,7 @@ public class ReviewConsumerConfig {
 
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
@@ -37,14 +41,17 @@ public class ReviewConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, Long> consumerFactory() {
+    public ConsumerFactory<String, Long>
+    consumerFactory() {
+
         return new DefaultKafkaConsumerFactory<>(consumerConfig());
     }
 
     @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, Long>> messageFactory(
-            ConsumerFactory<String, Long> consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, Long>>
+    messageFactory(ConsumerFactory<
+            String, Long> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
@@ -52,6 +59,4 @@ public class ReviewConsumerConfig {
 
         return factory;
     }
-
-
 }

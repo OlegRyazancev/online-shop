@@ -25,17 +25,22 @@ public class ProductConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
     public Map<String, Object> baseConsumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
+
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
         return props;
     }
 
     @Bean
-    public ConsumerFactory<
-            String, UpdateQuantityRequest> updateQuantityConsumerFactory() {
+    public ConsumerFactory<String, UpdateQuantityRequest>
+    updateQuantityConsumerFactory() {
 
         JsonDeserializer<UpdateQuantityRequest> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -49,11 +54,10 @@ public class ProductConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<
-                    String, UpdateQuantityRequest>>
-    updateQuantityMessageFactory(
-            ConsumerFactory<String, UpdateQuantityRequest> consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, UpdateQuantityRequest>>
+    updateQuantityMessageFactory(ConsumerFactory<
+            String, UpdateQuantityRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String,
                 UpdateQuantityRequest> factory =
@@ -87,7 +91,6 @@ public class ProductConsumerConfig {
 
         ConcurrentKafkaListenerContainerFactory<String,
                 RegistrationRequestDto> factory =
-
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);
@@ -96,31 +99,20 @@ public class ProductConsumerConfig {
     }
 
     @Bean
-    public Map<String, Object> longValueConsumerConfig() {
+    public ConsumerFactory<String, Long>
+    longValueConsumerFactory() {
 
-        Map<String, Object> props = new HashMap<>();
-
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapServers);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                LongDeserializer.class);
-
-        return props;
+        return new DefaultKafkaConsumerFactory<>(
+                baseConsumerConfig(),
+                new StringDeserializer(),
+                new LongDeserializer());
     }
 
     @Bean
-    public ConsumerFactory<String, Long> longValueConsumerFactory() {
-
-        return new DefaultKafkaConsumerFactory<>(longValueConsumerConfig());
-    }
-
-    @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String,
-                    Long>> longValueMessageFactory(
-            ConsumerFactory<String, Long> longValueConsumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, Long>>
+    longValueMessageFactory(ConsumerFactory<
+            String, Long> longValueConsumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
@@ -131,8 +123,8 @@ public class ProductConsumerConfig {
 
 
     @Bean
-    public ConsumerFactory<
-            String, ObjectRequest> changeObjectStatusConsumerFactory() {
+    public ConsumerFactory<String, ObjectRequest>
+    changeObjectStatusConsumerFactory() {
 
         JsonDeserializer<ObjectRequest> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -159,5 +151,4 @@ public class ProductConsumerConfig {
 
         return factory;
     }
-
 }

@@ -23,17 +23,22 @@ public class AuthConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
     public Map<String, Object> consumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
+
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
         return props;
     }
 
     @Bean
-    public ConsumerFactory
-            <String, UserLockRequest> userLockConsumerFactory() {
+    public ConsumerFactory<String, UserLockRequest>
+    userLockConsumerFactory() {
 
         JsonDeserializer<UserLockRequest> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -47,12 +52,10 @@ public class AuthConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory
-            <ConcurrentMessageListenerContainer
-                    <String, UserLockRequest>> userLockMessageFactory(
-            ConsumerFactory
-                    <String, UserLockRequest>
-                    consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, UserLockRequest>>
+    userLockMessageFactory(ConsumerFactory<
+            String, UserLockRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<
                 String, UserLockRequest> factory =
@@ -65,7 +68,8 @@ public class AuthConsumerConfig {
 
 
     @Bean
-    public ConsumerFactory<String, Long> longValueConsumerFactory() {
+    public ConsumerFactory<String, Long>
+    longValueConsumerFactory() {
 
         return new DefaultKafkaConsumerFactory<>(
                 consumerConfig(),
@@ -74,10 +78,10 @@ public class AuthConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String,
-                    Long>> longValueMessageFactory(
-            ConsumerFactory<String, Long> longValueConsumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, Long>>
+    longValueMessageFactory(ConsumerFactory<
+            String, Long> longValueConsumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();

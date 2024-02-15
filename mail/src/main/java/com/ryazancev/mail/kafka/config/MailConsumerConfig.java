@@ -22,30 +22,38 @@ public class MailConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    public Map<String, Object> consumerConfig() {
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
+    public Map<String, Object> baseConsumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
         return props;
     }
 
     @Bean
-    public ConsumerFactory<String, CustomerDto> consumerFactory() {
+    public ConsumerFactory<String, CustomerDto>
+    consumerFactory() {
 
-        JsonDeserializer<CustomerDto> jsonDeserializer = new JsonDeserializer<>();
+        JsonDeserializer<CustomerDto> jsonDeserializer =
+                new JsonDeserializer<>();
+
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
-                consumerConfig(),
+                baseConsumerConfig(),
                 new StringDeserializer(),
                 jsonDeserializer);
     }
 
     @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, CustomerDto>> messageFactory(
-            ConsumerFactory<String, CustomerDto> consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, CustomerDto>>
+    messageFactory(ConsumerFactory<
+            String, CustomerDto> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, CustomerDto> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();

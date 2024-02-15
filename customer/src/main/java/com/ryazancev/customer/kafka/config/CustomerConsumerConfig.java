@@ -22,16 +22,22 @@ public class CustomerConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
     public Map<String, Object> consumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
+
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
         return props;
     }
 
     @Bean
-    public ConsumerFactory<String, UpdateBalanceRequest> consumerFactory() {
+    public ConsumerFactory<String, UpdateBalanceRequest>
+    consumerFactory() {
 
         JsonDeserializer<UpdateBalanceRequest> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -45,10 +51,10 @@ public class CustomerConsumerConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<
-                    String, UpdateBalanceRequest>> messageFactory(
-            ConsumerFactory<String, UpdateBalanceRequest> consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, UpdateBalanceRequest>>
+    messageFactory(ConsumerFactory<
+            String, UpdateBalanceRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String,
                 UpdateBalanceRequest> factory =

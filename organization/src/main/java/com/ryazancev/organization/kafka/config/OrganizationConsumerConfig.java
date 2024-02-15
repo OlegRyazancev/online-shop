@@ -23,18 +23,22 @@ public class OrganizationConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    public Map<String, Object> registrationConsumerConfig() {
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
+    public Map<String, Object> baseConsumerConfig() {
 
         Map<String, Object> props = new HashMap<>();
 
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapServers);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
         return props;
     }
 
     @Bean
-    public ConsumerFactory<String, RegistrationRequestDto> registrationConsumerFactory() {
+    public ConsumerFactory<String, RegistrationRequestDto>
+    registrationConsumerFactory() {
 
         JsonDeserializer<RegistrationRequestDto> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -42,14 +46,14 @@ public class OrganizationConsumerConfig {
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
-                registrationConsumerConfig(),
+                baseConsumerConfig(),
                 new StringDeserializer(),
                 jsonDeserializer);
     }
 
     @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, RegistrationRequestDto>>
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, RegistrationRequestDto>>
     registrationMessageFactory(ConsumerFactory<
             String, RegistrationRequestDto> consumerFactory) {
 
@@ -62,18 +66,9 @@ public class OrganizationConsumerConfig {
         return factory;
     }
 
-    public Map<String, Object> changeStatusConsumerConfig() {
-
-        Map<String, Object> props = new HashMap<>();
-
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapServers);
-
-        return props;
-    }
-
     @Bean
-    public ConsumerFactory<String, ObjectRequest> changeStatusConsumerFactory() {
+    public ConsumerFactory<String, ObjectRequest>
+    changeStatusConsumerFactory() {
 
         JsonDeserializer<ObjectRequest> jsonDeserializer =
                 new JsonDeserializer<>();
@@ -81,25 +76,23 @@ public class OrganizationConsumerConfig {
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
-                changeStatusConsumerConfig(),
+                baseConsumerConfig(),
                 new StringDeserializer(),
                 jsonDeserializer);
     }
 
     @Bean
-    public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<
-                    String, ObjectRequest>> changeStatusMessageFactory(
-            ConsumerFactory<String, ObjectRequest>
-                    consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, ObjectRequest>>
+    changeStatusMessageFactory(ConsumerFactory<
+            String, ObjectRequest> consumerFactory) {
 
-        ConcurrentKafkaListenerContainerFactory<String, ObjectRequest> factory =
+        ConcurrentKafkaListenerContainerFactory<
+                String, ObjectRequest> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);
 
         return factory;
     }
-
-
 }

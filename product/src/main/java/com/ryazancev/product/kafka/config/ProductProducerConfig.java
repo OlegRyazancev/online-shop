@@ -22,7 +22,7 @@ public class ProductProducerConfig {
     private String bootstrapServers;
 
 
-    public Map<String, Object> adminProducerConfig() {
+    public Map<String, Object> jsonProducerConfig() {
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -38,7 +38,7 @@ public class ProductProducerConfig {
     @Bean
     public ProducerFactory<String, RegistrationRequestDto> adminProducerFactory() {
 
-        return new DefaultKafkaProducerFactory<>(adminProducerConfig());
+        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
     }
 
     @Bean
@@ -49,7 +49,7 @@ public class ProductProducerConfig {
         return new KafkaTemplate<>(adminProducerFactory);
     }
 
-    public Map<String, Object> reviewProducerConfig() {
+    public Map<String, Object> longValueProducerConfig() {
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -65,7 +65,7 @@ public class ProductProducerConfig {
     @Bean
     public ProducerFactory<String, Long> reviewProducerFactory() {
 
-        return new DefaultKafkaProducerFactory<>(reviewProducerConfig());
+        return new DefaultKafkaProducerFactory<>(longValueProducerConfig());
     }
 
     @Bean
