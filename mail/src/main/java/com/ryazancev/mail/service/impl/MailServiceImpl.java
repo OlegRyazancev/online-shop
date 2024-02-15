@@ -27,8 +27,8 @@ public class MailServiceImpl implements MailService {
     @Override
     public void sendEmail(MailDto mailDto) {
         switch (mailDto.getType()) {
-            case REGISTRATION -> sendRegistrationEmail(mailDto);
-            case CONFIRMATION -> sendConfirmationEmail(mailDto);
+            case USER_REGISTRATION -> sendRegistrationEmail(mailDto);
+            case MAIL_CONFIRMATION -> sendConfirmationEmail(mailDto);
             default -> {
             }
         }

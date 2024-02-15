@@ -15,6 +15,7 @@ spring:
         register: ${KAFKA_REGISTER_ORGANIZATION_TOPIC}
         change-status: ${KAFKA_CHANGE_STATUS_ORGANIZATION_TOPIC}
       product: ${KAFKA_DELETE_PRODUCT_TOPIC}
+      mail: ${KAFKA_MAIL_TOPIC}
     consumer:
       group-id: ${KAFKA_ORGANIZATION_GROUP}
 

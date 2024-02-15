@@ -1,14 +1,21 @@
 package com.ryazancev.organization.kafka;
 
+import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.dto.admin.ObjectRequest;
 import com.ryazancev.dto.admin.ObjectStatus;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
+import com.ryazancev.dto.customer.CustomerDto;
+import com.ryazancev.dto.mail.MailDto;
+import com.ryazancev.dto.mail.MailType;
+import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Properties;
 
 @Slf4j
 @Component
@@ -17,6 +24,9 @@ public class OrganizationMessageListener {
 
 
     private final OrganizationService organizationService;
+    private final CustomerClient customerClient;
+
+    private final OrganizationProducerService organizationProducerService;
 
     @KafkaListener(
             topics = "${spring.kafka.topic.organization.register}",
@@ -30,12 +40,19 @@ public class OrganizationMessageListener {
 
         switch (requestDto.getStatus()) {
             case ACCEPTED -> {
+
                 organizationService.changeStatus(
                         requestDto.getObjectToRegisterId(),
                         OrganizationStatus.ACTIVE);
                 organizationService.register(
                         requestDto.getObjectToRegisterId()
                 );
+
+                MailDto mailDto = createMail(
+                        requestDto.getObjectToRegisterId(),
+                        MailType.ORGANIZATION_REGISTRATION_ACCEPTED);
+
+                organizationProducerService.sendMessageToMailTopic(mailDto);
 
                 log.info("Organization now is: {}",
                         OrganizationStatus.ACTIVE);
@@ -44,6 +61,12 @@ public class OrganizationMessageListener {
                 organizationService.changeStatus(
                         requestDto.getObjectToRegisterId(),
                         OrganizationStatus.INACTIVE);
+
+                MailDto mailDto = createMail(
+                        requestDto.getObjectToRegisterId(),
+                        MailType.ORGANIZATION_REGISTRATION_REJECTED);
+
+                organizationProducerService.sendMessageToMailTopic(mailDto);
 
                 log.info("Organization now is: {}",
                         OrganizationStatus.INACTIVE);
@@ -54,6 +77,25 @@ public class OrganizationMessageListener {
                         requestDto.getStatus());
             }
         }
+    }
+
+    private MailDto createMail(Long organizationId,
+                               MailType mailType) {
+
+        boolean statusCheck = false;
+        Organization registered = organizationService.getById(
+                organizationId, statusCheck);
+
+        CustomerDto customerDto = customerClient.getSimpleById(registered.getOwnerId());
+        Properties properties = new Properties();
+        properties.setProperty("organization_name", registered.getName());
+
+        return MailDto.builder()
+                .email(customerDto.getEmail())
+                .type(mailType)
+                .name(customerDto.getUsername())
+                .properties(properties)
+                .build();
     }
 
     @KafkaListener(

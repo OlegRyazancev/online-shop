@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final CustomerClient customerClient;
     private final ConfirmationTokenService confirmationTokenService;
+    private final AuthUtil authUtil;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -83,16 +84,14 @@ public class UserServiceImpl implements UserService {
 
         User saved = userRepository.save(user);
 
-        ConfirmationToken token = AuthUtil
-                .getConfirmationToken(saved);
+        ConfirmationToken token = authUtil.getConfirmationToken(saved);
         confirmationTokenService.save(token);
 
 
-        MailDto mailDto = AuthUtil
-                .createConfirmationMailDto(
-                        saved.getEmail(),
-                        saved.getName(),
-                        token.getToken());
+        MailDto mailDto = authUtil.createConfirmationMailDto(
+                saved.getEmail(),
+                saved.getName(),
+                token.getToken());
 
         kafkaTemplate.send(mailTopicName, mailDto);
 

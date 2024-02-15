@@ -38,6 +38,7 @@ security:
     access: ${JWT_ACCESS}
     refresh: ${JWT_REFRESH}
     secret: ${JWT_SECRET}
+    confirmation_link_prefix: ${SECURITY_CONFIRMATION_LINK_PREFIX}
 
 #Zipkin
 management:

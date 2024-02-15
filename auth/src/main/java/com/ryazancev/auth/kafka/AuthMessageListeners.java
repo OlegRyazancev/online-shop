@@ -48,7 +48,7 @@ public class AuthMessageListeners {
 
         userService.markUserAsDeletedByCustomerId(customerId);
 
-        log.info("User was successfully deleted");
+        log.info("User was successfully marked as deleted");
 
 
     }

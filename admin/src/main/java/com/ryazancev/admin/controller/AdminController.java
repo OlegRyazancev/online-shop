@@ -86,7 +86,6 @@ public class AdminController {
         return adminService.toggleUserLock(request);
     }
 
-    //todo: delete customer
     //todo: send notification to user
 
 }

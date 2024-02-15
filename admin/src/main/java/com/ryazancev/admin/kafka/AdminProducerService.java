@@ -113,7 +113,7 @@ public class AdminProducerService {
         switch (objectRequest.getObjectType()) {
             case PRODUCT -> {
 
-                try{
+                try {
                     changeStatusKafkaTemplate.send(
                             productChangeStatusTopic, objectRequest);
 
@@ -121,7 +121,7 @@ public class AdminProducerService {
                                     "{} with id: {} successfully sent",
                             objectRequest.getObjectStatus(),
                             objectRequest.getObjectId());
-                } catch (Exception e){
+                } catch (Exception e) {
                     log.info("Request to change product status " +
                             "was not successfully sent");
                 }
@@ -129,7 +129,7 @@ public class AdminProducerService {
             }
             case ORGANIZATION -> {
 
-                try{
+                try {
                     changeStatusKafkaTemplate.send(
                             organizationChangeStatusTopic, objectRequest);
 
@@ -137,7 +137,7 @@ public class AdminProducerService {
                                     "{} with id: {} successfully sent",
                             objectRequest.getObjectStatus(),
                             objectRequest.getObjectId());
-                }catch (Exception e){
+                } catch (Exception e) {
                     log.info("Request to change organization status " +
                             "was not successfully sent");
                 }

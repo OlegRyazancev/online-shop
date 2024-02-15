@@ -12,7 +12,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface CustomerMapper {
 
-    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "username", ignore = true)
     @Mapping(target = "balance", ignore = true)
     CustomerDto toSimpleDto(Customer customer);
 
