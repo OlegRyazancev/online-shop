@@ -34,6 +34,12 @@ management:
     sampling:
       probability: 1.0
 
+  #Actuator Prometheus Endpoint
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
 #Eureka
 eureka:
   client:

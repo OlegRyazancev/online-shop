@@ -73,6 +73,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.ryazancev</groupId>
             <artifactId>clients</artifactId>
             <version>1.0-SNAPSHOT</version>

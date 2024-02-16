@@ -17,7 +17,7 @@ spring:
         format_sql: true
     show-sql: true
 
-#Redis
+  #Redis
   cache:
     type: redis
     cache-names: redis-cache
@@ -48,6 +48,12 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+  #Actuator Prometheus Endpoint
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
 
 #Eureka
 eureka:

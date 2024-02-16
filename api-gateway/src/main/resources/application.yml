@@ -44,11 +44,19 @@ spring:
     jwt:
       secret: ${JWT_SECRET}
 
+#Zipkin
 management:
   tracing:
     sampling:
       probability: 1.0
 
+#Actuator Prometheus Endpoint
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+#Eureka
 eureka:
   client:
     service-url:
