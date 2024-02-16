@@ -2,6 +2,7 @@ package com.ryazancev.product.util;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.OrganizationClient;
+import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.dto.mail.MailType;
@@ -26,7 +27,7 @@ public class ProductUtil {
     public void sendAcceptedMailToCustomerByProductId(Long productId) {
         MailDto mailDto = createMailDto(
                 productId,
-                MailType.PRODUCT_REGISTRATION_ACCEPTED);
+                MailType.OBJECT_REGISTRATION_ACCEPTED);
 
         productProducerService.sendMessageToMailTopic(mailDto);
     }
@@ -34,7 +35,7 @@ public class ProductUtil {
     public void sendRejectedMailToCustomerByProductId(Long productId) {
         MailDto mailDto = createMailDto(
                 productId,
-                MailType.PRODUCT_REGISTRATION_REJECTED);
+                MailType.OBJECT_REGISTRATION_REJECTED);
 
         productProducerService.sendMessageToMailTopic(mailDto);
     }
@@ -52,7 +53,11 @@ public class ProductUtil {
         CustomerDto customerDto = customerClient.getSimpleById(customerId);
 
         Properties properties = new Properties();
-        properties.setProperty("product_name", registered.getProductName());
+
+        properties.setProperty(
+                "object_name", registered.getProductName());
+        properties.setProperty(
+                "object_type", ObjectType.PRODUCT.name().toLowerCase());
 
         return MailDto.builder()
                 .email(customerDto.getEmail())

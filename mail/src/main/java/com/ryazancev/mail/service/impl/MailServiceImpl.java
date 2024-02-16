@@ -27,30 +27,90 @@ public class MailServiceImpl implements MailService {
     @Override
     public void sendEmail(MailDto mailDto) {
         switch (mailDto.getType()) {
-            case USER_REGISTRATION -> sendRegistrationEmail(mailDto);
-            case MAIL_CONFIRMATION -> sendConfirmationEmail(mailDto);
+
+            case USER_REGISTRATION -> {
+
+                sendRegistrationEmail(mailDto);
+            }
+
+            case MAIL_CONFIRMATION -> {
+
+                sendConfirmationEmail(mailDto);
+            }
+
+            case OBJECT_REGISTRATION_ACCEPTED -> {
+
+                sendAcceptedObjectRegistrationEmail(mailDto);
+            }
+            case OBJECT_REGISTRATION_REJECTED -> {
+
+                sendRejectedObjectRegistrationEmail(mailDto);
+            }
+
             default -> {
             }
         }
     }
 
     @SneakyThrows
+    private void sendRejectedObjectRegistrationEmail(MailDto mailDto) {
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper =
+                new MimeMessageHelper(message, false, "UTF-8");
+        helper.setSubject(
+                "Dear " + mailDto.getName() + "! Your registration " +
+                        "request were rejected!");
+        helper.setTo(mailDto.getEmail());
+
+        String emailContent = getObjectRegistrationEmailContent(
+                mailDto.getName(),
+                mailDto.getProperties(),
+                "rejected_registration.ftlh");
+
+        helper.setText(emailContent, true);
+
+        mailSender.send(message);
+
+    }
+
+    @SneakyThrows
+    private void sendAcceptedObjectRegistrationEmail(MailDto mailDto) {
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper =
+                new MimeMessageHelper(message, false, "UTF-8");
+        helper.setSubject(
+                "Dear " + mailDto.getName() + "! Your registration " +
+                        "request were accepted!");
+        helper.setTo(mailDto.getEmail());
+
+        String emailContent = getObjectRegistrationEmailContent(
+                mailDto.getName(),
+                mailDto.getProperties(),
+                "accepted_registration.ftlh");
+
+        helper.setText(emailContent, true);
+
+        mailSender.send(message);
+    }
+
+
+    @SneakyThrows
     private void sendRegistrationEmail(MailDto mailDto) {
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper =
-                new MimeMessageHelper(
-                        message,
-                        false,
-                        "UTF-8"
-                );
+                new MimeMessageHelper(message, false, "UTF-8");
         helper.setSubject(
                 "Thank you for registration, "
                         + mailDto.getName()
                         + "!");
         helper.setTo(mailDto.getEmail());
+
         String emailContent = getRegistrationEmailContent(mailDto.getName());
         helper.setText(emailContent, true);
+
         mailSender.send(message);
     }
 
@@ -90,12 +150,12 @@ public class MailServiceImpl implements MailService {
 
     @SneakyThrows
     private String getConfirmationContent(String name,
-                                          Properties params) {
+                                          Properties properties) {
         StringWriter writer = new StringWriter();
         Map<String, Object> model = new HashMap<>();
 
         model.put("name", name);
-        model.put("link", params.getProperty("link"));
+        model.put("link", properties.getProperty("link"));
 
         configuration.getTemplate("confirm.ftlh")
                 .process(model, writer);
@@ -103,4 +163,21 @@ public class MailServiceImpl implements MailService {
         return writer.getBuffer().toString();
     }
 
+    @SneakyThrows
+    private String getObjectRegistrationEmailContent(String name,
+                                                     Properties properties,
+                                                     String template) {
+
+        StringWriter writer = new StringWriter();
+        Map<String, Object> model = new HashMap<>();
+
+        model.put("name", name);
+        model.put("object_name", properties.getProperty("object_name"));
+        model.put("object_type", properties.getProperty("object_type"));
+
+        configuration.getTemplate(template)
+                .process(model, writer);
+
+        return writer.getBuffer().toString();
+    }
 }

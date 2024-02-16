@@ -1,6 +1,7 @@
 package com.ryazancev.organization.util;
 
 import com.ryazancev.clients.CustomerClient;
+import com.ryazancev.dto.admin.ObjectType;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.dto.mail.MailType;
@@ -26,7 +27,7 @@ public class OrganizationUtil {
     sendAcceptedMailToCustomerByOrganizationId(Long organizationId) {
         MailDto mailDto = createMail(
                 organizationId,
-                MailType.ORGANIZATION_REGISTRATION_ACCEPTED);
+                MailType.OBJECT_REGISTRATION_ACCEPTED);
 
         organizationProducerService.sendMessageToMailTopic(mailDto);
     }
@@ -35,7 +36,7 @@ public class OrganizationUtil {
     sendRejectedMailToCustomerByOrganizationId(Long organizationId) {
         MailDto mailDto = createMail(
                 organizationId,
-                MailType.ORGANIZATION_REGISTRATION_REJECTED);
+                MailType.OBJECT_REGISTRATION_REJECTED);
 
         organizationProducerService.sendMessageToMailTopic(mailDto);
     }
@@ -51,7 +52,11 @@ public class OrganizationUtil {
         CustomerDto customerDto = customerClient
                 .getSimpleById(registered.getOwnerId());
         Properties properties = new Properties();
-        properties.setProperty("organization_name", registered.getName());
+
+        properties.setProperty(
+                "object_name", registered.getName());
+        properties.setProperty(
+                "object_type", ObjectType.ORGANIZATION.name().toLowerCase());
 
         return MailDto.builder()
                 .email(customerDto.getEmail())
