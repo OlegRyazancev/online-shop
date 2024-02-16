@@ -16,7 +16,7 @@ public interface OrganizationClient {
     OrganizationDto getSimpleById(
             @PathVariable("id") Long id);
 
-    @GetMapping("api/v1/organizations/{id}/owner")
+    @GetMapping("api/v1/organizations/{id}/owner-id")
     Long getOwnerId(
             @PathVariable("id") Long organizationId);
 

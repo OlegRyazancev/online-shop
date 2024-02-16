@@ -2,7 +2,6 @@ package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.dto.product.PriceQuantityResponse;
@@ -14,13 +13,10 @@ import com.ryazancev.purchase.kafka.PurchaseProducerService;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.PurchaseService;
-import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
-import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
-import com.ryazancev.purchase.util.exception.custom.PurchasesNotFoundException;
 import com.ryazancev.purchase.util.mapper.PurchaseMapper;
+import com.ryazancev.purchase.util.validator.PurchaseValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +31,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     private final PurchaseRepository purchaseRepository;
     private final PurchaseMapper purchaseMapper;
+    private final PurchaseValidator purchaseValidator;
 
     private final ProductClient productClient;
     private final CustomerClient customerClient;
@@ -52,45 +49,48 @@ public class PurchaseServiceImpl implements PurchaseService {
         Double availableCustomerBalance = customerClient
                 .getBalanceById(customerId);
 
-       PriceQuantityResponse priceQuantityResponse = productClient
+        PriceQuantityResponse priceQuantityResponse = productClient
                 .getPriceAndQuantityByProductId(productId);
-        Double selectedProductPrice = 
+        Double selectedProductPrice =
                 priceQuantityResponse.getPrice();
-        Integer availableProductsInStock = 
+        Integer availableProductsInStock =
                 priceQuantityResponse.getQuantityInStock();
 
-        if (availableCustomerBalance < selectedProductPrice) {
-            throw new IncorrectBalanceException(
-                    "Customer doesn't have enough money " +
-                            "to purchase the product",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-        if (availableProductsInStock == 0) {
-            throw new OutOfStockException(
-                    "No available products in stock",
-                    HttpStatus.CONFLICT
-            );
-        }
-
-        //todo: increase money in organization's owner (for future add percent to admin)
+        purchaseValidator.validateSufficientBalance(
+                availableCustomerBalance,
+                selectedProductPrice);
+        purchaseValidator.validateProductAvailability(
+                availableProductsInStock);
+        //todo: for future add percent to admin
 
         updateCustomerBalance(customerId,
                 availableCustomerBalance - selectedProductPrice);
-        updateProductQuantity(productId, availableProductsInStock);
+        updateProductQuantity(productId,
+                availableProductsInStock - 1);
+
+        Long productOwnerId = productClient.getOwnerId(productId);
+        Double ownerBalance = customerClient.getBalanceById(productOwnerId);
+
+        updateCustomerBalance(productOwnerId,
+                ownerBalance + selectedProductPrice);
 
         Purchase toSave = purchaseMapper.toEntity(purchaseEditDto);
         toSave.setPurchaseDate(LocalDateTime.now());
         toSave.setAmount(selectedProductPrice);
 
         Purchase saved = purchaseRepository.save(toSave);
+
+        return createPurchaseDto(saved);
+    }
+
+    private PurchaseDto createPurchaseDto(Purchase saved) {
+
         PurchaseDto purchaseDto = purchaseMapper.toDto(saved);
 
-        CustomerDto customerDto = customerClient.getSimpleById(customerId);
-        ProductDto productDto = productClient.getSimpleById(productId);
-
-        purchaseDto.setCustomer(customerDto);
-        purchaseDto.setProduct(productDto);
+        purchaseDto.setCustomer(
+                customerClient.getSimpleById(saved.getCustomerId()));
+        purchaseDto.setProduct(
+                productClient.getSimpleById(saved.getProductId()));
 
         return purchaseDto;
     }
@@ -101,33 +101,9 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchaseProducerService.sendMessageToProductTopic(
                 UpdateQuantityRequest.builder()
                         .productId(productId)
-                        .quantityInStock(availableProductsInStock - 1)
+                        .quantityInStock(availableProductsInStock)
                         .build()
         );
-    }
-
-    @Override
-    public CustomerPurchasesResponse getByCustomerId(Long customerId) {
-        List<Purchase> purchases = purchaseRepository
-                .findByCustomerId(customerId);
-
-        if (purchases.isEmpty()) {
-            throw new PurchasesNotFoundException(
-                    "No purchases found for customer with this ID",
-                    HttpStatus.NOT_FOUND
-            );
-        }
-
-        List<PurchaseDto> purchasesDto = purchaseMapper.toListDto(purchases);
-
-        for (int i = 0; i < purchasesDto.size(); i++) {
-            ProductDto productDto = productClient
-                    .getSimpleById(purchases.get(i).getProductId());
-            purchasesDto.get(i).setProduct(productDto);
-        }
-        return CustomerPurchasesResponse.builder()
-                .purchases(purchasesDto)
-                .build();
     }
 
     private void updateCustomerBalance(Long customerId,
@@ -141,4 +117,22 @@ public class PurchaseServiceImpl implements PurchaseService {
         );
     }
 
+    @Override
+    public CustomerPurchasesResponse getByCustomerId(Long customerId) {
+        List<Purchase> purchases = purchaseRepository
+                .findByCustomerId(customerId);
+
+        purchaseValidator.validatePurchasesExist(purchases);
+
+        List<PurchaseDto> purchasesDto = purchaseMapper.toListDto(purchases);
+
+        for (int i = 0; i < purchasesDto.size(); i++) {
+            ProductDto productDto = productClient
+                    .getSimpleById(purchases.get(i).getProductId());
+            purchasesDto.get(i).setProduct(productDto);
+        }
+        return CustomerPurchasesResponse.builder()
+                .purchases(purchasesDto)
+                .build();
+    }
 }

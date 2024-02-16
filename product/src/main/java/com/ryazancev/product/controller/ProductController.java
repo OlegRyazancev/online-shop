@@ -194,4 +194,15 @@ public class ProductController {
                         organizationProducts))
                 .build();
     }
+
+    @GetMapping("/{id}/owner-id")
+    public Long getOwnerId(
+            @PathVariable("id") Long productId) {
+
+        boolean statusCheck = false;
+
+        Product product = productService.getById(productId, statusCheck);
+
+        return organizationClient.getOwnerId(product.getOrganizationId());
+    }
 }

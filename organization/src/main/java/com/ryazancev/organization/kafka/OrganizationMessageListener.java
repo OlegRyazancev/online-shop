@@ -1,13 +1,8 @@
 package com.ryazancev.organization.kafka;
 
-import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.dto.admin.ObjectRequest;
 import com.ryazancev.dto.admin.ObjectStatus;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
-import com.ryazancev.dto.customer.CustomerDto;
-import com.ryazancev.dto.mail.MailDto;
-import com.ryazancev.dto.mail.MailType;
-import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.OrganizationUtil;
@@ -15,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-
-import java.util.Properties;
 
 @Slf4j
 @Component

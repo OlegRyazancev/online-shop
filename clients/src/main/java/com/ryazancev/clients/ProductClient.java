@@ -26,4 +26,7 @@ public interface ProductClient {
     PriceQuantityResponse getPriceAndQuantityByProductId(
             @PathVariable("id") Long productId);
 
+    @GetMapping("api/v1/products/{id}/owner-id")
+     Long getOwnerId(
+            @PathVariable("id") Long productId);
 }

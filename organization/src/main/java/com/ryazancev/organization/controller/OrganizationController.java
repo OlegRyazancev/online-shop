@@ -162,7 +162,7 @@ public class OrganizationController {
         return organizationMapper.toSimpleDto(organization);
     }
 
-    @GetMapping("/{id}/owner")
+    @GetMapping("/{id}/owner-id")
     public Long getOwnerId(
             @PathVariable("id") Long id) {
 
