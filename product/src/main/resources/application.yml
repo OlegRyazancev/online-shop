@@ -41,6 +41,7 @@ spring:
         update: ${KAFKA_UPDATE_PRODUCT_TOPIC}
         delete: ${KAFKA_DELETE_PRODUCT_TOPIC}
         change-status: ${KAFKA_CHANGE_STATUS_PRODUCT_TOPIC}
+      mail: ${KAFKA_MAIL_TOPIC}
 
   #Liquibase
   liquibase:

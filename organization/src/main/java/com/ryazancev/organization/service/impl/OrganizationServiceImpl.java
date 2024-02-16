@@ -167,7 +167,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization existing = findById(id);
 
         existing.setRegisteredAt(LocalDateTime.now());
-        //todo: send email in case of status of organization
+
         organizationRepository.save(existing);
     }
 

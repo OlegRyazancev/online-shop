@@ -18,6 +18,6 @@ public interface OrganizationClient {
 
     @GetMapping("api/v1/organizations/{id}/owner")
     Long getOwnerId(
-            @PathVariable("id") Long id);
+            @PathVariable("id") Long organizationId);
 
 }

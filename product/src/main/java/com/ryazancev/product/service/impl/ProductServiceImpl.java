@@ -143,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
         Product existing = findById(id);
 
         existing.setRegisteredAt(LocalDateTime.now());
-        //todo: send email in case of status of product
+
         productRepository.save(existing);
     }
 

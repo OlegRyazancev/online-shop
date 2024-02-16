@@ -1,6 +1,7 @@
 package com.ryazancev.product.kafka.config;
 
 import com.ryazancev.dto.admin.RegistrationRequestDto;
+import com.ryazancev.dto.mail.MailDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -36,17 +37,19 @@ public class ProductProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, RegistrationRequestDto> adminProducerFactory() {
+    public KafkaTemplate<String, RegistrationRequestDto>
+    adminKafkaTemplate() {
 
-        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
+        return createKafkaTemplate(
+                createProducerFactory(RegistrationRequestDto.class));
     }
 
     @Bean
-    public KafkaTemplate<String, RegistrationRequestDto> adminKafkaTemplate(
-            ProducerFactory<
-                    String, RegistrationRequestDto> adminProducerFactory) {
+    public KafkaTemplate<String, MailDto>
+    mailKafkaTemplate() {
 
-        return new KafkaTemplate<>(adminProducerFactory);
+        return createKafkaTemplate(
+                createProducerFactory(MailDto.class));
     }
 
     public Map<String, Object> longValueProducerConfig() {
@@ -73,6 +76,19 @@ public class ProductProducerConfig {
             ProducerFactory<String, Long> reviewProducerFactory) {
 
         return new KafkaTemplate<>(reviewProducerFactory);
+    }
+
+    private <T> ProducerFactory<String, T>
+    createProducerFactory(Class<T> valueType) {
+
+        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
+    }
+
+
+    private <T> KafkaTemplate<String, T>
+    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
+
+        return new KafkaTemplate<>(producerFactory);
     }
 
 }

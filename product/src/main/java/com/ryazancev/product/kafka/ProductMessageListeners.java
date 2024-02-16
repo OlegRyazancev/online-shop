@@ -7,6 +7,7 @@ import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.ProductUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,6 +22,8 @@ public class ProductMessageListeners {
 
 
     private final ProductService productService;
+    private final ProductUtil productUtil;
+
 
     @KafkaListener(
             topics = "${spring.kafka.topic.product.update}",
@@ -62,6 +65,9 @@ public class ProductMessageListeners {
                 productService.register(
                         requestDto.getObjectToRegisterId());
 
+                productUtil.sendAcceptedMailToCustomerByProductId(
+                        requestDto.getObjectToRegisterId());
+
                 log.info("Product now is: {}",
                         ProductStatus.ACTIVE);
             }
@@ -69,6 +75,9 @@ public class ProductMessageListeners {
                 productService.changeStatus(
                         requestDto.getObjectToRegisterId(),
                         ProductStatus.INACTIVE);
+
+                productUtil.sendRejectedMailToCustomerByProductId(
+                        requestDto.getObjectToRegisterId());
 
                 log.info("Product now is: {}",
                         ProductStatus.INACTIVE);
