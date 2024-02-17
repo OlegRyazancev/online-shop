@@ -1,15 +1,31 @@
 server:
-  port: ${CUSTOMER_PORT}
+  port: 8089
 
 spring:
   application:
-    name: customer
+    name: admin
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: ${KAFKA_ADMIN_GROUP}
+    topic:
+      admin: ${KAFKA_REQUESTS_ADMIN_TOPIC}
+      user:
+        toggle-lock: ${KAFKA_TOGGLE_LOCK_USER_TOPIC}
+      organization:
+        register: ${KAFKA_REGISTER_ORGANIZATION_TOPIC}
+        change-status: ${KAFKA_CHANGE_STATUS_ORGANIZATION_TOPIC}
+      product:
+        register: ${KAFKA_REGISTER_PRODUCT_TOPIC}
+        change-status: ${KAFKA_CHANGE_STATUS_PRODUCT_TOPIC}
+
 
   #PostgreSQL connection
   datasource:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_CUSTOMER_DATABASE}?currentSchema=${POSTGRES_CUSTOMER_SCHEMA}
+    url: jdbc:postgresql://postgres:5432/${POSTGRES_ADMIN_DATABASE}?currentSchema=${POSTGRES_ADMIN_SCHEMA}
   jpa:
     properties:
       hibernate:
@@ -23,20 +39,9 @@ spring:
     cache-names: redis-cache
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
       password: ${REDIS_PASSWORD}
-
-  #Kafka
-  kafka:
-    bootstrap-servers: localhost:29092
-    consumer:
-      group-id: ${KAFKA_CUSTOMER_GROUP}
-    topic:
-      customer:
-        update: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
-      user:
-        delete: ${KAFKA_DELETE_USER_TOPIC}
 
   #Liquibase
   liquibase:
@@ -48,6 +53,9 @@ management:
   tracing:
     sampling:
       probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
 
   #Actuator Prometheus Endpoint
   endpoints:
@@ -67,6 +75,6 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true

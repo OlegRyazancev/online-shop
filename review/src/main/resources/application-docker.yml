@@ -1,17 +1,17 @@
 server:
-  port: ${PURCHASE_PORT}
+  port: ${REVIEW_PORT}
 
 spring:
   application:
-    name: purchase
+    name: review
 
   #MongoDB connection
   data:
     mongodb:
-      host: localhost
+      host: mongodb
       port: 27017
       authentication-database: admin
-      database: ${MONGO_PURCHASE_DATABASE}
+      database: ${MONGO_REVIEW_DATABASE}
       username: ${MONGO_INITDB_ROOT_USERNAME}
       password: ${MONGO_INITDB_ROOT_PASSWORD}
   jpa:
@@ -20,14 +20,14 @@ spring:
         dialect: org.hibernate.dialect.MongoDBDialect
         format_sql: true
     show-sql: true
+
   #Kafka
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: ${KAFKA_REVIEW_GROUP}
     topic:
-      customer:
-        update: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
-      product:
-        update: ${KAFKA_UPDATE_PRODUCT_TOPIC}
+      review: ${KAFKA_DELETE_REVIEW_TOPIC}
 
 #Zipkin
 management:
@@ -53,6 +53,6 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true

@@ -1,58 +1,52 @@
 server:
-  port: ${PRODUCT_PORT}
+  port: 9091
 
 spring:
   application:
-    name: product
+    name: auth
+
+  #Kafka
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: ${KAFKA_AUTH_GROUP}
+    topic:
+      mail: ${KAFKA_MAIL_TOPIC}
+      user:
+        toggle-lock: ${KAFKA_TOGGLE_LOCK_USER_TOPIC}
+        delete: ${KAFKA_DELETE_USER_TOPIC}
 
   #MariaDB connection
   datasource:
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
-    url: jdbc:mariadb://localhost:3306/${MYSQL_PRODUCT_DATABASE}
+    url: jdbc:mariadb://mariadb:3306/${MYSQL_AUTH_DATABASE}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: true
     show-sql: true
-
-  #Redis
-  cache:
-    type: redis
-    cache-names: redis-cache
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: ${REDIS_PASSWORD}
-
-
-  #Kafka
-  kafka:
-    bootstrap-servers: localhost:29092
-    consumer:
-      group-id: ${KAFKA_PRODUCT_GROUP}
-    topic:
-      admin: ${KAFKA_REQUESTS_ADMIN_TOPIC}
-      review: ${KAFKA_DELETE_REVIEW_TOPIC}
-      product:
-        register: ${KAFKA_REGISTER_PRODUCT_TOPIC}
-        update: ${KAFKA_UPDATE_PRODUCT_TOPIC}
-        delete: ${KAFKA_DELETE_PRODUCT_TOPIC}
-        change-status: ${KAFKA_CHANGE_STATUS_PRODUCT_TOPIC}
-      mail: ${KAFKA_MAIL_TOPIC}
-
   #Liquibase
   liquibase:
     change-log: classpath:liquibase/db.changelog.yml
     enabled: true
+
+security:
+  jwt:
+    access: ${JWT_ACCESS}
+    refresh: ${JWT_REFRESH}
+    secret: ${JWT_SECRET}
+    confirmation_link_prefix: ${SECURITY_CONFIRMATION_LINK_PREFIX_DOCKER}
 
 #Zipkin
 management:
   tracing:
     sampling:
       probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
 
   #Actuator Prometheus Endpoint
   endpoints:
@@ -68,10 +62,11 @@ management:
       percentiles-histogram:
         "[http.server.requests]": true
 
+
 #Eureka
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true

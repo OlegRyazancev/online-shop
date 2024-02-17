@@ -7,7 +7,7 @@ spring:
 
   #Kafka
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    bootstrap-servers: localhost:29092
     consumer:
       group-id: ${KAFKA_AUTH_GROUP}
     topic:
@@ -20,7 +20,7 @@ spring:
   datasource:
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
-    url: jdbc:mariadb://${MYSQL_HOST}:3306/${MYSQL_AUTH_DATABASE}
+    url: jdbc:mariadb://localhost:3306/${MYSQL_AUTH_DATABASE}
   jpa:
     properties:
       hibernate:
@@ -51,6 +51,14 @@ management:
     web:
       exposure:
         include: prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
 
 #Eureka
 eureka:

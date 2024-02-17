@@ -8,7 +8,7 @@ spring:
 
   #Kafka
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    bootstrap-servers: localhost:29092
     topic:
       admin: ${KAFKA_REQUESTS_ADMIN_TOPIC}
       organization:
@@ -23,7 +23,7 @@ spring:
   datasource:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_ORGANIZATION_DATABASE}?currentSchema=${POSTGRES_ORGANIZATION_SCHEMA}
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_ORGANIZATION_DATABASE}?currentSchema=${POSTGRES_ORGANIZATION_SCHEMA}
   jpa:
     properties:
       hibernate:
@@ -37,7 +37,7 @@ spring:
     cache-names: redis-cache
   data:
     redis:
-      host: ${REDIS_HOST}
+      host: localhost
       port: 6379
       password: ${REDIS_PASSWORD}
 
@@ -57,6 +57,14 @@ management:
     web:
       exposure:
         include: prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
 
 #Eureka
 eureka:

@@ -8,7 +8,7 @@ spring:
   #MongoDB connection
   data:
     mongodb:
-      host: localhost
+      host: mongodb
       port: 27017
       authentication-database: admin
       database: ${MONGO_PURCHASE_DATABASE}
@@ -22,7 +22,7 @@ spring:
     show-sql: true
   #Kafka
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: kafka:9092
     topic:
       customer:
         update: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
@@ -34,6 +34,9 @@ management:
   tracing:
     sampling:
       probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
 
   #Actuator Prometheus Endpoint
   endpoints:
@@ -53,6 +56,6 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true

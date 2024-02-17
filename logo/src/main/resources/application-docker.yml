@@ -1,15 +1,20 @@
+server:
+  port: ${LOGO_PORT}
+
 spring:
   application:
-    name: eureka-server
+    name: logo
 
-server:
-  port: 8761
 
 #Zipkin
 management:
   tracing:
     sampling:
       probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+
 
   #Actuator Prometheus Endpoint
   endpoints:
@@ -28,5 +33,15 @@ management:
 #Eureka
 eureka:
   client:
-    fetch-registry: false
-    register-with-eureka: false
+    service-url:
+      defaultZone: http://eureka-server/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+#Minio
+minio:
+  bucket: ${MINIO_BUCKET}
+  url: http://minio:9000
+  accessKey: ${MINIO_ACCESS_KEY}
+  secretKey: ${MINIO_SECRET_KEY}
+

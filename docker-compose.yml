@@ -175,12 +175,219 @@ services:
 
   redisinsight:
     container_name: redis-insight
-    image: redislabs/redisinsight:latest
+    image: redislabs/redisinsight:1.14.0
     ports:
       - "8001:8001"
     networks:
       - online-shop
 
+
+
+
+
+      #MICROSERVICES
+  eureka-server:
+    container_name: eureka-server
+    image: extenz16/eureka-server_online-shop:latest
+    ports:
+      - "8761:8761"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+    networks:
+      - online-shop
+
+
+  api-gateway:
+    container_name: api-gateway
+    image: extenz16/api-gateway_online-shop:latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    env_file:
+      - .env
+    depends_on:
+      - zipkin
+      - eureka-server
+    networks:
+      - online-shop
+
+  admin:
+    container_name: admin
+    image: extenz16/admin_online-shop:latest
+    ports:
+      - "8089:8089"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+      - postgres
+      - redis
+    networks:
+      - online-shop
+
+  auth:
+    container_name: auth
+    image: extenz16/auth_online-shop:latest
+    ports:
+      - "9091:9091"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+      - mariadb
+    networks:
+      - online-shop
+
+  customer:
+    container_name: customer
+    image: extenz16/customer_online-shop:latest
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+      - postgres
+      - redis
+    networks:
+      - online-shop
+
+  logo:
+    container_name: logo
+    image: extenz16/logo_online-shop:latest
+    ports:
+      - "8087:8087"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - minio
+    networks:
+      - online-shop
+
+  mail:
+    container_name: mail
+    image: extenz16/mail_online-shop:latest
+    ports:
+      - "8088:8088"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+    networks:
+      - online-shop
+
+  organization:
+    container_name: organization
+    image: extenz16/organization_online-shop:latest
+    ports:
+      - "8085:8085"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+      - redis
+      - postgres
+    networks:
+      - online-shop
+
+  product:
+    container_name: product
+    image: extenz16/product_online-shop:latest
+    ports:
+      - "8084:8084"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+      - redis
+      - mariadb
+    networks:
+      - online-shop
+
+  purchase:
+    container_name: purchase
+    image: extenz16/purchase_online-shop:latest
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+      - mongodb
+    networks:
+      - online-shop
+
+  review:
+    container_name: review
+    image: extenz16/review_online-shop:latest
+    ports:
+      - "8086:8086"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+      - mongodb
+    networks:
+      - online-shop
 
 networks:
   online-shop:

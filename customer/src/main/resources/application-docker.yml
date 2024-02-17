@@ -9,7 +9,7 @@ spring:
   datasource:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_CUSTOMER_DATABASE}?currentSchema=${POSTGRES_CUSTOMER_SCHEMA}
+    url: jdbc:postgresql://postgres:5432/${POSTGRES_CUSTOMER_DATABASE}?currentSchema=${POSTGRES_CUSTOMER_SCHEMA}
   jpa:
     properties:
       hibernate:
@@ -23,13 +23,13 @@ spring:
     cache-names: redis-cache
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
       password: ${REDIS_PASSWORD}
 
   #Kafka
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: kafka:9092
     consumer:
       group-id: ${KAFKA_CUSTOMER_GROUP}
     topic:
@@ -48,6 +48,9 @@ management:
   tracing:
     sampling:
       probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
 
   #Actuator Prometheus Endpoint
   endpoints:
@@ -67,6 +70,6 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true
