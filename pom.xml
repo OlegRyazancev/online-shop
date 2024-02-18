@@ -38,7 +38,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <hibernate.validator.version>8.0.1.Final</hibernate.validator.version>
-        <jib.maven.plugin.version>3.1.4</jib.maven.plugin.version>
+        <jib.maven.plugin.version>3.4.0</jib.maven.plugin.version>
         <image>extenz16/${project.artifactId}_online-shop:${project.version}</image>
     </properties>
 
