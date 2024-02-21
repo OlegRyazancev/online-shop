@@ -21,6 +21,7 @@
         <spring-security-test.version>6.1.5</spring-security-test.version>
         <jjwt.version>0.11.5</jjwt.version>
         <kafka.version>3.1.1</kafka.version>
+        <openapi.webmvc.version>2.2.0</openapi.webmvc.version>
     </properties>
 
     <build>
@@ -135,6 +136,17 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${openapi.webmvc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <dependency>

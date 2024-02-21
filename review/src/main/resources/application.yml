@@ -56,3 +56,15 @@ eureka:
       defaultZone: http://localhost:8761/eureka
     fetch-registry: true
     register-with-eureka: true
+
+#OpenApi
+openapi:
+  service:
+    title: Review-Service Documentation
+    version: 1.0.0
+    url: http://localhost:${REVIEW_PORT}
+springdoc:
+  api-docs:
+    path: /v3/api-docs/review
+  swagger-ui:
+    path: /swagger-ui.html/review

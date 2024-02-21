@@ -1,5 +1,7 @@
 server:
   port: ${PURCHASE_PORT}
+  servlet:
+    context-path: /
 
 spring:
   application:
@@ -56,3 +58,15 @@ eureka:
       defaultZone: http://localhost:8761/eureka
     fetch-registry: true
     register-with-eureka: true
+
+#OpenApi
+openapi:
+  service:
+    title: Purchase-Service Documentation
+    version: 1.0.0
+    url: http://localhost:${PURCHASE_PORT}
+springdoc:
+  api-docs:
+    path: /v3/api-docs/purchase
+  swagger-ui:
+    path: /swagger-ui.html/purchase
