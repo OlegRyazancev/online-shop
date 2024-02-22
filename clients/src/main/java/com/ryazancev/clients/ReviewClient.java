@@ -2,7 +2,7 @@ package com.ryazancev.clients;
 
 import com.ryazancev.config.FeignClientsConfiguration;
 import com.ryazancev.dto.review.ReviewDto;
-import com.ryazancev.dto.review.ReviewPostDto;
+import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ public interface ReviewClient {
 
     @PostMapping("api/v1/reviews")
     ReviewDto create(
-            @RequestBody ReviewPostDto reviewPostDto);
+            @RequestBody ReviewEditDto reviewEditDto);
 
     @GetMapping("api/v1/reviews/product/{id}/average-rating")
     Double getAverageRatingByProductId(

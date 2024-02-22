@@ -8,7 +8,7 @@ import com.ryazancev.dto.product.ProductDto;
 import com.ryazancev.dto.product.ProductEditDto;
 import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.dto.review.ReviewDto;
-import com.ryazancev.dto.review.ReviewPostDto;
+import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ProductService;
@@ -145,11 +145,11 @@ public class ProductController {
     public ReviewDto createReview(
             @RequestBody
             @Validated({OnCreate.class})
-            ReviewPostDto reviewPostDto) {
+            ReviewEditDto reviewEditDto) {
 
         customExpressionService.checkIfAccountLocked();
 
-        return reviewClient.create(reviewPostDto);
+        return reviewClient.create(reviewEditDto);
     }
 
     //    Endpoints only  for feign clients

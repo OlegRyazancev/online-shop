@@ -1,5 +1,6 @@
 package com.ryazancev.dto.review;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.List;
@@ -9,7 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Response model for a list of reviews")
 public class ReviewsResponse {
 
+    @Schema(description = "List of reviews")
     private List<ReviewDto> reviews;
 }

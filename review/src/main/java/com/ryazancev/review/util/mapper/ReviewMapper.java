@@ -1,7 +1,7 @@
 package com.ryazancev.review.util.mapper;
 
 import com.ryazancev.dto.review.ReviewDto;
-import com.ryazancev.dto.review.ReviewPostDto;
+import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.review.model.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -16,7 +16,7 @@ public interface ReviewMapper {
 
     List<ReviewDto> toListDto(List<Review> reviews);
 
-    Review toEntity(ReviewPostDto reviewPostDto);
+    Review toEntity(ReviewEditDto reviewEditDto);
 
     ReviewDto toDto(Review savedReview);
 }

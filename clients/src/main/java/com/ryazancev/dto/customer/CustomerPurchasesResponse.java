@@ -2,6 +2,7 @@ package com.ryazancev.dto.customer;
 
 
 import com.ryazancev.dto.purchase.PurchaseDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Response model for customer's purchases")
 public class CustomerPurchasesResponse {
 
+    @Schema(description = "List of customer's purchases")
     private List<PurchaseDto> purchases;
 }

@@ -1,8 +1,8 @@
 package com.ryazancev.organization.service.impl;
 
 import com.ryazancev.clients.LogoClient;
-import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
+import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.logo.LogoDto;
 import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;

@@ -13,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "Organization Edit DTO, used for PUT, POST, DELETE")
+@Schema(description = "Organization Edit DTO. Used in PUT, POST methods")
 public class OrganizationEditDto {
 
     @Schema(

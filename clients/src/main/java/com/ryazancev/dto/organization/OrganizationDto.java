@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Schema(description = "Organization DTO, used for GET methods")
+@Schema(description = "Organization DTO. Used in GET methods")
 public class OrganizationDto {
 
     @Schema(

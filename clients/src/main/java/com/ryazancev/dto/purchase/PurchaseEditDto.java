@@ -1,6 +1,7 @@
 package com.ryazancev.dto.purchase;
 
 import com.ryazancev.validation.OnCreate;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -9,13 +10,26 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Purchase Edit DTO. Used in POST, PUT methods")
 public class PurchaseEditDto {
 
-    @NotNull(message = "Customer ID must be not null",
-            groups = OnCreate.class)
+    @Schema(
+            description = "Customer ID who made the purchase",
+            example = "1"
+    )
+    @NotNull(
+            message = "Customer ID must be not null",
+            groups = OnCreate.class
+    )
     private Long customerId;
 
-    @NotNull(message = "Product ID must be not null",
-            groups = OnCreate.class)
+    @Schema(
+            description = "ID of the purchased product",
+            example = "1"
+    )
+    @NotNull(
+            message = "Product ID must be not null",
+            groups = OnCreate.class
+    )
     private Long productId;
 }

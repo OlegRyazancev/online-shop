@@ -1,7 +1,7 @@
 package com.ryazancev.review.service;
 
 import com.ryazancev.dto.review.ReviewDto;
-import com.ryazancev.dto.review.ReviewPostDto;
+import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 
 public interface ReviewService {
@@ -10,7 +10,7 @@ public interface ReviewService {
 
     ReviewsResponse getByProductId(Long id);
 
-    ReviewDto create(ReviewPostDto reviewPostDto);
+    ReviewDto create(ReviewEditDto reviewEditDto);
 
     Double getAverageRatingByProductId(Long productId);
 

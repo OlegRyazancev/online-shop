@@ -2,6 +2,7 @@ package com.ryazancev.dto.logo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ryazancev.validation.OnCreate;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,11 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
+@Schema(description = "Logo DTO")
 public class LogoDto {
 
+    @Schema(description = "File to be upload")
     @JsonIgnore
-    @NotNull(message = "Logo must be not null",
-            groups = OnCreate.class)
+    @NotNull(
+            message = "Logo must be not null",
+            groups = OnCreate.class
+    )
     private MultipartFile file;
 }

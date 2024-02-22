@@ -5,7 +5,7 @@ import com.ryazancev.clients.ProductClient;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.product.ProductDto;
 import com.ryazancev.dto.review.ReviewDto;
-import com.ryazancev.dto.review.ReviewPostDto;
+import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
@@ -83,23 +83,23 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewDto create(ReviewPostDto reviewPostDto) {
+    public ReviewDto create(ReviewEditDto reviewEditDto) {
 
         CustomerDto selectedCustomerDto;
         ProductDto selectedProductDto;
 
         try {
             selectedCustomerDto = customerClient
-                    .getSimpleById(reviewPostDto.getCustomerId());
+                    .getSimpleById(reviewEditDto.getCustomerId());
             selectedProductDto = productClient
-                    .getSimpleById(reviewPostDto.getProductId());
+                    .getSimpleById(reviewEditDto.getProductId());
         } catch (Exception e) {
             throw new ReviewCreationException(
                     "Customer/product doesn't exists",
                     HttpStatus.NOT_FOUND);
         }
 
-        Review toSave = reviewMapper.toEntity(reviewPostDto);
+        Review toSave = reviewMapper.toEntity(reviewEditDto);
         toSave.setCreatedAt(LocalDateTime.now());
 
         Review saved = reviewRepository.insert(toSave);

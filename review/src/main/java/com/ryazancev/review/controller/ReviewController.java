@@ -1,7 +1,7 @@
 package com.ryazancev.review.controller;
 
 import com.ryazancev.dto.review.ReviewDto;
-import com.ryazancev.dto.review.ReviewPostDto;
+import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +41,8 @@ public class ReviewController {
 
     @PostMapping
     public ReviewDto create(
-            @RequestBody ReviewPostDto reviewPostDto) {
+            @RequestBody ReviewEditDto reviewEditDto) {
 
-        return reviewService.create(reviewPostDto);
+        return reviewService.create(reviewEditDto);
     }
 }

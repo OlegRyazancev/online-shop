@@ -1,8 +1,8 @@
 package com.ryazancev.organization.kafka;
 
 import com.ryazancev.dto.admin.ObjectRequest;
-import com.ryazancev.dto.admin.enums.ObjectStatus;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
+import com.ryazancev.dto.admin.enums.ObjectStatus;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.OrganizationUtil;
