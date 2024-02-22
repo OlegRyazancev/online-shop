@@ -1,0 +1,18 @@
+openapi:
+  info:
+    title: Admin API
+    version: 1.0.0
+    description: |
+      Welcome to the Admin Service API! This API serves as the administrative interface
+      for managing user registration requests, object statuses, and user locks within the
+      Online Shop ecosystem. As an administrator, you can perform various actions such as
+      retrieving registration requests, changing request statuses, toggling user locks,
+      and more. Explore the comprehensive documentation to understand the functionality
+      and usage of each endpoint.
+      
+      For detailed instructions on running the project locally and contributing, visit the GitHub repository.
+      - [ GitHub Repository ](https://github.com/OlegRyazancev/online-shop/tree/master/admin) - Access the GitHub
+      repository for the source code, detailed README, and instructions for running the application.
+    contact:
+      name: Oleg Ryazancev
+      email: oleg.ryazancev1022@gmail.com

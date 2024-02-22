@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: classpath:openapi/open-api-config.yml
   application:
     name: api-gateway
   cloud:

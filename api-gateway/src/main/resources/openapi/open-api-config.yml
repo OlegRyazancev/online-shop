@@ -4,12 +4,14 @@ openapi:
     version: 1.0.0
     description: |
       Welcome to the Online Shop API! This API serves as the backbone for a pet project online shop.
-      As the central entry point to my online shop ecosystem,this API Gateway microservice orchestrates requests 
-      and forwards them to the appropriate services.Explore my comprehensive documentation to understand how the 
-      API Gateway streamlines communication between clients and the underlying microservices. 
+
+      As the central entry point to my online shop ecosystem, this API Gateway microservice orchestrates requests
+      and forwards them to the appropriate services. Explore my comprehensive documentation to understand how the
+      API Gateway streamlines communication between clients and the underlying microservices.
+    
       For detailed instructions on running the project locally and contributing, visit my GitHub repository.
       - [GitHub Repository](https://github.com/OlegRyazancev/online-shop) - Access the GitHub repository
-        for the source code, detailed README, and instructions for running the application.
+      for the source code, detailed README, and instructions for running the application.
     contact:
       name: Oleg Ryazancev
       email: oleg.ryazancev1022@gmail.com

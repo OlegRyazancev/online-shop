@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: classpath:openapi/open-api-config.yml
   application:
     name: auth
 
@@ -35,6 +37,7 @@ spring:
     change-log: classpath:liquibase/db.changelog.yml
     enabled: true
 
+#Security
 security:
   jwt:
     access: ${JWT_ACCESS}
@@ -74,8 +77,6 @@ eureka:
 #OpenApi
 openapi:
   service:
-    title: Auth-Service Documentation
-    version: 1.0.0
     url: http://localhost:8080
 springdoc:
   api-docs:

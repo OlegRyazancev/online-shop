@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: classpath:openapi/open-api-config.yml
   application:
     name: admin
 
@@ -84,8 +86,6 @@ eureka:
 #OpenApi
 openapi:
   service:
-    title: Admin-Service Documentation
-    version: 1.0.0
     url: http://api-gateway:8080
 springdoc:
   api-docs:

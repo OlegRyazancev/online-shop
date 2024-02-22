@@ -4,9 +4,10 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: classpath:openapi/open-api-config.yml
   application:
     name: logo
-
 
 #Zipkin
 management:
@@ -50,8 +51,6 @@ minio:
 #OpenApi
 openapi:
   service:
-    title: Logo-Service Documentation
-    version: 1.0.0
     url: http://logo:${LOGO_PORT}
 springdoc:
   api-docs:

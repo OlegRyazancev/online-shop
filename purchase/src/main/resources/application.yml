@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: classpath:openapi/open-api-config.yml
   application:
     name: purchase
 
@@ -62,8 +64,6 @@ eureka:
 #OpenApi
 openapi:
   service:
-    title: Purchase-Service Documentation
-    version: 1.0.0
     url: http://localhost:${PURCHASE_PORT}
 springdoc:
   api-docs:

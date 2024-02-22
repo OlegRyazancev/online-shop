@@ -1,0 +1,22 @@
+openapi:
+  info:
+    title: Product API
+    version: 1.0.0
+    description: |
+      Welcome to the Product Service API! This API provides endpoints for managing product data,
+      including retrieving product details, updating product information, accessing product reviews,
+      and managing product inventory.
+
+      User authentication is required to access these endpoints. Please ensure you have appropriate
+      authentication credentials before making requests.
+
+      Explore the comprehensive documentation to understand the functionality and usage of each endpoint.
+
+      _**Note:** Some endpoints may have additional access restrictions or requirements._
+
+      For detailed instructions on running the project locally and contributing, visit the GitHub repository.
+      - [GitHub Repository](https://github.com/OlegRyazancev/online-shop/tree/master/product): Access the GitHub
+      repository for the source code, detailed README, and instructions for running the application.
+    contact:
+      name: Oleg Ryazancev
+      email: oleg.ryazancev1022@gmail.com

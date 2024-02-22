@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: classpath:openapi/open-api-config.yml
   application:
     name: mail
 
@@ -64,8 +66,6 @@ eureka:
 #OpenApi
 openapi:
   service:
-    title: Mail-Service Documentation
-    version: 1.0.0
     url: http://mail:${MAIL_PORT}
 springdoc:
   api-docs:

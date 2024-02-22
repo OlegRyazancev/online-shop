@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: classpath:openapi/open-api-config.yml
   application:
     name: customer
 
@@ -76,8 +78,6 @@ eureka:
 #OpenApi
 openapi:
   service:
-    title: Customer-Service Documentation
-    version: 1.0.0
     url: http://localhost:808
 springdoc:
   api-docs:

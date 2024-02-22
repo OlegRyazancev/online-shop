@@ -5,7 +5,7 @@ server:
 
 spring:
   config:
-    import: classpath:openapi/openapi-config.yml
+    import: classpath:openapi/open-api-config.yml
   application:
     name: api-gateway
   cloud:
