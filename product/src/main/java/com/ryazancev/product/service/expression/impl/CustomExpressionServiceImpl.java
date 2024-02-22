@@ -58,6 +58,20 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         }
     }
 
+    @Override
+    public void checkIfEmailConfirmed() {
+
+        boolean confirmed = Boolean.parseBoolean(
+                request.getHeader("confirmed"));
+
+        if (!confirmed) {
+
+            throw new AccessDeniedException(
+                    "Access denied because your email is not confirmed",
+                    HttpStatus.FORBIDDEN);
+        }
+    }
+
 
     private boolean canAccessProduct(Long productId) {
 

@@ -9,4 +9,6 @@ public interface CustomExpressionService {
     void checkAccessOrganization(Long id);
 
     void checkIfAccountLocked();
+
+    void checkIfEmailConfirmed();
 }

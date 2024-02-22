@@ -106,6 +106,7 @@ public class OrganizationController {
             )
             OrganizationEditDto organizationEditDto) {
 
+        customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessUser(organizationEditDto);
 
@@ -137,6 +138,7 @@ public class OrganizationController {
             )
             OrganizationEditDto organizationEditDto) {
 
+        customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
         customExpressionService
                 .checkAccessOrganization(organizationEditDto.getId());
@@ -188,6 +190,7 @@ public class OrganizationController {
             )
             LogoDto logoDto) {
 
+        customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessOrganization(id);
 
@@ -208,6 +211,7 @@ public class OrganizationController {
             )
             Long id) {
 
+        customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessOrganization(id);
 

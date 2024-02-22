@@ -9,4 +9,6 @@ public interface CustomExpressionService {
     void checkAccessOrganization(ProductEditDto productEditDto);
 
     void checkIfAccountLocked();
+
+    void checkIfEmailConfirmed();
 }

@@ -60,11 +60,19 @@ public class JwtUtil {
         );
     }
 
-    public String extractLocked(String token){
+    public String extractLocked(String token) {
 
         return extractClaim(
                 token,
                 claims -> claims.get("locked", Boolean.class)
+        ).toString();
+    }
+
+    public String extractConfirmed(String token) {
+
+        return extractClaim(
+                token,
+                claims -> claims.get("confirmed", Boolean.class)
         ).toString();
     }
 
@@ -85,5 +93,6 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
 
 }

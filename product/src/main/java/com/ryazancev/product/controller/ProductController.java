@@ -80,6 +80,7 @@ public class ProductController {
             @Validated(OnCreate.class)
             ProductEditDto productEditDto) {
 
+        customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessOrganization(productEditDto);
 
@@ -103,6 +104,7 @@ public class ProductController {
             @Validated(OnUpdate.class)
             ProductEditDto productEditDto) {
 
+        customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessProduct(productEditDto.getId());
 
@@ -126,6 +128,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public String deleteProductById(@PathVariable("id") Long id) {
 
+        customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessProduct(id);
 
@@ -147,6 +150,7 @@ public class ProductController {
             @Validated({OnCreate.class})
             ReviewEditDto reviewEditDto) {
 
+        customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
 
         return reviewClient.create(reviewEditDto);

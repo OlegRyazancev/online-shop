@@ -70,6 +70,8 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                                 rolesString)
                         .header("locked",
                                 jwtUtil.extractLocked(token))
+                        .header("confirmed",
+                                jwtUtil.extractConfirmed(token))
                         .build();
             }
             return chain.filter(exchange
