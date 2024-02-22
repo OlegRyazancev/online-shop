@@ -1,10 +1,11 @@
 package com.ryazancev.organization.util;
 
 import com.ryazancev.clients.CustomerClient;
-import com.ryazancev.dto.admin.ObjectType;
+import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.dto.mail.MailType;
+import com.ryazancev.dto.organization.OrganizationDto;
 import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.service.OrganizationService;
@@ -22,6 +23,12 @@ public class OrganizationUtil {
 
     private final CustomerClient customerClient;
 
+
+    public void enrichOrganizationDto(OrganizationDto dto, Long ownerId) {
+        CustomerDto owner =
+                customerClient.getSimpleById(ownerId);
+        dto.setOwner(owner);
+    }
 
     public void
     sendAcceptedMailToCustomerByOrganizationId(Long organizationId) {

@@ -1,6 +1,8 @@
 package com.ryazancev.dto.admin;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ryazancev.dto.admin.enums.ObjectType;
+import com.ryazancev.dto.admin.enums.RequestStatus;
 import com.ryazancev.validation.OnCreate;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

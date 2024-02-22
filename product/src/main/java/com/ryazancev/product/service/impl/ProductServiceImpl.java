@@ -1,6 +1,6 @@
 package com.ryazancev.product.service.impl;
 
-import com.ryazancev.dto.admin.ObjectType;
+import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;

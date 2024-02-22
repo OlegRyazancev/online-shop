@@ -215,222 +215,222 @@ services:
     networks:
       - online-shop
 
-  admin:
-    container_name: admin
-    image: extenz16/admin_online-shop:latest
-    ports:
-      - "8089:8089"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - kafka
-      - postgres
-      - redis
-    networks:
-      - online-shop
-
-  auth:
-    container_name: auth
-    image: extenz16/auth_online-shop:latest
-    ports:
-      - "9091:9091"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - kafka
-      - mariadb
-    networks:
-      - online-shop
-
-  customer:
-    container_name: customer
-    image: extenz16/customer_online-shop:latest
-    ports:
-      - "8082:8082"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - kafka
-      - postgres
-      - redis
-    networks:
-      - online-shop
-
-  logo:
-    container_name: logo
-    image: extenz16/logo_online-shop:latest
-    ports:
-      - "8087:8087"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - minio
-    networks:
-      - online-shop
-
-  mail:
-    container_name: mail
-    image: extenz16/mail_online-shop:latest
-    ports:
-      - "8088:8088"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - kafka
-    networks:
-      - online-shop
-
-  organization:
-    container_name: organization
-    image: extenz16/organization_online-shop:latest
-    ports:
-      - "8085:8085"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - kafka
-      - redis
-      - postgres
-    networks:
-      - online-shop
-
-  product:
-    container_name: product
-    image: extenz16/product_online-shop:latest
-    ports:
-      - "8084:8084"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - kafka
-      - redis
-      - mariadb
-    networks:
-      - online-shop
-
-  purchase:
-    container_name: purchase
-    image: extenz16/purchase_online-shop:latest
-    ports:
-      - "8083:8083"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - kafka
-      - mongodb
-    networks:
-      - online-shop
-
-  review:
-    container_name: review
-    image: extenz16/review_online-shop:latest
-    ports:
-      - "8086:8086"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - api-gateway
-      - zipkin
-      - eureka-server
-      - kafka
-      - mongodb
-    networks:
-      - online-shop
-
-
-#Prometheus and grafana
-
-  prometheus:
-    container_name: prometheus
-    image: prom/prometheus:v2.45.3
-    ports:
-      - "9089:9090"
-    restart: unless-stopped
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    depends_on:
-      - eureka-server
-      - api-gateway
-      - admin
-      - auth
-      - customer
-      - logo
-      - mail
-      - organization
-      - product
-      - purchase
-      - review
-    networks:
-      - online-shop
-
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:10.2.4
-    ports:
-      - "3000:3000"
-    restart: unless-stopped
-    environment:
-      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
-      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
-    links:
-      - prometheus:prometheus
-    volumes:
-      - grafana:/var/lib/grafana
-    depends_on:
-      - prometheus
-    networks:
-      - online-shop
+#  admin:
+#    container_name: admin
+#    image: extenz16/admin_online-shop:latest
+#    ports:
+#      - "8089:8089"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - kafka
+#      - postgres
+#      - redis
+#    networks:
+#      - online-shop
+#
+#  auth:
+#    container_name: auth
+#    image: extenz16/auth_online-shop:latest
+#    ports:
+#      - "9091:9091"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - kafka
+#      - mariadb
+#    networks:
+#      - online-shop
+#
+#  customer:
+#    container_name: customer
+#    image: extenz16/customer_online-shop:latest
+#    ports:
+#      - "8082:8082"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - kafka
+#      - postgres
+#      - redis
+#    networks:
+#      - online-shop
+#
+#  logo:
+#    container_name: logo
+#    image: extenz16/logo_online-shop:latest
+#    ports:
+#      - "8087:8087"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - minio
+#    networks:
+#      - online-shop
+#
+#  mail:
+#    container_name: mail
+#    image: extenz16/mail_online-shop:latest
+#    ports:
+#      - "8088:8088"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - kafka
+#    networks:
+#      - online-shop
+#
+#  organization:
+#    container_name: organization
+#    image: extenz16/organization_online-shop:latest
+#    ports:
+#      - "8085:8085"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - kafka
+#      - redis
+#      - postgres
+#    networks:
+#      - online-shop
+#
+#  product:
+#    container_name: product
+#    image: extenz16/product_online-shop:latest
+#    ports:
+#      - "8084:8084"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - kafka
+#      - redis
+#      - mariadb
+#    networks:
+#      - online-shop
+#
+#  purchase:
+#    container_name: purchase
+#    image: extenz16/purchase_online-shop:latest
+#    ports:
+#      - "8083:8083"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - kafka
+#      - mongodb
+#    networks:
+#      - online-shop
+#
+#  review:
+#    container_name: review
+#    image: extenz16/review_online-shop:latest
+#    ports:
+#      - "8086:8086"
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - api-gateway
+#      - zipkin
+#      - eureka-server
+#      - kafka
+#      - mongodb
+#    networks:
+#      - online-shop
+#
+#
+##Prometheus and grafana
+#
+#  prometheus:
+#    container_name: prometheus
+#    image: prom/prometheus:v2.45.3
+#    ports:
+#      - "9089:9090"
+#    restart: unless-stopped
+#    volumes:
+#      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#    depends_on:
+#      - eureka-server
+#      - api-gateway
+#      - admin
+#      - auth
+#      - customer
+#      - logo
+#      - mail
+#      - organization
+#      - product
+#      - purchase
+#      - review
+#    networks:
+#      - online-shop
+#
+#  grafana:
+#    container_name: grafana
+#    image: grafana/grafana:10.2.4
+#    ports:
+#      - "3000:3000"
+#    restart: unless-stopped
+#    environment:
+#      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
+#      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+#    links:
+#      - prometheus:prometheus
+#    volumes:
+#      - grafana:/var/lib/grafana
+#    depends_on:
+#      - prometheus
+#    networks:
+#      - online-shop
 
 networks:
   online-shop:

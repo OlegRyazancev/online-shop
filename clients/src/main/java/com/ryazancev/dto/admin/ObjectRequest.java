@@ -1,5 +1,7 @@
 package com.ryazancev.dto.admin;
 
+import com.ryazancev.dto.admin.enums.ObjectStatus;
+import com.ryazancev.dto.admin.enums.ObjectType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 

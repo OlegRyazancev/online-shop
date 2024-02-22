@@ -1,7 +1,7 @@
 package com.ryazancev.product.kafka;
 
 import com.ryazancev.dto.admin.ObjectRequest;
-import com.ryazancev.dto.admin.ObjectStatus;
+import com.ryazancev.dto.admin.enums.ObjectStatus;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.product.model.Product;
