@@ -1,6 +1,7 @@
 server:
   port: ${CUSTOMER_PORT}
-
+  servlet:
+    context-path: /
 spring:
   application:
     name: customer
@@ -73,3 +74,15 @@ eureka:
       defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true
+
+#OpenApi
+openapi:
+  service:
+    title: Customer-Service Documentation
+    version: 1.0.0
+    url: http://api-gateway:8080
+springdoc:
+  api-docs:
+    path: /v3/api-docs/customer
+  swagger-ui:
+    path: /swagger-ui.html/customer

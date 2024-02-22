@@ -1,5 +1,7 @@
 server:
   port: 8080
+  servlet:
+    context-path: /
 
 spring:
   application:
@@ -76,3 +78,42 @@ eureka:
       register-with-eureka: true
   instance:
     preferIpAddress: true
+
+#OpenAPI
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: API Gateway Service
+
+      - url: /v3/api-docs/auth
+        name: Auth Service
+
+      - url: /v3/api-docs/customer
+        name: Customer Service
+
+      - url: /v3/api-docs/organization
+        name: Organization Service
+
+      - url: /v3/api-docs/product
+        name: Product Service
+
+      - url: /v3/api-docs/admin
+        name: Admin Service
+
+      - url: /v3/api-docs/purchase
+        name: Purchase Service
+
+      - url: /v3/api-docs/review
+        name: Review Service
+
+      - url: /v3/api-docs/logo
+        name: Logo Service
+
+      - url: /v3/api-docs/mail
+        name: Mail Service

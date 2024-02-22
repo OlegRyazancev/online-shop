@@ -1,5 +1,7 @@
 server:
   port: ${MAIL_PORT}
+  servlet:
+    context-path: /
 
 spring:
   application:
@@ -58,3 +60,15 @@ eureka:
       defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true
+
+#OpenApi
+openapi:
+  service:
+    title: Mail-Service Documentation
+    version: 1.0.0
+    url: http://mail:${MAIL_PORT}
+springdoc:
+  api-docs:
+    path: /v3/api-docs/mail
+  swagger-ui:
+    path: /swagger-ui.html/mail
