@@ -199,7 +199,6 @@ services:
     networks:
       - online-shop
 
-
 #  api-gateway:
 #    container_name: api-gateway
 #    image: extenz16/api-gateway_online-shop:latest

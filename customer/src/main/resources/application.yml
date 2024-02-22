@@ -78,7 +78,7 @@ openapi:
   service:
     title: Customer-Service Documentation
     version: 1.0.0
-    url: http://localhost:8080
+    url: http://localhost:808
 springdoc:
   api-docs:
     path: /v3/api-docs/customer

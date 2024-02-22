@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  config:
+    import: classpath:openapi/openapi-config.yml
   application:
     name: api-gateway
   cloud:
@@ -114,5 +116,3 @@ springdoc:
 
       - url: /v3/api-docs/mail
         name: Mail Service
-
-
