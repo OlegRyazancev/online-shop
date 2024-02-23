@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  profiles:
+    active: docker
   config:
     import: classpath:openapi/open-api-config.yml
   application:
@@ -40,6 +42,7 @@ spring:
       customer:
         update: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
       user:
+        update: ${KAFKA_UPDATE_USER_TOPIC}
         delete: ${KAFKA_DELETE_USER_TOPIC}
 
   #Liquibase

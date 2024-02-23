@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  profiles:
+    active: default
   config:
     import: classpath:openapi/open-api-config.yml
   application:
@@ -40,6 +42,7 @@ spring:
       customer:
         update: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
       user:
+        update: ${KAFKA_UPDATE_USER_TOPIC}
         delete: ${KAFKA_DELETE_USER_TOPIC}
 
   #Liquibase
@@ -78,7 +81,7 @@ eureka:
 #OpenApi
 openapi:
   service:
-    url: http://localhost:808
+    url: http://localhost:8080
 springdoc:
   api-docs:
     path: /v3/api-docs/customer

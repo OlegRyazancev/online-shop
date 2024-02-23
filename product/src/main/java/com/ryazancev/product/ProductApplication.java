@@ -6,18 +6,25 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
-@SpringBootApplication
+
 @EnableDiscoveryClient
 @EnableFeignClients(
         basePackages = "com.ryazancev.clients"
 )
-@ComponentScan(
-        basePackages = {
+@EnableCaching
+@PropertySources({
+        @PropertySource(
+                "classpath:clients-${spring.profiles.active}.properties"
+        )
+})
+@SpringBootApplication(
+        scanBasePackages = {
                 "com.ryazancev.config",
                 "com.ryazancev.product"
         })
-@EnableCaching
 public class ProductApplication {
 
     public static void main(String[] args) {

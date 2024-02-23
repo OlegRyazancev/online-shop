@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(
         name = "review",
-        configuration = FeignClientsConfiguration.class
+        configuration = FeignClientsConfiguration.class,
+        url = "${clients.review.url}"
 )
 public interface ReviewClient {
 

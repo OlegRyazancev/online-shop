@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  profiles:
+    active: default
   config:
     import: classpath:openapi/open-api-config.yml
   application:

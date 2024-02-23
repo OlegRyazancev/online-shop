@@ -4,6 +4,8 @@ server:
     context-path: /
 
 spring:
+  profiles:
+    active: docker
   config:
     import: classpath:openapi/open-api-config.yml
   application:
@@ -17,6 +19,7 @@ spring:
     topic:
       mail: ${KAFKA_MAIL_TOPIC}
       user:
+        update: ${KAFKA_UPDATE_USER_TOPIC}
         toggle-lock: ${KAFKA_TOGGLE_LOCK_USER_TOPIC}
         delete: ${KAFKA_DELETE_USER_TOPIC}
 

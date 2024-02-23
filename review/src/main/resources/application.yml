@@ -2,6 +2,8 @@ server:
   port: ${REVIEW_PORT}
 
 spring:
+  profiles:
+    active: default
   config:
     import: classpath:openapi/open-api-config.yml
   application:

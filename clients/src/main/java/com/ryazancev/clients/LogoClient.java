@@ -10,7 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @FeignClient(
         name = "logo",
-        configuration = FeignClientsConfiguration.class
+        configuration = FeignClientsConfiguration.class,
+        url = "${clients.logo.url}"
 )
 public interface LogoClient {
 

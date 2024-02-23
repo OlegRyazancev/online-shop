@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
         name = "organization",
-        configuration = FeignClientsConfiguration.class
+        configuration = FeignClientsConfiguration.class,
+        url = "${clients.organization.url}"
 )
 public interface OrganizationClient {
 
