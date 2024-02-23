@@ -50,7 +50,7 @@ public class User implements Serializable {
     private boolean locked;
 
     @Column(name = "confirmed")
-    private Boolean confirmed;
+    private boolean confirmed;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

@@ -14,6 +14,7 @@ import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.dto.user.UserDto;
+import com.ryazancev.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -138,8 +139,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void markUserAsDeletedByCustomerId(Long customerId) {
 
-        User existing = userRepository.findByCustomerId(customerId).
-                orElseThrow(() ->
+        User existing = userRepository.findByCustomerId(customerId)
+                .orElseThrow(() ->
                         new UserNotFoundException(
                                 "User not found",
                                 HttpStatus.NOT_FOUND
@@ -147,6 +148,23 @@ public class UserServiceImpl implements UserService {
 
         existing.setName("DELETED");
         existing.setDeletedAt(LocalDateTime.now());
+
+        userRepository.save(existing);
+    }
+
+    @Override
+    @Transactional
+    public void updateByCustomer(UserUpdateRequest request) {
+
+        User existing = userRepository
+                .findByCustomerId(request.getCustomerId())
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User not found",
+                                HttpStatus.NOT_FOUND));
+
+        existing.setName(request.getName());
+        existing.setEmail(request.getEmail());
 
         userRepository.save(existing);
     }

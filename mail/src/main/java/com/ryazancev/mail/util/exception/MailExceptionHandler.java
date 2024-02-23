@@ -19,47 +19,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class MailExceptionHandler {
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            ConstraintViolationException e) {
-
-        log.error("Constraint violation exception");
-
-        ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
-        exceptionBody.setErrors(e.getConstraintViolations().stream()
-                .collect(Collectors.toMap(
-                        violation -> violation.getPropertyPath().toString(),
-                        ConstraintViolation::getMessage
-                )));
-        exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
-        exceptionBody.setServiceStage(ServiceStage.MAIL);
-
-        return ResponseEntity
-                .status(exceptionBody.getHttpStatus())
-                .body(exceptionBody);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException e) {
-
-        log.error("Method argument not valid exception");
-
-        ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
-        List<FieldError> errors = e.getBindingResult().getFieldErrors();
-        exceptionBody.setErrors(errors.stream()
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        FieldError::getDefaultMessage)));
-
-        exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
-        exceptionBody.setServiceStage(ServiceStage.MAIL);
-
-        return ResponseEntity
-                .status(exceptionBody.getHttpStatus())
-                .body(exceptionBody);
-    }
-
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {

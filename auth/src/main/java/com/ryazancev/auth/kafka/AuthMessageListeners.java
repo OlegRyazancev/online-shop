@@ -2,6 +2,7 @@ package com.ryazancev.auth.kafka;
 
 import com.ryazancev.auth.service.UserService;
 import com.ryazancev.dto.admin.UserLockRequest;
+import com.ryazancev.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -36,6 +37,8 @@ public class AuthMessageListeners {
         }
     }
 
+
+
     @KafkaListener(
             topics = "${spring.kafka.topic.user.delete}",
             groupId = "${spring.kafka.consumer.group-id}",
@@ -50,6 +53,21 @@ public class AuthMessageListeners {
 
         log.info("User was successfully marked as deleted");
 
-
     }
+
+    @KafkaListener(
+            topics = "${spring.kafka.topic.user.update}",
+            groupId = "${spring.kafka.consumer.group-id}",
+            containerFactory = "userUpdateMessageFactory"
+    )
+    void markUserAsDeleted(UserUpdateRequest request) {
+
+        log.info("Received message to update user where customerId: {}",
+                request.getCustomerId());
+
+        userService.updateByCustomer(request);
+
+        log.info("User was successfully updated");
+    }
+
 }

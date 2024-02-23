@@ -1,5 +1,6 @@
 package com.ryazancev.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
@@ -15,6 +16,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @Builder
 @Schema(description = "User DTO for auth service")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
 
     @Schema(
@@ -25,6 +27,7 @@ public class UserDto {
             message = "Id must not be null",
             groups = OnUpdate.class
     )
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @Schema(
@@ -88,6 +91,7 @@ public class UserDto {
             description = "Indicates whether the user is locked",
             example = "false"
     )
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean locked;
 
     @Schema(
@@ -95,6 +99,7 @@ public class UserDto {
                     "is confirmed via email",
             example = "true"
     )
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean confirmed;
 
 }

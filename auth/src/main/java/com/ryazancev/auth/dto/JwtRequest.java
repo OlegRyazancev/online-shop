@@ -21,7 +21,7 @@ public class JwtRequest {
 
     @Schema(
             description = "Password of the user/customer account",
-            example = "12345"
+            example = "123"
     )
     @NotNull(message = "Password must be not null")
     private String password;

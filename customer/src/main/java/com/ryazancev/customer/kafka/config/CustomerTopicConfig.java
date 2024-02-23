@@ -16,6 +16,9 @@ public class CustomerTopicConfig {
     @Value("${spring.kafka.topic.customer.update}")
     private String customerUpdateTopicName;
 
+    @Value("${spring.kafka.topic.user.update}")
+    private String userUpdateTopicName;
+
 
     @Bean
     public NewTopic customerUpdateEventsTopic() {
@@ -28,6 +31,13 @@ public class CustomerTopicConfig {
     public NewTopic userDeleteEventsTopic() {
         return TopicBuilder
                 .name(userDeleteTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic userUpdateEventsTopic() {
+        return TopicBuilder
+                .name(userUpdateTopicName)
                 .build();
     }
 }

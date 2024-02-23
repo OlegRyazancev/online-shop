@@ -2,6 +2,7 @@ package com.ryazancev.auth.service;
 
 import com.ryazancev.auth.model.User;
 import com.ryazancev.dto.user.UserDto;
+import com.ryazancev.dto.user.UserUpdateRequest;
 
 public interface UserService {
 
@@ -14,4 +15,6 @@ public interface UserService {
     void toggleUserLock(String username, boolean lock);
 
     void markUserAsDeletedByCustomerId(Long customerId);
+
+    void updateByCustomer(UserUpdateRequest request);
 }

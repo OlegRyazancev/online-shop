@@ -13,6 +13,7 @@ import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.dto.purchase.PurchaseDto;
 import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
+import com.ryazancev.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -119,6 +120,14 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setEmail(customer.getEmail());
         existing.setBalance(customer.getBalance());
 
+        UserUpdateRequest request = UserUpdateRequest.builder()
+                .customerId(customer.getId())
+                .email(customer.getEmail())
+                .name(customer.getUsername())
+                .build();
+
+        customerProducerService.sendMessageToAuthUpdateTopic(request);
+
         return customerRepository.save(existing);
     }
 
@@ -136,7 +145,7 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setBalance(0.0);
         existing.setDeletedAt(LocalDateTime.now());
 
-        customerProducerService.sendMessageToAuthTopic(id);
+        customerProducerService.sendMessageToAuthDeleteTopic(id);
         customerRepository.save(existing);
 
         return "Customer was successfully deleted";

@@ -41,6 +41,7 @@ public class JwtTokenProvider {
                                     String email,
                                     Long customerId,
                                     boolean isLocked,
+                                    boolean isConfirmed,
                                     Set<Role> roles) {
 
         Claims claims = Jwts.claims().setSubject(email);
@@ -48,6 +49,7 @@ public class JwtTokenProvider {
         claims.put("id", userId);
         claims.put("customerId", customerId);
         claims.put("locked", isLocked);
+        claims.put("confirmed", isConfirmed);
         claims.put("roles", resolveRoles(roles));
 
         Instant validity = Instant.now()
@@ -63,13 +65,15 @@ public class JwtTokenProvider {
     public String createRefreshToken(Long userId,
                                      String email,
                                      Long customerId,
-                                     boolean isLocked) {
+                                     boolean isLocked,
+                                     boolean isConfirmed) {
 
         Claims claims = Jwts.claims().setSubject(email);
 
         claims.put("id", userId);
         claims.put("customerId", customerId);
         claims.put("locked", isLocked);
+        claims.put("confirmed", isConfirmed);
 
         Instant validity = Instant.now()
                 .plus(jwtProperties.getRefresh(), ChronoUnit.DAYS);
@@ -103,6 +107,7 @@ public class JwtTokenProvider {
                         user.getEmail(),
                         user.getCustomerId(),
                         user.isLocked(),
+                        user.isConfirmed(),
                         user.getRoles()
                 ));
         jwtResponse.setRefreshToken(
@@ -110,7 +115,8 @@ public class JwtTokenProvider {
                         userId,
                         user.getEmail(),
                         user.getCustomerId(),
-                        user.isLocked()
+                        user.isLocked(),
+                        user.isConfirmed()
                 ));
 
         return jwtResponse;

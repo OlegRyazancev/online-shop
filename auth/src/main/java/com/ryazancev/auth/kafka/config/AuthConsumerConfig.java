@@ -1,6 +1,7 @@
 package com.ryazancev.auth.kafka.config;
 
 import com.ryazancev.dto.admin.UserLockRequest;
+import com.ryazancev.dto.user.UserUpdateRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -86,6 +87,36 @@ public class AuthConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(longValueConsumerFactory);
+
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, UserUpdateRequest>
+    userUpdateConsumerFactory() {
+
+        JsonDeserializer<UserUpdateRequest> jsonDeserializer =
+                new JsonDeserializer<>();
+
+        jsonDeserializer.addTrustedPackages("*");
+
+        return new DefaultKafkaConsumerFactory<>(
+                consumerConfig(),
+                new StringDeserializer(),
+                jsonDeserializer);
+    }
+
+    @Bean
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
+            String, UserUpdateRequest>>
+    userUpdateMessageFactory(ConsumerFactory<
+            String, UserUpdateRequest> consumerFactory) {
+
+        ConcurrentKafkaListenerContainerFactory<
+                String, UserUpdateRequest> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(consumerFactory);
 
         return factory;
     }
