@@ -117,5 +117,6 @@
             <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
             <version>${openapi.webflux.version}</version>
         </dependency>
+
     </dependencies>
 </project>

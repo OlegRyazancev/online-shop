@@ -49,7 +49,6 @@ public class SecurityConfig {
                             CorsConfiguration config = new CorsConfiguration();
                             config.setAllowedOriginPatterns(
                                     Collections.singletonList("*"));
-                            config.setAllowedOrigins(List.of("*"));
                             config.setAllowedMethods(List.of("*"));
                             config.setAllowedHeaders(List.of("*"));
                             return config;

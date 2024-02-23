@@ -4,8 +4,6 @@ server:
     context-path: /
 
 spring:
-  profiles:
-    active: docker
   config:
     import: classpath:openapi/open-api-config.yml
   application:
@@ -69,7 +67,7 @@ eureka:
 #OpenApi
 openapi:
   service:
-    url: http://purchase:${PURCHASE_PORT}
+    url: http://localhost:${PURCHASE_PORT}
 springdoc:
   api-docs:
     path: /v3/api-docs/purchase

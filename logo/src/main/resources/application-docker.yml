@@ -4,8 +4,6 @@ server:
     context-path: /
 
 spring:
-  profiles:
-    active: docker
   config:
     import: classpath:openapi/open-api-config.yml
   application:
@@ -39,7 +37,7 @@ management:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-server/eureka
+      defaultZone: http://eureka-server:8761/eureka
     fetch-registry: true
     register-with-eureka: true
 
@@ -53,7 +51,7 @@ minio:
 #OpenApi
 openapi:
   service:
-    url: http://logo:${LOGO_PORT}
+    url: http://localhost:${LOGO_PORT}
 springdoc:
   api-docs:
     path: /v3/api-docs/logo

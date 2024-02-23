@@ -4,8 +4,6 @@ server:
     context-path: /
 
 spring:
-  profiles:
-    active: docker
   config:
     import: classpath:openapi/open-api-config.yml
   application:
@@ -81,7 +79,7 @@ eureka:
 #OpenApi
 openapi:
   service:
-    url: http://api-gateway:8080
+    url: http://localhost:8080
 springdoc:
   api-docs:
     path: /v3/api-docs/auth
