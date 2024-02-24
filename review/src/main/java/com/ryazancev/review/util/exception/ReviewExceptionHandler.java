@@ -3,6 +3,7 @@ package com.ryazancev.review.util.exception;
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
+import com.ryazancev.review.util.exception.custom.ReviewNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,21 @@ public class ReviewExceptionHandler {
             ReviewCreationException e) {
 
         log.error("Review creation exception");
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.REVIEW,
+                        e.getHttpStatus()
+                ));
+    }
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<ExceptionBody> handleReviewNotFound(
+            ReviewNotFoundException e) {
+
+        log.error("Review not found exception");
 
         return ResponseEntity
                 .status(e.getHttpStatus())

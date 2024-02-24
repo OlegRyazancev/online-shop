@@ -10,4 +10,5 @@ public interface PurchaseService {
 
     CustomerPurchasesResponse getByCustomerId(Long customerId);
 
+    PurchaseDto getById(String id);
 }

@@ -29,4 +29,6 @@ public class Review implements Serializable {
     private Integer rating;
 
     private LocalDateTime createdAt;
+
+    private String purchaseId;
 }

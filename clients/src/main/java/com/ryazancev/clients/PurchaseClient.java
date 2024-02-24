@@ -24,4 +24,8 @@ public interface PurchaseClient {
     @PostMapping("api/v1/purchases")
     PurchaseDto processPurchase(
             @RequestBody PurchaseEditDto purchaseEditDto);
+
+    @GetMapping("api/v1/purchases/{id}")
+    PurchaseDto getById(
+            @PathVariable("id") String id);
 }

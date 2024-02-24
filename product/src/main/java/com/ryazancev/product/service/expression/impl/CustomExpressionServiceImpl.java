@@ -1,7 +1,9 @@
 package com.ryazancev.product.service.expression.impl;
 
 import com.ryazancev.clients.OrganizationClient;
+import com.ryazancev.clients.PurchaseClient;
 import com.ryazancev.dto.product.ProductEditDto;
+import com.ryazancev.dto.purchase.PurchaseDto;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.service.expression.CustomExpressionService;
@@ -21,8 +23,11 @@ import java.util.List;
 public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final HttpServletRequest request;
-    private final OrganizationClient organizationClient;
+
     private final ProductService productService;
+
+    private final OrganizationClient organizationClient;
+    private final PurchaseClient purchaseClient;
 
     public void checkAccessProduct(Long id) {
 
@@ -72,6 +77,29 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         }
     }
 
+    @Override
+    public void checkAccessPurchase(String purchaseId) {
+
+        if (!canAccessPurchase(purchaseId)) {
+
+            throw new AccessDeniedException(
+                    "Access denied because you don't" +
+                            " have permission to access this purchase",
+                    HttpStatus.FORBIDDEN);
+        }
+    }
+
+    private boolean canAccessPurchase(String purchaseId) {
+
+        Long userId = getUserIdFromRequest(request);
+        List<String> userRoles = getRolesFromRequest(request);
+
+        PurchaseDto purchaseDto = purchaseClient.getById(purchaseId);
+
+        return userId.equals(purchaseDto.getCustomer().getId())
+                || userRoles.contains("ROLE_ADMIN");
+    }
+
 
     private boolean canAccessProduct(Long productId) {
 
@@ -102,8 +130,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         Long userId = getUserIdFromRequest(request);
         List<String> userRoles = getRolesFromRequest(request);
-
-        log.info("user Id = {}, user roles = {}", userId, userRoles);
 
         Long ownerId = organizationClient.getOwnerId(organizationId);
 

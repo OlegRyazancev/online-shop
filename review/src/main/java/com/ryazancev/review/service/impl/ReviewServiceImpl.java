@@ -2,8 +2,10 @@ package com.ryazancev.review.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
+import com.ryazancev.clients.PurchaseClient;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.product.ProductDto;
+import com.ryazancev.dto.purchase.PurchaseDto;
 import com.ryazancev.dto.review.ReviewDto;
 import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
@@ -32,6 +34,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final CustomerClient customerClient;
     private final ProductClient productClient;
+    private final PurchaseClient purchaseClient;
+
 
     @Override
     public ReviewsResponse getByCustomerId(Long customerId) {
@@ -85,31 +89,29 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ReviewDto create(ReviewEditDto reviewEditDto) {
 
-        CustomerDto selectedCustomerDto;
-        ProductDto selectedProductDto;
+        String purchaseId = reviewEditDto.getPurchaseId();
 
-        try {
-            selectedCustomerDto = customerClient
-                    .getSimpleById(reviewEditDto.getCustomerId());
-            selectedProductDto = productClient
-                    .getSimpleById(reviewEditDto.getProductId());
-        } catch (Exception e) {
+        if (reviewRepository.findByPurchaseId(purchaseId).isPresent()) {
             throw new ReviewCreationException(
-                    "Customer/product doesn't exists",
-                    HttpStatus.NOT_FOUND);
+                    "Review with same purchase ID already exists",
+                    HttpStatus.BAD_REQUEST);
         }
 
+        PurchaseDto purchaseDto = purchaseClient.getById(purchaseId);
+
         Review toSave = reviewMapper.toEntity(reviewEditDto);
+
+        toSave.setCustomerId(purchaseDto.getCustomer().getId());
+        toSave.setProductId(purchaseDto.getProduct().getId());
         toSave.setCreatedAt(LocalDateTime.now());
 
         Review saved = reviewRepository.insert(toSave);
 
-        ReviewDto savedReviewDto = reviewMapper
-                .toDto(saved);
-        savedReviewDto.setCustomer(selectedCustomerDto);
-        savedReviewDto.setProduct(selectedProductDto);
+        ReviewDto savedDto = reviewMapper.toDto(saved);
 
-        return savedReviewDto;
+        savedDto.setPurchase(purchaseDto);
+
+        return savedDto;
     }
 
     @Override

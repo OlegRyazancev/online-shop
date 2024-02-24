@@ -18,5 +18,5 @@ public interface ReviewMapper {
 
     Review toEntity(ReviewEditDto reviewEditDto);
 
-    ReviewDto toDto(Review savedReview);
+    ReviewDto toDto(Review review);
 }

@@ -4,6 +4,7 @@ import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
 import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
+import com.ryazancev.purchase.util.exception.custom.PurchaseNotFoundException;
 import com.ryazancev.purchase.util.exception.custom.PurchasesNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -21,6 +22,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class PurchaseExceptionHandler {
+
+    @ExceptionHandler(PurchaseNotFoundException.class)
+    public ResponseEntity<ExceptionBody> handlePurchaseNotFound(
+            PurchaseNotFoundException e) {
+
+        log.error("Purchase not found exception");
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.PURCHASE,
+                        e.getHttpStatus()
+                ));
+    }
 
     @ExceptionHandler(IncorrectBalanceException.class)
     public ResponseEntity<ExceptionBody> handleIncorrectBalance(

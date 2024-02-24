@@ -152,6 +152,8 @@ public class ProductController {
 
         customExpressionService.checkIfEmailConfirmed();
         customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessPurchase(
+                reviewEditDto.getPurchaseId());
 
         return reviewClient.create(reviewEditDto);
     }

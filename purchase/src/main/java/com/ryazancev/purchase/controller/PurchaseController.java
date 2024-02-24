@@ -30,4 +30,11 @@ public class PurchaseController {
         return purchaseService.getByCustomerId(id);
     }
 
+    @GetMapping("/{id}")
+    public PurchaseDto getById(
+            @PathVariable("id") String id) {
+
+        return purchaseService.getById(id);
+    }
+
 }

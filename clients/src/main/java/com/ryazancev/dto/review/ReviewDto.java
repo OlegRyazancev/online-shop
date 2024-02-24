@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.product.ProductDto;
+import com.ryazancev.dto.purchase.PurchaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,6 +37,10 @@ public class ReviewDto {
 
     @Schema(description = "Customer who posted the review")
     private CustomerDto customer;
+
+
+    @Schema(description = "Purchase associated with review")
+    private PurchaseDto purchase;
 
     @Schema(
             description = "Rating given in the review. 1-5",

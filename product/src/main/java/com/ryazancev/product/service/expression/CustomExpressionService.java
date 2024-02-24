@@ -11,4 +11,6 @@ public interface CustomExpressionService {
     void checkIfAccountLocked();
 
     void checkIfEmailConfirmed();
+
+    void checkAccessPurchase(String purchaseId);
 }

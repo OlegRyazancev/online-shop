@@ -34,26 +34,6 @@ public class ReviewEditDto {
     private String body;
 
     @Schema(
-            description = "Product ID associated with the review",
-            example = "1"
-    )
-    @NotNull(
-            message = "Product ID must not be null",
-            groups = OnCreate.class
-    )
-    private Long productId;
-
-    @Schema(
-            description = "Customer ID who posted the review",
-            example = "1"
-    )
-    @NotNull(
-            message = "Customer ID must not be null",
-            groups = OnCreate.class
-    )
-    private Long customerId;
-
-    @Schema(
             description = "Rating given in the review. 1-5",
             example = "5"
     )
@@ -72,4 +52,13 @@ public class ReviewEditDto {
             groups = OnCreate.class
     )
     private Integer rating;
+
+    @Schema(
+            description = "Purchase ID associated with created review"
+    )
+    @NotNull(
+            message = "Purchase ID must not be null",
+            groups = OnCreate.class
+    )
+    private String purchaseId;
 }
