@@ -1,13 +1,12 @@
 package com.ryazancev.product.util;
 
-import com.ryazancev.clients.CustomerClient;
-import com.ryazancev.clients.OrganizationClient;
 import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.dto.mail.MailType;
 import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;
+import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,8 +20,8 @@ public class ProductUtil {
     private final ProductProducerService productProducerService;
     private final ProductService productService;
 
-    private final OrganizationClient organizationClient;
-    private final CustomerClient customerClient;
+    private final ClientsService clientsService;
+
 
     public void sendAcceptedMailToCustomerByProductId(Long productId) {
         MailDto mailDto = createMailDto(
@@ -48,9 +47,11 @@ public class ProductUtil {
         Product registered = productService.getById(
                 productId, statusCheck);
 
-        Long customerId = organizationClient
-                .getOwnerId(registered.getOrganizationId());
-        CustomerDto customerDto = customerClient.getSimpleById(customerId);
+        Long customerId = (Long) clientsService
+                .getOrganizationOwnerIdById(registered.getOrganizationId());
+
+        CustomerDto customerDto = (CustomerDto) clientsService
+                .getSimpleCustomerById(customerId);
 
         Properties properties = new Properties();
 

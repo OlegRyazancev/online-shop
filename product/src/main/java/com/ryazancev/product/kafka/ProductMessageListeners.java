@@ -64,8 +64,14 @@ public class ProductMessageListeners {
                 productService.register(
                         requestDto.getObjectToRegisterId());
 
-                productUtil.sendAcceptedMailToCustomerByProductId(
-                        requestDto.getObjectToRegisterId());
+                try {
+                    productUtil.sendAcceptedMailToCustomerByProductId(
+                            requestDto.getObjectToRegisterId());
+                } catch (Exception e) {
+                    log.error("Error during sending email to customer: {}",
+                            e.getMessage());
+                }
+
 
                 log.info("Product now is: {}",
                         ProductStatus.ACTIVE);
@@ -75,8 +81,13 @@ public class ProductMessageListeners {
                         requestDto.getObjectToRegisterId(),
                         ProductStatus.INACTIVE);
 
-                productUtil.sendRejectedMailToCustomerByProductId(
-                        requestDto.getObjectToRegisterId());
+                try {
+                    productUtil.sendRejectedMailToCustomerByProductId(
+                            requestDto.getObjectToRegisterId());
+                } catch (Exception e) {
+                    log.error("Error during sending email to customer: {}",
+                            e.getMessage());
+                }
 
                 log.info("Product now is: {}",
                         ProductStatus.INACTIVE);

@@ -1,6 +1,5 @@
 package com.ryazancev.organization.util;
 
-import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;

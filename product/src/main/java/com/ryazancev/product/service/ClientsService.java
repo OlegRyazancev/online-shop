@@ -4,6 +4,8 @@ import com.ryazancev.dto.review.ReviewEditDto;
 
 public interface ClientsService {
 
+    Object getSimpleCustomerById(Long customerId);
+
     Object getSimpleOrganizationById(Long organizationId);
 
     Object getOrganizationOwnerIdById(Long organizationId);

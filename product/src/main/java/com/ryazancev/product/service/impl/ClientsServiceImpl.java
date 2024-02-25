@@ -1,5 +1,6 @@
 package com.ryazancev.product.service.impl;
 
+import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.OrganizationClient;
 import com.ryazancev.clients.ReviewClient;
 import com.ryazancev.dto.review.ReviewEditDto;
@@ -10,8 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static com.ryazancev.product.util.exception.Message.ORGANIZATION_SERVICE_UNAVAILABLE;
-import static com.ryazancev.product.util.exception.Message.REVIEW_SERVICE_UNAVAILABLE;
+import static com.ryazancev.product.util.exception.Message.*;
 
 /**
  * @author Oleg Ryazancev
@@ -23,6 +23,17 @@ public class ClientsServiceImpl implements ClientsService {
 
     private final OrganizationClient organizationClient;
     private final ReviewClient reviewClient;
+    private final CustomerClient customerClient;
+
+    @Override
+    @CircuitBreaker(
+            name = "product",
+            fallbackMethod = "customerServiceUnavailable"
+    )
+    public Object getSimpleCustomerById(Long customerId) {
+
+        return customerClient.getSimpleById(customerId);
+    }
 
     @Override
     @CircuitBreaker(
@@ -76,6 +87,13 @@ public class ClientsServiceImpl implements ClientsService {
     }
 
     //Fallback methods
+
+    private Object customerServiceUnavailable(Exception e){
+
+        throw new ServiceUnavailableException(
+                CUSTOMER_SERVICE_UNAVAILABLE,
+                HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
     private Object organizationServiceUnavailable(Exception e) {
 
