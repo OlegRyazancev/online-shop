@@ -1,7 +1,7 @@
 package com.ryazancev.customer.util.exception;
 
 
-public class Messages {
+public class Message {
 
     //    Customer service messages
     public static final String CUSTOMER_EMAIL_EXISTS =

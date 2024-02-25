@@ -20,7 +20,6 @@ public class Message {
             "User with this email already exists";
     public static final String PASSWORD_MISMATCH =
             "Password and password confirmation do not match";
-
     public static final String CUSTOMER_SERVICE_UNAVAILABLE=
             "Customer service is unavailable. Try again after some seconds";
 }

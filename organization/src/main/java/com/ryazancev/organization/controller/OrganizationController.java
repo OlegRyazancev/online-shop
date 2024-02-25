@@ -1,14 +1,14 @@
 package com.ryazancev.organization.controller;
 
-import com.ryazancev.clients.ProductClient;
 import com.ryazancev.dto.logo.LogoDto;
 import com.ryazancev.dto.organization.OrganizationDto;
 import com.ryazancev.dto.organization.OrganizationEditDto;
 import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
 import com.ryazancev.dto.product.ProductsSimpleResponse;
 import com.ryazancev.organization.model.Organization;
+import com.ryazancev.organization.service.ClientsService;
+import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.service.expression.CustomExpressionService;
 import com.ryazancev.organization.util.OrganizationUtil;
 import com.ryazancev.organization.util.mapper.OrganizationMapper;
 import com.ryazancev.validation.OnCreate;
@@ -38,9 +38,10 @@ public class OrganizationController {
     private final OrganizationMapper organizationMapper;
     private final OrganizationUtil organizationUtil;
 
+    private final ClientsService clientsService;
+
     private final CustomExpressionService customExpressionService;
 
-    private final ProductClient productClient;
 
     @GetMapping
     @Operation(
@@ -155,7 +156,6 @@ public class OrganizationController {
         return organizationDto;
     }
 
-    //TODO:CB here
     @GetMapping("/{id}/products")
     @Operation(
             summary = "Get products by organization ID",
@@ -172,10 +172,10 @@ public class OrganizationController {
 
         customExpressionService.checkIfAccountLocked();
 
-        return productClient.getProductsByOrganizationId(id);
+        return (ProductsSimpleResponse) clientsService
+                .getProductsByOrganizationId(id);
     }
 
-    //TODO:CB here
     @PostMapping("/{id}/logo")
     @Operation(
             summary = "Upload organization logo",

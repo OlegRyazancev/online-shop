@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.ryazancev.customer.util.exception.Messages.*;
+import static com.ryazancev.customer.util.exception.Message.*;
 
 @Service
 @RequiredArgsConstructor

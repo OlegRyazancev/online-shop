@@ -1,6 +1,5 @@
 package com.ryazancev.organization.service.impl;
 
-import com.ryazancev.clients.LogoClient;
 import com.ryazancev.dto.admin.RegistrationRequestDto;
 import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.logo.LogoDto;
@@ -8,10 +7,10 @@ import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
+import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
-import com.ryazancev.organization.util.validator.OrganizationStatusValidator;
+import com.ryazancev.organization.util.validator.OrganizationValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -25,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.ryazancev.organization.util.exception.Message.ORGANIZATION_NOT_FOUND;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -33,10 +34,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository organizationRepository;
     private final OrganizationProducerService organizationProducerService;
-    private final OrganizationStatusValidator organizationStatusValidator;
+    private final OrganizationValidator organizationValidator;
 
-    private final LogoClient logoClient;
-
+    private final ClientsService clientsService;
 
     @Override
     @Cacheable(value = "Organization::getAll")
@@ -54,8 +54,8 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization existing = findById(id);
 
         if (statusCheck) {
-            organizationStatusValidator.validateInactiveStatus(existing);
-            organizationStatusValidator.validateDeletedStatus(existing);
+            organizationValidator.validateInactiveStatus(existing);
+            organizationValidator.validateDeletedStatus(existing);
         }
 
         return existing;
@@ -70,25 +70,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Organization makeRegistrationRequest(
             Organization organization) {
 
-        if (organizationRepository
-                .findByName(organization.getName())
-                .isPresent()) {
-
-            throw new OrganizationCreationException(
-                    "Organization with this name already exists",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
-        if (organizationRepository
-                .findByDescription(organization.getDescription())
-                .isPresent()) {
-
-            throw new OrganizationCreationException(
-                    "Organization with this description already exists",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
+        organizationValidator.validateNameUniqueness(organization);
+        organizationValidator.validateDescriptionUniqueness(organization);
 
         organization.setStatus(OrganizationStatus.INACTIVE);
 
@@ -117,7 +100,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization existing = findById(organization.getId());
 
-        organizationStatusValidator.validateAllStatus(existing);
+        organizationValidator.validateAllStatus(existing);
 
         existing.setName(organization.getName());
         existing.setDescription(organization.getDescription());
@@ -171,7 +154,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationRepository.save(existing);
     }
 
-    //TODO:CB here
     @Transactional
     @Override
     @CacheEvict(
@@ -182,9 +164,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization existing = findById(id);
 
-        organizationStatusValidator.validateAllStatus(existing);
+        organizationValidator.validateAllStatus(existing);
 
-        String fileName = logoClient.upload(logoDto.getFile());
+        String fileName = (String) clientsService
+                .uploadLogo(logoDto.getFile());
 
         existing.setLogo(fileName);
         organizationRepository.save(existing);
@@ -224,7 +207,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization existing = findById(id);
 
-        organizationStatusValidator.validateAllStatus(existing);
+        organizationValidator.validateAllStatus(existing);
 
         existing.setLogo("DELETED");
         existing.setDescription("DELETED");
@@ -240,7 +223,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         return organizationRepository.findById(id)
                 .orElseThrow(() -> new OrganizationNotFoundException(
-                        "Organization not found",
+                        ORGANIZATION_NOT_FOUND,
                         HttpStatus.NOT_FOUND
                 ));
     }

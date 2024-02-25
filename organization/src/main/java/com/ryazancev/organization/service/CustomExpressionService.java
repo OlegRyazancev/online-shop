@@ -1,4 +1,4 @@
-package com.ryazancev.organization.service.expression;
+package com.ryazancev.organization.service;
 
 import com.ryazancev.dto.organization.OrganizationEditDto;
 

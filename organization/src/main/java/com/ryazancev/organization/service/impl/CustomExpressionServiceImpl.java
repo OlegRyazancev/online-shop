@@ -1,8 +1,8 @@
-package com.ryazancev.organization.service.expression.impl;
+package com.ryazancev.organization.service.impl;
 
 import com.ryazancev.dto.organization.OrganizationEditDto;
 import com.ryazancev.organization.repository.OrganizationRepository;
-import com.ryazancev.organization.service.expression.CustomExpressionService;
+import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.ryazancev.organization.util.exception.Message.*;
 
 @Slf4j
 @Service
@@ -26,7 +28,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!canAccessOrganization(id)) {
             throw new AccessDeniedException(
-                    "You have no permissions to access to this organization",
+                    ACCESS_ORGANIZATION,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -36,7 +38,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!canAccessUser(organizationEditDto.getOwnerId())) {
             throw new AccessDeniedException(
-                    "You have no permissions to access to this customer",
+                    ACCESS_CUSTOMER,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -48,7 +50,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (locked) {
             throw new AccessDeniedException(
-                    "Access denied because your account is locked",
+                    ACCOUNT_LOCKED,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -61,7 +63,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!confirmed) {
             throw new AccessDeniedException(
-                    "Access denied because your email is not confirmed",
+                    EMAIL_NOT_CONFIRMED,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -70,8 +72,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         Long currentUserId = getUserIdFromRequest();
         List<String> userRoles = getUserRolesFromRequest();
-
-        log.info("user Id = {}, user roles = {}", currentUserId, userRoles);
 
         return organizationRepository
                 .isOrganizationOwner(currentUserId, organizationId)
@@ -82,9 +82,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         Long currentUserId = getUserIdFromRequest();
         List<String> userRoles = getUserRolesFromRequest();
-
-
-        log.info("user Id = {}, user roles = {}", userId, userRoles);
 
         return userId.equals(currentUserId)
                 || userRoles.contains("ROLE_ADMIN");

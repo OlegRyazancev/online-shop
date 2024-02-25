@@ -5,6 +5,7 @@ import com.ryazancev.config.ServiceStage;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
+import com.ryazancev.organization.util.exception.custom.ServiceUnavailableException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class OrganizationExceptionHandler {
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ExceptionBody> handleServiceUnavailable(
+            ServiceUnavailableException e) {
+
+        log.error("Service unavailable exception");
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.ORGANIZATION,
+                        e.getHttpStatus()
+                ));
+    }
 
     @ExceptionHandler(OrganizationCreationException.class)
     public ResponseEntity<ExceptionBody> handleOrganizationCreation(
