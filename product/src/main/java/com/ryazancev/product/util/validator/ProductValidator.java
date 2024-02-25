@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductStatusValidator {
+public class ProductValidator {
 
     public void validateFrozenStatus(Product product) {
 

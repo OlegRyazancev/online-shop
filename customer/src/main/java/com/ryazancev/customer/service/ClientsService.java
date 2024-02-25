@@ -1,4 +1,4 @@
-package com.ryazancev.customer.service.clients;
+package com.ryazancev.customer.service;
 
 import com.ryazancev.dto.purchase.PurchaseEditDto;
 

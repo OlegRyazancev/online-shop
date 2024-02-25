@@ -1,21 +1,21 @@
 package com.ryazancev.auth.service.impl;
 
+import com.ryazancev.auth.kafka.AuthProducerService;
 import com.ryazancev.auth.model.ConfirmationToken;
 import com.ryazancev.auth.repository.ConfirmationTokenRepository;
 import com.ryazancev.auth.repository.UserRepository;
 import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.util.AuthUtil;
 import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
+import com.ryazancev.auth.util.validator.AuthValidator;
 import com.ryazancev.dto.mail.MailDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import static com.ryazancev.auth.util.exception.Message.TOKEN_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -23,14 +23,12 @@ import java.time.LocalDateTime;
 @Transactional(readOnly = true)
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
+    private final AuthUtil authUtil;
+    private final AuthValidator authValidator;
+    private final AuthProducerService authProducerService;
+
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final UserRepository userRepository;
-    private final AuthUtil authUtil;
-
-    @Value("${spring.kafka.topic.mail}")
-    private String mailTopicName;
-
-    private final KafkaTemplate<String, MailDto> kafkaTemplate;
 
     @Transactional
     @Override
@@ -39,31 +37,20 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
                 .findByToken(token)
                 .orElseThrow(() ->
                         new ConfirmationTokenException(
-                                "Token not found",
+                                TOKEN_NOT_FOUND,
                                 HttpStatus.NOT_FOUND));
 
-        if (confirmationToken.getConfirmedAt() != null) {
-            throw new ConfirmationTokenException(
-                    "Email already confirmed",
-                    HttpStatus.BAD_REQUEST);
-        }
+        authValidator.validateConfirmationStatus(confirmationToken);
+        authValidator.validateExpiration(confirmationToken);
 
-        LocalDateTime expiredAt = confirmationToken.getExpiredAt();
-
-        if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new ConfirmationTokenException(
-                    "Token expired",
-                    HttpStatus.BAD_REQUEST);
-        }
         String email = confirmationToken.getUser().getEmail();
         String name = confirmationToken.getUser().getName();
 
         confirmationTokenRepository.updateConfirmedAt(token);
-
         userRepository.enableUser(email);
 
         MailDto mailDto = authUtil.createRegistrationMailDto(email, name);
-        kafkaTemplate.send(mailTopicName, mailDto);
+        authProducerService.sendMessageToMailTopic(mailDto);
 
         return "Email confirmed successfully!";
     }

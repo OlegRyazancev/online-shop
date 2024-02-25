@@ -37,8 +37,6 @@ public class AuthMessageListeners {
         }
     }
 
-
-
     @KafkaListener(
             topics = "${spring.kafka.topic.user.delete}",
             groupId = "${spring.kafka.consumer.group-id}",

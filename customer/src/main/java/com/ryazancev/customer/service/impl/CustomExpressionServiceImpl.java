@@ -1,6 +1,6 @@
-package com.ryazancev.customer.service.expression.impl;
+package com.ryazancev.customer.service.impl;
 
-import com.ryazancev.customer.service.expression.CustomExpressionService;
+import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

@@ -1,31 +1,32 @@
 package com.ryazancev.auth.service.impl;
 
+import com.ryazancev.auth.kafka.AuthProducerService;
 import com.ryazancev.auth.model.ConfirmationToken;
 import com.ryazancev.auth.model.Role;
 import com.ryazancev.auth.model.User;
 import com.ryazancev.auth.repository.UserRepository;
+import com.ryazancev.auth.service.ClientsService;
 import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.service.UserService;
 import com.ryazancev.auth.util.AuthUtil;
-import com.ryazancev.auth.util.exception.custom.UserCreationException;
 import com.ryazancev.auth.util.exception.custom.UserNotFoundException;
 import com.ryazancev.auth.util.mappers.UserMapper;
-import com.ryazancev.clients.CustomerClient;
+import com.ryazancev.auth.util.validator.AuthValidator;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;
 import com.ryazancev.dto.user.UserDto;
 import com.ryazancev.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+
+import static com.ryazancev.auth.util.exception.Message.USER_NOT_FOUND;
 
 
 @Slf4j
@@ -34,41 +35,28 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final AuthUtil authUtil;
+    private final AuthValidator authValidator;
+    private final AuthProducerService authProducerService;
+
+    private final ClientsService clientsService;
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final CustomerClient customerClient;
+
     private final ConfirmationTokenService confirmationTokenService;
-    private final AuthUtil authUtil;
 
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${spring.kafka.topic.mail}")
-    private String mailTopicName;
-
-    private final KafkaTemplate<String, MailDto> kafkaTemplate;
 
     @Transactional
     @Override
     public UserDto create(UserDto userDto) {
 
-        if (userRepository.findByEmail(
-                userDto.getEmail()).isPresent()) {
-            throw new UserCreationException(
-                    "User with this email already exists",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-        if (!userDto.getPassword().equals(
-                userDto.getPasswordConfirmation())) {
-            throw new UserCreationException(
-                    "Password and password confirmation do not equals",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
+        authValidator.validateEmailUniqueness(userDto);
+        authValidator.validatePasswordConfirmation(userDto);
 
         User user = userMapper.toEntity(userDto);
-
-        log.info("User email {}", user.getEmail());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmed(false);
@@ -78,7 +66,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
 
         CustomerDto createdCustomer =
-                customerClient.createCustomer(
+                (CustomerDto) clientsService.createCustomer(
                         userMapper.toCustomerDto(user));
         user.setCustomerId(createdCustomer.getId());
 
@@ -94,7 +82,7 @@ public class UserServiceImpl implements UserService {
                 saved.getName(),
                 token.getToken());
 
-        kafkaTemplate.send(mailTopicName, mailDto);
+        authProducerService.sendMessageToMailTopic(mailDto);
 
         return userMapper.toDto(saved);
     }
@@ -106,7 +94,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UserNotFoundException(
-                                "User not found",
+                                USER_NOT_FOUND,
                                 HttpStatus.NOT_FOUND));
     }
 
@@ -116,7 +104,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() ->
                         new UserNotFoundException(
-                                "User not found",
+                                USER_NOT_FOUND,
                                 HttpStatus.NOT_FOUND));
     }
 
@@ -124,11 +112,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void toggleUserLock(String username, boolean lock) {
 
-        User existing = userRepository.findByEmail(username)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                "User not found",
-                                HttpStatus.NOT_FOUND));
+        User existing = getByEmail(username);
 
         existing.setLocked(lock);
 
@@ -139,10 +123,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void markUserAsDeletedByCustomerId(Long customerId) {
 
-        User existing = userRepository.findByCustomerId(customerId)
+        User existing = userRepository
+                .findByCustomerId(customerId)
                 .orElseThrow(() ->
                         new UserNotFoundException(
-                                "User not found",
+                                USER_NOT_FOUND,
                                 HttpStatus.NOT_FOUND
                         ));
 
@@ -160,7 +145,7 @@ public class UserServiceImpl implements UserService {
                 .findByCustomerId(request.getCustomerId())
                 .orElseThrow(() ->
                         new UserNotFoundException(
-                                "User not found",
+                                USER_NOT_FOUND,
                                 HttpStatus.NOT_FOUND));
 
         existing.setName(request.getName());

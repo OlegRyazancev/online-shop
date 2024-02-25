@@ -10,7 +10,7 @@ import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
-import com.ryazancev.product.util.validator.ProductStatusValidator;
+import com.ryazancev.product.util.validator.ProductValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -31,7 +31,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductStatusValidator productStatusValidator;
+    private final ProductValidator productValidator;
 
     private final ProductProducerService productProducerService;
 
@@ -51,8 +51,8 @@ public class ProductServiceImpl implements ProductService {
         Product existing = findById(id);
 
         if (statusCheck) {
-            productStatusValidator.validateInactiveStatus(existing);
-            productStatusValidator.validateDeletedStatus(existing);
+            productValidator.validateInactiveStatus(existing);
+            productValidator.validateDeletedStatus(existing);
         }
         return existing;
     }
@@ -171,7 +171,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product existing = findById(product.getId());
 
-        productStatusValidator.validateAllStatus(existing);
+        productValidator.validateAllStatus(existing);
 
         existing.setProductName(product.getProductName());
         existing.setDescription(product.getDescription());
@@ -216,7 +216,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product existing = findById(id);
 
-        productStatusValidator.validateAllStatus(existing);
+        productValidator.validateAllStatus(existing);
 
         existing.setDescription("DELETED");
         existing.setPrice(0.0);

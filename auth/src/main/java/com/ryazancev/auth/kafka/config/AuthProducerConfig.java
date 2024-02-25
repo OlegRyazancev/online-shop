@@ -35,15 +35,15 @@ public class AuthProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, MailDto> producerFactory() {
+    public ProducerFactory<String, MailDto> mailProducerFactory() {
 
         return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, MailDto> kafkaTemplate(
-            ProducerFactory<String, MailDto> producerFactory) {
+    public KafkaTemplate<String, MailDto> mailKafkaTemplate(
+            ProducerFactory<String, MailDto> mailProducerFactory) {
 
-        return new KafkaTemplate<>(producerFactory);
+        return new KafkaTemplate<>(mailProducerFactory);
     }
 }

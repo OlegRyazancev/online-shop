@@ -1,8 +1,8 @@
-package com.ryazancev.customer.service.clients.impl;
+package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.clients.PurchaseClient;
 import com.ryazancev.clients.ReviewClient;
-import com.ryazancev.customer.service.clients.ClientsService;
+import com.ryazancev.customer.service.ClientsService;
 import com.ryazancev.customer.util.exception.custom.ServiceUnavailableException;
 import com.ryazancev.dto.purchase.PurchaseEditDto;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;

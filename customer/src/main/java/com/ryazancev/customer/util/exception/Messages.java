@@ -22,4 +22,5 @@ public class Messages {
             "You have no permissions to access to this customer";
     public static final String ACCOUNT_LOCKED =
             "Access denied because your account is locked";
+
 }
