@@ -1,11 +1,9 @@
 package com.ryazancev.customer.controller;
 
-import com.ryazancev.clients.PurchaseClient;
-import com.ryazancev.clients.ReviewClient;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
+import com.ryazancev.customer.service.clients.ClientsService;
 import com.ryazancev.customer.service.expression.CustomExpressionService;
-import com.ryazancev.customer.util.exception.custom.ServiceUnavailableException;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
@@ -14,15 +12,10 @@ import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import static com.ryazancev.customer.util.exception.Messages.PURCHASE_SERVICE_UNAVAILABLE;
-import static com.ryazancev.customer.util.exception.Messages.REVIEW_SERVICE_UNAVAILABLE;
 
 @Slf4j
 @RestController
@@ -35,9 +28,7 @@ public class CustomerController {
     private final CustomExpressionService customExpressionService;
     private final CustomerMapper customerMapper;
 
-    private final PurchaseClient purchaseClient;
-    private final ReviewClient reviewClient;
-
+    private final ClientsService clientsService;
 
     @GetMapping("/{id}")
     public CustomerDto getById(
@@ -68,38 +59,28 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}/reviews")
-    @CircuitBreaker(
-            name = "customer",
-            fallbackMethod = "reviewServiceUnavailable"
-    )
     public ReviewsResponse getReviewsByCustomerId(
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessCustomer(id);
 
-        return reviewClient.getByCustomerId(id);
+        return (ReviewsResponse) clientsService
+                .getReviewsByCustomerId(id);
     }
 
     @GetMapping("/{id}/purchases")
-    @CircuitBreaker(
-            name = "customer",
-            fallbackMethod = "purchaseServiceUnavailable"
-    )
     public CustomerPurchasesResponse getPurchasesByCustomerId(
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessCustomer(id);
 
-        return purchaseClient.getByCustomerId(id);
+        return (CustomerPurchasesResponse) clientsService
+                .getPurchasesByCustomerId(id);
     }
 
     @PostMapping("/purchases")
-    @CircuitBreaker(
-            name = "customer",
-            fallbackMethod = "purchaseServiceUnavailable"
-    )
     public PurchaseDto processPurchase(
             @RequestBody
             @Validated(OnCreate.class)
@@ -110,7 +91,8 @@ public class CustomerController {
         customExpressionService
                 .checkAccessCustomer(purchaseEditDto.getCustomerId());
 
-        return purchaseClient.processPurchase(purchaseEditDto);
+        return (PurchaseDto) clientsService
+                .processPurchase(purchaseEditDto);
     }
 
     @DeleteMapping("{id}")
@@ -153,21 +135,5 @@ public class CustomerController {
         Customer created = customerService.create(customer);
 
         return customerMapper.toSimpleDto(created);
-    }
-
-    //Fallback methods
-
-    private ReviewsResponse reviewServiceUnavailable(Exception e) {
-
-        throw new ServiceUnavailableException(
-                REVIEW_SERVICE_UNAVAILABLE,
-                HttpStatus.SERVICE_UNAVAILABLE);
-    }
-
-    private ReviewsResponse purchaseServiceUnavailable(Exception e) {
-
-        throw new ServiceUnavailableException(
-                PURCHASE_SERVICE_UNAVAILABLE,
-                HttpStatus.SERVICE_UNAVAILABLE);
     }
 }
