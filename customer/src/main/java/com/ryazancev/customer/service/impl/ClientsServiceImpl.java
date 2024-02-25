@@ -11,8 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static com.ryazancev.customer.util.exception.Message.PURCHASE_SERVICE_UNAVAILABLE;
-import static com.ryazancev.customer.util.exception.Message.REVIEW_SERVICE_UNAVAILABLE;
+import static com.ryazancev.customer.util.exception.Message.*;
 
 /**
  * @author Oleg Ryazancev
