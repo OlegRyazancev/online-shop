@@ -1,7 +1,5 @@
 package com.ryazancev.customer.service.impl;
 
-import com.ryazancev.clients.PurchaseClient;
-import com.ryazancev.clients.ReviewClient;
 import com.ryazancev.customer.kafka.CustomerProducerService;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
@@ -21,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static com.ryazancev.customer.util.exception.Messages.*;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -29,10 +29,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerProducerService customerProducerService;
-
-    private final PurchaseClient purchaseClient;
-    private final ReviewClient reviewClient;
-
 
     @Override
     @Cacheable(
@@ -76,7 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (customerRepository.findByEmail(customer.getEmail()).isPresent()) {
             throw new CustomerCreationException(
-                    "Customer with this email already exists",
+                    CUSTOMER_EMAIL_EXISTS,
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -135,7 +131,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(id)
                 .orElseThrow(() ->
                         new CustomerNotFoundException(
-                                "Customer not found with this ID",
+                                CUSTOMER_ID_NOT_FOUND,
                                 HttpStatus.NOT_FOUND
                         ));
     }

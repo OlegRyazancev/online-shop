@@ -1,6 +1,7 @@
 package com.ryazancev.customer.service.expression.impl;
 
 import com.ryazancev.customer.service.expression.CustomExpressionService;
+import com.ryazancev.customer.util.exception.Messages;
 import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.ryazancev.customer.util.exception.Messages.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +28,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         boolean confirmed = Boolean.parseBoolean(
                 request.getHeader("confirmed"));
 
-        if (!confirmed){
+        if (!confirmed) {
             throw new AccessDeniedException(
-                    "Access denied because your email is not confirmed",
+                    EMAIL_NOT_CONFIRMED,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -38,7 +41,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!canAccessCustomer(customerId)) {
 
             throw new AccessDeniedException(
-                    "You have no permissions to access to this customer",
+                    ACCESS_CUSTOMER,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -50,7 +53,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (locked) {
             throw new AccessDeniedException(
-                    "Access denied because your account is locked",
+                    ACCOUNT_LOCKED,
                     HttpStatus.FORBIDDEN);
 
         }
@@ -63,8 +66,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
                 .stream(request
                         .getHeader("roles")
                         .split(" ")).toList();
-
-        log.info("user Id = {}, user roles = {}", userId, userRoles);
 
         return userId.equals(id) || userRoles.contains("ROLE_ADMIN");
     }
