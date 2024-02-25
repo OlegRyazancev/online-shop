@@ -19,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static com.ryazancev.customer.util.exception.Message.*;
+import static com.ryazancev.customer.util.exception.Message.CUSTOMER_EMAIL_EXISTS;
+import static com.ryazancev.customer.util.exception.Message.CUSTOMER_ID_NOT_FOUND;
 @Slf4j
 @Service
 @Transactional(readOnly = true)

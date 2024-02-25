@@ -1,23 +1,23 @@
-package com.ryazancev.product.service.expression.impl;
+package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.OrganizationClient;
 import com.ryazancev.clients.PurchaseClient;
 import com.ryazancev.dto.product.ProductEditDto;
 import com.ryazancev.dto.purchase.PurchaseDto;
 import com.ryazancev.product.model.Product;
+import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.service.expression.CustomExpressionService;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Slf4j
+import static com.ryazancev.product.util.exception.Message.*;
+
 @Service
 @RequiredArgsConstructor
 public class CustomExpressionServiceImpl implements CustomExpressionService {
@@ -34,7 +34,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!canAccessProduct(id)) {
 
             throw new AccessDeniedException(
-                    "You have no permissions to access to this product",
+                    ACCESS_PRODUCT,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -44,7 +44,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!canAccessOrganization(productEditDto.getOrganizationId())) {
 
             throw new AccessDeniedException(
-                    "You have no permissions to access to this organization",
+                    ACCESS_ORGANIZATION,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -58,7 +58,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (locked) {
 
             throw new AccessDeniedException(
-                    "Access denied because your account is locked",
+                    ACCOUNT_LOCKED,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -72,7 +72,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!confirmed) {
 
             throw new AccessDeniedException(
-                    "Access denied because your email is not confirmed",
+                    EMAIL_NOT_CONFIRMED,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -83,8 +83,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!canAccessPurchase(purchaseId)) {
 
             throw new AccessDeniedException(
-                    "Access denied because you don't" +
-                            " have permission to access this purchase",
+                    ACCESS_PURCHASE,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -109,8 +108,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         Long organizationId = product.getOrganizationId();
 
         if (canAccessOrganization(organizationId)) {
-
-            log.info("User is organization owner, or user is admin");
 
             List<String> userRoles = getRolesFromRequest(request);
             List<Product> products =

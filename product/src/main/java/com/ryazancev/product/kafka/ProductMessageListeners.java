@@ -42,7 +42,6 @@ public class ProductMessageListeners {
                 request.getProductId(),
                 request.getQuantityInStock());
 
-
         log.info("Product successfully updated");
     }
 

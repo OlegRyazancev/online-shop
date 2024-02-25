@@ -1,4 +1,4 @@
-package com.ryazancev.product.service.expression;
+package com.ryazancev.product.service;
 
 import com.ryazancev.dto.product.ProductEditDto;
 

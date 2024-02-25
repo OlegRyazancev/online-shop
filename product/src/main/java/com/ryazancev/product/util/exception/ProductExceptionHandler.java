@@ -2,10 +2,7 @@ package com.ryazancev.product.util.exception;
 
 import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
-import com.ryazancev.product.util.exception.custom.AccessDeniedException;
-import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
-import com.ryazancev.product.util.exception.custom.ProductCreationException;
-import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
+import com.ryazancev.product.util.exception.custom.*;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +19,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class ProductExceptionHandler {
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ExceptionBody> handleServiceUnavailable(
+            ServiceUnavailableException e) {
+
+        log.error("Service unavailable exception");
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.PRODUCT,
+                        e.getHttpStatus()
+                ));
+    }
 
     @ExceptionHandler(ProductCreationException.class)
     public ResponseEntity<ExceptionBody> handleProductCreation(

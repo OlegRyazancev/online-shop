@@ -8,7 +8,6 @@ import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
-import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import com.ryazancev.product.util.validator.ProductValidator;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.ryazancev.product.util.exception.Message.ORGANIZATION_NOT_FOUND;
+import static com.ryazancev.product.util.exception.Message.PRODUCT_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -67,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByOrganizationId(organizationId)
                 .orElseThrow(() ->
                         new OrganizationNotFoundException(
-                                "Organization not found",
+                                ORGANIZATION_NOT_FOUND,
                                 HttpStatus.NOT_FOUND)
                 );
     }
@@ -87,13 +89,7 @@ public class ProductServiceImpl implements ProductService {
     )
     public Product makeRegistrationRequest(Product product) {
 
-        if (productRepository.findByProductName(
-                product.getProductName()).isPresent()) {
-            throw new ProductCreationException(
-                    "Product with this name already exists",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
+        productValidator.validateNameUniqueness(product);
 
         product.setStatus(ProductStatus.INACTIVE);
 
@@ -234,7 +230,7 @@ public class ProductServiceImpl implements ProductService {
 
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(
-                        "Product not found",
+                        PRODUCT_NOT_FOUND,
                         HttpStatus.NOT_FOUND
                 ));
     }

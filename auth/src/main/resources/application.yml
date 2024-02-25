@@ -78,7 +78,7 @@ management:
 resilience4j:
   circuitbreaker:
     instances:
-      customer:
+      auth:
         sliding-window-type: COUNT_BASED
         failure-rate-threshold: 50
         minimum-number-of-calls: 5

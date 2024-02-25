@@ -1,7 +1,5 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.clients.OrganizationClient;
-import com.ryazancev.clients.ReviewClient;
 import com.ryazancev.dto.organization.OrganizationDto;
 import com.ryazancev.dto.product.PriceQuantityResponse;
 import com.ryazancev.dto.product.ProductDto;
@@ -11,8 +9,9 @@ import com.ryazancev.dto.review.ReviewDto;
 import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.model.Product;
+import com.ryazancev.product.service.ClientsService;
+import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.service.expression.CustomExpressionService;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.product.util.validator.ProductValidator;
 import com.ryazancev.validation.OnCreate;
@@ -35,10 +34,10 @@ public class ProductController {
     private final ProductMapper productMapper;
     private final ProductValidator productValidator;
 
+    private final ClientsService clientsService;
+
     private final CustomExpressionService customExpressionService;
 
-    private final OrganizationClient organizationClient;
-    private final ReviewClient reviewClient;
 
     @GetMapping
     public ProductsSimpleResponse getAll() {
@@ -52,7 +51,6 @@ public class ProductController {
                 .build();
     }
 
-    //TODO:CB here
     @GetMapping("/{id}")
     public ProductDto getById(
             @PathVariable("id") Long id) {
@@ -64,17 +62,17 @@ public class ProductController {
         Product product = productService.getById(id, statusCheck);
         ProductDto productDto = productMapper.toDetailedDto(product);
 
-        OrganizationDto organizationDto = organizationClient.getSimpleById(
-                product.getOrganizationId());
+        OrganizationDto organizationDto = (OrganizationDto) clientsService
+                .getSimpleOrganizationById(product.getOrganizationId());
         productDto.setOrganization(organizationDto);
 
-        Double avgRating = reviewClient.getAverageRatingByProductId(id);
+        Double avgRating = (Double) clientsService
+                .getAverageRatingByProductId(product.getId());
         productDto.setAverageRating(avgRating);
 
         return productDto;
     }
 
-    //TODO:CB here
     @PostMapping
     public ProductDto makeRegistrationRequestOfProduct(
             @RequestBody
@@ -89,16 +87,13 @@ public class ProductController {
         Product saved = productService.makeRegistrationRequest(product);
         ProductDto productDto = productMapper.toDetailedDto(saved);
 
-
-        OrganizationDto organizationDto =
-                organizationClient.getSimpleById(
-                        product.getOrganizationId());
+        OrganizationDto organizationDto = (OrganizationDto) clientsService
+                .getSimpleOrganizationById(product.getOrganizationId());
         productDto.setOrganization(organizationDto);
 
         return productDto;
     }
 
-    //TODO:CB here
     @PutMapping
     public ProductDto updateProduct(
             @RequestBody
@@ -113,12 +108,11 @@ public class ProductController {
         Product updated = productService.update(product);
         ProductDto productDto = productMapper.toDetailedDto(updated);
 
-        OrganizationDto organizationDto =
-                organizationClient.getSimpleById(
-                        updated.getOrganizationId());
+        OrganizationDto organizationDto = (OrganizationDto) clientsService
+                .getSimpleOrganizationById(updated.getOrganizationId());
         productDto.setOrganization(organizationDto);
 
-        Double avgRating = reviewClient
+        Double avgRating = (Double) clientsService
                 .getAverageRatingByProductId(updated.getId());
         productDto.setAverageRating(avgRating);
 
@@ -136,17 +130,15 @@ public class ProductController {
         return productService.markProductAsDeleted(id);
     }
 
-    //TODO:CB here
     @GetMapping("/{id}/reviews")
     public ReviewsResponse getReviewsByProductId(
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
 
-        return reviewClient.getByProductId(id);
+        return (ReviewsResponse) clientsService.getReviewsByProductId(id);
     }
 
-    //TODO:CB here
     @PostMapping("/reviews")
     public ReviewDto createReview(
             @RequestBody
@@ -158,7 +150,7 @@ public class ProductController {
         customExpressionService.checkAccessPurchase(
                 reviewEditDto.getPurchaseId());
 
-        return reviewClient.create(reviewEditDto);
+        return (ReviewDto) clientsService.createReview(reviewEditDto);
     }
 
     //    Endpoints only  for feign clients
@@ -204,7 +196,6 @@ public class ProductController {
                 .build();
     }
 
-    //TODO:CB here
     @GetMapping("/{id}/owner-id")
     public Long getOwnerId(
             @PathVariable("id") Long productId) {
@@ -213,6 +204,7 @@ public class ProductController {
 
         Product product = productService.getById(productId, statusCheck);
 
-        return organizationClient.getOwnerId(product.getOrganizationId());
+        return (Long) clientsService
+                .getOrganizationOwnerIdById(product.getOrganizationId());
     }
 }
