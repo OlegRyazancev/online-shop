@@ -52,6 +52,7 @@ public class ProductController {
                 .build();
     }
 
+    //TODO:CB here
     @GetMapping("/{id}")
     public ProductDto getById(
             @PathVariable("id") Long id) {
@@ -73,7 +74,7 @@ public class ProductController {
         return productDto;
     }
 
-
+    //TODO:CB here
     @PostMapping
     public ProductDto makeRegistrationRequestOfProduct(
             @RequestBody
@@ -97,7 +98,7 @@ public class ProductController {
         return productDto;
     }
 
-
+    //TODO:CB here
     @PutMapping
     public ProductDto updateProduct(
             @RequestBody
@@ -135,6 +136,7 @@ public class ProductController {
         return productService.markProductAsDeleted(id);
     }
 
+    //TODO:CB here
     @GetMapping("/{id}/reviews")
     public ReviewsResponse getReviewsByProductId(
             @PathVariable("id") Long id) {
@@ -144,6 +146,7 @@ public class ProductController {
         return reviewClient.getByProductId(id);
     }
 
+    //TODO:CB here
     @PostMapping("/reviews")
     public ReviewDto createReview(
             @RequestBody
@@ -201,6 +204,7 @@ public class ProductController {
                 .build();
     }
 
+    //TODO:CB here
     @GetMapping("/{id}/owner-id")
     public Long getOwnerId(
             @PathVariable("id") Long productId) {

@@ -20,7 +20,7 @@ public interface OrganizationService {
 
     void register(Long organizationId);
 
-    void uploadLogo(Long id, LogoDto logoDto);
+    String uploadLogo(Long id, LogoDto logoDto);
 
     Long getOwnerId(Long organizationId);
 

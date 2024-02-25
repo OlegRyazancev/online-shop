@@ -8,11 +8,7 @@ import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
-import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
-import com.ryazancev.dto.purchase.PurchaseDto;
-import com.ryazancev.dto.purchase.PurchaseEditDto;
-import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,24 +41,6 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getById(Long id) {
 
         return findById(id);
-    }
-
-    @Override
-    public CustomerPurchasesResponse getPurchasesByCustomerId(Long id) {
-
-        return purchaseClient.getByCustomerId(id);
-    }
-
-    @Override
-    public PurchaseDto processPurchase(PurchaseEditDto purchaseEditDto) {
-
-        return purchaseClient.processPurchase(purchaseEditDto);
-    }
-
-    @Override
-    public ReviewsResponse getReviewsByCustomerId(Long id) {
-
-        return reviewClient.getByCustomerId(id);
     }
 
     @Transactional

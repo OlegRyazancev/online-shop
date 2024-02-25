@@ -16,6 +16,7 @@ import com.ryazancev.purchase.util.validator.PurchaseValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.retry.annotation.CircuitBreaker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         return purchaseUtil.createPurchaseDto(purchase);
     }
 
+    //TODO:CB here
     @Transactional
     @Override
     public PurchaseDto processPurchase(

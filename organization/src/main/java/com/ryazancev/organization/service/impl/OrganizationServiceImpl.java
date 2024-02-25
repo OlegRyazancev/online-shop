@@ -171,13 +171,14 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationRepository.save(existing);
     }
 
+    //TODO:CB here
     @Transactional
     @Override
     @CacheEvict(
             value = "Organization::getById",
             key = "#id"
     )
-    public void uploadLogo(Long id, LogoDto logoDto) {
+    public String uploadLogo(Long id, LogoDto logoDto) {
 
         Organization existing = findById(id);
 
@@ -187,6 +188,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         existing.setLogo(fileName);
         organizationRepository.save(existing);
+
+        return "Logo uploaded successfully";
     }
 
     @Override

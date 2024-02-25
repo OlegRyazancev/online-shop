@@ -155,6 +155,7 @@ public class OrganizationController {
         return organizationDto;
     }
 
+    //TODO:CB here
     @GetMapping("/{id}/products")
     @Operation(
             summary = "Get products by organization ID",
@@ -174,13 +175,14 @@ public class OrganizationController {
         return productClient.getProductsByOrganizationId(id);
     }
 
+    //TODO:CB here
     @PostMapping("/{id}/logo")
     @Operation(
             summary = "Upload organization logo",
             description = "Uploads a logo for the organization " +
                     "with the specified ID"
     )
-    public void uploadLogo(
+    public String uploadLogo(
             @PathVariable("id") Long id,
             @Validated(OnCreate.class)
             @ModelAttribute
@@ -194,7 +196,7 @@ public class OrganizationController {
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessOrganization(id);
 
-        organizationService.uploadLogo(id, logoDto);
+        return organizationService.uploadLogo(id, logoDto);
     }
 
     @DeleteMapping("/{id}")
