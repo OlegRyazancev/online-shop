@@ -1,5 +1,6 @@
 package com.ryazancev.organization.service.impl;
 
+import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.LogoClient;
 import com.ryazancev.clients.ProductClient;
 import com.ryazancev.organization.service.ClientsService;
@@ -10,8 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.ryazancev.organization.util.exception.Message.LOGO_SERVICE_UNAVAILABLE;
-import static com.ryazancev.organization.util.exception.Message.PRODUCT_SERVICE_UNAVAILABLE;
+import static com.ryazancev.organization.util.exception.Message.*;
 
 /**
  * @author Oleg Ryazancev
@@ -23,6 +23,7 @@ public class ClientsServiceImpl implements ClientsService {
 
     private final LogoClient logoClient;
     private final ProductClient productClient;
+    private final CustomerClient customerClient;
 
     @Override
     @CircuitBreaker(
@@ -44,7 +45,24 @@ public class ClientsServiceImpl implements ClientsService {
         return productClient.getProductsByOrganizationId(id);
     }
 
+    @Override
+    @CircuitBreaker(
+            name = "organization",
+            fallbackMethod = "customerServiceUnavailable"
+    )
+    public Object getSimpleCustomerById(Long customerId) {
+
+        return customerClient.getSimpleById(customerId);
+    }
+
     //Fallback methods
+
+    private Object customerServiceUnavailable(Exception e) {
+
+        throw new ServiceUnavailableException(
+                CUSTOMER_SERVICE_UNAVAILABLE,
+                HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
     private Object logoServiceUnavailable(Exception e) {
 

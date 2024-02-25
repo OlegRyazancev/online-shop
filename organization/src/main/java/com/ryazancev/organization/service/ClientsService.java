@@ -7,4 +7,6 @@ public interface ClientsService {
     Object uploadLogo(MultipartFile multipartFile);
 
     Object getProductsByOrganizationId(Long id);
+
+    Object getSimpleCustomerById(Long customerId);
 }

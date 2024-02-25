@@ -8,6 +8,7 @@ import com.ryazancev.dto.mail.MailType;
 import com.ryazancev.dto.organization.OrganizationDto;
 import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
+import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,12 +22,12 @@ public class OrganizationUtil {
     private final OrganizationService organizationService;
     private final OrganizationProducerService organizationProducerService;
 
-    private final CustomerClient customerClient;
+    private final ClientsService clientsService;
 
 
     public void enrichOrganizationDto(OrganizationDto dto, Long ownerId) {
         CustomerDto owner =
-                customerClient.getSimpleById(ownerId);
+                (CustomerDto) clientsService.getSimpleCustomerById(ownerId);
         dto.setOwner(owner);
     }
 
@@ -56,8 +57,8 @@ public class OrganizationUtil {
         Organization registered = organizationService.getById(
                 organizationId, statusCheck);
 
-        CustomerDto customerDto = customerClient
-                .getSimpleById(registered.getOwnerId());
+        CustomerDto customerDto = (CustomerDto) clientsService
+                .getSimpleCustomerById(registered.getOwnerId());
         Properties properties = new Properties();
 
         properties.setProperty(

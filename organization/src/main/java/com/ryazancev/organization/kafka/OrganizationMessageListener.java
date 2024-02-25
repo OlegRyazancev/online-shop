@@ -40,8 +40,13 @@ public class OrganizationMessageListener {
                         requestDto.getObjectToRegisterId()
                 );
 
-                organizationUtil.sendAcceptedMailToCustomerByOrganizationId(
-                        requestDto.getObjectToRegisterId());
+                try {
+                    organizationUtil.sendAcceptedMailToCustomerByOrganizationId(
+                            requestDto.getObjectToRegisterId());
+                } catch (Exception e) {
+                    log.error("Error during sending email to customer: {}",
+                            e.getMessage());
+                }
 
                 log.info("Organization now is: {}",
                         OrganizationStatus.ACTIVE);
@@ -50,9 +55,13 @@ public class OrganizationMessageListener {
                 organizationService.changeStatus(
                         requestDto.getObjectToRegisterId(),
                         OrganizationStatus.INACTIVE);
-
-                organizationUtil.sendRejectedMailToCustomerByOrganizationId(
-                        requestDto.getObjectToRegisterId());
+                try {
+                    organizationUtil.sendRejectedMailToCustomerByOrganizationId(
+                            requestDto.getObjectToRegisterId());
+                } catch (Exception e) {
+                    log.error("Error during sending email to customer: {}",
+                            e.getMessage());
+                }
 
                 log.info("Organization now is: {}",
                         OrganizationStatus.INACTIVE);

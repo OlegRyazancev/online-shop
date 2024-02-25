@@ -15,6 +15,10 @@ public class Message {
     public static final String ACCOUNT_LOCKED =
             "Access denied because your account is locked";
 
+    public static final String CUSTOMER_SERVICE_UNAVAILABLE=
+            "The customer service is currently unavailable. " +
+                    "Please try again later";
+
     public static final String DESCRIPTION_EXISTS =
             "An organization with this description already exists";
 
