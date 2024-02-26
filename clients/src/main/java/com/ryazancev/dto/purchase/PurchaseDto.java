@@ -2,7 +2,7 @@ package com.ryazancev.dto.purchase;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.dto.customer.CustomerDto;
+import com.ryazancev.dto.Component;
 import com.ryazancev.dto.product.ProductDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -26,10 +26,10 @@ public class PurchaseDto {
     private String id;
 
     @Schema(description = "Customer who made the purchase")
-    private CustomerDto customer;
+    private Component customer;
 
     @Schema(description = "Product purchased")
-    private ProductDto product;
+    private Component product;
 
     @Schema(
             description = "Amount of the purchase",

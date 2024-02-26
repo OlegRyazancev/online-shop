@@ -1,13 +1,12 @@
 package com.ryazancev.purchase.util;
 
-import com.ryazancev.clients.CustomerClient;
-import com.ryazancev.clients.ProductClient;
+import com.ryazancev.dto.Component;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
-import com.ryazancev.dto.product.ProductDto;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.dto.purchase.PurchaseDto;
 import com.ryazancev.purchase.kafka.PurchaseProducerService;
 import com.ryazancev.purchase.model.Purchase;
+import com.ryazancev.purchase.service.ClientsService;
 import com.ryazancev.purchase.util.mapper.PurchaseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,18 +20,18 @@ public class PurchaseUtil {
     private final PurchaseMapper purchaseMapper;
     private final PurchaseProducerService purchaseProducerService;
 
-    private final CustomerClient customerClient;
-    private final ProductClient productClient;
+    private final ClientsService clientsService;
 
 
     public PurchaseDto createPurchaseDto(Purchase purchase) {
 
         PurchaseDto purchaseDto = purchaseMapper.toDto(purchase);
 
-        purchaseDto.setCustomer(
-                customerClient.getSimpleById(purchase.getCustomerId()));
-        purchaseDto.setProduct(
-                productClient.getSimpleById(purchase.getProductId()));
+        purchaseDto.setCustomer(clientsService
+                .getSimpleCustomer(purchase.getCustomerId()));
+
+        purchaseDto.setProduct(clientsService
+                .getSimpleProduct(purchase.getProductId()));
 
         return purchaseDto;
     }
@@ -43,8 +42,8 @@ public class PurchaseUtil {
         List<PurchaseDto> purchasesDto = purchaseMapper.toListDto(purchases);
 
         for (int i = 0; i < purchasesDto.size(); i++) {
-            ProductDto productDto = productClient
-                    .getSimpleById(purchases.get(i).getProductId());
+            Component productDto = clientsService
+                    .getSimpleProduct(purchases.get(i).getProductId());
             purchasesDto.get(i).setProduct(productDto);
         }
 
@@ -52,7 +51,7 @@ public class PurchaseUtil {
     }
 
     public void updateProductQuantity(Long productId,
-                                       Integer availableProductsInStock) {
+                                      Integer availableProductsInStock) {
 
         purchaseProducerService.sendMessageToProductTopic(
                 UpdateQuantityRequest.builder()
@@ -63,7 +62,7 @@ public class PurchaseUtil {
     }
 
     public void updateCustomerBalance(Long customerId,
-                                       Double updatedBalance) {
+                                      Double updatedBalance) {
 
         purchaseProducerService.sendMessageToCustomerTopic(
                 UpdateBalanceRequest.builder()

@@ -1,13 +1,12 @@
 package com.ryazancev.purchase.service.impl;
 
-import com.ryazancev.clients.CustomerClient;
-import com.ryazancev.clients.ProductClient;
 import com.ryazancev.dto.customer.CustomerPurchasesResponse;
 import com.ryazancev.dto.product.PriceQuantityResponse;
 import com.ryazancev.dto.purchase.PurchaseDto;
 import com.ryazancev.dto.purchase.PurchaseEditDto;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
+import com.ryazancev.purchase.service.ClientsService;
 import com.ryazancev.purchase.service.PurchaseService;
 import com.ryazancev.purchase.util.PurchaseUtil;
 import com.ryazancev.purchase.util.exception.custom.PurchaseNotFoundException;
@@ -20,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+
+import static com.ryazancev.purchase.util.exception.Message.PURCHASE_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -33,8 +35,8 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final PurchaseValidator purchaseValidator;
     private final PurchaseUtil purchaseUtil;
 
-    private final ProductClient productClient;
-    private final CustomerClient customerClient;
+    private final ClientsService clientsService;
+
 
     @Override
     public PurchaseDto getById(String id) {
@@ -42,7 +44,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         Purchase purchase = purchaseRepository.findById(id)
                 .orElseThrow(() ->
                         new PurchaseNotFoundException(
-                                "Purchase with this ID not found",
+                                PURCHASE_NOT_FOUND,
                                 HttpStatus.NOT_FOUND));
 
         return purchaseUtil.createPurchaseDto(purchase);
@@ -57,11 +59,19 @@ public class PurchaseServiceImpl implements PurchaseService {
         Long customerId = purchaseEditDto.getCustomerId();
         Long productId = purchaseEditDto.getProductId();
 
-        Double availableCustomerBalance = customerClient
-                .getBalanceById(customerId);
+        Double availableCustomerBalance = (Double) clientsService
+                .getCustomerBalance(customerId);
 
-        PriceQuantityResponse priceQuantityResponse = productClient
-                .getPriceAndQuantityByProductId(productId);
+        PriceQuantityResponse priceQuantityResponse =
+                (PriceQuantityResponse) clientsService
+                        .getProductPriceAndQuantity(productId);
+
+        Long productOwnerId = (Long) clientsService
+                .getProductOwnerId(productId);
+
+        Double ownerBalance = (Double) clientsService
+                .getCustomerBalance(productOwnerId);
+
         Double selectedProductPrice =
                 priceQuantityResponse.getPrice();
         Integer availableProductsInStock =
@@ -74,8 +84,6 @@ public class PurchaseServiceImpl implements PurchaseService {
                 availableProductsInStock);
         //todo: for future add percent to admin
 
-        Long productOwnerId = productClient.getOwnerId(productId);
-        Double ownerBalance = customerClient.getBalanceById(productOwnerId);
 
         Purchase toSave = purchaseMapper.toEntity(purchaseEditDto);
         toSave.setPurchaseDate(LocalDateTime.now());
@@ -96,13 +104,16 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public CustomerPurchasesResponse getByCustomerId(Long customerId) {
+
         List<Purchase> purchases = purchaseRepository
                 .findByCustomerId(customerId);
 
-        purchaseValidator.validatePurchasesExist(purchases);
+        List<PurchaseDto> purchasesDto = Collections.emptyList();
 
-        List<PurchaseDto> purchasesDto = purchaseUtil
-                .enrichPurchasesWithProductInfo(purchases);
+        if (!purchases.isEmpty()) {
+            purchasesDto = purchaseUtil
+                    .enrichPurchasesWithProductInfo(purchases);
+        }
 
         return CustomerPurchasesResponse.builder()
                 .purchases(purchasesDto)

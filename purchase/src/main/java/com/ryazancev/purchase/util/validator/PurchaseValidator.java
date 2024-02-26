@@ -1,13 +1,12 @@
 package com.ryazancev.purchase.util.validator;
 
-import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
-import com.ryazancev.purchase.util.exception.custom.PurchasesNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import static com.ryazancev.purchase.util.exception.Message.INSUFFICIENT_FUNDS;
+import static com.ryazancev.purchase.util.exception.Message.NO_PRODUCTS_IN_STOCK;
 
 @Component
 public class PurchaseValidator {
@@ -19,7 +18,7 @@ public class PurchaseValidator {
 
         if (availableCustomerBalance < selectedProductPrice) {
             throw new IncorrectBalanceException(
-                    "Customer doesn't have enough money to purchase the product",
+                    INSUFFICIENT_FUNDS,
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -30,20 +29,10 @@ public class PurchaseValidator {
 
         if (availableProductsInStock == 0) {
             throw new OutOfStockException(
-                    "No available products in stock",
+                    NO_PRODUCTS_IN_STOCK,
                     HttpStatus.CONFLICT
             );
         }
     }
 
-    public void
-    validatePurchasesExist(List<Purchase> purchases) {
-
-        if (purchases.isEmpty()) {
-            throw new PurchasesNotFoundException(
-                    "No purchases found for customer with this ID",
-                    HttpStatus.NOT_FOUND
-            );
-        }
-    }
 }

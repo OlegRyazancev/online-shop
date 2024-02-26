@@ -2,6 +2,7 @@ package com.ryazancev.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ryazancev.dto.Component;
 import com.ryazancev.dto.organization.OrganizationDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -17,7 +18,7 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Product DTO. Used in GET methods")
-public class ProductDto {
+public class ProductDto implements Component {
 
     @Schema(
             description = "Product ID",
