@@ -4,13 +4,13 @@ import com.ryazancev.dto.product.ProductEditDto;
 
 public interface CustomExpressionService {
 
+    void checkAccountPermissions();
+
     void checkAccessProduct(Long id);
 
     void checkAccessOrganization(ProductEditDto productEditDto);
 
     void checkIfAccountLocked();
-
-    void checkIfEmailConfirmed();
 
     void checkAccessPurchase(String purchaseId);
 }

@@ -1,6 +1,5 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.dto.organization.OrganizationDto;
 import com.ryazancev.dto.product.PriceQuantityResponse;
 import com.ryazancev.dto.product.ProductDto;
 import com.ryazancev.dto.product.ProductEditDto;
@@ -13,6 +12,7 @@ import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.ProductUtil;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.product.util.validator.ProductValidator;
 import com.ryazancev.validation.OnCreate;
@@ -34,6 +34,7 @@ public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final ProductValidator productValidator;
+    private final ProductUtil productUtil;
 
     private final ClientsService clientsService;
 
@@ -61,18 +62,9 @@ public class ProductController {
         boolean statusCheck = true;
 
         Product product = productService.getById(id, statusCheck);
-        ProductDto productDto = productMapper.toDetailedDto(product);
-
-        OrganizationDto organizationDto = (OrganizationDto) clientsService
-                .getSimpleOrganizationById(product.getOrganizationId());
-        productDto.setOrganization(organizationDto);
-
-        Double avgRating = clientsService
-                .getAverageRatingByProductId(product.getId());
-        productDto.setAverageRating(avgRating);
-
-        return productDto;
+        return productUtil.createDetailedProductDto(product);
     }
+
 
     @PostMapping
     public ProductDto makeRegistrationRequestOfProduct(
@@ -80,20 +72,18 @@ public class ProductController {
             @Validated(OnCreate.class)
             ProductEditDto productEditDto) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountPermissions();
         customExpressionService.checkAccessOrganization(productEditDto);
 
         Product product = productMapper.toEntity(productEditDto);
         Product saved = productService.makeRegistrationRequest(product);
         ProductDto productDto = productMapper.toDetailedDto(saved);
 
-        OrganizationDto organizationDto = (OrganizationDto) clientsService
-                .getSimpleOrganizationById(product.getOrganizationId());
-        productDto.setOrganization(organizationDto);
+        productUtil.setOrganizationDto(productDto, product.getOrganizationId());
 
         return productDto;
     }
+
 
     @PutMapping
     public ProductDto updateProduct(
@@ -101,30 +91,18 @@ public class ProductController {
             @Validated(OnUpdate.class)
             ProductEditDto productEditDto) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountPermissions();
         customExpressionService.checkAccessProduct(productEditDto.getId());
 
         Product product = productMapper.toEntity(productEditDto);
         Product updated = productService.update(product);
-        ProductDto productDto = productMapper.toDetailedDto(updated);
-
-        OrganizationDto organizationDto = (OrganizationDto) clientsService
-                .getSimpleOrganizationById(updated.getOrganizationId());
-        productDto.setOrganization(organizationDto);
-
-        Double avgRating = clientsService
-                .getAverageRatingByProductId(updated.getId());
-        productDto.setAverageRating(avgRating);
-
-        return productDto;
+        return productUtil.createDetailedProductDto(updated);
     }
 
     @DeleteMapping("/{id}")
     public String deleteProductById(@PathVariable("id") Long id) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountPermissions();
         customExpressionService.checkAccessProduct(id);
 
         return productService.markProductAsDeleted(id);
@@ -145,8 +123,7 @@ public class ProductController {
             @Validated({OnCreate.class})
             ReviewEditDto reviewEditDto) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountPermissions();
         customExpressionService.checkAccessPurchase(
                 reviewEditDto.getPurchaseId());
 

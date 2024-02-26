@@ -30,9 +30,13 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final ClientsService clientsService;
 
-//    private final OrganizationClient organizationClient;
-//    private final PurchaseClient purchaseClient;
+    @Override
+    public void checkAccountPermissions() {
+        checkIfAccountLocked();
+        checkIfEmailConfirmed();
+    }
 
+    @Override
     public void checkAccessProduct(Long id) {
 
         if (!canAccessProduct(id)) {
@@ -43,6 +47,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         }
     }
 
+    @Override
     public void checkAccessOrganization(ProductEditDto productEditDto) {
 
         if (!canAccessOrganization(productEditDto.getOrganizationId())) {
@@ -53,7 +58,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         }
     }
 
-
     @Override
     public void checkIfAccountLocked() {
 
@@ -63,20 +67,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw new AccessDeniedException(
                     ACCOUNT_LOCKED,
-                    HttpStatus.FORBIDDEN);
-        }
-    }
-
-    @Override
-    public void checkIfEmailConfirmed() {
-
-        boolean confirmed = Boolean.parseBoolean(
-                request.getHeader("confirmed"));
-
-        if (!confirmed) {
-
-            throw new AccessDeniedException(
-                    EMAIL_NOT_CONFIRMED,
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -119,6 +109,18 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         return false;
     }
 
+    private void checkIfEmailConfirmed() {
+
+        boolean confirmed = Boolean.parseBoolean(
+                request.getHeader("confirmed"));
+
+        if (!confirmed) {
+
+            throw new AccessDeniedException(
+                    EMAIL_NOT_CONFIRMED,
+                    HttpStatus.FORBIDDEN);
+        }
+    }
 
     private boolean canAccessProduct(Long productId) {
 
