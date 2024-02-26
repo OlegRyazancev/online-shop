@@ -18,9 +18,9 @@ public class ProductValidator {
 
     private final ProductRepository productRepository;
 
-    public void validateStatus(Product product, ProductStatus toValidate) {
+    public void validateStatus(Product product, ProductStatus status) {
 
-        if (product.getStatus().equals(toValidate)) {
+        if (product.getStatus().equals(status)) {
 
             throw new AccessDeniedException(
                     String.format(

@@ -72,7 +72,7 @@ public class ProductController {
             @Validated(OnCreate.class)
             ProductEditDto productEditDto) {
 
-        customExpressionService.checkAccountPermissions();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessOrganization(productEditDto);
 
         Product product = productMapper.toEntity(productEditDto);
@@ -91,7 +91,7 @@ public class ProductController {
             @Validated(OnUpdate.class)
             ProductEditDto productEditDto) {
 
-        customExpressionService.checkAccountPermissions();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessProduct(productEditDto.getId());
 
         Product product = productMapper.toEntity(productEditDto);
@@ -102,7 +102,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public String deleteProductById(@PathVariable("id") Long id) {
 
-        customExpressionService.checkAccountPermissions();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessProduct(id);
 
         return productService.markProductAsDeleted(id);
@@ -123,7 +123,7 @@ public class ProductController {
             @Validated({OnCreate.class})
             ReviewEditDto reviewEditDto) {
 
-        customExpressionService.checkAccountPermissions();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessPurchase(
                 reviewEditDto.getPurchaseId());
 

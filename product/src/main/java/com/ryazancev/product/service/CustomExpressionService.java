@@ -4,7 +4,7 @@ import com.ryazancev.dto.product.ProductEditDto;
 
 public interface CustomExpressionService {
 
-    void checkAccountPermissions();
+    void checkAccountConditions();
 
     void checkAccessProduct(Long id);
 

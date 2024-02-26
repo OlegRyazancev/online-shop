@@ -31,7 +31,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     private final ClientsService clientsService;
 
     @Override
-    public void checkAccountPermissions() {
+    public void checkAccountConditions() {
         checkIfAccountLocked();
         checkIfEmailConfirmed();
     }
