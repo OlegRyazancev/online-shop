@@ -2,8 +2,7 @@ package com.ryazancev.customer.service;
 
 public interface CustomExpressionService {
 
-
-    void checkIfEmailConfirmed();
+    void checkAccountConditions();
 
     void checkAccessCustomer(Long id);
 

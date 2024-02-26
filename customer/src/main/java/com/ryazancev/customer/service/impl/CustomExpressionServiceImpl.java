@@ -20,18 +20,11 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final HttpServletRequest request;
 
-
     @Override
-    public void checkIfEmailConfirmed() {
+    public void checkAccountConditions() {
 
-        boolean confirmed = Boolean.parseBoolean(
-                request.getHeader("confirmed"));
-
-        if (!confirmed) {
-            throw new AccessDeniedException(
-                    EMAIL_NOT_CONFIRMED,
-                    HttpStatus.FORBIDDEN);
-        }
+        checkIfAccountLocked();
+        checkIfEmailConfirmed();
     }
 
     @Override
@@ -55,6 +48,18 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
                     ACCOUNT_LOCKED,
                     HttpStatus.FORBIDDEN);
 
+        }
+    }
+
+    private void checkIfEmailConfirmed() {
+
+        boolean confirmed = Boolean.parseBoolean(
+                request.getHeader("confirmed"));
+
+        if (!confirmed) {
+            throw new AccessDeniedException(
+                    EMAIL_NOT_CONFIRMED,
+                    HttpStatus.FORBIDDEN);
         }
     }
 

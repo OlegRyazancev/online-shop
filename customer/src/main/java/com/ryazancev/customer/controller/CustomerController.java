@@ -48,8 +48,7 @@ public class CustomerController {
             @Validated(OnUpdate.class)
             CustomerDto customerDto) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessCustomer(customerDto.getId());
 
         Customer customer = customerMapper.toEntity(customerDto);
@@ -86,8 +85,7 @@ public class CustomerController {
             @Validated(OnCreate.class)
             PurchaseEditDto purchaseEditDto) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountConditions();
         customExpressionService
                 .checkAccessCustomer(purchaseEditDto.getCustomerId());
 
@@ -98,8 +96,7 @@ public class CustomerController {
     @DeleteMapping("{id}")
     public String deleteCustomerById(@PathVariable("id") Long id) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessCustomer(id);
 
         return customerService.markCustomerAsDeleted(id);
