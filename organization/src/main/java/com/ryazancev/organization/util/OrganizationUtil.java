@@ -1,5 +1,7 @@
 package com.ryazancev.organization.util;
 
+import com.ryazancev.dto.Element;
+import com.ryazancev.dto.Fallback;
 import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;
@@ -9,10 +11,14 @@ import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.OrganizationService;
+import com.ryazancev.organization.util.exception.custom.ServiceUnavailableException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;
+
+import static com.ryazancev.organization.util.exception.Message.CUSTOMER_SERVICE_UNAVAILABLE;
 
 @Component
 @RequiredArgsConstructor
@@ -24,10 +30,10 @@ public class OrganizationUtil {
     private final ClientsService clientsService;
 
 
-    public void enrichOrganizationDto(OrganizationDto dto, Long ownerId) {
-        CustomerDto owner =
-                (CustomerDto) clientsService.getSimpleCustomerById(ownerId);
-        dto.setOwner(owner);
+    public void setOwnerDto(OrganizationDto organizationDto, Long ownerId) {
+
+        organizationDto.setOwner(clientsService
+                .getSimpleCustomerById(ownerId));
     }
 
     public void
@@ -56,8 +62,17 @@ public class OrganizationUtil {
         Organization registered = organizationService.getById(
                 organizationId, statusCheck);
 
-        CustomerDto customerDto = (CustomerDto) clientsService
+        Element customerObj = clientsService
                 .getSimpleCustomerById(registered.getOwnerId());
+
+        if (customerObj instanceof Fallback) {
+
+            throw new ServiceUnavailableException(
+                    CUSTOMER_SERVICE_UNAVAILABLE,
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        CustomerDto customerDto = (CustomerDto) customerObj;
         Properties properties = new Properties();
 
         properties.setProperty(

@@ -24,6 +24,13 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     private final OrganizationRepository organizationRepository;
 
     @Override
+    public void checkAccountConditions() {
+
+        checkIfAccountLocked();
+        checkIfEmailConfirmed();
+    }
+
+    @Override
     public void checkAccessOrganization(Long id) {
 
         if (!canAccessOrganization(id)) {
@@ -55,8 +62,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         }
     }
 
-    @Override
-    public void checkIfEmailConfirmed() {
+    private void checkIfEmailConfirmed() {
 
         boolean confirmed = Boolean.parseBoolean(
                 request.getHeader("confirmed"));

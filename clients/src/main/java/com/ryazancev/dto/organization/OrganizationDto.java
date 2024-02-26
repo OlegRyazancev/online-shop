@@ -45,7 +45,7 @@ public class OrganizationDto implements Element {
     private String logo;
 
     @Schema(description = "Details of the organization's owner")
-    private CustomerDto owner;
+    private Element owner;
 
     @Schema(
             description = "Status of the organization (e.g., ACTIVE, INACTIVE)",

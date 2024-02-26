@@ -85,7 +85,7 @@ public class OrganizationController {
         OrganizationDto organizationDto =
                 organizationMapper.toDetailedDto(organization);
 
-        organizationUtil.enrichOrganizationDto(organizationDto,
+        organizationUtil.setOwnerDto(organizationDto,
                 organization.getOwnerId());
 
         return organizationDto;
@@ -107,8 +107,7 @@ public class OrganizationController {
             )
             OrganizationEditDto organizationEditDto) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessUser(organizationEditDto);
 
         Organization organization =
@@ -118,7 +117,7 @@ public class OrganizationController {
         OrganizationDto organizationDto =
                 organizationMapper.toDetailedDto(saved);
 
-        organizationUtil.enrichOrganizationDto(organizationDto,
+        organizationUtil.setOwnerDto(organizationDto,
                 organization.getOwnerId());
 
         return organizationDto;
@@ -139,8 +138,7 @@ public class OrganizationController {
             )
             OrganizationEditDto organizationEditDto) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountConditions();
         customExpressionService
                 .checkAccessOrganization(organizationEditDto.getId());
 
@@ -150,7 +148,7 @@ public class OrganizationController {
         OrganizationDto organizationDto =
                 organizationMapper.toDetailedDto(updated);
 
-        organizationUtil.enrichOrganizationDto(organizationDto,
+        organizationUtil.setOwnerDto(organizationDto,
                 organization.getOwnerId());
 
         return organizationDto;
@@ -192,8 +190,7 @@ public class OrganizationController {
             )
             LogoDto logoDto) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessOrganization(id);
 
         return organizationService.uploadLogo(id, logoDto);
@@ -213,8 +210,7 @@ public class OrganizationController {
             )
             Long id) {
 
-        customExpressionService.checkIfEmailConfirmed();
-        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessOrganization(id);
 
         return organizationService.markOrganizationAsDeleted(id);

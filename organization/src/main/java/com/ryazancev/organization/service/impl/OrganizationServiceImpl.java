@@ -54,8 +54,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization existing = findById(id);
 
         if (statusCheck) {
-            organizationValidator.validateInactiveStatus(existing);
-            organizationValidator.validateDeletedStatus(existing);
+            organizationValidator
+                    .validateStatus(existing, OrganizationStatus.INACTIVE);
+            organizationValidator
+                    .validateStatus(existing, OrganizationStatus.DELETED);
         }
 
         return existing;

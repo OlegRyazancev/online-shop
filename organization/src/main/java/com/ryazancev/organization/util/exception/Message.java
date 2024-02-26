@@ -15,7 +15,7 @@ public class Message {
     public static final String ACCOUNT_LOCKED =
             "Access denied because your account is locked";
 
-    public static final String CUSTOMER_SERVICE_UNAVAILABLE=
+    public static final String CUSTOMER_SERVICE_UNAVAILABLE =
             "The customer service is currently unavailable. " +
                     "Please try again later";
 
@@ -32,17 +32,11 @@ public class Message {
     public static final String NAME_EXISTS =
             "An organization with this name already exists";
 
-    public static final String ORGANIZATION_DELETED =
-            "Access denied. The organization has been deleted";
-
-    public static final String ORGANIZATION_FROZEN =
-            "Access denied. The organization is frozen";
-
-    public static final String ORGANIZATION_INACTIVE =
-            "Access denied. The organization is inactive";
-
     public static final String ORGANIZATION_NOT_FOUND =
             "Organization not found";
+
+    public static final String ORGANIZATION_STATUS_ACCESS =
+            "Access denied because organization status is %s";
 
     public static final String PRODUCT_SERVICE_UNAVAILABLE =
             "The product service is currently unavailable. " +

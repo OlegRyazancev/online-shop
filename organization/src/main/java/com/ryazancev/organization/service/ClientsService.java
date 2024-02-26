@@ -1,5 +1,6 @@
 package com.ryazancev.organization.service;
 
+import com.ryazancev.dto.Element;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ClientsService {
@@ -8,5 +9,5 @@ public interface ClientsService {
 
     Object getProductsByOrganizationId(Long id);
 
-    Object getSimpleCustomerById(Long customerId);
+    Element getSimpleCustomerById(Long customerId);
 }

@@ -3,6 +3,8 @@ package com.ryazancev.organization.service.impl;
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.LogoClient;
 import com.ryazancev.clients.ProductClient;
+import com.ryazancev.dto.Element;
+import com.ryazancev.dto.Fallback;
 import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.util.exception.custom.ServiceUnavailableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -48,14 +50,21 @@ public class ClientsServiceImpl implements ClientsService {
     @Override
     @CircuitBreaker(
             name = "organization",
-            fallbackMethod = "customerServiceUnavailable"
+            fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Object getSimpleCustomerById(Long customerId) {
+    public Element getSimpleCustomerById(Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
 
     //Fallback methods
+
+    private Element getSimpleCustomerFallback(Exception e) {
+
+        return Fallback.builder()
+                .message(CUSTOMER_SERVICE_UNAVAILABLE)
+                .build();
+    }
 
     private Object customerServiceUnavailable(Exception e) {
 

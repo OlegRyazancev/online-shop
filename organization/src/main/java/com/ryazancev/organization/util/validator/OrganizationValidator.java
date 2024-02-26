@@ -17,41 +17,25 @@ public class OrganizationValidator {
 
     private final OrganizationRepository organizationRepository;
 
-    public void validateFrozenStatus(Organization organization) {
-
-        if (organization.getStatus().equals(OrganizationStatus.FROZEN)) {
+    public void validateStatus(Organization organization,
+                               OrganizationStatus status) {
+        if (organization.getStatus().equals(status)) {
 
             throw new AccessDeniedException(
-                    ORGANIZATION_FROZEN,
+                    String.format(
+                            ORGANIZATION_STATUS_ACCESS,
+                            organization.getStatus().name()
+                    ),
                     HttpStatus.CONFLICT);
         }
     }
 
-    public void validateInactiveStatus(Organization organization) {
-
-        if (organization.getStatus().equals(OrganizationStatus.INACTIVE)) {
-
-            throw new AccessDeniedException(
-                    ORGANIZATION_INACTIVE,
-                    HttpStatus.CONFLICT);
-        }
-    }
-
-    public void validateDeletedStatus(Organization organization) {
-
-        if (organization.getStatus().equals(OrganizationStatus.DELETED)) {
-
-            throw new AccessDeniedException(
-                    ORGANIZATION_DELETED,
-                    HttpStatus.CONFLICT);
-        }
-    }
 
     public void validateAllStatus(Organization organization) {
 
-        validateDeletedStatus(organization);
-        validateInactiveStatus(organization);
-        validateFrozenStatus(organization);
+        validateStatus(organization, OrganizationStatus.DELETED);
+        validateStatus(organization, OrganizationStatus.INACTIVE);
+        validateStatus(organization, OrganizationStatus.FROZEN);
     }
 
     public void validateNameUniqueness(Organization organization) {

@@ -4,11 +4,11 @@ import com.ryazancev.dto.organization.OrganizationEditDto;
 
 public interface CustomExpressionService {
 
+    void checkAccountConditions();
+
     void checkAccessUser(OrganizationEditDto organizationEditDto);
 
     void checkAccessOrganization(Long id);
 
     void checkIfAccountLocked();
-
-    void checkIfEmailConfirmed();
 }
