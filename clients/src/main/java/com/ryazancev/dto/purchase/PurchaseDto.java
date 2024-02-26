@@ -2,8 +2,7 @@ package com.ryazancev.dto.purchase;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.dto.Component;
-import com.ryazancev.dto.product.ProductDto;
+import com.ryazancev.dto.Element;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,10 +25,10 @@ public class PurchaseDto {
     private String id;
 
     @Schema(description = "Customer who made the purchase")
-    private Component customer;
+    private Element customer;
 
     @Schema(description = "Product purchased")
-    private Component product;
+    private Element product;
 
     @Schema(
             description = "Amount of the purchase",

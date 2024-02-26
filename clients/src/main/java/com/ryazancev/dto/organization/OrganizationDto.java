@@ -2,6 +2,7 @@ package com.ryazancev.dto.organization;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ryazancev.dto.Element;
 import com.ryazancev.dto.customer.CustomerDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Organization DTO. Used in GET methods")
-public class OrganizationDto {
+public class OrganizationDto implements Element {
 
     @Schema(
             description = "Organization ID",

@@ -2,12 +2,16 @@ package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.OrganizationClient;
 import com.ryazancev.clients.PurchaseClient;
+import com.ryazancev.dto.Fallback;
+import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.product.ProductEditDto;
 import com.ryazancev.dto.purchase.PurchaseDto;
 import com.ryazancev.product.model.Product;
+import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
+import com.ryazancev.product.util.exception.custom.ServiceUnavailableException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,8 +30,10 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final ProductService productService;
 
-    private final OrganizationClient organizationClient;
-    private final PurchaseClient purchaseClient;
+    private final ClientsService clientsService;
+
+//    private final OrganizationClient organizationClient;
+//    private final PurchaseClient purchaseClient;
 
     public void checkAccessProduct(Long id) {
 
@@ -93,10 +99,26 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         Long userId = getUserIdFromRequest(request);
         List<String> userRoles = getRolesFromRequest(request);
 
-        PurchaseDto purchaseDto = purchaseClient.getById(purchaseId);
+        PurchaseDto purchaseDto = (PurchaseDto) clientsService
+                .getPurchaseById(purchaseId);
 
-        return userId.equals(purchaseDto.getCustomer().getId())
-                || userRoles.contains("ROLE_ADMIN");
+        Object customer = purchaseDto.getCustomer();
+
+        if (customer instanceof CustomerDto) {
+
+            Long customerId = ((CustomerDto) customer).getId();
+
+            return userId.equals(customerId)
+                    || userRoles.contains("ROLE_ADMIN");
+
+        } else if (customer instanceof Fallback) {
+
+            throw new ServiceUnavailableException(
+                    ((Fallback) customer).getMessage(),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        return false;
     }
 
 
@@ -128,7 +150,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         Long userId = getUserIdFromRequest(request);
         List<String> userRoles = getRolesFromRequest(request);
 
-        Long ownerId = organizationClient.getOwnerId(organizationId);
+        Long ownerId = (Long) clientsService
+                .getOrganizationOwnerIdById(organizationId);
 
         return userId.equals(ownerId)
                 || userRoles.contains("ROLE_ADMIN");

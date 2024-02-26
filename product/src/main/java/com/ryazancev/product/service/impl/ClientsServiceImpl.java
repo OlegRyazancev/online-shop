@@ -2,7 +2,10 @@ package com.ryazancev.product.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.OrganizationClient;
+import com.ryazancev.clients.PurchaseClient;
 import com.ryazancev.clients.ReviewClient;
+import com.ryazancev.dto.Element;
+import com.ryazancev.dto.Fallback;
 import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.util.exception.custom.ServiceUnavailableException;
@@ -21,16 +24,18 @@ import static com.ryazancev.product.util.exception.Message.*;
 @RequiredArgsConstructor
 public class ClientsServiceImpl implements ClientsService {
 
+
     private final OrganizationClient organizationClient;
     private final ReviewClient reviewClient;
     private final CustomerClient customerClient;
+    private final PurchaseClient purchaseClient;
 
     @Override
     @CircuitBreaker(
             name = "product",
-            fallbackMethod = "customerServiceUnavailable"
+            fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Object getSimpleCustomerById(Long customerId) {
+    public Element getSimpleCustomerById(Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
@@ -38,12 +43,23 @@ public class ClientsServiceImpl implements ClientsService {
     @Override
     @CircuitBreaker(
             name = "product",
-            fallbackMethod = "organizationServiceUnavailable"
+            fallbackMethod = "getSimpleOrganizationFallback"
     )
-    public Object getSimpleOrganizationById(Long organizationId) {
+    public Element getSimpleOrganizationById(Long organizationId) {
 
         return organizationClient.getSimpleById(organizationId);
     }
+
+    @Override
+    @CircuitBreaker(
+            name = "product",
+            fallbackMethod = "getAverageRatingFallback"
+    )
+    public Double getAverageRatingByProductId(Long id) {
+
+        return reviewClient.getAverageRatingByProductId(id);
+    }
+
 
     @Override
     @CircuitBreaker(
@@ -55,16 +71,6 @@ public class ClientsServiceImpl implements ClientsService {
         return organizationClient.getOwnerId(organizationId);
     }
 
-
-    @Override
-    @CircuitBreaker(
-            name = "product",
-            fallbackMethod = "reviewServiceUnavailable"
-    )
-    public Object getAverageRatingByProductId(Long id) {
-
-        return reviewClient.getAverageRatingByProductId(id);
-    }
 
     @Override
     @CircuitBreaker(
@@ -86,9 +92,19 @@ public class ClientsServiceImpl implements ClientsService {
         return reviewClient.create(reviewEditDto);
     }
 
+    @Override
+    @CircuitBreaker(
+            name = "product",
+            fallbackMethod = "purchaseServiceUnavailable"
+    )
+    public Object getPurchaseById(String purchaseId) {
+
+        return purchaseClient.getById(purchaseId);
+    }
+
     //Fallback methods
 
-    private Object customerServiceUnavailable(Exception e){
+    private Object customerServiceUnavailable(Exception e) {
 
         throw new ServiceUnavailableException(
                 CUSTOMER_SERVICE_UNAVAILABLE,
@@ -106,6 +122,32 @@ public class ClientsServiceImpl implements ClientsService {
 
         throw new ServiceUnavailableException(
                 REVIEW_SERVICE_UNAVAILABLE,
+                HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    private Object getSimpleCustomerFallback(Exception e) {
+
+        return Fallback.builder()
+                .message(CUSTOMER_SERVICE_UNAVAILABLE)
+                .build();
+    }
+
+    private Object getSimpleOrganizationFallback(Exception e) {
+
+        return Fallback.builder()
+                .message(ORGANIZATION_SERVICE_UNAVAILABLE)
+                .build();
+    }
+
+    private Double getAverageRatingFallback(Exception e) {
+
+        return -1.0;
+    }
+
+    private Object purchaseServiceUnavailable(Exception e) {
+
+        throw new ServiceUnavailableException(
+                PURCHASE_SERVICE_UNAVAILABLE,
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 }

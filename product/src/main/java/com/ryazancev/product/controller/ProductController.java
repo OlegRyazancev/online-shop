@@ -1,5 +1,7 @@
 package com.ryazancev.product.controller;
 
+import com.ryazancev.dto.Element;
+import com.ryazancev.dto.Fallback;
 import com.ryazancev.dto.organization.OrganizationDto;
 import com.ryazancev.dto.product.PriceQuantityResponse;
 import com.ryazancev.dto.product.ProductDto;
@@ -9,6 +11,7 @@ import com.ryazancev.dto.review.ReviewDto;
 import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.product.model.Product;
+import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
@@ -66,7 +69,7 @@ public class ProductController {
                 .getSimpleOrganizationById(product.getOrganizationId());
         productDto.setOrganization(organizationDto);
 
-        Double avgRating = (Double) clientsService
+        Double avgRating = clientsService
                 .getAverageRatingByProductId(product.getId());
         productDto.setAverageRating(avgRating);
 
@@ -112,10 +115,9 @@ public class ProductController {
                 .getSimpleOrganizationById(updated.getOrganizationId());
         productDto.setOrganization(organizationDto);
 
-        Double avgRating = (Double) clientsService
+        Double avgRating = clientsService
                 .getAverageRatingByProductId(updated.getId());
         productDto.setAverageRating(avgRating);
-
 
         return productDto;
     }
@@ -174,7 +176,8 @@ public class ProductController {
         boolean statusCheck = true;
 
         Product product = productService.getById(productId, statusCheck);
-        productValidator.validateFrozenStatus(product);
+
+        productValidator.validateStatus(product, ProductStatus.FROZEN);
 
         return PriceQuantityResponse.builder()
                 .price(product.getPrice())

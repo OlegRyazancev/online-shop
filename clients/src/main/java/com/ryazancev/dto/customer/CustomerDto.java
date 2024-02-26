@@ -1,7 +1,7 @@
 package com.ryazancev.dto.customer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.dto.Component;
+import com.ryazancev.dto.Element;
 import com.ryazancev.validation.OnCreate;
 import com.ryazancev.validation.OnUpdate;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Customer DTO")
-public class CustomerDto implements Component {
+public class CustomerDto implements Element {
 
     @Schema(
             description = "ID of the customer",

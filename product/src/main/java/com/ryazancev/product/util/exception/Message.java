@@ -38,6 +38,13 @@ public class Message {
     public static final String PRODUCT_NOT_FOUND =
             "Product not found";
 
+    public static final String PRODUCT_STATUS_ACCESS =
+            "Access denied because product status is %s";
+
+    public static final String PURCHASE_SERVICE_UNAVAILABLE =
+            "The purchase service is currently unavailable. " +
+                    "Please try again later";
+
     public static final String REVIEW_SERVICE_UNAVAILABLE =
             "The review service is currently unavailable. " +
                     "Please try again later";

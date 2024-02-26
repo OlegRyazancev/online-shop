@@ -17,7 +17,7 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Fallback class for response if " +
         "some service unavailable for simple GET requests")
-public class Fallback implements Component {
+public class Fallback implements Element {
 
     @Schema(
             description = "Message about status of some service",

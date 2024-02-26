@@ -2,8 +2,7 @@ package com.ryazancev.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.dto.Component;
-import com.ryazancev.dto.organization.OrganizationDto;
+import com.ryazancev.dto.Element;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +17,7 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Product DTO. Used in GET methods")
-public class ProductDto implements Component {
+public class ProductDto implements Element {
 
     @Schema(
             description = "Product ID",
@@ -39,7 +38,7 @@ public class ProductDto implements Component {
     private String description;
 
     @Schema(description = "Details of the issuer of product")
-    private OrganizationDto organization;
+    private Element organization;
 
     @Schema(
             description = "Price of the product",

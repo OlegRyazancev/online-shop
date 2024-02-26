@@ -1,4 +1,4 @@
 package com.ryazancev.dto;
 
-public interface Component {
+public interface Element {
 }

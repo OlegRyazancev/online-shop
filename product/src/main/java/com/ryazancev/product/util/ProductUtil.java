@@ -1,5 +1,7 @@
 package com.ryazancev.product.util;
 
+import com.ryazancev.dto.Element;
+import com.ryazancev.dto.Fallback;
 import com.ryazancev.dto.admin.enums.ObjectType;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.mail.MailDto;
@@ -8,10 +10,14 @@ import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.exception.custom.ServiceUnavailableException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;
+
+import static com.ryazancev.product.util.exception.Message.CUSTOMER_SERVICE_UNAVAILABLE;
 
 @Component
 @RequiredArgsConstructor
@@ -50,8 +56,17 @@ public class ProductUtil {
         Long customerId = (Long) clientsService
                 .getOrganizationOwnerIdById(registered.getOrganizationId());
 
-        CustomerDto customerDto = (CustomerDto) clientsService
+        Element customerObj = clientsService
                 .getSimpleCustomerById(customerId);
+
+        if (customerObj instanceof Fallback) {
+
+            throw new ServiceUnavailableException(
+                    CUSTOMER_SERVICE_UNAVAILABLE,
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        CustomerDto customerDto = (CustomerDto) customerObj;
 
         Properties properties = new Properties();
 

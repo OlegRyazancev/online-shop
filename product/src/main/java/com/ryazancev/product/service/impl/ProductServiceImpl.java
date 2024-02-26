@@ -53,8 +53,8 @@ public class ProductServiceImpl implements ProductService {
         Product existing = findById(id);
 
         if (statusCheck) {
-            productValidator.validateInactiveStatus(existing);
-            productValidator.validateDeletedStatus(existing);
+            productValidator.validateStatus(existing, ProductStatus.INACTIVE);
+            productValidator.validateStatus(existing, ProductStatus.DELETED);
         }
         return existing;
     }
