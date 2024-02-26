@@ -1,12 +1,12 @@
 package com.ryazancev.purchase.service;
 
-import com.ryazancev.dto.Component;
+import com.ryazancev.dto.Element;
 
 public interface ClientsService {
 
-    Component getSimpleCustomer(Long customerId);
+    Element getSimpleCustomer(Long customerId);
 
-    Component getSimpleProduct(Long productId);
+    Element getSimpleProduct(Long productId);
 
     Object getCustomerBalance(Long customerId);
 

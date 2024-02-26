@@ -1,7 +1,5 @@
 package com.ryazancev.product.service.impl;
 
-import com.ryazancev.clients.OrganizationClient;
-import com.ryazancev.clients.PurchaseClient;
 import com.ryazancev.dto.Fallback;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.product.ProductEditDto;

@@ -1,7 +1,5 @@
 package com.ryazancev.product.controller;
 
-import com.ryazancev.dto.Element;
-import com.ryazancev.dto.Fallback;
 import com.ryazancev.dto.organization.OrganizationDto;
 import com.ryazancev.dto.product.PriceQuantityResponse;
 import com.ryazancev.dto.product.ProductDto;

@@ -2,7 +2,7 @@ package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.Component;
+import com.ryazancev.dto.Element;
 import com.ryazancev.dto.Fallback;
 import com.ryazancev.purchase.service.ClientsService;
 import com.ryazancev.purchase.util.exception.custom.ServiceUnavailableException;
@@ -30,7 +30,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Component getSimpleCustomer(Long customerId) {
+    public Element getSimpleCustomer(Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
@@ -40,7 +40,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "getSimpleProductFallback"
     )
-    public Component getSimpleProduct(Long productId) {
+    public Element getSimpleProduct(Long productId) {
 
         return productClient.getSimpleById(productId);
     }
@@ -91,14 +91,14 @@ public class ClientsServiceImpl implements ClientsService {
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
-    private Component getSimpleProductFallback(Exception e) {
+    private Element getSimpleProductFallback(Exception e) {
 
        return Fallback.builder()
                .message(PRODUCT_SERVICE_UNAVAILABLE)
                .build();
     }
 
-    private Component getSimpleCustomerFallback(Exception e) {
+    private Element getSimpleCustomerFallback(Exception e) {
 
         return Fallback.builder()
                 .message(CUSTOMER_SERVICE_UNAVAILABLE)

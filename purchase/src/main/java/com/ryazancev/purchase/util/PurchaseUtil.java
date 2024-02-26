@@ -1,6 +1,6 @@
 package com.ryazancev.purchase.util;
 
-import com.ryazancev.dto.Component;
+import com.ryazancev.dto.Element;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.dto.purchase.PurchaseDto;
@@ -42,7 +42,7 @@ public class PurchaseUtil {
         List<PurchaseDto> purchasesDto = purchaseMapper.toListDto(purchases);
 
         for (int i = 0; i < purchasesDto.size(); i++) {
-            Component productDto = clientsService
+            Element productDto = clientsService
                     .getSimpleProduct(purchases.get(i).getProductId());
             purchasesDto.get(i).setProduct(productDto);
         }
