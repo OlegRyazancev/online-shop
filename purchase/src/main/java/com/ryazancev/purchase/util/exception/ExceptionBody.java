@@ -7,6 +7,10 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Data
 @AllArgsConstructor
 public class ExceptionBody {

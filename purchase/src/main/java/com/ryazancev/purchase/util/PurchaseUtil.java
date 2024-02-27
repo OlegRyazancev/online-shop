@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Service
 @RequiredArgsConstructor
 public class PurchaseUtil {

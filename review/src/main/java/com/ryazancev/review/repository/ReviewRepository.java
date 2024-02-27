@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Repository
 public interface ReviewRepository extends MongoRepository<Review, String> {
     List<Review> findByCustomerId(Long customerId);

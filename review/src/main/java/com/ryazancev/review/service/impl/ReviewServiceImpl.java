@@ -25,6 +25,10 @@ import java.util.List;
 
 import static com.ryazancev.review.util.exception.Message.DUPLICATE_REVIEW;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)

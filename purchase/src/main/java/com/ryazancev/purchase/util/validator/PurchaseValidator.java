@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 import static com.ryazancev.purchase.util.exception.Message.INSUFFICIENT_FUNDS;
 import static com.ryazancev.purchase.util.exception.Message.NO_PRODUCTS_IN_STOCK;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 public class PurchaseValidator {
 

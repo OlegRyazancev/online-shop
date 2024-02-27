@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Repository
 public interface PurchaseRepository extends MongoRepository<Purchase, String> {
     List<Purchase> findByCustomerId(Long customerId);

@@ -15,6 +15,10 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Configuration
 public class ReviewConsumerConfig {
 

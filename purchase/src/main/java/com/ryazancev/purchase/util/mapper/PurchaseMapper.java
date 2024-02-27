@@ -8,6 +8,10 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE

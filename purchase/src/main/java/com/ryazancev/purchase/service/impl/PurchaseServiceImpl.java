@@ -24,6 +24,10 @@ import java.util.List;
 
 import static com.ryazancev.purchase.util.exception.Message.PURCHASE_NOT_FOUND;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)

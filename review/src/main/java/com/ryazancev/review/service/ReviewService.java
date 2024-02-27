@@ -4,6 +4,10 @@ import com.ryazancev.common.dto.review.ReviewDto;
 import com.ryazancev.common.dto.review.ReviewEditDto;
 import com.ryazancev.common.dto.review.ReviewsResponse;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface ReviewService {
 
     ReviewsResponse getByCustomerId(Long customerId);
