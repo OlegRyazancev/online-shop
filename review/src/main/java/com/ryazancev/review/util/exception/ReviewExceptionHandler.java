@@ -1,7 +1,8 @@
 package com.ryazancev.review.util.exception;
 
-import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
+import com.ryazancev.exception.OnlineShopException;
+import com.ryazancev.exception.ServiceUnavailableException;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.exception.custom.ReviewNotFoundException;
 import jakarta.validation.ConstraintViolation;
@@ -20,6 +21,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class ReviewExceptionHandler {
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ExceptionBody> handleServiceUnavailable(
+            ServiceUnavailableException e) {
+
+        log.error("Service unavailable exception");
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.REVIEW,
+                        e.getHttpStatus()
+                ));
+    }
 
     @ExceptionHandler(ReviewCreationException.class)
     public ResponseEntity<ExceptionBody> handleReviewCreation(

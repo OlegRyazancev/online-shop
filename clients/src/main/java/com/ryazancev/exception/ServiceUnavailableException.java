@@ -1,4 +1,4 @@
-package com.ryazancev.auth.util.exception.custom;
+package com.ryazancev.exception;
 
 import lombok.Getter;
 import lombok.Setter;

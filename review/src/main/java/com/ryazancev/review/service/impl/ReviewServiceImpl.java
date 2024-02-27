@@ -1,8 +1,5 @@
 package com.ryazancev.review.service.impl;
 
-import com.ryazancev.clients.CustomerClient;
-import com.ryazancev.clients.ProductClient;
-import com.ryazancev.clients.PurchaseClient;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.product.ProductDto;
 import com.ryazancev.dto.purchase.PurchaseDto;
@@ -11,7 +8,9 @@ import com.ryazancev.dto.review.ReviewEditDto;
 import com.ryazancev.dto.review.ReviewsResponse;
 import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
+import com.ryazancev.review.service.ClientsService;
 import com.ryazancev.review.service.ReviewService;
+import com.ryazancev.review.util.ReviewUtil;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+
+import static com.ryazancev.review.util.exception.Message.DUPLICATE_REVIEW;
 
 @Slf4j
 @Service
@@ -31,29 +33,19 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
+    private final ReviewUtil reviewUtil;
 
-    private final CustomerClient customerClient;
-    private final ProductClient productClient;
-    private final PurchaseClient purchaseClient;
-
+    private final ClientsService clientsService;
 
     @Override
     public ReviewsResponse getByCustomerId(Long customerId) {
 
-        CustomerDto existingCustomer = customerClient
-                .getSimpleById(customerId);
         List<Review> reviews = reviewRepository
-                .findByCustomerId(existingCustomer.getId());
-        List<ReviewDto> reviewsDto = reviewMapper
-                .toListDto(reviews);
+                .findByCustomerId(customerId);
 
-        if (!reviewsDto.isEmpty()) {
-            for (int i = 0; i < reviewsDto.size(); i++) {
-                Long productId = reviews.get(i).getProductId();
-                reviewsDto.get(i)
-                        .setProduct(productClient.getSimpleById(productId));
-            }
-        }
+        List<ReviewDto> reviewsDto = reviews.isEmpty() ?
+                Collections.emptyList()
+                : reviewUtil.createReviewsDtoWithProductsInfo(reviews);
 
         return ReviewsResponse.builder()
                 .reviews(reviewsDto)
@@ -63,22 +55,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewsResponse getByProductId(Long productId) {
 
-        ProductDto productDto = productClient.getSimpleById(productId);
-
         List<Review> reviews = reviewRepository
-                .findByProductId(productDto.getId());
-        List<ReviewDto> reviewsDto = reviewMapper
-                .toListDto(reviews);
+                .findByProductId(productId);
 
-        if (!reviewsDto.isEmpty()) {
-            for (int i = 0; i < reviewsDto.size(); i++) {
-                Long customerId = reviews.get(i).getCustomerId();
-                reviewsDto.get(i)
-                        .setCustomer(
-                                customerClient.getSimpleById(customerId)
-                        );
-            }
-        }
+        List<ReviewDto> reviewsDto = reviews.isEmpty() ?
+                Collections.emptyList()
+                : reviewUtil.createReviewsDtoWithCustomersInfo(reviews);
 
         return ReviewsResponse.builder()
                 .reviews(reviewsDto)
@@ -93,16 +75,23 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (reviewRepository.findByPurchaseId(purchaseId).isPresent()) {
             throw new ReviewCreationException(
-                    "Review with same purchase ID already exists",
+                    DUPLICATE_REVIEW,
                     HttpStatus.BAD_REQUEST);
         }
 
-        PurchaseDto purchaseDto = purchaseClient.getById(purchaseId);
+        PurchaseDto purchaseDto = (PurchaseDto) clientsService
+                .getPurchaseById(purchaseId);
+
+        CustomerDto customerDto = purchaseDto.getCustomer()
+                .safelyCast(CustomerDto.class);
+        ProductDto productDto = purchaseDto.getProduct()
+                .safelyCast(ProductDto.class);
+
 
         Review toSave = reviewMapper.toEntity(reviewEditDto);
 
-        toSave.setCustomerId(purchaseDto.getCustomer().getId());
-        toSave.setProductId(purchaseDto.getProduct().getId());
+        toSave.setCustomerId(customerDto.getId());
+        toSave.setProductId(productDto.getId());
         toSave.setCreatedAt(LocalDateTime.now());
 
         Review saved = reviewRepository.insert(toSave);
@@ -113,6 +102,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         return savedDto;
     }
+
 
     @Override
     public Double getAverageRatingByProductId(Long productId) {
@@ -132,7 +122,5 @@ public class ReviewServiceImpl implements ReviewService {
         List<Review> reviews = reviewRepository.findByProductId(productId);
 
         reviewRepository.deleteAll(reviews);
-        log.info("Reviews {} successfully deleted for product ID {}",
-                reviews.size(), productId);
     }
 }

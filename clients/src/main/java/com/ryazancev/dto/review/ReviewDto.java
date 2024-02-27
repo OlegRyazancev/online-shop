@@ -2,9 +2,7 @@ package com.ryazancev.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ryazancev.dto.customer.CustomerDto;
-import com.ryazancev.dto.product.ProductDto;
-import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.dto.Element;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,14 +31,14 @@ public class ReviewDto {
     private String body;
 
     @Schema(description = "Product associated with the review")
-    private ProductDto product;
+    private Element product;
 
     @Schema(description = "Customer who posted the review")
-    private CustomerDto customer;
+    private Element customer;
 
 
     @Schema(description = "Purchase associated with review")
-    private PurchaseDto purchase;
+    private Element purchase;
 
     @Schema(
             description = "Rating given in the review. 1-5",

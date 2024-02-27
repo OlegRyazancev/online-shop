@@ -43,7 +43,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: "*"
   prometheus:
     metrics:
       export:
@@ -52,6 +52,26 @@ management:
     distribution:
       percentiles-histogram:
         "[http.server.requests]": true
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+#Resilience4j
+resilience4j:
+  circuitbreaker:
+    instances:
+      review:
+        sliding-window-type: COUNT_BASED
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        register-health-indicator: true
 
 #Eureka
 eureka:
