@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Configuration
 public class AdminTopicConfig {
 

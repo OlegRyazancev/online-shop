@@ -8,6 +8,10 @@ import com.ryazancev.common.dto.admin.enums.RequestStatus;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface AdminService {
 
     List<RegistrationRequest> getAll();

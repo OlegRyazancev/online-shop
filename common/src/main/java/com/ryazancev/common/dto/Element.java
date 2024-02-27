@@ -11,13 +11,31 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "type"
+)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ProductDto.class, name = "product"),
-        @JsonSubTypes.Type(value = CustomerDto.class, name = "customer"),
-        @JsonSubTypes.Type(value = Fallback.class, name = "fallback"),
-        @JsonSubTypes.Type(value = OrganizationDto.class, name = "organization"),
-        @JsonSubTypes.Type(value = PurchaseDto.class, name = "purchase")
+        @JsonSubTypes.Type(
+                value = ProductDto.class,
+                name = "product"
+        ),
+        @JsonSubTypes.Type(
+                value = CustomerDto.
+                        class, name = "customer"
+        ),
+        @JsonSubTypes.Type(
+                value = OrganizationDto.class,
+                name = "organization"
+        ),
+        @JsonSubTypes.Type(
+                value = PurchaseDto.class,
+                name = "purchase"
+        ),
+        @JsonSubTypes.Type(
+                value = Fallback.class,
+                name = "fallback"
+        )
 })
 public interface Element {
 

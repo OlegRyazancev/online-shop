@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Repository
 public interface AdminRepository
         extends JpaRepository<RegistrationRequest, Long> {
