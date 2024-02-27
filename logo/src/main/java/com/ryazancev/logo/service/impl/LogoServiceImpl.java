@@ -18,6 +18,9 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * @author Oleg Ryazancev
+ */
 
 @Slf4j
 @Service

@@ -6,6 +6,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Data
 @Builder
 public class Logo implements Serializable {
