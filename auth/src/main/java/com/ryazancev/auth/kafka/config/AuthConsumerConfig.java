@@ -1,7 +1,7 @@
 package com.ryazancev.auth.kafka.config;
 
-import com.ryazancev.dto.admin.UserLockRequest;
-import com.ryazancev.dto.user.UserUpdateRequest;
+import com.ryazancev.common.dto.admin.UserLockRequest;
+import com.ryazancev.common.dto.user.UserUpdateRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;

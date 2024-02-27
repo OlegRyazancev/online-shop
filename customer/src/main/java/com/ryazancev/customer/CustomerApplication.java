@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySources;
 @Slf4j
 @EnableDiscoveryClient
 @EnableFeignClients(
-        basePackages = "com.ryazancev.clients"
+        basePackages = "com.ryazancev.common.clients"
 )
 @PropertySources({
         @PropertySource(
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.PropertySources;
 @EnableCaching
 @SpringBootApplication(
         scanBasePackages = {
-                "com.ryazancev.config",
+                "com.ryazancev.common.config",
                 "com.ryazancev.customer"
         }
 )

@@ -1,8 +1,8 @@
 package com.ryazancev.admin.kafka.config;
 
-import com.ryazancev.dto.admin.ObjectRequest;
-import com.ryazancev.dto.admin.RegistrationRequestDto;
-import com.ryazancev.dto.admin.UserLockRequest;
+import com.ryazancev.common.dto.admin.ObjectRequest;
+import com.ryazancev.common.dto.admin.RegistrationRequestDto;
+import com.ryazancev.common.dto.admin.UserLockRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

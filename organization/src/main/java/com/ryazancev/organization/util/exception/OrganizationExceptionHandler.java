@@ -1,8 +1,8 @@
 package com.ryazancev.organization.util.exception;
 
-import com.ryazancev.config.ServiceStage;
-import com.ryazancev.exception.OnlineShopException;
-import com.ryazancev.exception.ServiceUnavailableException;
+import com.ryazancev.common.config.ServiceStage;
+import com.ryazancev.common.exception.OnlineShopException;
+import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;

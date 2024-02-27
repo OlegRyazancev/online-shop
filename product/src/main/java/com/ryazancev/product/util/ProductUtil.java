@@ -1,11 +1,11 @@
 package com.ryazancev.product.util;
 
-import com.ryazancev.dto.admin.enums.ObjectType;
-import com.ryazancev.dto.customer.CustomerDto;
-import com.ryazancev.dto.mail.MailDto;
-import com.ryazancev.dto.mail.MailType;
-import com.ryazancev.dto.organization.OrganizationDto;
-import com.ryazancev.dto.product.ProductDto;
+import com.ryazancev.common.dto.admin.enums.ObjectType;
+import com.ryazancev.common.dto.customer.CustomerDto;
+import com.ryazancev.common.dto.mail.MailDto;
+import com.ryazancev.common.dto.mail.MailType;
+import com.ryazancev.common.dto.organization.OrganizationDto;
+import com.ryazancev.common.dto.product.ProductDto;
 import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ClientsService;

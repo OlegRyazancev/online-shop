@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySources;
 
 @EnableDiscoveryClient
 @EnableFeignClients(
-        basePackages = "com.ryazancev.clients"
+        basePackages = "com.ryazancev.common.clients"
 )
 @PropertySources({
         @PropertySource(
@@ -18,7 +18,7 @@ import org.springframework.context.annotation.PropertySources;
 })
 @SpringBootApplication(
         scanBasePackages = {
-                "com.ryazancev.config",
+                "com.ryazancev.common.config",
                 "com.ryazancev.review"
         })
 public class ReviewApplication {

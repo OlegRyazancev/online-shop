@@ -1,7 +1,7 @@
 package com.ryazancev.product.kafka;
 
-import com.ryazancev.dto.admin.RegistrationRequestDto;
-import com.ryazancev.dto.mail.MailDto;
+import com.ryazancev.common.dto.admin.RegistrationRequestDto;
+import com.ryazancev.common.dto.mail.MailDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,9 +1,9 @@
 package com.ryazancev.auth.service.impl;
 
 import com.ryazancev.auth.service.ClientsService;
-import com.ryazancev.clients.CustomerClient;
-import com.ryazancev.dto.customer.CustomerDto;
-import com.ryazancev.exception.ServiceUnavailableException;
+import com.ryazancev.common.clients.CustomerClient;
+import com.ryazancev.common.dto.customer.CustomerDto;
+import com.ryazancev.common.exception.ServiceUnavailableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

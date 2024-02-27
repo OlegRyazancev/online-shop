@@ -1,6 +1,6 @@
 package com.ryazancev.purchase.service;
 
-import com.ryazancev.dto.Element;
+import com.ryazancev.common.dto.Element;
 
 public interface ClientsService {
 

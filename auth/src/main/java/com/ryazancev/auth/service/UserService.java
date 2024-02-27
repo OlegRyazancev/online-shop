@@ -1,8 +1,8 @@
 package com.ryazancev.auth.service;
 
 import com.ryazancev.auth.model.User;
-import com.ryazancev.dto.user.UserDto;
-import com.ryazancev.dto.user.UserUpdateRequest;
+import com.ryazancev.common.dto.user.UserDto;
+import com.ryazancev.common.dto.user.UserUpdateRequest;
 
 public interface UserService {
 

@@ -1,7 +1,7 @@
 package com.ryazancev.product.util.mapper;
 
-import com.ryazancev.dto.product.ProductDto;
-import com.ryazancev.dto.product.ProductEditDto;
+import com.ryazancev.common.dto.product.ProductDto;
+import com.ryazancev.common.dto.product.ProductEditDto;
 import com.ryazancev.product.model.Product;
 import org.mapstruct.*;
 

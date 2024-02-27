@@ -1,6 +1,6 @@
 package com.ryazancev.customer.service;
 
-import com.ryazancev.dto.purchase.PurchaseEditDto;
+import com.ryazancev.common.dto.purchase.PurchaseEditDto;
 
 public interface ClientsService {
 

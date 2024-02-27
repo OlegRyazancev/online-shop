@@ -1,7 +1,7 @@
 package com.ryazancev.organization.kafka.config;
 
-import com.ryazancev.dto.admin.RegistrationRequestDto;
-import com.ryazancev.dto.mail.MailDto;
+import com.ryazancev.common.dto.admin.RegistrationRequestDto;
+import com.ryazancev.common.dto.mail.MailDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;

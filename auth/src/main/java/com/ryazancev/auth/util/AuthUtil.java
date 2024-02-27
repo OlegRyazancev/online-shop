@@ -2,8 +2,8 @@ package com.ryazancev.auth.util;
 
 import com.ryazancev.auth.model.ConfirmationToken;
 import com.ryazancev.auth.model.User;
-import com.ryazancev.dto.mail.MailDto;
-import com.ryazancev.dto.mail.MailType;
+import com.ryazancev.common.dto.mail.MailDto;
+import com.ryazancev.common.dto.mail.MailType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

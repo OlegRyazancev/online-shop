@@ -1,11 +1,11 @@
 package com.ryazancev.organization.service.impl;
 
-import com.ryazancev.clients.CustomerClient;
-import com.ryazancev.clients.LogoClient;
-import com.ryazancev.clients.ProductClient;
-import com.ryazancev.dto.Element;
-import com.ryazancev.dto.Fallback;
-import com.ryazancev.exception.ServiceUnavailableException;
+import com.ryazancev.common.clients.CustomerClient;
+import com.ryazancev.common.clients.LogoClient;
+import com.ryazancev.common.clients.ProductClient;
+import com.ryazancev.common.dto.Element;
+import com.ryazancev.common.dto.Fallback;
+import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.organization.service.ClientsService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;

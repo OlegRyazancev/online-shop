@@ -1,7 +1,7 @@
 package com.ryazancev.customer.service;
 
+import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.customer.model.Customer;
-import com.ryazancev.dto.customer.UpdateBalanceRequest;
 
 public interface CustomerService {
     Customer getById(Long id);

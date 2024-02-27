@@ -1,8 +1,8 @@
 package com.ryazancev.purchase.util.exception;
 
-import com.ryazancev.config.ServiceStage;
-import com.ryazancev.exception.OnlineShopException;
-import com.ryazancev.exception.ServiceUnavailableException;
+import com.ryazancev.common.config.ServiceStage;
+import com.ryazancev.common.exception.OnlineShopException;
+import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
 import com.ryazancev.purchase.util.exception.custom.PurchaseNotFoundException;

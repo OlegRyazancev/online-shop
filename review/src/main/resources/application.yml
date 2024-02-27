@@ -39,7 +39,7 @@ management:
     sampling:
       probability: 1.0
 
-  #Actuator Prometheus Endpoint
+  #Actuator Endpoint
   endpoints:
     web:
       exposure:

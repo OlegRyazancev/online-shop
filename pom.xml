@@ -14,7 +14,7 @@
         <module>customer</module>
         <module>purchase</module>
         <module>eureka-server</module>
-        <module>clients</module>
+        <module>common</module>
         <module>product</module>
         <module>review</module>
         <module>organization</module>

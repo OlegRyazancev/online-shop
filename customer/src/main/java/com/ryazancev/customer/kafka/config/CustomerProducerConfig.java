@@ -1,7 +1,7 @@
 package com.ryazancev.customer.kafka.config;
 
 
-import com.ryazancev.dto.user.UserUpdateRequest;
+import com.ryazancev.common.dto.user.UserUpdateRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;

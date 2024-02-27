@@ -1,8 +1,8 @@
 package com.ryazancev.admin.util.exception;
 
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
-import com.ryazancev.config.ServiceStage;
-import com.ryazancev.exception.OnlineShopException;
+import com.ryazancev.common.config.ServiceStage;
+import com.ryazancev.common.exception.OnlineShopException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;

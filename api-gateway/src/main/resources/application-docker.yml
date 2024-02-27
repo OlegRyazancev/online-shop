@@ -57,7 +57,7 @@ management:
     tracing:
       endpoint: http://zipkin:9411/api/v2/spans
 
-  #Actuator Prometheus Endpoint
+  #Actuator Endpoint
   endpoints:
     web:
       exposure:

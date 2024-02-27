@@ -1,6 +1,6 @@
 package com.ryazancev.mail.service.impl;
 
-import com.ryazancev.dto.mail.MailDto;
+import com.ryazancev.common.dto.mail.MailDto;
 import com.ryazancev.mail.service.MailService;
 import freemarker.template.Configuration;
 import jakarta.mail.internet.MimeMessage;

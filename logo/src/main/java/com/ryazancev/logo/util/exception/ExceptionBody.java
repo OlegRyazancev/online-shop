@@ -1,6 +1,6 @@
 package com.ryazancev.logo.util.exception;
 
-import com.ryazancev.config.ServiceStage;
+import com.ryazancev.common.config.ServiceStage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;

@@ -1,7 +1,7 @@
 package com.ryazancev.product.service;
 
-import com.ryazancev.dto.Element;
-import com.ryazancev.dto.review.ReviewEditDto;
+import com.ryazancev.common.dto.Element;
+import com.ryazancev.common.dto.review.ReviewEditDto;
 
 public interface ClientsService {
 

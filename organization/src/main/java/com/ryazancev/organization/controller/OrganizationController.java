@@ -1,18 +1,18 @@
 package com.ryazancev.organization.controller;
 
-import com.ryazancev.dto.logo.LogoDto;
-import com.ryazancev.dto.organization.OrganizationDto;
-import com.ryazancev.dto.organization.OrganizationEditDto;
-import com.ryazancev.dto.organization.OrganizationsSimpleResponse;
-import com.ryazancev.dto.product.ProductsSimpleResponse;
+import com.ryazancev.common.dto.logo.LogoDto;
+import com.ryazancev.common.dto.organization.OrganizationDto;
+import com.ryazancev.common.dto.organization.OrganizationEditDto;
+import com.ryazancev.common.dto.organization.OrganizationsSimpleResponse;
+import com.ryazancev.common.dto.product.ProductsSimpleResponse;
+import com.ryazancev.common.validation.OnCreate;
+import com.ryazancev.common.validation.OnUpdate;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.OrganizationUtil;
 import com.ryazancev.organization.util.mapper.OrganizationMapper;
-import com.ryazancev.validation.OnCreate;
-import com.ryazancev.validation.OnUpdate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

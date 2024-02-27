@@ -1,8 +1,8 @@
 package com.ryazancev.product.service.impl;
 
-import com.ryazancev.dto.customer.CustomerDto;
-import com.ryazancev.dto.product.ProductEditDto;
-import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.common.dto.customer.CustomerDto;
+import com.ryazancev.common.dto.product.ProductEditDto;
+import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.CustomExpressionService;

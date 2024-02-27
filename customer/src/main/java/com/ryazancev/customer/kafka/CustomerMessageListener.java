@@ -1,8 +1,8 @@
 package com.ryazancev.customer.kafka;
 
+import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.CustomerService;
-import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

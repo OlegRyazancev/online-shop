@@ -3,9 +3,9 @@ package com.ryazancev.admin.kafka;
 
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.util.mapper.AdminMapper;
-import com.ryazancev.dto.admin.ObjectRequest;
-import com.ryazancev.dto.admin.RegistrationRequestDto;
-import com.ryazancev.dto.admin.UserLockRequest;
+import com.ryazancev.common.dto.admin.ObjectRequest;
+import com.ryazancev.common.dto.admin.RegistrationRequestDto;
+import com.ryazancev.common.dto.admin.UserLockRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

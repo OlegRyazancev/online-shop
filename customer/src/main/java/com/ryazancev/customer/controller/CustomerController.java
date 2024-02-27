@@ -1,17 +1,17 @@
 package com.ryazancev.customer.controller;
 
+import com.ryazancev.common.dto.customer.CustomerDto;
+import com.ryazancev.common.dto.customer.CustomerPurchasesResponse;
+import com.ryazancev.common.dto.purchase.PurchaseDto;
+import com.ryazancev.common.dto.purchase.PurchaseEditDto;
+import com.ryazancev.common.dto.review.ReviewsResponse;
+import com.ryazancev.common.validation.OnCreate;
+import com.ryazancev.common.validation.OnUpdate;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.ClientsService;
 import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
-import com.ryazancev.dto.customer.CustomerDto;
-import com.ryazancev.dto.customer.CustomerPurchasesResponse;
-import com.ryazancev.dto.purchase.PurchaseDto;
-import com.ryazancev.dto.purchase.PurchaseEditDto;
-import com.ryazancev.dto.review.ReviewsResponse;
-import com.ryazancev.validation.OnCreate;
-import com.ryazancev.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;

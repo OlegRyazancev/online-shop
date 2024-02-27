@@ -1,7 +1,7 @@
 package com.ryazancev.admin.util.mapper;
 
 import com.ryazancev.admin.model.RegistrationRequest;
-import com.ryazancev.dto.admin.RegistrationRequestDto;
+import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

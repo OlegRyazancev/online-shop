@@ -1,6 +1,6 @@
 package com.ryazancev.mail.kafka.config;
 
-import com.ryazancev.dto.customer.CustomerDto;
+import com.ryazancev.common.dto.customer.CustomerDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

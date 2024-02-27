@@ -1,7 +1,7 @@
 package com.ryazancev.purchase.kafka;
 
-import com.ryazancev.dto.customer.UpdateBalanceRequest;
-import com.ryazancev.dto.product.UpdateQuantityRequest;
+import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
+import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;

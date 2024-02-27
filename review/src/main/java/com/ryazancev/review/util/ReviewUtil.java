@@ -1,6 +1,6 @@
 package com.ryazancev.review.util;
 
-import com.ryazancev.dto.review.ReviewDto;
+import com.ryazancev.common.dto.review.ReviewDto;
 import com.ryazancev.review.model.Review;
 import com.ryazancev.review.service.ClientsService;
 import com.ryazancev.review.util.mapper.ReviewMapper;

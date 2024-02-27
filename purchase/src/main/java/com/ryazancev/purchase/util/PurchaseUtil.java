@@ -1,8 +1,8 @@
 package com.ryazancev.purchase.util;
 
-import com.ryazancev.dto.customer.UpdateBalanceRequest;
-import com.ryazancev.dto.product.UpdateQuantityRequest;
-import com.ryazancev.dto.purchase.PurchaseDto;
+import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
+import com.ryazancev.common.dto.product.UpdateQuantityRequest;
+import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.purchase.kafka.PurchaseProducerService;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.service.ClientsService;

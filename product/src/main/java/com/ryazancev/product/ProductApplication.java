@@ -11,7 +11,7 @@ import org.springframework.context.annotation.PropertySources;
 
 @EnableDiscoveryClient
 @EnableFeignClients(
-        basePackages = "com.ryazancev.clients"
+        basePackages = "com.ryazancev.common.clients"
 )
 @EnableCaching
 @PropertySources({
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.PropertySources;
 })
 @SpringBootApplication(
         scanBasePackages = {
-                "com.ryazancev.config",
+                "com.ryazancev.common.config",
                 "com.ryazancev.product"
         })
 public class ProductApplication {

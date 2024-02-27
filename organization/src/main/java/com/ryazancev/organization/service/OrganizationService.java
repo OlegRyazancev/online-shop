@@ -1,6 +1,6 @@
 package com.ryazancev.organization.service;
 
-import com.ryazancev.dto.logo.LogoDto;
+import com.ryazancev.common.dto.logo.LogoDto;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 

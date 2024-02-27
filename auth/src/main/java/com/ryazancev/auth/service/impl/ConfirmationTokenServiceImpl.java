@@ -8,7 +8,7 @@ import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.util.AuthUtil;
 import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
 import com.ryazancev.auth.util.validator.AuthValidator;
-import com.ryazancev.dto.mail.MailDto;
+import com.ryazancev.common.dto.mail.MailDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

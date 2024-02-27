@@ -1,8 +1,8 @@
 package com.ryazancev.product.kafka.config;
 
-import com.ryazancev.dto.admin.ObjectRequest;
-import com.ryazancev.dto.admin.RegistrationRequestDto;
-import com.ryazancev.dto.product.UpdateQuantityRequest;
+import com.ryazancev.common.dto.admin.ObjectRequest;
+import com.ryazancev.common.dto.admin.RegistrationRequestDto;
+import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;

@@ -1,6 +1,6 @@
 package com.ryazancev.customer.kafka;
 
-import com.ryazancev.dto.user.UserUpdateRequest;
+import com.ryazancev.common.dto.user.UserUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

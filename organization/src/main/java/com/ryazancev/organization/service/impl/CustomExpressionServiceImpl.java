@@ -1,6 +1,6 @@
 package com.ryazancev.organization.service.impl;
 
-import com.ryazancev.dto.organization.OrganizationEditDto;
+import com.ryazancev.common.dto.organization.OrganizationEditDto;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;

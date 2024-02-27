@@ -1,8 +1,8 @@
 package com.ryazancev.auth.util.mappers;
 
 import com.ryazancev.auth.model.User;
-import com.ryazancev.dto.customer.CustomerDto;
-import com.ryazancev.dto.user.UserDto;
+import com.ryazancev.common.dto.customer.CustomerDto;
+import com.ryazancev.common.dto.user.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

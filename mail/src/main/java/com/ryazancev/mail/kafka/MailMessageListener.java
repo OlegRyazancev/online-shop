@@ -1,6 +1,6 @@
 package com.ryazancev.mail.kafka;
 
-import com.ryazancev.dto.mail.MailDto;
+import com.ryazancev.common.dto.mail.MailDto;
 import com.ryazancev.mail.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

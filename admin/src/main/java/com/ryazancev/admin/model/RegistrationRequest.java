@@ -1,7 +1,7 @@
 package com.ryazancev.admin.model;
 
-import com.ryazancev.dto.admin.enums.ObjectType;
-import com.ryazancev.dto.admin.enums.RequestStatus;
+import com.ryazancev.common.dto.admin.enums.ObjectType;
+import com.ryazancev.common.dto.admin.enums.RequestStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

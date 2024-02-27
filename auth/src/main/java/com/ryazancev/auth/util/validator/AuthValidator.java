@@ -6,7 +6,7 @@ import com.ryazancev.auth.repository.UserRepository;
 import com.ryazancev.auth.util.exception.custom.AccessDeniedException;
 import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
 import com.ryazancev.auth.util.exception.custom.UserCreationException;
-import com.ryazancev.dto.user.UserDto;
+import com.ryazancev.common.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;

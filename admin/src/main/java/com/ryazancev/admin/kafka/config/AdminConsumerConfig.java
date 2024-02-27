@@ -1,6 +1,6 @@
 package com.ryazancev.admin.kafka.config;
 
-import com.ryazancev.dto.admin.RegistrationRequestDto;
+import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

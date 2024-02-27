@@ -1,8 +1,8 @@
 package com.ryazancev.purchase.controller;
 
-import com.ryazancev.dto.customer.CustomerPurchasesResponse;
-import com.ryazancev.dto.purchase.PurchaseDto;
-import com.ryazancev.dto.purchase.PurchaseEditDto;
+import com.ryazancev.common.dto.customer.CustomerPurchasesResponse;
+import com.ryazancev.common.dto.purchase.PurchaseDto;
+import com.ryazancev.common.dto.purchase.PurchaseEditDto;
 import com.ryazancev.purchase.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

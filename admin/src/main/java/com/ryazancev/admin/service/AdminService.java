@@ -2,9 +2,9 @@ package com.ryazancev.admin.service;
 
 
 import com.ryazancev.admin.model.RegistrationRequest;
-import com.ryazancev.dto.admin.ObjectRequest;
-import com.ryazancev.dto.admin.UserLockRequest;
-import com.ryazancev.dto.admin.enums.RequestStatus;
+import com.ryazancev.common.dto.admin.ObjectRequest;
+import com.ryazancev.common.dto.admin.UserLockRequest;
+import com.ryazancev.common.dto.admin.enums.RequestStatus;
 
 import java.util.List;
 

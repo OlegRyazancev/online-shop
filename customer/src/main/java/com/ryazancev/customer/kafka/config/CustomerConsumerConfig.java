@@ -1,6 +1,6 @@
 package com.ryazancev.customer.kafka.config;
 
-import com.ryazancev.dto.customer.UpdateBalanceRequest;
+import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,7 +1,7 @@
 package com.ryazancev.mail.util.exception;
 
-import com.ryazancev.config.ServiceStage;
-import com.ryazancev.exception.OnlineShopException;
+import com.ryazancev.common.config.ServiceStage;
+import com.ryazancev.common.exception.OnlineShopException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,10 +1,10 @@
 package com.ryazancev.customer.service.impl;
 
-import com.ryazancev.clients.PurchaseClient;
-import com.ryazancev.clients.ReviewClient;
+import com.ryazancev.common.clients.PurchaseClient;
+import com.ryazancev.common.clients.ReviewClient;
+import com.ryazancev.common.dto.purchase.PurchaseEditDto;
+import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.customer.service.ClientsService;
-import com.ryazancev.dto.purchase.PurchaseEditDto;
-import com.ryazancev.exception.ServiceUnavailableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
