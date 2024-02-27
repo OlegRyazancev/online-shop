@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 public class OpenApiRoutesConfig {
 

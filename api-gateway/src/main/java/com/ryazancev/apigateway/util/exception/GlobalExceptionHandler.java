@@ -11,6 +11,10 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 @Order(-2)
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {

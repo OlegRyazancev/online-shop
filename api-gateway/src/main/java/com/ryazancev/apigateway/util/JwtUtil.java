@@ -13,6 +13,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 public class JwtUtil {
 
