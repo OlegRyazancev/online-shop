@@ -4,8 +4,8 @@ import com.ryazancev.clients.CustomerClient;
 import com.ryazancev.clients.ProductClient;
 import com.ryazancev.dto.Element;
 import com.ryazancev.dto.Fallback;
+import com.ryazancev.exception.ServiceUnavailableException;
 import com.ryazancev.purchase.service.ClientsService;
-import com.ryazancev.purchase.util.exception.custom.ServiceUnavailableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Element getSimpleCustomer(Long customerId) {
+    public Element getSimpleCustomerById(Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
@@ -40,7 +40,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "getSimpleProductFallback"
     )
-    public Element getSimpleProduct(Long productId) {
+    public Element getSimpleProductById(Long productId) {
 
         return productClient.getSimpleById(productId);
     }

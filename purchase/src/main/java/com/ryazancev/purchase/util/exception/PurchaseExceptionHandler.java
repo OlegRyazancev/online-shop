@@ -1,8 +1,12 @@
 package com.ryazancev.purchase.util.exception;
 
-import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
-import com.ryazancev.purchase.util.exception.custom.*;
+import com.ryazancev.exception.OnlineShopException;
+import com.ryazancev.exception.ServiceUnavailableException;
+import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
+import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
+import com.ryazancev.purchase.util.exception.custom.PurchaseNotFoundException;
+import com.ryazancev.purchase.util.exception.custom.PurchasesNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;

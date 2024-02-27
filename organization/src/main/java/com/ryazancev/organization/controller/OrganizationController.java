@@ -170,8 +170,13 @@ public class OrganizationController {
 
         customExpressionService.checkIfAccountLocked();
 
+        boolean statusCheck = false;
+
+        Organization organization = organizationService
+                .getById(id, statusCheck);
+
         return (ProductsSimpleResponse) clientsService
-                .getProductsByOrganizationId(id);
+                .getProductsByOrganizationId(organization.getId());
     }
 
     @PostMapping("/{id}/logo")

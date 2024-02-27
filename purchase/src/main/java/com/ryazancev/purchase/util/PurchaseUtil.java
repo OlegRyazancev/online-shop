@@ -1,6 +1,5 @@
 package com.ryazancev.purchase.util;
 
-import com.ryazancev.dto.Element;
 import com.ryazancev.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.dto.product.UpdateQuantityRequest;
 import com.ryazancev.dto.purchase.PurchaseDto;
@@ -28,23 +27,24 @@ public class PurchaseUtil {
         PurchaseDto purchaseDto = purchaseMapper.toDto(purchase);
 
         purchaseDto.setCustomer(clientsService
-                .getSimpleCustomer(purchase.getCustomerId()));
+                .getSimpleCustomerById(purchase.getCustomerId()));
 
         purchaseDto.setProduct(clientsService
-                .getSimpleProduct(purchase.getProductId()));
+                .getSimpleProductById(purchase.getProductId()));
 
         return purchaseDto;
     }
 
-    public List<PurchaseDto> enrichPurchasesWithProductInfo(
+    public List<PurchaseDto> createPurchasesDtoWithProductsInfo(
             List<Purchase> purchases) {
 
         List<PurchaseDto> purchasesDto = purchaseMapper.toListDto(purchases);
 
         for (int i = 0; i < purchasesDto.size(); i++) {
-            Element productDto = clientsService
-                    .getSimpleProduct(purchases.get(i).getProductId());
-            purchasesDto.get(i).setProduct(productDto);
+            Long productId = purchases.get(i).getProductId();
+            purchasesDto.get(i)
+                    .setProduct(clientsService
+                            .getSimpleProductById(productId));
         }
 
         return purchasesDto;

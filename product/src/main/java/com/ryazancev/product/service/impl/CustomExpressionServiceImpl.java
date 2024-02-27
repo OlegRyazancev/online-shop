@@ -1,6 +1,5 @@
 package com.ryazancev.product.service.impl;
 
-import com.ryazancev.dto.Fallback;
 import com.ryazancev.dto.customer.CustomerDto;
 import com.ryazancev.dto.product.ProductEditDto;
 import com.ryazancev.dto.purchase.PurchaseDto;
@@ -9,7 +8,6 @@ import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
-import com.ryazancev.product.util.exception.custom.ServiceUnavailableException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -90,23 +88,11 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         PurchaseDto purchaseDto = (PurchaseDto) clientsService
                 .getPurchaseById(purchaseId);
 
-        Object customer = purchaseDto.getCustomer();
+        CustomerDto customerDto = purchaseDto.getCustomer()
+                .safelyCast(CustomerDto.class);
 
-        if (customer instanceof CustomerDto) {
-
-            Long customerId = ((CustomerDto) customer).getId();
-
-            return userId.equals(customerId)
-                    || userRoles.contains("ROLE_ADMIN");
-
-        } else if (customer instanceof Fallback) {
-
-            throw new ServiceUnavailableException(
-                    ((Fallback) customer).getMessage(),
-                    HttpStatus.SERVICE_UNAVAILABLE);
-        }
-
-        return false;
+        return userId.equals(customerDto.getId())
+                || userRoles.contains("ROLE_ADMIN");
     }
 
     private void checkIfEmailConfirmed() {

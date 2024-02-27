@@ -50,7 +50,6 @@ public class PurchaseServiceImpl implements PurchaseService {
         return purchaseUtil.createPurchaseDto(purchase);
     }
 
-    //TODO:CB here
     @Transactional
     @Override
     public PurchaseDto processPurchase(
@@ -108,12 +107,9 @@ public class PurchaseServiceImpl implements PurchaseService {
         List<Purchase> purchases = purchaseRepository
                 .findByCustomerId(customerId);
 
-        List<PurchaseDto> purchasesDto = Collections.emptyList();
-
-        if (!purchases.isEmpty()) {
-            purchasesDto = purchaseUtil
-                    .enrichPurchasesWithProductInfo(purchases);
-        }
+        List<PurchaseDto> purchasesDto = purchases.isEmpty() ?
+                Collections.emptyList()
+                : purchaseUtil.createPurchasesDtoWithProductsInfo(purchases);
 
         return CustomerPurchasesResponse.builder()
                 .purchases(purchasesDto)

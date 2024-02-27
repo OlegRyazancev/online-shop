@@ -4,9 +4,9 @@ import com.ryazancev.dto.Element;
 
 public interface ClientsService {
 
-    Element getSimpleCustomer(Long customerId);
+    Element getSimpleCustomerById(Long customerId);
 
-    Element getSimpleProduct(Long productId);
+    Element getSimpleProductById(Long productId);
 
     Object getCustomerBalance(Long customerId);
 

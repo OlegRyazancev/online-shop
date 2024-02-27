@@ -1,8 +1,12 @@
 package com.ryazancev.product.util.exception;
 
-import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
-import com.ryazancev.product.util.exception.custom.*;
+import com.ryazancev.exception.OnlineShopException;
+import com.ryazancev.exception.ServiceUnavailableException;
+import com.ryazancev.product.util.exception.custom.AccessDeniedException;
+import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
+import com.ryazancev.product.util.exception.custom.ProductCreationException;
+import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;

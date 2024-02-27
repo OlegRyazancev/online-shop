@@ -1,7 +1,7 @@
 package com.ryazancev.logo.util.exception;
 
-import com.ryazancev.config.OnlineShopException;
 import com.ryazancev.config.ServiceStage;
+import com.ryazancev.exception.OnlineShopException;
 import com.ryazancev.logo.util.exception.custom.LogoUploadException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

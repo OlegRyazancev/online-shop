@@ -3,7 +3,6 @@ package com.ryazancev.dto.organization;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ryazancev.dto.Element;
-import com.ryazancev.dto.customer.CustomerDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;

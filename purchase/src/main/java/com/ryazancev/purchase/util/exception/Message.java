@@ -7,7 +7,8 @@ package com.ryazancev.purchase.util.exception;
 public class Message {
 
     public static final String CUSTOMER_SERVICE_UNAVAILABLE =
-            "The customer service is currently unavailable. Please try again later";
+            "The customer service is currently unavailable. " +
+                    "Please try again later";
 
     public static final String INSUFFICIENT_FUNDS =
             "The customer does not have enough funds to purchase the product";
@@ -16,7 +17,8 @@ public class Message {
             "No products are currently available in stock";
 
     public static final String PRODUCT_SERVICE_UNAVAILABLE =
-            "The product service is currently unavailable. Please try again later";
+            "The product service is currently unavailable. " +
+                    "Please try again later";
 
     public static final String PURCHASE_NOT_FOUND =
             "Purchase not found";

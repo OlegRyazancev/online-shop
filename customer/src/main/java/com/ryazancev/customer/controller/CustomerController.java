@@ -64,8 +64,10 @@ public class CustomerController {
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessCustomer(id);
 
+        Customer customer = customerService.getById(id);
+
         return (ReviewsResponse) clientsService
-                .getReviewsByCustomerId(id);
+                .getReviewsByCustomerId(customer.getId());
     }
 
     @GetMapping("/{id}/purchases")
@@ -75,8 +77,10 @@ public class CustomerController {
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessCustomer(id);
 
+        Customer customer = customerService.getById(id);
+
         return (CustomerPurchasesResponse) clientsService
-                .getPurchasesByCustomerId(id);
+                .getPurchasesByCustomerId(customer.getId());
     }
 
     @PostMapping("/purchases")

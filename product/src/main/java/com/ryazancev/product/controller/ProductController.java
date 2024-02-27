@@ -114,7 +114,12 @@ public class ProductController {
 
         customExpressionService.checkIfAccountLocked();
 
-        return (ReviewsResponse) clientsService.getReviewsByProductId(id);
+        boolean statusCheck = false;
+
+        Product product = productService.getById(id, statusCheck);
+
+        return (ReviewsResponse) clientsService
+                .getReviewsByProductId(product.getId());
     }
 
     @PostMapping("/reviews")

@@ -1,5 +1,6 @@
-package com.ryazancev.config;
+package com.ryazancev.exception;
 
+import com.ryazancev.config.ServiceStage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
