@@ -1,5 +1,9 @@
 package com.ryazancev.customer.service;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface CustomExpressionService {
 
     void checkAccountConditions();

@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Entity
 @Table(name = "customers")
 @Data

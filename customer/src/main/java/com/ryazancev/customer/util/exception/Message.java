@@ -1,5 +1,8 @@
 package com.ryazancev.customer.util.exception;
 
+/**
+ * @author Oleg Ryazancev
+ */
 
 public class Message {
 

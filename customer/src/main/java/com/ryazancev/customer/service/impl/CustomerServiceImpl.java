@@ -21,6 +21,11 @@ import java.time.LocalDateTime;
 
 import static com.ryazancev.customer.util.exception.Message.CUSTOMER_EMAIL_EXISTS;
 import static com.ryazancev.customer.util.exception.Message.CUSTOMER_ID_NOT_FOUND;
+
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)

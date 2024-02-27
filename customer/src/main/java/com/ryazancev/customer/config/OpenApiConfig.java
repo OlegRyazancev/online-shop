@@ -15,6 +15,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @OpenAPIDefinition
 @Configuration
 @RequiredArgsConstructor

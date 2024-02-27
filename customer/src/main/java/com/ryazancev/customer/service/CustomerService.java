@@ -3,6 +3,10 @@ package com.ryazancev.customer.service;
 import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.customer.model.Customer;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface CustomerService {
     Customer getById(Long id);
 

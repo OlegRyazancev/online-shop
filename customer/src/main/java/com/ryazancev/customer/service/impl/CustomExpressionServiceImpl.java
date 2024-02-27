@@ -13,6 +13,10 @@ import java.util.List;
 
 import static com.ryazancev.customer.util.exception.Message.*;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
