@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 @Data
 @ConfigurationProperties(prefix = "spring.mail")

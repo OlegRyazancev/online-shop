@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

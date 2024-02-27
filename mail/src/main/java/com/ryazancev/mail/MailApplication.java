@@ -6,6 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @SpringBootApplication
 @EnableDiscoveryClient
 @PropertySources({
