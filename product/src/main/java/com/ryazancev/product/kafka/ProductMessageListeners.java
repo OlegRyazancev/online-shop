@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @Component
 @RequiredArgsConstructor

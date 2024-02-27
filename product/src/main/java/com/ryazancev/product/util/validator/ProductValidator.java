@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 import static com.ryazancev.product.util.exception.Message.NAME_EXISTS;
 import static com.ryazancev.product.util.exception.Message.PRODUCT_STATUS_ACCESS;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 @RequiredArgsConstructor
 public class ProductValidator {

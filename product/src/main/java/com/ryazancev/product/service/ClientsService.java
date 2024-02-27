@@ -3,6 +3,10 @@ package com.ryazancev.product.service;
 import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.review.ReviewEditDto;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface ClientsService {
 
     Element getSimpleCustomerById(Long customerId);

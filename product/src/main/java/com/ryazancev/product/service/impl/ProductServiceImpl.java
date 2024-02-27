@@ -26,6 +26,10 @@ import java.util.List;
 import static com.ryazancev.product.util.exception.Message.ORGANIZATION_NOT_FOUND;
 import static com.ryazancev.product.util.exception.Message.PRODUCT_NOT_FOUND;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)

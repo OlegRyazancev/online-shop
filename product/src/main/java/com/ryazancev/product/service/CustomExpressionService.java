@@ -2,6 +2,10 @@ package com.ryazancev.product.service;
 
 import com.ryazancev.common.dto.product.ProductEditDto;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface CustomExpressionService {
 
     void checkAccountConditions();

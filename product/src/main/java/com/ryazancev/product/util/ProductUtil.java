@@ -16,6 +16,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 @RequiredArgsConstructor
 public class ProductUtil {

@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @RestControllerAdvice
 public class ProductExceptionHandler {

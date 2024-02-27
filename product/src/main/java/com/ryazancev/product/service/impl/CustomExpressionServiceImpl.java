@@ -18,6 +18,10 @@ import java.util.List;
 
 import static com.ryazancev.product.util.exception.Message.*;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Service
 @RequiredArgsConstructor
 public class CustomExpressionServiceImpl implements CustomExpressionService {

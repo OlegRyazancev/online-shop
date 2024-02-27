@@ -5,6 +5,10 @@ import com.ryazancev.product.model.ProductStatus;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface ProductService {
 
     List<Product> getAll();
