@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         property = "type"

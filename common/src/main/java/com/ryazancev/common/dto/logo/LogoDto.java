@@ -7,6 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Setter
 @Getter
 @AllArgsConstructor

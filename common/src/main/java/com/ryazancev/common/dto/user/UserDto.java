@@ -10,6 +10,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Setter
 @Getter
 @AllArgsConstructor

@@ -12,6 +12,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 public class CustomErrorDecoder implements ErrorDecoder {
     @Override

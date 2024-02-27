@@ -12,6 +12,10 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Setter
 @Getter
 @AllArgsConstructor

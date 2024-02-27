@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Getter
 @Setter
 @AllArgsConstructor

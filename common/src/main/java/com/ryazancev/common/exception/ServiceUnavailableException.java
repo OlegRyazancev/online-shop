@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Getter
 @Setter
 public class ServiceUnavailableException extends RuntimeException {

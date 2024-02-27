@@ -6,6 +6,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @FeignClient(
         name = "organization",
         configuration = FeignClientsConfiguration.class,

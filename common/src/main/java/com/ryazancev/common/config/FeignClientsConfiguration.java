@@ -7,6 +7,9 @@ import org.springframework.cloud.openfeign.support.JsonFormWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author Oleg Ryazancev
+ */
 
 @Configuration
 @Slf4j

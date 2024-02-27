@@ -1,5 +1,9 @@
 package com.ryazancev.common.config;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public enum ServiceStage {
     AUTH,
     CUSTOMER,

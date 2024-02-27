@@ -6,6 +6,9 @@ import lombok.*;
 
 import java.util.Properties;
 
+/**
+ * @author Oleg Ryazancev
+ */
 
 @Setter
 @Getter
