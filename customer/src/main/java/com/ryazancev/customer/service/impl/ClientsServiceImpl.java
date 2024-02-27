@@ -67,6 +67,8 @@ public class ClientsServiceImpl implements ClientsService {
 
     private Object purchaseServiceUnavailable(Exception e) {
 
+        e.printStackTrace();
+
         throw new ServiceUnavailableException(
                 PURCHASE_SERVICE_UNAVAILABLE,
                 HttpStatus.SERVICE_UNAVAILABLE);

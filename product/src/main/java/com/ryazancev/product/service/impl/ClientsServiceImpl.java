@@ -120,6 +120,8 @@ public class ClientsServiceImpl implements ClientsService {
 
     private Object reviewServiceUnavailable(Exception e) {
 
+        e.printStackTrace();
+
         throw new ServiceUnavailableException(
                 REVIEW_SERVICE_UNAVAILABLE,
                 HttpStatus.SERVICE_UNAVAILABLE);
