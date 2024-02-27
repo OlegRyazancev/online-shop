@@ -15,6 +15,10 @@ import java.util.List;
 
 import static com.ryazancev.organization.util.exception.Message.*;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

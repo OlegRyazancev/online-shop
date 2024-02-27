@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import static com.ryazancev.organization.util.exception.Message.*;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 @RequiredArgsConstructor
 public class OrganizationValidator {

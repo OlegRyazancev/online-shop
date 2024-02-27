@@ -7,6 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
 
     Optional<Organization> findByName(String name);

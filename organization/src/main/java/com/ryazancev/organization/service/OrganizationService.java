@@ -6,6 +6,10 @@ import com.ryazancev.organization.model.OrganizationStatus;
 
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface OrganizationService {
 
     List<Organization> getAll();
