@@ -14,6 +14,10 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Configuration
 public class AuthProducerConfig {
 

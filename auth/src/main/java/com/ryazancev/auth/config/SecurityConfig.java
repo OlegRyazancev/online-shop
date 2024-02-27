@@ -19,6 +19,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))

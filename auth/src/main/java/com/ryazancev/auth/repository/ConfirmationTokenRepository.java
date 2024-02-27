@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Repository
 public interface ConfirmationTokenRepository
         extends JpaRepository<ConfirmationToken, Long> {

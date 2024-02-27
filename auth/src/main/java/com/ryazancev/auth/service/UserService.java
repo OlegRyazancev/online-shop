@@ -4,6 +4,10 @@ import com.ryazancev.auth.model.User;
 import com.ryazancev.common.dto.user.UserDto;
 import com.ryazancev.common.dto.user.UserUpdateRequest;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public interface UserService {
 
     UserDto create(UserDto userDto);

@@ -28,6 +28,9 @@ import java.util.Set;
 
 import static com.ryazancev.auth.util.exception.Message.USER_NOT_FOUND;
 
+/**
+ * @author Oleg Ryazancev
+ */
 
 @Slf4j
 @Service

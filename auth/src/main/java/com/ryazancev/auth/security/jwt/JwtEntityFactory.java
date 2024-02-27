@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 public class JwtEntityFactory {
 
     public static JwtEntity create(User user) {

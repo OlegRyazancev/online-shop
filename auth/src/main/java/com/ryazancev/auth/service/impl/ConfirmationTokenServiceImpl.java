@@ -17,6 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.ryazancev.auth.util.exception.Message.TOKEN_NOT_FOUND;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

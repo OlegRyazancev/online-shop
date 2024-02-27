@@ -8,6 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Data
 @AllArgsConstructor
 public class JwtEntity implements UserDetails {

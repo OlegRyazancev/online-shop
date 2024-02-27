@@ -24,6 +24,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Service
 @RequiredArgsConstructor
 public class JwtTokenProvider {

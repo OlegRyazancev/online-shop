@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 import java.util.Properties;
 import java.util.UUID;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 public class AuthUtil {
 

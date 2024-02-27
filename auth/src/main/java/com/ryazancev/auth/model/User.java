@@ -10,6 +10,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Entity
 @Table(name = "users")
 @Data

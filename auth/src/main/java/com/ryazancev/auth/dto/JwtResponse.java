@@ -3,6 +3,10 @@ package com.ryazancev.auth.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Setter
 @Getter
 @AllArgsConstructor

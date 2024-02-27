@@ -4,6 +4,10 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Oleg Ryazancev
+ */
+
 @Component
 @Data
 @ConfigurationProperties(prefix = "security.jwt")
