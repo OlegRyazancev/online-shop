@@ -1,8 +1,8 @@
 CREATE TABLE products
 (
     id                BIGINT AUTO_INCREMENT PRIMARY KEY,
-    product_name      VARCHAR(255) NOT NULL,
-    description       VARCHAR(255) NOT NULL,
+    product_name      VARCHAR(255) NOT NULL UNIQUE ,
+    description       VARCHAR(255) NOT NULL UNIQUE ,
     organization_id   BIGINT       NOT NULL,
     price             DOUBLE       NOT NULL CHECK ( price >= 0 ),
     quantity_in_stock INT          NOT NULL,

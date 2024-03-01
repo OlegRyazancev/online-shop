@@ -62,7 +62,7 @@ public class AuthMessageListeners {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "userUpdateMessageFactory"
     )
-    void markUserAsDeleted(UserUpdateRequest request) {
+    void updateUser(UserUpdateRequest request) {
 
         log.info("Received message to update user where customerId: {}",
                 request.getCustomerId());

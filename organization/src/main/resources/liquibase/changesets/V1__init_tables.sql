@@ -1,8 +1,8 @@
 CREATE TABLE organizations
 (
     id            BIGSERIAL PRIMARY KEY,
-    name          VARCHAR(255) NOT NULL,
-    description   VARCHAR(500) NOT NULL,
+    name          VARCHAR(255) NOT NULL UNIQUE,
+    description   VARCHAR(500) NOT NULL UNIQUE,
     logo          VARCHAR(255),
     owner_id      BIGINT       NOT NULL,
     status        VARCHAR(255) NOT NULL,

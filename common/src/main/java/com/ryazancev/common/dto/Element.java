@@ -9,8 +9,6 @@ import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import org.springframework.http.HttpStatus;
 
-import java.io.Serializable;
-
 /**
  * @author Oleg Ryazancev
  */
