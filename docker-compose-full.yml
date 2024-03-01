@@ -181,10 +181,6 @@ services:
     networks:
       - online-shop
 
-
-
-
-
       #MICROSERVICES
   eureka-server:
     container_name: eureka-server
