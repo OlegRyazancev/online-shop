@@ -221,6 +221,6 @@ You can use example `.env.example` file with some predefined environments.
 
 ## Setup
 
-You can find how to run this project locally or by Docker here (in production)
+You can find how to run this project locally or by Docker [here](https://youtu.be/_CqLDGYR5pw?si=GA1l6ZJYHuMHnOlT)
 
 
