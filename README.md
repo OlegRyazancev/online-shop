@@ -1,5 +1,7 @@
 # Online Shop Microservices Project
 
+![last commit (master)](https://img.shields.io/github/last-commit/OlegRyazancev/online-shop/master)
+
 Welcome to the Online Shop Microservices pet-project! This project is a
 collection of microservices built using **Spring Boot(v 3.1.4)** for an online
 shopping platform.
