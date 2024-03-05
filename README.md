@@ -112,7 +112,7 @@ The Mail microservice is a technical service for sending mails to customers.
 
 **Spring Boot, Spring Security, JWT (JSON Web Tokens), Docker, PostgreSQL,
 MongoDB, MariaDB, Minio, Redis, Kafka, Feign, Grafana, Prometheus, Eureka,
-Resilience4j, Zipkin, Swagger**
+Resilience4j, Zipkin, Swagger, Liquibase**
 
 ## Environment Variables
 
