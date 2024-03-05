@@ -1,20 +1,29 @@
 # Online Shop Microservices Project
 
-Welcome to the Online Shop Microservices pet-project! This project is a collection of microservices built using **Spring Boot(v 3.1.4)** for an online shopping platform.
+Welcome to the Online Shop Microservices pet-project! This project is a
+collection of microservices built using **Spring Boot(v 3.1.4)** for an online
+shopping platform.
+
+You can access Swagger and see all available endpoints by
+visiting `http://localhost:8080/swagger-ui.html`
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Project Schema](#project-schema)
 3. [Sequence Diagram with caching](#sequence-diagram-with-caching)
 4. [Sequence Diagram without caching](#sequence-diagram-without-caching)
 5. [Microservices](#microservices)
 6. [Technologies Used](#technologies-used)
-7. [Environments](#environments)
+7. [Environment Variables](#environment-variables)
 8. [Setup](#setup)
 
 ## Overview
 
-The Online Shop Microservices Project is designed to provide a scalable and modular architecture for an online shopping platform. Each microservice focuses on specific business functionalities to ensure maintainability, scalability, and flexibility of the system.
+The Online Shop Microservices Project is designed to provide a scalable and
+modular architecture for an online shopping platform. Each microservice focuses
+on specific business functionalities to ensure maintainability, scalability, and
+flexibility of the system.
 
 ## Project Schema
 
@@ -27,7 +36,6 @@ The Online Shop Microservices Project is designed to provide a scalable and modu
 ## Sequence diagram without caching
 
 ![Online-shop schema](/docs/sequence_without_cache_diagram.png)
-
 
 ## Microservices
 
@@ -83,7 +91,8 @@ The Purchase is technical microservice for purchase-related functionalities.
 
 ### 🔧 Review Microservice
 
-The Review is a technical microservice for handling product reviews submitted by customers.
+The Review is a technical microservice for handling product reviews submitted by
+customers.
 
 #### Database Diagram
 
@@ -99,9 +108,11 @@ The Mail microservice is a technical service for sending mails to customers.
 
 ## Technologies Used
 
-**Spring Boot**, **Spring Security**, **JWT (JSON Web Tokens)**, **Docker**, **PostgreSQL**, **MongoDB**, **MariaDB**, **Minio**, **Redis**, **Kafka**, **Feign**, **Grafana**, **Prometheus**, **Eureka**, **Resilience4j**, **Zipkin**
+**Spring Boot, Spring Security, JWT (JSON Web Tokens), Docker, PostgreSQL,
+MongoDB, MariaDB, Minio, Redis, Kafka, Feign, Grafana, Prometheus, Eureka,
+Resilience4j, Zipkin, Swagger**
 
-## Environments
+## Environment Variables
 
 **PostgreSQL related**
 
@@ -188,7 +199,8 @@ _topics_
 - `KAFKA_UPDATE_PRODUCT_TOPIC` - Kafka topic for updating product events.
 - `KAFKA_UPDATE_USER_TOPIC` - Kafka topic for updating user events.
 - `KAFKA_CHANGE_STATUS_PRODUCT_TOPIC` - Kafka topic for changing product status events.
-- `KAFKA_CHANGE_STATUS_ORGANIZATION_TOPIC` - Kafka topic for changing organization status events.
+- `KAFKA_CHANGE_STATUS_ORGANIZATION_TOPIC` - Kafka topic for changing
+  organization status events.
 - `KAFKA_DELETE_REVIEW_TOPIC` - Kafka topic for deleting review events.
 - `KAFKA_DELETE_PRODUCT_TOPIC` - Kafka topic for deleting product events.
 - `KAFKA_DELETE_USER_TOPIC` - Kafka topic for deleting user events.
@@ -216,11 +228,11 @@ _consumer groups_
 - `GF_SECURITY_ADMIN_USER` - Grafana admin username.
 - `GF_SECURITY_ADMIN_PASSWORD` - Grafana admin password.
 
-
 You can use example `.env.example` file with some predefined environments.
 
 ## Setup
 
-You can find how to run this project locally or by Docker [here](https://youtu.be/_CqLDGYR5pw?si=GA1l6ZJYHuMHnOlT)
+You can find how to run this project locally or by
+Docker [here](https://youtu.be/_CqLDGYR5pw?si=GA1l6ZJYHuMHnOlT)
 
 
