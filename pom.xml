@@ -23,6 +23,7 @@
         <module>auth</module>
         <module>mail</module>
         <module>admin</module>
+        <module>notification</module>
     </modules>
 
     <properties>
