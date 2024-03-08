@@ -1,0 +1,43 @@
+server:
+  port: ${NOTIFICATION_PORT}
+  servlet:
+    context-path: /
+
+spring:
+  profiles:
+    active: default
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: notification
+
+#Zipkin
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+  #Actuator Endpoint
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+  endpoint:
+    health:
+      show-details: always
+
+#Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
