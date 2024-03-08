@@ -40,6 +40,7 @@
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <hibernate.validator.version>8.0.1.Final</hibernate.validator.version>
         <jib.maven.plugin.version>3.4.0</jib.maven.plugin.version>
+        <shakeyaml.version>2.2</shakeyaml.version>
         <image>extenz16/${project.artifactId}_online-shop:${project.version}</image>
     </properties>
 
@@ -105,6 +106,13 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${shakeyaml.version}</version>
         </dependency>
     </dependencies>
 
