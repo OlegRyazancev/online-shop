@@ -20,4 +20,6 @@ public class NotificationRequest {
     private Long senderId;
 
     private NotificationType type;
+
+    private NotificationScope scope;
 }
