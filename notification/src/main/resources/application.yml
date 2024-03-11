@@ -11,6 +11,22 @@ spring:
   application:
     name: notification
 
+  #MongoDB connection
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      authentication-database: admin
+      database: ${MONGO_PURCHASE_DATABASE}
+      username: ${MONGO_INITDB_ROOT_USERNAME}
+      password: ${MONGO_INITDB_ROOT_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MongoDBDialect
+        format_sql: true
+    show-sql: true
+
   #Kafka
   kafka:
     bootstrap-servers: localhost:29092

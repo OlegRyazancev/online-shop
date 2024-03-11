@@ -1,14 +1,28 @@
 package com.ryazancev.notification.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author Oleg Ryazancev
  */
 
-public class Notification {
+@Document
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Notification implements Serializable {
 
-    private Long id;
+    @Id
+    private String id;
     private Content content;
     private Long recipientId;
     private Long senderId;
