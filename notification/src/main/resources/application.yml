@@ -10,6 +10,7 @@ spring:
     import: optional:file:.env[.properties]
   application:
     name: notification
+  mail: ${MAIL_USERNAME}
 
   #MongoDB connection
   data:
