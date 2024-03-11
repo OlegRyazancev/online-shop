@@ -1,4 +1,4 @@
-package com.ryazancev.notification.model;
+package com.ryazancev.common.dto.notification.enums;
 
 /**
  * @author Oleg Ryazancev
