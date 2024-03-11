@@ -1,7 +1,11 @@
 package com.ryazancev.common.dto.notification;
 
+import com.ryazancev.common.dto.notification.enums.NotificationScope;
+import com.ryazancev.common.dto.notification.enums.NotificationType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import java.util.Properties;
 
 /**
  * @author Oleg Ryazancev
@@ -22,4 +26,6 @@ public class NotificationRequest {
     private NotificationType type;
 
     private NotificationScope scope;
+
+    private Properties properties;
 }
