@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Notification implements Serializable {
+public class PrivateNotification implements Serializable {
 
     @Id
     private String id;
