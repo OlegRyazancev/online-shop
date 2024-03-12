@@ -14,9 +14,6 @@ import java.util.Properties;
 @Component
 public class ContentProcessor {
 
-    private static final String PROPERTIES_FILE =
-            "notification_messages.properties";
-
     @Value("${spring.mail}")
     private String mail;
 
