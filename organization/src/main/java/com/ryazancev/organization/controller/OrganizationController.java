@@ -11,7 +11,7 @@ import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.util.OrganizationUtil;
+import com.ryazancev.organization.util.DtoProcessor;
 import com.ryazancev.organization.util.mapper.OrganizationMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,9 +40,8 @@ public class OrganizationController {
 
     private final OrganizationService organizationService;
     private final OrganizationMapper organizationMapper;
-    private final OrganizationUtil organizationUtil;
 
-    private final ClientsService clientsService;
+    private final DtoProcessor dtoProcessor;
 
     private final CustomExpressionService customExpressionService;
 
@@ -59,10 +58,7 @@ public class OrganizationController {
 
         List<Organization> organizations = organizationService.getAll();
 
-        return OrganizationsSimpleResponse.builder()
-                .organizations(
-                        organizationMapper.toSimpleListDto(organizations))
-                .build();
+        return dtoProcessor.createOrganizationsSimpleResponse(organizations);
     }
 
     @GetMapping("/{id}")
@@ -86,13 +82,9 @@ public class OrganizationController {
 
         Organization organization =
                 organizationService.getById(id, statusCheck);
-        OrganizationDto organizationDto =
-                organizationMapper.toDetailedDto(organization);
 
-        organizationUtil.setOwnerDto(organizationDto,
-                organization.getOwnerId());
-
-        return organizationDto;
+        return dtoProcessor
+                .createOrganizationDetailedDtoWithOwner(organization);
     }
 
     @PostMapping
@@ -118,13 +110,8 @@ public class OrganizationController {
                 organizationMapper.toEntity(organizationEditDto);
         Organization saved =
                 organizationService.makeRegistrationRequest(organization);
-        OrganizationDto organizationDto =
-                organizationMapper.toDetailedDto(saved);
 
-        organizationUtil.setOwnerDto(organizationDto,
-                organization.getOwnerId());
-
-        return organizationDto;
+        return dtoProcessor.createOrganizationDetailedDtoWithOwner(saved);
     }
 
     @PutMapping
@@ -149,13 +136,8 @@ public class OrganizationController {
         Organization organization =
                 organizationMapper.toEntity(organizationEditDto);
         Organization updated = organizationService.update(organization);
-        OrganizationDto organizationDto =
-                organizationMapper.toDetailedDto(updated);
 
-        organizationUtil.setOwnerDto(organizationDto,
-                organization.getOwnerId());
-
-        return organizationDto;
+        return dtoProcessor.createOrganizationDetailedDtoWithOwner(updated);
     }
 
     @GetMapping("/{id}/products")
@@ -179,8 +161,7 @@ public class OrganizationController {
         Organization organization = organizationService
                 .getById(id, statusCheck);
 
-        return (ProductsSimpleResponse) clientsService
-                .getProductsByOrganizationId(organization.getId());
+        return dtoProcessor.createProductsSimpleResponse(organization.getId());
     }
 
     @PostMapping("/{id}/logo")
@@ -247,7 +228,7 @@ public class OrganizationController {
         Organization organization =
                 organizationService.getById(id, statusCheck);
 
-        return organizationMapper.toSimpleDto(organization);
+        return dtoProcessor.createOrganizationSimpleDto(organization);
     }
 
     @GetMapping("/{id}/owner-id")

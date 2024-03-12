@@ -4,7 +4,6 @@ import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.customer.CustomerDto;
 import com.ryazancev.common.dto.mail.MailDto;
 import com.ryazancev.common.dto.mail.MailType;
-import com.ryazancev.common.dto.organization.OrganizationDto;
 import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.service.ClientsService;
@@ -20,19 +19,13 @@ import java.util.Properties;
 
 @Component
 @RequiredArgsConstructor
-public class OrganizationUtil {
+public class MailProcessor {
 
     private final OrganizationService organizationService;
     private final OrganizationProducerService organizationProducerService;
 
     private final ClientsService clientsService;
 
-
-    public void setOwnerDto(OrganizationDto organizationDto, Long ownerId) {
-
-        organizationDto.setOwner(clientsService
-                .getSimpleCustomerById(ownerId));
-    }
 
     public void
     sendAcceptedMailToCustomerByOrganizationId(Long organizationId) {

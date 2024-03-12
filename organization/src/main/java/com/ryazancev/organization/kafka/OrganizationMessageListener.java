@@ -5,7 +5,7 @@ import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import com.ryazancev.common.dto.admin.enums.ObjectStatus;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.util.OrganizationUtil;
+import com.ryazancev.organization.util.MailProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -22,7 +22,7 @@ public class OrganizationMessageListener {
 
 
     private final OrganizationService organizationService;
-    private final OrganizationUtil organizationUtil;
+    private final MailProcessor mailProcessor;
 
     @KafkaListener(
             topics = "${spring.kafka.topic.organization.register}",
@@ -45,7 +45,7 @@ public class OrganizationMessageListener {
                 );
 
                 try {
-                    organizationUtil.sendAcceptedMailToCustomerByOrganizationId(
+                    mailProcessor.sendAcceptedMailToCustomerByOrganizationId(
                             requestDto.getObjectToRegisterId());
                 } catch (Exception e) {
                     log.error("Error during sending email to customer: {}",
@@ -60,7 +60,7 @@ public class OrganizationMessageListener {
                         requestDto.getObjectToRegisterId(),
                         OrganizationStatus.INACTIVE);
                 try {
-                    organizationUtil.sendRejectedMailToCustomerByOrganizationId(
+                    mailProcessor.sendRejectedMailToCustomerByOrganizationId(
                             requestDto.getObjectToRegisterId());
                 } catch (Exception e) {
                     log.error("Error during sending email to customer: {}",
