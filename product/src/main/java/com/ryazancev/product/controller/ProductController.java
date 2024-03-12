@@ -14,7 +14,8 @@ import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.ProductUtil;
+import com.ryazancev.product.util.DtoProcessor;
+import com.ryazancev.product.util.MailProcessor;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.product.util.validator.ProductValidator;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +39,8 @@ public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final ProductValidator productValidator;
-    private final ProductUtil productUtil;
 
-    private final ClientsService clientsService;
-
+    private final DtoProcessor dtoProcessor;
     private final CustomExpressionService customExpressionService;
 
 
@@ -52,9 +51,7 @@ public class ProductController {
 
         List<Product> products = productService.getAll();
 
-        return ProductsSimpleResponse.builder()
-                .products(productMapper.toSimpleListDto(products))
-                .build();
+        return dtoProcessor.createProductsSimpleResponse(products);
     }
 
     @GetMapping("/{id}")
@@ -66,7 +63,9 @@ public class ProductController {
         boolean statusCheck = true;
 
         Product product = productService.getById(id, statusCheck);
-        return productUtil.createDetailedProductDto(product);
+
+        return dtoProcessor
+                .createProductDetailedDtoWithOrganizationAndAvgRating(product);
     }
 
 
@@ -81,13 +80,9 @@ public class ProductController {
 
         Product product = productMapper.toEntity(productEditDto);
         Product saved = productService.makeRegistrationRequest(product);
-        ProductDto productDto = productMapper.toDetailedDto(saved);
 
-        productUtil.setOrganizationDto(productDto, product.getOrganizationId());
-
-        return productDto;
+        return dtoProcessor.createProductDetailedDtoWithOrganization(saved);
     }
-
 
     @PutMapping
     public ProductDto updateProduct(
@@ -100,7 +95,9 @@ public class ProductController {
 
         Product product = productMapper.toEntity(productEditDto);
         Product updated = productService.update(product);
-        return productUtil.createDetailedProductDto(updated);
+
+        return dtoProcessor
+                .createProductDetailedDtoWithOrganizationAndAvgRating(updated);
     }
 
     @DeleteMapping("/{id}")
@@ -122,8 +119,7 @@ public class ProductController {
 
         Product product = productService.getById(id, statusCheck);
 
-        return (ReviewsResponse) clientsService
-                .getReviewsByProductId(product.getId());
+        return dtoProcessor.getReviewsResponseByProductId(product.getId());
     }
 
     @PostMapping("/reviews")
@@ -136,7 +132,7 @@ public class ProductController {
         customExpressionService.checkAccessPurchase(
                 reviewEditDto.getPurchaseId());
 
-        return (ReviewDto) clientsService.createReview(reviewEditDto);
+        return dtoProcessor.createReviewDto(reviewEditDto);
     }
 
     //    Endpoints only  for feign clients
@@ -150,7 +146,7 @@ public class ProductController {
 
         Product product = productService.getById(id, statusCheck);
 
-        return productMapper.toSimpleDto(product);
+        return dtoProcessor.createProductSimpleDto(product);
     }
 
     @GetMapping("/{id}/price-quantity")
@@ -163,11 +159,7 @@ public class ProductController {
 
         productValidator.validateStatus(product, ProductStatus.FROZEN);
 
-        return PriceQuantityResponse.builder()
-                .price(product.getPrice())
-                .quantityInStock(product.getQuantityInStock())
-                .build();
-
+        return dtoProcessor.createPriceQuantityResponse(product);
     }
 
     @GetMapping("/organizations/{id}")
@@ -177,10 +169,7 @@ public class ProductController {
         List<Product> organizationProducts =
                 productService.getByOrganizationId(id);
 
-        return ProductsSimpleResponse.builder()
-                .products(productMapper.toSimpleListDto(
-                        organizationProducts))
-                .build();
+        return dtoProcessor.createProductsSimpleResponse(organizationProducts);
     }
 
     @GetMapping("/{id}/owner-id")
@@ -191,7 +180,7 @@ public class ProductController {
 
         Product product = productService.getById(productId, statusCheck);
 
-        return (Long) clientsService
-                .getOrganizationOwnerIdById(product.getOrganizationId());
+        return dtoProcessor
+                .getOrganizationOwnerDtoById(product.getOrganizationId());
     }
 }

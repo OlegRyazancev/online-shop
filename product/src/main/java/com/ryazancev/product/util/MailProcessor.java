@@ -4,13 +4,10 @@ import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.customer.CustomerDto;
 import com.ryazancev.common.dto.mail.MailDto;
 import com.ryazancev.common.dto.mail.MailType;
-import com.ryazancev.common.dto.organization.OrganizationDto;
-import com.ryazancev.common.dto.product.ProductDto;
 import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,38 +19,12 @@ import java.util.Properties;
 
 @Component
 @RequiredArgsConstructor
-public class ProductUtil {
+public class MailProcessor {
 
     private final ProductProducerService productProducerService;
     private final ProductService productService;
-    private final ProductMapper productMapper;
 
     private final ClientsService clientsService;
-
-
-    public ProductDto createDetailedProductDto(Product product) {
-
-        ProductDto productDto = productMapper.toDetailedDto(product);
-
-        setOrganizationDto(productDto, product.getOrganizationId());
-        setAvgRating(productDto);
-
-        return productDto;
-    }
-
-    private void setAvgRating(ProductDto productDto) {
-        Double avgRating = clientsService
-                .getAverageRatingByProductId(productDto.getId());
-        productDto.setAverageRating(avgRating);
-    }
-
-    public void setOrganizationDto(ProductDto productDto,
-                                   Long organizationId) {
-
-        OrganizationDto organizationDto = (OrganizationDto) clientsService
-                .getSimpleOrganizationById(organizationId);
-        productDto.setOrganization(organizationDto);
-    }
 
     public void sendAcceptedMailToCustomerByProductId(Long productId) {
         MailDto mailDto = createMailDto(
@@ -64,6 +35,7 @@ public class ProductUtil {
     }
 
     public void sendRejectedMailToCustomerByProductId(Long productId) {
+
         MailDto mailDto = createMailDto(
                 productId,
                 MailType.OBJECT_REGISTRATION_REJECTED);

@@ -7,7 +7,7 @@ import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.ProductUtil;
+import com.ryazancev.product.util.MailProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,7 +26,7 @@ public class ProductMessageListeners {
 
 
     private final ProductService productService;
-    private final ProductUtil productUtil;
+    private final MailProcessor mailProcessor;
 
 
     @KafkaListener(
@@ -69,7 +69,7 @@ public class ProductMessageListeners {
                         requestDto.getObjectToRegisterId());
 
                 try {
-                    productUtil.sendAcceptedMailToCustomerByProductId(
+                    mailProcessor.sendAcceptedMailToCustomerByProductId(
                             requestDto.getObjectToRegisterId());
                 } catch (Exception e) {
                     log.error("Error during sending email to customer: {}",
@@ -86,7 +86,7 @@ public class ProductMessageListeners {
                         ProductStatus.INACTIVE);
 
                 try {
-                    productUtil.sendRejectedMailToCustomerByProductId(
+                    mailProcessor.sendRejectedMailToCustomerByProductId(
                             requestDto.getObjectToRegisterId());
                 } catch (Exception e) {
                     log.error("Error during sending email to customer: {}",

@@ -10,6 +10,7 @@ import com.ryazancev.common.dto.review.ReviewEditDto;
 public interface ClientsService {
 
     Element getSimpleCustomerById(Long customerId);
+
     Element getSimpleOrganizationById(Long organizationId);
 
     Double getAverageRatingByProductId(Long id);
