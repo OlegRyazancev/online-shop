@@ -3,7 +3,7 @@ package com.ryazancev.notification.service.impl;
 import com.ryazancev.common.dto.notification.enums.NotificationType;
 import com.ryazancev.notification.model.Content;
 import com.ryazancev.notification.service.ContentService;
-import com.ryazancev.notification.util.ContentUtil;
+import com.ryazancev.notification.util.ContentProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
 
-    private final ContentUtil contentUtil;
+    private final ContentProcessor contentProcessor;
 
     @Override
     public Content generateContent(NotificationType type, Properties properties) {
@@ -27,45 +27,45 @@ public class ContentServiceImpl implements ContentService {
 
         switch (type) {
             case PRIVATE_PRODUCT_REGISTRATION_ACCEPTED -> {
-                content = contentUtil
+                content = contentProcessor
                         .createProductRegistrationAcceptedContent(
                                 properties);
             }
             case PRIVATE_PRODUCT_REGISTRATION_REJECTED -> {
-                content = contentUtil
+                content = contentProcessor
                         .createProductRegistrationRejectedContent(
                                 properties);
             }
             case PRIVATE_ORGANIZATION_REGISTRATION_ACCEPTED -> {
-                content = contentUtil
+                content = contentProcessor
                         .createOrganizationRegistrationAcceptedContent(
                                 properties);
             }
             case PRIVATE_ORGANIZATION_REGISTRATION_REJECTED -> {
-                content = contentUtil
+                content = contentProcessor
                         .createOrganizationRegistrationRejectedContent(
                                 properties);
             }
             case PRIVATE_ACCOUNT_LOCKED -> {
-                content = contentUtil
-                        .createAccountLockedContent();
+                content = contentProcessor
+                        .createAccountLockedContent(properties);
             }
             case PRIVATE_ACCOUNT_UNLOCKED -> {
-                content = contentUtil
-                        .createAccountUnlockedContent();
+                content = contentProcessor
+                        .createAccountUnlockedContent(properties);
             }
             case PRIVATE_REVIEW_RECEIVED -> {
-                content = contentUtil
+                content = contentProcessor
                         .createReviewReceivedContent(
                                 properties);
             }
             case PRIVATE_PURCHASE_PROCESSED -> {
-                content = contentUtil
+                content = contentProcessor
                         .createPurchaseProcessedContent(
                                 properties);
             }
             case PUBLIC_NEW_PRODUCT_CREATED -> {
-                content = contentUtil
+                content = contentProcessor
                         .createNewProductAvailableContent(
                                 properties);
             }
