@@ -10,7 +10,7 @@ import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
 import com.ryazancev.review.service.ClientsService;
 import com.ryazancev.review.service.ReviewService;
-import com.ryazancev.review.util.ReviewUtil;
+import com.ryazancev.review.util.DtoProcessor;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static com.ryazancev.review.util.exception.Message.DUPLICATE_REVIEW;
@@ -37,8 +36,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
-    private final ReviewUtil reviewUtil;
 
+    private final DtoProcessor dtoProcessor;
     private final ClientsService clientsService;
 
     @Override
@@ -47,15 +46,8 @@ public class ReviewServiceImpl implements ReviewService {
         List<Review> reviews = reviewRepository
                 .findByCustomerId(customerId);
 
-        //todo: move this creation to OrganizationUtil
-
-        List<ReviewDto> reviewsDto = reviews.isEmpty() ?
-                Collections.emptyList()
-                : reviewUtil.createReviewsDtoWithProductsInfo(reviews);
-
-        return ReviewsResponse.builder()
-                .reviews(reviewsDto)
-                .build();
+        return dtoProcessor
+                .createReviewsResponseWithSupplier(reviews, ProductDto.class);
     }
 
     @Override
@@ -64,15 +56,9 @@ public class ReviewServiceImpl implements ReviewService {
         List<Review> reviews = reviewRepository
                 .findByProductId(productId);
 
-        //todo: move this creation to OrganizationUtil
 
-        List<ReviewDto> reviewsDto = reviews.isEmpty() ?
-                Collections.emptyList()
-                : reviewUtil.createReviewsDtoWithCustomersInfo(reviews);
-
-        return ReviewsResponse.builder()
-                .reviews(reviewsDto)
-                .build();
+        return dtoProcessor
+                .createReviewsResponseWithSupplier(reviews, CustomerDto.class);
     }
 
     @Override
@@ -103,13 +89,8 @@ public class ReviewServiceImpl implements ReviewService {
         toSave.setCreatedAt(LocalDateTime.now());
 
         Review saved = reviewRepository.insert(toSave);
-//todo: move this creation to OrganizationUtil
 
-        ReviewDto savedDto = reviewMapper.toDto(saved);
-
-        savedDto.setPurchase(purchaseDto);
-
-        return savedDto;
+        return dtoProcessor.createReviewDtoWithPurchaseDto(saved, purchaseDto);
     }
 
     @Override
