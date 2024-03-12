@@ -9,7 +9,7 @@ import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.ClientsService;
 import com.ryazancev.purchase.service.PurchaseService;
 import com.ryazancev.purchase.util.DtoProcessor;
-import com.ryazancev.purchase.util.MessageProcessor;
+import com.ryazancev.purchase.util.KafkaMessageProcessor;
 import com.ryazancev.purchase.util.exception.custom.PurchaseNotFoundException;
 import com.ryazancev.purchase.util.mapper.PurchaseMapper;
 import com.ryazancev.purchase.util.validator.PurchaseValidator;
@@ -38,7 +38,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final PurchaseMapper purchaseMapper;
     private final PurchaseValidator purchaseValidator;
 
-    private final MessageProcessor messageProcessor;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
     private final DtoProcessor dtoProcessor;
 
     private final ClientsService clientsService;
@@ -94,11 +94,11 @@ public class PurchaseServiceImpl implements PurchaseService {
         toSave.setPurchaseDate(LocalDateTime.now());
         toSave.setAmount(selectedProductPrice);
 
-        messageProcessor.updateCustomerBalance(customerId,
+        kafkaMessageProcessor.updateCustomerBalance(customerId,
                 availableCustomerBalance - selectedProductPrice);
-        messageProcessor.updateProductQuantity(productId,
+        kafkaMessageProcessor.updateProductQuantity(productId,
                 availableProductsInStock - 1);
-        messageProcessor.updateCustomerBalance(productOwnerId,
+        kafkaMessageProcessor.updateCustomerBalance(productOwnerId,
                 ownerBalance + selectedProductPrice);
 
         Purchase saved = purchaseRepository.save(toSave);

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MessageProcessor {
+public class KafkaMessageProcessor {
 
     private final PurchaseProducerService purchaseProducerService;
 

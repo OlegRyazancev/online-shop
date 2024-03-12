@@ -13,5 +13,6 @@ public enum ServiceStage {
     REVIEW,
     LOGO,
     MAIL,
-    ADMIN
+    ADMIN,
+    NOTIFICATION
 }

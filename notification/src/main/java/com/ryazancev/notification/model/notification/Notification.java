@@ -2,7 +2,9 @@ package com.ryazancev.notification.model.notification;
 
 import com.ryazancev.common.dto.notification.enums.NotificationStatus;
 import com.ryazancev.notification.model.Content;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 
