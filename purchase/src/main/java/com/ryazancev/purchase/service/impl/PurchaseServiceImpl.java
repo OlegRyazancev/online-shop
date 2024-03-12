@@ -8,7 +8,8 @@ import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.ClientsService;
 import com.ryazancev.purchase.service.PurchaseService;
-import com.ryazancev.purchase.util.PurchaseUtil;
+import com.ryazancev.purchase.util.DtoProcessor;
+import com.ryazancev.purchase.util.MessageProcessor;
 import com.ryazancev.purchase.util.exception.custom.PurchaseNotFoundException;
 import com.ryazancev.purchase.util.mapper.PurchaseMapper;
 import com.ryazancev.purchase.util.validator.PurchaseValidator;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static com.ryazancev.purchase.util.exception.Message.PURCHASE_NOT_FOUND;
@@ -37,7 +37,9 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final PurchaseMapper purchaseMapper;
     private final PurchaseValidator purchaseValidator;
-    private final PurchaseUtil purchaseUtil;
+
+    private final MessageProcessor messageProcessor;
+    private final DtoProcessor dtoProcessor;
 
     private final ClientsService clientsService;
 
@@ -51,7 +53,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                                 PURCHASE_NOT_FOUND,
                                 HttpStatus.NOT_FOUND));
 
-        return purchaseUtil.createPurchaseDto(purchase);
+        return dtoProcessor.createPurchaseDto(purchase);
     }
 
     @Transactional
@@ -92,16 +94,16 @@ public class PurchaseServiceImpl implements PurchaseService {
         toSave.setPurchaseDate(LocalDateTime.now());
         toSave.setAmount(selectedProductPrice);
 
-        purchaseUtil.updateCustomerBalance(customerId,
+        messageProcessor.updateCustomerBalance(customerId,
                 availableCustomerBalance - selectedProductPrice);
-        purchaseUtil.updateProductQuantity(productId,
+        messageProcessor.updateProductQuantity(productId,
                 availableProductsInStock - 1);
-        purchaseUtil.updateCustomerBalance(productOwnerId,
+        messageProcessor.updateCustomerBalance(productOwnerId,
                 ownerBalance + selectedProductPrice);
 
         Purchase saved = purchaseRepository.save(toSave);
 
-        return purchaseUtil.createPurchaseDto(saved);
+        return dtoProcessor.createPurchaseDto(saved);
     }
 
 
@@ -111,13 +113,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         List<Purchase> purchases = purchaseRepository
                 .findByCustomerId(customerId);
 
-        List<PurchaseDto> purchasesDto = purchases.isEmpty() ?
-                Collections.emptyList()
-                : purchaseUtil.createPurchasesDtoWithProductsInfo(purchases);
-
-        return CustomerPurchasesResponse.builder()
-                .purchases(purchasesDto)
-                .build();
+        return dtoProcessor.createCustomerPurchasesResponse(purchases);
     }
 
 }

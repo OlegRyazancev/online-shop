@@ -47,6 +47,8 @@ public class ReviewServiceImpl implements ReviewService {
         List<Review> reviews = reviewRepository
                 .findByCustomerId(customerId);
 
+        //todo: move this creation to OrganizationUtil
+
         List<ReviewDto> reviewsDto = reviews.isEmpty() ?
                 Collections.emptyList()
                 : reviewUtil.createReviewsDtoWithProductsInfo(reviews);
@@ -61,6 +63,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         List<Review> reviews = reviewRepository
                 .findByProductId(productId);
+
+        //todo: move this creation to OrganizationUtil
 
         List<ReviewDto> reviewsDto = reviews.isEmpty() ?
                 Collections.emptyList()
@@ -99,6 +103,7 @@ public class ReviewServiceImpl implements ReviewService {
         toSave.setCreatedAt(LocalDateTime.now());
 
         Review saved = reviewRepository.insert(toSave);
+//todo: move this creation to OrganizationUtil
 
         ReviewDto savedDto = reviewMapper.toDto(saved);
 
@@ -106,7 +111,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         return savedDto;
     }
-
 
     @Override
     public Double getAverageRatingByProductId(Long productId) {
