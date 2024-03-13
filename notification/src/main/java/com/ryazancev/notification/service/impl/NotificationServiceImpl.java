@@ -14,11 +14,15 @@ import com.ryazancev.notification.service.NotificationService;
 import com.ryazancev.notification.util.exception.custom.NotificationNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
+
+
 
 /**
  * @author Oleg Ryazancev
@@ -34,6 +38,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final PublicNotificationRepository publicNotificationRepository;
 
     private final ContentService contentService;
+    private final MessageSource messageSource;
 
 
     @Override
@@ -70,20 +75,24 @@ public class NotificationServiceImpl implements NotificationService {
             case PRIVATE -> {
 
                 return privateNotificationRepository.findById(id)
-                        .orElseThrow(() ->
-                                new NotificationNotFoundException(
-                                        "Private notification with id " +
-                                                id + " not found",
-                                        HttpStatus.BAD_REQUEST));
+                        .orElseThrow(() -> new NotificationNotFoundException(
+                                messageSource.getMessage(
+                                        "private_by_id_not_found",
+                                        new Object[]{id},
+                                        Locale.getDefault()
+                                ),
+                                HttpStatus.BAD_REQUEST));
             }
             case PUBLIC -> {
 
                 return publicNotificationRepository.findById(id)
-                        .orElseThrow(() ->
-                                new NotificationNotFoundException(
-                                        "Public notification with id " +
-                                                id + " not found",
-                                        HttpStatus.BAD_REQUEST));
+                        .orElseThrow(() -> new NotificationNotFoundException(
+                                messageSource.getMessage(
+                                        "public_by_id_not_found",
+                                        new Object[]{id},
+                                        Locale.getDefault()
+                                ),
+                                HttpStatus.BAD_REQUEST));
             }
         }
         return null;

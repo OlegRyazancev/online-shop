@@ -6,9 +6,10 @@ import com.ryazancev.common.dto.Fallback;
 import com.ryazancev.notification.service.ClientsService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import static com.ryazancev.notification.util.exception.Message.CUSTOMER_SERVICE_UNAVAILABLE;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -19,6 +20,7 @@ import static com.ryazancev.notification.util.exception.Message.CUSTOMER_SERVICE
 public class ClientsServiceImpl implements ClientsService {
 
     private final CustomerClient customerClient;
+    private final MessageSource messageSource;
 
     @Override
     @CircuitBreaker(
@@ -33,7 +35,13 @@ public class ClientsServiceImpl implements ClientsService {
     private Element getSimpleCustomerFallback(Exception e) {
 
         return Fallback.builder()
-                .message(CUSTOMER_SERVICE_UNAVAILABLE)
+                .message(
+                        messageSource.getMessage(
+                                "customer_service_unavailable",
+                                null,
+                                Locale.getDefault()
+                        )
+                )
                 .build();
     }
 }
