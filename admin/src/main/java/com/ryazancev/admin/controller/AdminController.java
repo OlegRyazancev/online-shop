@@ -2,6 +2,7 @@ package com.ryazancev.admin.controller;
 
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.AdminService;
+import com.ryazancev.admin.util.AdminUtil;
 import com.ryazancev.admin.util.mapper.AdminMapper;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.RegistrationRequestDto;
@@ -28,6 +29,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final AdminMapper adminMapper;
+    private final AdminUtil adminUtil;
 
 
     @GetMapping("/requests")
@@ -70,11 +72,13 @@ public class AdminController {
             @PathVariable("id") Long id,
             @RequestParam("status") String status) {
 
+        RequestStatus statusEnum = adminUtil.castStatus(status);
         RegistrationRequest request = adminService
-                .changeRegistrationStatus(id, RequestStatus.valueOf(status));
+                .changeRegistrationStatus(id, statusEnum);
 
         return adminMapper.toDto(request);
     }
+
 
     @PutMapping("/change-object-status")
     public String changeObjectStatus(

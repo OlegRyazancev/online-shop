@@ -1,5 +1,6 @@
 package com.ryazancev.admin.util.exception;
 
+import com.ryazancev.admin.util.exception.custom.InvalidRequestStatusException;
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.exception.OnlineShopException;
@@ -29,6 +30,21 @@ public class AdminExceptionHandler {
             RequestNotFoundException e) {
 
         log.error("Request not found exception");
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(new ExceptionBody(
+                        e.getMessage(),
+                        ServiceStage.ADMIN,
+                        e.getHttpStatus()
+                ));
+    }
+
+    @ExceptionHandler(InvalidRequestStatusException.class)
+    public ResponseEntity<ExceptionBody> handleInvalidRequestStatus(
+            InvalidRequestStatusException e) {
+
+        log.error("Invalid request status exception");
 
         return ResponseEntity
                 .status(e.getHttpStatus())
