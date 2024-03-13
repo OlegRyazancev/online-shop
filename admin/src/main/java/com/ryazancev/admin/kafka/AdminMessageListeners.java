@@ -34,7 +34,7 @@ public class AdminMessageListeners {
                 requestDto.getObjectToRegisterId(),
                 requestDto.getObjectType().name());
 
-        log.info("Creating request...");
+        log.trace("Creating request...");
         RegistrationRequest request =
                 adminMapper.toEntity(requestDto);
 
