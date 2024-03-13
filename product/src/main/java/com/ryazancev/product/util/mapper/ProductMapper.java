@@ -21,7 +21,6 @@ public interface ProductMapper {
     @Named("toSimpleDto")
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "organization", ignore = true)
-    @Mapping(target = "price", ignore = true)
     @Mapping(target = "quantityInStock", ignore = true)
     @Mapping(target = "keywords", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
