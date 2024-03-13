@@ -4,11 +4,14 @@ import com.ryazancev.admin.kafka.AdminProducerService;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.repository.AdminRepository;
 import com.ryazancev.admin.service.AdminService;
+import com.ryazancev.admin.util.NotificationProcessor;
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
 import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.admin.enums.RequestStatus;
+import com.ryazancev.common.dto.notification.NotificationRequest;
+import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -33,6 +36,7 @@ public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
     private final AdminProducerService adminProducerService;
+    private final NotificationProcessor notificationProcessor;
 
     @Override
     @Cacheable(value = "Admin::getAll")
@@ -90,7 +94,28 @@ public class AdminServiceImpl implements AdminService {
 
         adminProducerService.sendRegisterResponse(updated);
 
-        //todo: send notification to user about admin's decision
+
+        NotificationRequest privateNotification =
+                notificationProcessor
+                        .createNotification(
+                                updated,
+                                NotificationScope.PRIVATE
+                        );
+
+        adminProducerService.sendNotification(privateNotification);
+
+        if (updated.getObjectType().equals(ObjectType.PRODUCT)
+                && updated.getStatus().equals(RequestStatus.ACCEPTED)) {
+
+            NotificationRequest publicNotification =
+                    notificationProcessor
+                            .createNotification(
+                                    updated,
+                                    NotificationScope.PUBLIC
+                            );
+
+            adminProducerService.sendNotification(publicNotification);
+        }
 
         return updated;
     }
