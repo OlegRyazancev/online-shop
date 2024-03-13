@@ -17,7 +17,6 @@ import java.io.Serializable;
 @Document(collection = "public-notifications")
 @SuperBuilder
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class PublicNotification
         extends Notification

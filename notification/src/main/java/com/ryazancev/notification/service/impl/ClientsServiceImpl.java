@@ -24,7 +24,7 @@ public class ClientsServiceImpl implements ClientsService {
 
     @Override
     @CircuitBreaker(
-            name = "review",
+            name = "notification",
             fallbackMethod = "getSimpleCustomerFallback"
     )
     public Element getSimpleCustomerById(Long customerId) {

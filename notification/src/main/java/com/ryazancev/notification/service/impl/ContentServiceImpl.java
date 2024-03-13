@@ -22,7 +22,8 @@ public class ContentServiceImpl implements ContentService {
     private final ContentProcessor contentProcessor;
 
     @Override
-    public Content generateContent(NotificationType type, Properties properties) {
+    public Content generateContent(NotificationType type,
+                                   Properties properties) {
         Content content;
 
         switch (type) {
