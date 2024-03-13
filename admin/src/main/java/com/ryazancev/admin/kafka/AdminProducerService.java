@@ -6,6 +6,7 @@ import com.ryazancev.admin.util.mapper.AdminMapper;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import com.ryazancev.common.dto.admin.UserLockRequest;
+import com.ryazancev.common.dto.notification.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+
 public class AdminProducerService {
 
     private final KafkaTemplate<String,
@@ -28,6 +30,8 @@ public class AdminProducerService {
     private final KafkaTemplate<String,
             UserLockRequest> toggleUserLockKafkaTemplate;
 
+    private final KafkaTemplate<String,
+            NotificationRequest> notificationKafkaTemplate;
     private final AdminMapper adminMapper;
 
     @Value("${spring.kafka.topic.organization.register}")
@@ -45,129 +49,160 @@ public class AdminProducerService {
     @Value("${spring.kafka.topic.user.toggle-lock}")
     private String toggleUserLockTopic;
 
+    @Value("${spring.kafka.topic.notification}")
+    private String notificationTopic;
+
     public AdminProducerService(
             @Qualifier("registerKafkaTemplate")
-            KafkaTemplate<String, RegistrationRequestDto> registerKafkaTemplate,
+            KafkaTemplate<String, RegistrationRequestDto>
+                    registerKafkaTemplate,
             @Qualifier("changeStatusKafkaTemplate")
-            KafkaTemplate<String, ObjectRequest> changeStatusKafkaTemplate,
+            KafkaTemplate<String, ObjectRequest>
+                    changeStatusKafkaTemplate,
             @Qualifier("toggleUserLockKafkaTemplate")
-            KafkaTemplate<String, UserLockRequest> toggleUserLockKafkaTemplate,
+            KafkaTemplate<String, UserLockRequest>
+                    toggleUserLockKafkaTemplate,
+            @Qualifier("notificationKafkaTemplate")
+            KafkaTemplate<String, NotificationRequest>
+                    notificationKafkaTemplate,
             AdminMapper adminMapper) {
 
         this.registerKafkaTemplate = registerKafkaTemplate;
         this.changeStatusKafkaTemplate = changeStatusKafkaTemplate;
         this.toggleUserLockKafkaTemplate = toggleUserLockKafkaTemplate;
+        this.notificationKafkaTemplate = notificationKafkaTemplate;
         this.adminMapper = adminMapper;
     }
 
     public void sendRegisterResponse(RegistrationRequest request) {
+
+        //todo: change here
         RegistrationRequestDto requestDto =
                 adminMapper.toDto(request);
 
-        switch (requestDto.getObjectType()) {
+        log.info("Request to send register response of {} with status: {} " +
+                        "with id: {} was received",
+                requestDto.getObjectType(),
+                requestDto.getStatus(),
+                request.getObjectToRegisterId());
+        try {
+            switch (requestDto.getObjectType()) {
 
-            case PRODUCT -> {
+                case PRODUCT -> {
 
-                try {
+                    log.trace("sending request...}");
                     registerKafkaTemplate.send(
                             productRegisterTopic,
                             requestDto);
 
-                    log.info(
-                            "Request sent to product topic with: {} and status {}",
-                            requestDto.getObjectType(),
-                            requestDto.getStatus()
-                    );
-                } catch (Exception e) {
-                    log.info("Request to product topic with: {} and " +
-                                    "status {} was not sent",
-                            requestDto.getObjectType(),
-                            requestDto.getStatus());
+                    log.debug("Request to {} was successfully send",
+                            productRegisterTopic);
                 }
+                case ORGANIZATION -> {
 
-            }
-            case ORGANIZATION -> {
-
-                try {
+                    log.trace("sending request...}");
                     registerKafkaTemplate.send(
-                            organizationRegisterTopic,
-                            requestDto);
+                            organizationRegisterTopic, requestDto);
 
-                    log.info("Request sent to organization topic with: " +
-                                    "{} and status {}",
-                            requestDto.getObjectType(),
-                            requestDto.getStatus());
-                } catch (Exception e) {
-                    log.info("Request to organization topic with: {} and " +
-                                    "status {} was not sent",
-                            requestDto.getObjectType(),
-                            requestDto.getStatus());
+                    log.debug("Request to {} was successfully send",
+                            organizationRegisterTopic);
                 }
-
+                default -> {
+                    log.warn("Unknown request/object type: {}",
+                            requestDto.getObjectType());
+                }
             }
-            default -> {
-                log.info("Unknown request/object type: {}",
-                        requestDto.getObjectType());
-            }
+        } catch (Exception e) {
+            log.error("Request to send register response of {} with id:" +
+                            " {} was not successfully sent",
+                    requestDto.getObjectType(),
+                    requestDto.getObjectToRegisterId());
         }
     }
 
     public void sendMessageToChangeObjectStatus(ObjectRequest objectRequest) {
 
-        switch (objectRequest.getObjectType()) {
-            case PRODUCT -> {
+        log.info("Request to change {} status to {} with object " +
+                        "id: {} was received",
+                objectRequest.getObjectType(),
+                objectRequest.getObjectStatus(),
+                objectRequest.getObjectId());
 
-                try {
+        try {
+            switch (objectRequest.getObjectType()) {
+                case PRODUCT -> {
+
+                    log.trace("sending request...}");
                     changeStatusKafkaTemplate.send(
                             productChangeStatusTopic, objectRequest);
 
-                    log.info("Request to change product status to " +
-                                    "{} with id: {} successfully sent",
-                            objectRequest.getObjectStatus(),
-                            objectRequest.getObjectId());
-                } catch (Exception e) {
-                    log.info("Request to change product status " +
-                            "was not successfully sent");
+                    log.debug("Request to {} was successfully sent",
+                            productChangeStatusTopic);
                 }
+                case ORGANIZATION -> {
 
-            }
-            case ORGANIZATION -> {
-
-                try {
+                    log.trace("sending request...}");
                     changeStatusKafkaTemplate.send(
                             organizationChangeStatusTopic, objectRequest);
 
-                    log.info("Request to change organization status to " +
-                                    "{} with id: {} successfully sent",
-                            objectRequest.getObjectStatus(),
-                            objectRequest.getObjectId());
-                } catch (Exception e) {
-                    log.info("Request to change organization status " +
-                            "was not successfully sent");
+                    log.debug("Request to {} was successfully sent",
+                            organizationChangeStatusTopic);
                 }
-
+                default -> {
+                    log.warn("Unknown request/object type: {}",
+                            objectRequest.getObjectType());
+                }
             }
-            default -> {
-                log.info("Unknown request/object type: {}",
-                        objectRequest.getObjectType());
-            }
+        } catch (Exception e) {
+            log.error("Request to change {} status was not successfully sent",
+                    objectRequest.getObjectType());
         }
     }
 
     public void sendMessageToToggleUserLock(UserLockRequest request) {
 
+        log.info("Request to toggle user: {} lock {} " +
+                        "was received",
+                request.getUsername(),
+                request.isLock());
         try {
+
+            log.trace("sending request...}");
             toggleUserLockKafkaTemplate.send(toggleUserLockTopic, request);
 
-            log.info("Request to toggle user: {} lock {} " +
-                            "was successfully sent",
-                    request.getUsername(),
-                    request.isLock());
+            log.debug("Request to {} was successfully sent",
+                    toggleUserLockTopic);
         } catch (Exception e) {
-            log.info("Request to toggle user: {} lock {} " +
+            log.error("Request to toggle user: {} lock {} " +
                             "was not successfully sent",
                     request.getUsername(),
                     request.isLock());
+        }
+    }
+
+    public void sendNotification(NotificationRequest request) {
+
+        log.info("Request to send {} notification {} to user with id: " +
+                        "{} from admin if exists: {} was received",
+                request.getScope(),
+                request.getType(),
+                request.getRecipientId(),
+                request.getSenderId());
+        try {
+
+            log.trace("sending request...}");
+            notificationKafkaTemplate.send(notificationTopic, request);
+
+            log.debug("Request to {} was successfully sent",
+                    notificationTopic);
+        } catch (Exception e) {
+            log.error("Request to send {} notification {} to user with id: " +
+                            "{} from admin if exists: {} was NOT " +
+                            "successfully sent",
+                    request.getScope(),
+                    request.getType(),
+                    request.getRecipientId(),
+                    request.getSenderId());
         }
     }
 }
