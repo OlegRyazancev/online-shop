@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Locale;
 
 
-
 /**
  * @author Oleg Ryazancev
  */
@@ -103,7 +102,7 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationRequest request) {
 
         PublicNotification notification =
-                (PublicNotification) buildNotification(request);
+                buildNotification(request, PublicNotification.class);
 
         return publicNotificationRepository.insert(notification);
     }
@@ -113,25 +112,35 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationRequest request) {
 
         PrivateNotification notification =
-                (PrivateNotification) buildNotification(request);
-        notification.setRecipientId(request.getRecipientId());
+                buildNotification(request, PrivateNotification.class);
 
         return privateNotificationRepository.insert(notification);
     }
 
 
-    private Notification buildNotification(NotificationRequest request) {
+    private <T extends Notification> T buildNotification(
+            NotificationRequest request,
+            Class<T> targetType) {
 
         Content content = contentService.generateContent(
                 request.getType(),
                 request.getProperties());
 
-
-        return Notification.builder()
-                .senderId(request.getSenderId())
-                .content(content)
-                .timestamp(LocalDateTime.now())
-                .status(NotificationStatus.UNREAD)
-                .build();
+        if (request.getScope() == NotificationScope.PRIVATE) {
+            return targetType.cast(PrivateNotification.builder()
+                    .senderId(request.getSenderId())
+                    .recipientId(request.getRecipientId())
+                    .content(content)
+                    .timestamp(LocalDateTime.now())
+                    .status(NotificationStatus.UNREAD)
+                    .build());
+        } else {
+            return targetType.cast(PublicNotification.builder()
+                    .senderId(request.getSenderId())
+                    .content(content)
+                    .timestamp(LocalDateTime.now())
+                    .status(NotificationStatus.UNREAD)
+                    .build());
+        }
     }
 }
