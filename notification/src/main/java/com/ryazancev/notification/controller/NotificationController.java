@@ -7,9 +7,7 @@ import com.ryazancev.notification.model.notification.Notification;
 import com.ryazancev.notification.service.NotificationService;
 import com.ryazancev.notification.util.DtoProcessor;
 import com.ryazancev.notification.util.NotificationUtil;
-import com.ryazancev.notification.util.exception.custom.InvalidScopeException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

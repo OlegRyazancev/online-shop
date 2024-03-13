@@ -48,11 +48,11 @@ public class ContentServiceImpl implements ContentService {
             }
             case PRIVATE_ACCOUNT_LOCKED -> {
                 content = contentProcessor
-                        .createAccountLockedContent(properties);
+                        .createAccountLockedContent();
             }
             case PRIVATE_ACCOUNT_UNLOCKED -> {
                 content = contentProcessor
-                        .createAccountUnlockedContent(properties);
+                        .createAccountUnlockedContent();
             }
             case PRIVATE_REVIEW_RECEIVED -> {
                 content = contentProcessor
