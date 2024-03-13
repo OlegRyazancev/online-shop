@@ -5,7 +5,8 @@ spring:
   profiles:
     active: default
   config:
-    import: classpath:openapi/open-api-config.yml, optional:file:.env[.properties]
+    import: classpath:openapi/open-api-config.yml, 
+            optional:file:.env[.properties]
   application:
     name: review
 

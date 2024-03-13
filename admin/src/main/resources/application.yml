@@ -7,11 +7,9 @@ spring:
   profiles:
     active: default
   config:
-    import: |
-      classpath:openapi/open-api-config.yml 
-      optional:file:.env[.properties] 
-      classpath:messages/*.properties
-
+    import: classpath:openapi/open-api-config.yml, 
+            optional:file:.env[.properties],
+            classpath:messages/exception-messages.properties
   application:
     name: admin
 
