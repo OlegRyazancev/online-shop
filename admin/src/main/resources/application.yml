@@ -7,7 +7,11 @@ spring:
   profiles:
     active: default
   config:
-    import: classpath:openapi/open-api-config.yml, optional:file:.env[.properties]
+    import: |
+      classpath:openapi/open-api-config.yml 
+      optional:file:.env[.properties] 
+      classpath:messages/*.properties
+
   application:
     name: admin
 
@@ -25,6 +29,7 @@ spring:
       product:
         register: ${KAFKA_REGISTER_PRODUCT_TOPIC}
         change-status: ${KAFKA_CHANGE_STATUS_PRODUCT_TOPIC}
+      notification: ${KAFKA_NOTIFICATION_TOPIC}
 
 
   #PostgreSQL connection
@@ -73,6 +78,23 @@ management:
     distribution:
       percentiles-histogram:
         "[http.server.requests]": true
+  health:
+    circuitbreakers:
+      enabled: true
+
+#Resilience4j
+resilience4j:
+  circuitbreaker:
+    instances:
+      admin:
+        sliding-window-type: COUNT_BASED
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        register-health-indicator: true
 
 #Eureka
 eureka:

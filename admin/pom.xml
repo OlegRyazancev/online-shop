@@ -18,6 +18,7 @@
         <preliquibase.version>1.5.0</preliquibase.version>
         <kafka.version>3.1.1</kafka.version>
         <openapi.webmvc.version>2.2.0</openapi.webmvc.version>
+        <resilience4j.version>2.2.0</resilience4j.version>
     </properties>
 
     <build>
@@ -124,6 +125,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>${resilience4j.version}</version>
         </dependency>
 
         <dependency>
