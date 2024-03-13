@@ -93,7 +93,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
                 .getPurchaseById(purchaseId);
 
         CustomerDto customerDto = purchaseDto.getCustomer()
-                .safelyCast(CustomerDto.class);
+                .safelyCast(CustomerDto.class, true);
 
         return userId.equals(customerDto.getId())
                 || userRoles.contains("ROLE_ADMIN");

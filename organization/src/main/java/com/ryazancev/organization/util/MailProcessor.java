@@ -55,7 +55,7 @@ public class MailProcessor {
 
         CustomerDto customerDto = clientsService
                 .getSimpleCustomerById(registered.getOwnerId())
-                .safelyCast(CustomerDto.class);
+                .safelyCast(CustomerDto.class, true);
 
         Properties properties = new Properties();
 

@@ -41,12 +41,35 @@ import org.springframework.http.HttpStatus;
 })
 public interface Element {
 
-    default <T> T safelyCast(Class<T> targetType) {
+    default <T> T safelyCast(Class<T> targetType, boolean throwException) {
 
         if (this instanceof Fallback) {
-            throw new ServiceUnavailableException(
-                    ((Fallback) this).getMessage(),
-                    HttpStatus.SERVICE_UNAVAILABLE);
+            if (throwException) {
+                throw new ServiceUnavailableException(
+                        ((Fallback) this).getMessage(),
+                        HttpStatus.SERVICE_UNAVAILABLE);
+            } else {
+                String message = "SERVICE_UNAVAILABLE";
+
+                if (targetType.equals(OrganizationDto.class)) {
+
+                    return targetType.cast(
+                            OrganizationDto.builder()
+                                    .id(-1L)
+                                    .name(message)
+                                    .build()
+                    );
+                } else if (targetType.equals(ProductDto.class)) {
+
+                    return targetType.cast(
+                            ProductDto.builder()
+                                    .id(-1L)
+                                    .productName(message)
+                                    .price(-1.0)
+                                    .build()
+                    );
+                }
+            }
         }
         return targetType.cast(this);
     }

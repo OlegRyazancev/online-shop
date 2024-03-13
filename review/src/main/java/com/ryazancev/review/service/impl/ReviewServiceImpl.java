@@ -77,9 +77,9 @@ public class ReviewServiceImpl implements ReviewService {
                 .getPurchaseById(purchaseId);
 
         CustomerDto customerDto = purchaseDto.getCustomer()
-                .safelyCast(CustomerDto.class);
+                .safelyCast(CustomerDto.class, true);
         ProductDto productDto = purchaseDto.getProduct()
-                .safelyCast(ProductDto.class);
+                .safelyCast(ProductDto.class, true);
 
 
         Review toSave = reviewMapper.toEntity(reviewEditDto);
