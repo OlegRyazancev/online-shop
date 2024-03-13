@@ -3,6 +3,7 @@ package com.ryazancev.admin.kafka.config;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import com.ryazancev.common.dto.admin.UserLockRequest;
+import com.ryazancev.common.dto.notification.NotificationRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,6 +63,14 @@ public class AdminProducerConfig {
 
         return createKafkaTemplate(
                 createProducerFactory(UserLockRequest.class));
+    }
+
+    @Bean
+    public KafkaTemplate<String, NotificationRequest>
+    notificationKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createProducerFactory(NotificationRequest.class));
     }
 
     private <T> ProducerFactory<String, T>

@@ -31,6 +31,9 @@ public class AdminTopicConfig {
     @Value("${spring.kafka.topic.user.toggle-lock}")
     private String userToggleLockTopic;
 
+    @Value("${spring.kafka.topic.notification}")
+    private String notificationTopic;
+
 
     @Bean
     public NewTopic organizationRegisterEventsTopic() {
@@ -71,6 +74,13 @@ public class AdminTopicConfig {
     public NewTopic userToggleLockEventsTopic() {
         return TopicBuilder
                 .name(userToggleLockTopic)
+                .build();
+    }
+
+    @Bean
+    public NewTopic notificationEventsTopic() {
+        return TopicBuilder
+                .name(notificationTopic)
                 .build();
     }
 }
