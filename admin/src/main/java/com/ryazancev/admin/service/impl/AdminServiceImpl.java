@@ -152,6 +152,15 @@ public class AdminServiceImpl implements AdminService {
 
         adminProducerService.sendMessageToToggleUserLock(request);
 
+        NotificationRequest privateNotificationRequest =
+                notificationProcessor
+                        .createNotification(
+                                request,
+                                NotificationScope.PRIVATE
+                        );
+
+        adminProducerService.sendNotification(privateNotificationRequest);
+
         return String.format(
                 "Request to set locked to: %b of user with " +
                         "id: %s successfully sent",

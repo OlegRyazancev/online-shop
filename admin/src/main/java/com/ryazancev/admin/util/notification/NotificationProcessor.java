@@ -3,6 +3,7 @@ package com.ryazancev.admin.util.notification;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.ClientsService;
 import com.ryazancev.common.dto.admin.ObjectRequest;
+import com.ryazancev.common.dto.admin.UserLockRequest;
 import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.notification.enums.NotificationType;
@@ -88,5 +89,24 @@ public class NotificationProcessor {
                 .recipientId(recipientId)
                 .build();
 
+    }
+
+    public NotificationRequest createNotification(UserLockRequest request,
+                                                  NotificationScope scope) {
+
+        NotificationType type = determiner.determineNotificationType(request);
+
+        Long recipientId = request.getUserId();
+
+        Long senderId =
+                determiner.determineSenderId();
+
+        return NotificationRequest.builder()
+                .scope(scope)
+                .type(type)
+                .recipientId(recipientId)
+                .senderId(senderId)
+                .properties(new Properties())
+                .build();
     }
 }

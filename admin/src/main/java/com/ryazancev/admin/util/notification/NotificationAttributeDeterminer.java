@@ -3,6 +3,7 @@ package com.ryazancev.admin.util.notification;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.ClientsService;
 import com.ryazancev.common.dto.admin.ObjectRequest;
+import com.ryazancev.common.dto.admin.UserLockRequest;
 import com.ryazancev.common.dto.admin.enums.ObjectStatus;
 import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.admin.enums.RequestStatus;
@@ -147,5 +148,17 @@ public class NotificationAttributeDeterminer {
             return NotificationType.PRIVATE_FREEZE_OBJECT;
         }
         return null;
+    }
+
+    public NotificationType determineNotificationType(
+            UserLockRequest request) {
+
+        if (request.isLock()) {
+
+            return NotificationType.PRIVATE_ACCOUNT_LOCKED;
+        } else {
+
+            return NotificationType.PRIVATE_ACCOUNT_UNLOCKED;
+        }
     }
 }
