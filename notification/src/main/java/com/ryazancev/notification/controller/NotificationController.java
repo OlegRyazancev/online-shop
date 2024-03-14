@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -43,7 +44,7 @@ public class NotificationController {
 
 
     @GetMapping("/{id}")
-    private NotificationDto getNotificationById(
+    public NotificationDto getNotificationById(
             @PathVariable("id") String id,
             @RequestParam("scope") String scope) {
 
@@ -53,8 +54,12 @@ public class NotificationController {
                 notificationService.getById(id, scopeEnum);
 
         return dtoProcessor.createNotificationDto(notification);
-
     }
 
+    @GetMapping("/private/{id}/recipient-id")
+    public Long getRecipientIdByPrivateNotificationId(
+            @PathVariable("id") String id) {
 
+        return notificationService.getRecipientIdByPrivateNotificationId(id);
+    }
 }

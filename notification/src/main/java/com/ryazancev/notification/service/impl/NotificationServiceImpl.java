@@ -11,6 +11,7 @@ import com.ryazancev.notification.repository.PrivateNotificationRepository;
 import com.ryazancev.notification.repository.PublicNotificationRepository;
 import com.ryazancev.notification.service.ContentService;
 import com.ryazancev.notification.service.NotificationService;
+import com.ryazancev.notification.util.NotificationUtil;
 import com.ryazancev.notification.util.exception.custom.NotificationNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,8 +35,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final PrivateNotificationRepository privateNotificationRepository;
     private final PublicNotificationRepository publicNotificationRepository;
+    private final NotificationUtil notificationUtil;
 
-    private final ContentService contentService;
     private final MessageSource messageSource;
 
 
@@ -73,7 +73,8 @@ public class NotificationServiceImpl implements NotificationService {
 
             case PRIVATE -> {
 
-                return privateNotificationRepository.findById(id)
+                PrivateNotification notification = privateNotificationRepository
+                        .findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
                                         "private_by_id_not_found",
@@ -81,6 +82,14 @@ public class NotificationServiceImpl implements NotificationService {
                                         Locale.getDefault()
                                 ),
                                 HttpStatus.BAD_REQUEST));
+
+                if (notification.getStatus() == NotificationStatus.UNREAD) {
+
+                    notification.setStatus(NotificationStatus.READ);
+                    privateNotificationRepository.save(notification);
+                }
+
+                return notification;
             }
             case PUBLIC -> {
 
@@ -102,7 +111,8 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationRequest request) {
 
         PublicNotification notification =
-                buildNotification(request, PublicNotification.class);
+                notificationUtil.buildNotification(
+                        request, PublicNotification.class);
 
         return publicNotificationRepository.insert(notification);
     }
@@ -112,35 +122,26 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationRequest request) {
 
         PrivateNotification notification =
-                buildNotification(request, PrivateNotification.class);
+                notificationUtil.buildNotification(
+                        request, PrivateNotification.class);
 
         return privateNotificationRepository.insert(notification);
     }
 
+    @Override
+    public Long getRecipientIdByPrivateNotificationId(String id) {
 
-    private <T extends Notification> T buildNotification(
-            NotificationRequest request,
-            Class<T> targetType) {
+        PrivateNotification notification =
+                privateNotificationRepository.findById(id)
+                        .orElseThrow(() -> new NotificationNotFoundException(
+                                messageSource.getMessage(
+                                        "private_by_id_not_found",
+                                        new Object[]{id},
+                                        Locale.getDefault()
+                                ),
+                                HttpStatus.BAD_REQUEST
+                        ));
 
-        Content content = contentService.generateContent(
-                request.getType(),
-                request.getProperties());
-
-        if (request.getScope() == NotificationScope.PRIVATE) {
-            return targetType.cast(PrivateNotification.builder()
-                    .senderId(request.getSenderId())
-                    .recipientId(request.getRecipientId())
-                    .content(content)
-                    .timestamp(LocalDateTime.now())
-                    .status(NotificationStatus.UNREAD)
-                    .build());
-        } else {
-            return targetType.cast(PublicNotification.builder()
-                    .senderId(request.getSenderId())
-                    .content(content)
-                    .timestamp(LocalDateTime.now())
-                    .status(NotificationStatus.UNREAD)
-                    .build());
-        }
+        return notification.getRecipientId();
     }
 }

@@ -22,4 +22,6 @@ public interface NotificationService {
     PublicNotification createPublicNotification(NotificationRequest request);
 
     PrivateNotification createPrivateNotification(NotificationRequest request);
+
+    Long getRecipientIdByPrivateNotificationId(String id);
 }
