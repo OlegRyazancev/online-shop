@@ -12,9 +12,9 @@ spring:
       classpath:messages/messages.properties
   messages:
     always-use-message-format: false
-    basename: messages/messages
     fallback-to-system-locale: true
     encoding: UTF-8
+    basename: messages/messages
   application:
     name: notification
 

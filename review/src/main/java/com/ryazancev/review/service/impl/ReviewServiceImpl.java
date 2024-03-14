@@ -30,7 +30,6 @@ import static com.ryazancev.review.util.exception.Message.DUPLICATE_REVIEW;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
@@ -62,7 +61,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional
     public ReviewDto create(ReviewEditDto reviewEditDto) {
 
         String purchaseId = reviewEditDto.getPurchaseId();
@@ -105,7 +103,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional
     public void deleteByProductId(Long productId) {
 
         List<Review> reviews = reviewRepository.findByProductId(productId);

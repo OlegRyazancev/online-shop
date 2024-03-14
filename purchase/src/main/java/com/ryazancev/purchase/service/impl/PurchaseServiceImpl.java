@@ -30,7 +30,6 @@ import static com.ryazancev.purchase.util.exception.Message.PURCHASE_NOT_FOUND;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PurchaseServiceImpl implements PurchaseService {
 
@@ -56,7 +55,6 @@ public class PurchaseServiceImpl implements PurchaseService {
         return dtoProcessor.createPurchaseDto(purchase);
     }
 
-    @Transactional
     @Override
     public PurchaseDto processPurchase(
             PurchaseEditDto purchaseEditDto) {
