@@ -1,6 +1,7 @@
 package com.ryazancev.notification.kafka;
 
 import com.ryazancev.common.dto.notification.NotificationRequest;
+import com.ryazancev.notification.model.notification.AdminNotification;
 import com.ryazancev.notification.model.notification.PrivateNotification;
 import com.ryazancev.notification.model.notification.PublicNotification;
 import com.ryazancev.notification.service.NotificationService;
@@ -61,10 +62,31 @@ public class NotificationMessageListener {
                 PublicNotification notification =
                         notificationService.createPublicNotification(request);
 
-                log.trace("Sending public notification with id {}",
+                log.trace("Sending public notification with id {} " +
+                                "by websocket...",
                         notification.getId());
                 messagingTemplate.convertAndSend(
                         "/public",
+                        notification);
+
+                log.info("Public notification to users  " +
+                        "was successfully send");
+            }
+
+            case ADMIN -> {
+
+                log.info("Receive message to send admin notification " +
+                        "to all admins");
+
+                log.trace("Creating admin notification...");
+                AdminNotification notification =
+                        notificationService.createAdminNotification(request);
+
+                log.trace("Sending admin notification with id {} " +
+                                "by websocket...",
+                        notification.getId());
+                messagingTemplate.convertAndSend(
+                        "/admin",
                         notification);
 
                 log.info("Public notification to users  " +

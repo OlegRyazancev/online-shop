@@ -2,6 +2,7 @@ package com.ryazancev.notification.service;
 
 import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
+import com.ryazancev.notification.model.notification.AdminNotification;
 import com.ryazancev.notification.model.notification.Notification;
 import com.ryazancev.notification.model.notification.PrivateNotification;
 import com.ryazancev.notification.model.notification.PublicNotification;
@@ -18,6 +19,8 @@ public interface NotificationService {
             Long customerId, NotificationScope castedScope);
 
     Notification getById(String id, NotificationScope castedScope);
+
+    AdminNotification createAdminNotification(NotificationRequest request);
 
     PublicNotification createPublicNotification(NotificationRequest request);
 

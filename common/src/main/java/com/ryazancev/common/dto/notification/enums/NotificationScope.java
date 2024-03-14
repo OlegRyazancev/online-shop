@@ -7,5 +7,6 @@ package com.ryazancev.common.dto.notification.enums;
 public enum NotificationScope {
 
     PUBLIC,
-    PRIVATE
+    PRIVATE,
+    ADMIN
 }

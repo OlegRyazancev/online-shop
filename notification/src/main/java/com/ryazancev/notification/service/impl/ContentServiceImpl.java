@@ -80,6 +80,11 @@ public class ContentServiceImpl implements ContentService {
                         .createNewProductAvailableContent(
                                 properties);
             }
+            case ADMIN_NEW_REGISTRATION_REQUEST_RECEIVED -> {
+                content = contentProcessor
+                        .createNewRegistrationRequestReceived(
+                                properties);
+            }
             default -> {
                 content = Content.builder()
                         .header("NO HEADER")

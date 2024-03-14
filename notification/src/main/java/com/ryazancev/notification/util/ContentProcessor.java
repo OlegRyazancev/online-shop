@@ -200,7 +200,8 @@ public class ContentProcessor {
         return buildContent(header, body);
     }
 
-    public Content createFreezeObjectContent(Properties properties) {
+    public Content createFreezeObjectContent(
+            Properties properties) {
 
         String header = messageSource.getMessage(
                 "object_freeze.header",
@@ -222,7 +223,8 @@ public class ContentProcessor {
         return buildContent(header, body);
     }
 
-    public Content createActivateObjectContent(Properties properties) {
+    public Content createActivateObjectContent(
+            Properties properties) {
 
         String header = messageSource.getMessage(
                 "object_activate.header",
@@ -236,6 +238,26 @@ public class ContentProcessor {
                 "object_activate.body",
                 new Object[]{
                         properties.getProperty("object_name")
+                },
+                Locale.getDefault()
+        );
+
+        return buildContent(header, body);
+    }
+
+    public Content createNewRegistrationRequestReceived(
+            Properties properties) {
+
+        String header = messageSource.getMessage(
+                "new_registration_request_received.header",
+                null,
+                Locale.getDefault()
+        );
+
+        String body = messageSource.getMessage(
+                "new_registration_request_received.body",
+                new Object[]{
+                        properties.getProperty("object_type")
                 },
                 Locale.getDefault()
         );

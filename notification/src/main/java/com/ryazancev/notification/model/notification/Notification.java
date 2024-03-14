@@ -26,6 +26,5 @@ public class Notification implements Serializable {
     private Content content;
     private LocalDateTime timestamp;
     private Long senderId;
-    private NotificationStatus status;
 
 }

@@ -4,6 +4,7 @@ import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.notification.enums.NotificationStatus;
 import com.ryazancev.notification.model.Content;
+import com.ryazancev.notification.model.notification.AdminNotification;
 import com.ryazancev.notification.model.notification.Notification;
 import com.ryazancev.notification.model.notification.PrivateNotification;
 import com.ryazancev.notification.model.notification.PublicNotification;
@@ -45,7 +46,7 @@ public class NotificationUtil {
         }
     }
 
-    public  <T extends Notification> T buildNotification(
+    public <T extends Notification> T buildNotification(
             NotificationRequest request,
             Class<T> targetType) {
 
@@ -53,21 +54,36 @@ public class NotificationUtil {
                 request.getType(),
                 request.getProperties());
 
-        if (request.getScope() == NotificationScope.PRIVATE) {
-            return targetType.cast(PrivateNotification.builder()
-                    .senderId(request.getSenderId())
-                    .recipientId(request.getRecipientId())
-                    .content(content)
-                    .timestamp(LocalDateTime.now())
-                    .status(NotificationStatus.UNREAD)
-                    .build());
-        } else {
-            return targetType.cast(PublicNotification.builder()
-                    .senderId(request.getSenderId())
-                    .content(content)
-                    .timestamp(LocalDateTime.now())
-                    .status(NotificationStatus.UNREAD)
-                    .build());
+        switch (request.getScope()) {
+            case PRIVATE -> {
+
+                return targetType.cast(PrivateNotification.builder()
+                        .senderId(request.getSenderId())
+                        .recipientId(request.getRecipientId())
+                        .content(content)
+                        .timestamp(LocalDateTime.now())
+                        .status(NotificationStatus.UNREAD)
+                        .build());
+            }
+            case PUBLIC -> {
+
+                return targetType.cast(PublicNotification.builder()
+                        .senderId(request.getSenderId())
+                        .content(content)
+                        .timestamp(LocalDateTime.now())
+                        .build());
+            }
+            case ADMIN -> {
+
+                return targetType.cast(AdminNotification.builder()
+                        .senderId(request.getSenderId())
+                        .content(content)
+                        .timestamp(LocalDateTime.now())
+                        .build());
+            }
+            default -> {
+                return null;
+            }
         }
     }
 }

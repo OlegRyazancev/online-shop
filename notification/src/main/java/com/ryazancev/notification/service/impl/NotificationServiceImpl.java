@@ -3,13 +3,13 @@ package com.ryazancev.notification.service.impl;
 import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.notification.enums.NotificationStatus;
-import com.ryazancev.notification.model.Content;
+import com.ryazancev.notification.model.notification.AdminNotification;
 import com.ryazancev.notification.model.notification.Notification;
 import com.ryazancev.notification.model.notification.PrivateNotification;
 import com.ryazancev.notification.model.notification.PublicNotification;
+import com.ryazancev.notification.repository.AdminNotificationRepository;
 import com.ryazancev.notification.repository.PrivateNotificationRepository;
 import com.ryazancev.notification.repository.PublicNotificationRepository;
-import com.ryazancev.notification.service.ContentService;
 import com.ryazancev.notification.service.NotificationService;
 import com.ryazancev.notification.util.NotificationUtil;
 import com.ryazancev.notification.util.exception.custom.NotificationNotFoundException;
@@ -33,8 +33,9 @@ import java.util.Locale;
 public class NotificationServiceImpl implements NotificationService {
 
 
-    private final PrivateNotificationRepository privateNotificationRepository;
-    private final PublicNotificationRepository publicNotificationRepository;
+    private final AdminNotificationRepository adminRepository;
+    private final PrivateNotificationRepository privateRepository;
+    private final PublicNotificationRepository publicRepository;
     private final NotificationUtil notificationUtil;
 
     private final MessageSource messageSource;
@@ -47,7 +48,7 @@ public class NotificationServiceImpl implements NotificationService {
         switch (castedScope) {
             case PUBLIC -> {
 
-                return publicNotificationRepository
+                return publicRepository
                         .findAll()
                         .stream()
                         .map(pn -> (Notification) pn)
@@ -55,10 +56,18 @@ public class NotificationServiceImpl implements NotificationService {
             }
             case PRIVATE -> {
 
-                return privateNotificationRepository
+                return privateRepository
                         .findByRecipientId(customerId)
                         .stream()
                         .map(pn -> (Notification) pn)
+                        .toList();
+            }
+            case ADMIN -> {
+
+                return adminRepository
+                        .findAll()
+                        .stream()
+                        .map(an -> (Notification) an)
                         .toList();
             }
         }
@@ -73,12 +82,12 @@ public class NotificationServiceImpl implements NotificationService {
 
             case PRIVATE -> {
 
-                PrivateNotification notification = privateNotificationRepository
+                PrivateNotification notification = privateRepository
                         .findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "private_by_id_not_found",
-                                        new Object[]{id},
+                                        "notification_by_id_not_found",
+                                        new Object[]{castedScope, id},
                                         Locale.getDefault()
                                 ),
                                 HttpStatus.BAD_REQUEST));
@@ -86,24 +95,47 @@ public class NotificationServiceImpl implements NotificationService {
                 if (notification.getStatus() == NotificationStatus.UNREAD) {
 
                     notification.setStatus(NotificationStatus.READ);
-                    privateNotificationRepository.save(notification);
+                    privateRepository.save(notification);
                 }
 
                 return notification;
             }
             case PUBLIC -> {
 
-                return publicNotificationRepository.findById(id)
+                return publicRepository.findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "public_by_id_not_found",
-                                        new Object[]{id},
+                                        "notification_by_id_not_found",
+                                        new Object[]{castedScope, id},
                                         Locale.getDefault()
                                 ),
                                 HttpStatus.BAD_REQUEST));
             }
+            case ADMIN -> {
+
+                return adminRepository.findById(id)
+                        .orElseThrow(() -> new NotificationNotFoundException(
+                                messageSource.getMessage(
+                                        "notification_by_id_not_found",
+                                        new Object[]{castedScope, id},
+                                        Locale.getDefault()
+                                ),
+                                HttpStatus.BAD_REQUEST
+                        ));
+            }
         }
         return null;
+    }
+
+    @Override
+    public AdminNotification createAdminNotification(
+            NotificationRequest request) {
+
+        AdminNotification notification =
+                notificationUtil.buildNotification(
+                        request, AdminNotification.class);
+
+        return adminRepository.insert(notification);
     }
 
     @Override
@@ -114,7 +146,7 @@ public class NotificationServiceImpl implements NotificationService {
                 notificationUtil.buildNotification(
                         request, PublicNotification.class);
 
-        return publicNotificationRepository.insert(notification);
+        return publicRepository.insert(notification);
     }
 
     @Override
@@ -125,18 +157,21 @@ public class NotificationServiceImpl implements NotificationService {
                 notificationUtil.buildNotification(
                         request, PrivateNotification.class);
 
-        return privateNotificationRepository.insert(notification);
+        return privateRepository.insert(notification);
     }
 
     @Override
     public Long getRecipientIdByPrivateNotificationId(String id) {
 
         PrivateNotification notification =
-                privateNotificationRepository.findById(id)
+                privateRepository.findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "private_by_id_not_found",
-                                        new Object[]{id},
+                                        "notification_by_id_not_found",
+                                        new Object[]{
+                                                NotificationScope.PRIVATE,
+                                                id
+                                        },
                                         Locale.getDefault()
                                 ),
                                 HttpStatus.BAD_REQUEST

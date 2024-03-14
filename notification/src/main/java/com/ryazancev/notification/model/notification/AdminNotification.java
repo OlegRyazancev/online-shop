@@ -1,6 +1,5 @@
 package com.ryazancev.notification.model.notification;
 
-import com.ryazancev.common.dto.notification.enums.NotificationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,16 +13,13 @@ import java.io.Serializable;
  * @author Oleg Ryazancev
  */
 
-@Document(collection = "private-notifications")
+@Document(collection = "admin-notifications")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrivateNotification
+public class AdminNotification
         extends Notification
-        implements Serializable{
-
-    private NotificationStatus status;
-    private Long recipientId;
+        implements Serializable {
 }
