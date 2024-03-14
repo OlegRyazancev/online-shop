@@ -1,13 +1,11 @@
 package com.ryazancev.admin.util.notification;
 
 import com.ryazancev.admin.model.RegistrationRequest;
-import com.ryazancev.admin.service.ClientsService;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
 import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.notification.enums.NotificationType;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -38,15 +36,16 @@ public class NotificationProcessor {
                         request.getObjectToRegisterId(),
                         type
                 );
-
-        Long senderId =
-                determiner.determineSenderId();
-
         Long recipientId =
                 determiner.determineRecipientId(
                         request.getObjectType(),
                         request.getObjectToRegisterId(),
                         scope
+                );
+        Long senderId =
+                determiner.determineSenderId(
+                        scope,
+                        recipientId
                 );
 
         return NotificationRequest.builder()
@@ -54,7 +53,8 @@ public class NotificationProcessor {
                 .type(type)
                 .properties(properties)
                 .senderId(senderId)
-                .recipientId(recipientId)
+                .recipientId(scope == NotificationScope.ADMIN ?
+                        null : recipientId)
                 .build();
     }
 

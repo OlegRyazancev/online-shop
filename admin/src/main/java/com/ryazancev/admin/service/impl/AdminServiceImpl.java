@@ -187,6 +187,7 @@ public class AdminServiceImpl implements AdminService {
 
         registrationRequest.setCreatedAt(LocalDateTime.now());
         registrationRequest.setStatus(RequestStatus.ON_REVIEW);
+
         //todo:send notification to Admin that new request here
         adminRepository.save(registrationRequest);
     }
