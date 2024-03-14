@@ -17,12 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -37,6 +39,8 @@ public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
     private final AdminProducerService adminProducerService;
     private final NotificationProcessor notificationProcessor;
+
+    private final MessageSource messageSource;
 
     @Override
     @Cacheable(value = "Admin::getAll")
@@ -81,11 +85,13 @@ public class AdminServiceImpl implements AdminService {
 
         RegistrationRequest existing =
                 adminRepository.findById(requestId)
-                        .orElseThrow(() ->
-                                new RequestNotFoundException(
-                                        "Request not found with this id",
-                                        HttpStatus.NOT_FOUND
-                                ));
+                        .orElseThrow(() -> new RequestNotFoundException(
+                                messageSource.getMessage(
+                                        "request_not_found_by_id",
+                                        new Object[]{requestId},
+                                        Locale.getDefault()
+                                ),
+                                HttpStatus.NOT_FOUND));
         existing.setStatus(status);
         existing.setReviewedAt(LocalDateTime.now());
 

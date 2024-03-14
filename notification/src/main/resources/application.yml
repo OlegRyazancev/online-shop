@@ -9,7 +9,6 @@ spring:
   config:
     import: classpath:openapi/open-api-config.yml,
       optional:file:.env[.properties],
-      classpath:messages/messages.properties
   messages:
     always-use-message-format: false
     fallback-to-system-locale: true
