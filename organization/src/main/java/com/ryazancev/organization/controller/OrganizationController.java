@@ -8,7 +8,6 @@ import com.ryazancev.common.dto.product.ProductsSimpleResponse;
 import com.ryazancev.common.validation.OnCreate;
 import com.ryazancev.common.validation.OnUpdate;
 import com.ryazancev.organization.model.Organization;
-import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.DtoProcessor;

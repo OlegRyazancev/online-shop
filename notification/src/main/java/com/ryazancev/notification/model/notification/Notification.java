@@ -1,6 +1,5 @@
 package com.ryazancev.notification.model.notification;
 
-import com.ryazancev.common.dto.notification.enums.NotificationStatus;
 import com.ryazancev.notification.model.Content;
 import lombok.AllArgsConstructor;
 import lombok.Data;
