@@ -34,40 +34,45 @@ public class NotificationMessageListener {
             case PRIVATE -> {
 
                 log.info("Receive message to send private notification" +
-                                " to user: {}",
+                                " to user with id: {}",
                         request.getRecipientId());
 
+                log.trace("Creating private notification...");
                 PrivateNotification notification =
                         notificationService.createPrivateNotification(request);
 
+                log.trace("Sending private notification with id {} " +
+                                "by websocket...",
+                        notification.getId());
                 messagingTemplate.convertAndSendToUser(
                         String.valueOf(notification.getRecipientId()),
                         "/private",
                         notification);
 
-                log.info("Private notification to user with id: {} was " +
-                                "successfully send. Notification id: {}",
-                        notification.getId(), notification.getRecipientId());
+                log.info("Private notification was successfully send");
             }
 
             case PUBLIC -> {
 
                 log.info("Receive message to send public notification " +
-                                "to user: {}",
-                        request.getRecipientId());
+                        "to all users");
 
+                log.trace("Creating public notification...");
                 PublicNotification notification =
                         notificationService.createPublicNotification(request);
 
+                log.trace("Sending public notification with id {}",
+                        notification.getId());
                 messagingTemplate.convertAndSend(
                         "/public",
                         notification);
 
-                log.info("Public notification to user was successfully " +
-                                "send. Notification id: {}",
-                        notification.getId());
+                log.info("Public notification to users  " +
+                        "was successfully send");
             }
             default -> {
+
+                log.warn("Unknown scope: {}", request.getScope());
             }
 
         }
