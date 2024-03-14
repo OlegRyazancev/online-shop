@@ -161,9 +161,9 @@ public class AdminProducerService {
 
     public void sendMessageToToggleUserLock(UserLockRequest request) {
 
-        log.info("Request to toggle user: {} lock {} " +
+        log.info("Request to toggle user by id: {} lock {} " +
                         "was received",
-                request.getUsername(),
+                request.getUserId(),
                 request.isLock());
         try {
 
@@ -173,9 +173,9 @@ public class AdminProducerService {
             log.debug("Request to {} was successfully sent",
                     toggleUserLockTopic);
         } catch (Exception e) {
-            log.error("Request to toggle user: {} lock {} " +
+            log.error("Request to toggle user by id: {} lock {} " +
                             "was not successfully sent",
-                    request.getUsername(),
+                    request.getUserId(),
                     request.isLock());
         }
     }

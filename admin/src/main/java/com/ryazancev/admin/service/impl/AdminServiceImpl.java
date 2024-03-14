@@ -153,9 +153,10 @@ public class AdminServiceImpl implements AdminService {
         adminProducerService.sendMessageToToggleUserLock(request);
 
         return String.format(
-                "Request to set locked to: %b of user: %s successfully sent",
+                "Request to set locked to: %b of user with " +
+                        "id: %s successfully sent",
                 request.isLock(),
-                request.getUsername());
+                request.getUserId());
     }
 
     @Transactional

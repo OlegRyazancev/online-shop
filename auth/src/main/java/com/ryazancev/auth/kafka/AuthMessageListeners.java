@@ -28,9 +28,9 @@ public class AuthMessageListeners {
 
         log.info("Received message to lock: {}, user: {}",
                 request.isLock(),
-                request.getUsername());
+                request.getUserId());
 
-        userService.toggleUserLock(request.getUsername(), request.isLock());
+        userService.toggleUserLock(request.getUserId(), request.isLock());
 
         if (request.isLock()) {
 

@@ -17,11 +17,11 @@ import lombok.*;
 public class UserLockRequest {
 
     @Schema(
-            description = "Username of the user to be managed",
-            example = "john@example.com"
+            description = "User id of the user to be managed",
+            example = "3"
     )
-    @NotNull(message = "Username must be not null")
-    private String username;
+    @NotNull(message = "User id must be not null")
+    private Long userId;
 
     @Schema(
             description = "Lock status of the user",

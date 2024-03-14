@@ -16,7 +16,7 @@ public interface UserService {
 
     User getById(Long id);
 
-    void toggleUserLock(String username, boolean lock);
+    void toggleUserLock(Long id, boolean lock);
 
     void markUserAsDeletedByCustomerId(Long customerId);
 

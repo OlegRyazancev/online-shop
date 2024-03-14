@@ -113,9 +113,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void toggleUserLock(String username, boolean lock) {
+    public void toggleUserLock(Long id, boolean lock) {
 
-        User existing = getByEmail(username);
+        User existing = getById(id);
 
         existing.setLocked(lock);
 
