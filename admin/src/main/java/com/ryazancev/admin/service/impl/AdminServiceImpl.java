@@ -4,7 +4,7 @@ import com.ryazancev.admin.kafka.AdminProducerService;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.repository.AdminRepository;
 import com.ryazancev.admin.service.AdminService;
-import com.ryazancev.admin.util.NotificationProcessor;
+import com.ryazancev.admin.util.notification.NotificationProcessor;
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
@@ -101,26 +101,26 @@ public class AdminServiceImpl implements AdminService {
         adminProducerService.sendRegisterResponse(updated);
 
 
-        NotificationRequest privateNotification =
+        NotificationRequest privateNotificationRequest =
                 notificationProcessor
                         .createNotification(
                                 updated,
                                 NotificationScope.PRIVATE
                         );
 
-        adminProducerService.sendNotification(privateNotification);
+        adminProducerService.sendNotification(privateNotificationRequest);
 
         if (updated.getObjectType().equals(ObjectType.PRODUCT)
                 && updated.getStatus().equals(RequestStatus.ACCEPTED)) {
 
-            NotificationRequest publicNotification =
+            NotificationRequest publicNotificationRequest =
                     notificationProcessor
                             .createNotification(
                                     updated,
                                     NotificationScope.PUBLIC
                             );
 
-            adminProducerService.sendNotification(publicNotification);
+            adminProducerService.sendNotification(publicNotificationRequest);
         }
 
         return updated;
@@ -130,6 +130,15 @@ public class AdminServiceImpl implements AdminService {
     public String changeObjectStatus(ObjectRequest request) {
 
         adminProducerService.sendMessageToChangeObjectStatus(request);
+
+        NotificationRequest privateNotificationRequest =
+                notificationProcessor
+                        .createNotification(
+                                request,
+                                NotificationScope.PRIVATE
+                        );
+
+        adminProducerService.sendNotification(privateNotificationRequest);
 
         return String.format(
                 "Request to %s %s with id: %s successfully sent",

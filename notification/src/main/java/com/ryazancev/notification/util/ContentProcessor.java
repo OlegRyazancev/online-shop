@@ -200,6 +200,49 @@ public class ContentProcessor {
         return buildContent(header, body);
     }
 
+    public Content createFreezeObjectContent(Properties properties) {
+
+        String header = messageSource.getMessage(
+                "object_freeze.header",
+                new Object[]{
+                        properties.getProperty("object_type")
+                },
+                Locale.getDefault()
+        );
+
+        String body = messageSource.getMessage(
+                "object_freeze.body",
+                new Object[]{
+                        properties.getProperty("object_name"),
+                        mail
+                },
+                Locale.getDefault()
+        );
+
+        return buildContent(header, body);
+    }
+
+    public Content createActivateObjectContent(Properties properties) {
+
+        String header = messageSource.getMessage(
+                "object_activate.header",
+                new Object[]{
+                        properties.getProperty("object_type")
+                },
+                Locale.getDefault()
+        );
+
+        String body = messageSource.getMessage(
+                "object_activate.body",
+                new Object[]{
+                        properties.getProperty("object_name")
+                },
+                Locale.getDefault()
+        );
+
+        return buildContent(header, body);
+    }
+
     private Content buildContent(String header, String body) {
 
         return Content.builder()

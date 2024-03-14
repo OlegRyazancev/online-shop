@@ -65,6 +65,16 @@ public class ContentServiceImpl implements ContentService {
                         .createPurchaseProcessedContent(
                                 properties);
             }
+            case PRIVATE_FREEZE_OBJECT -> {
+                content = contentProcessor
+                        .createFreezeObjectContent(
+                                properties);
+            }
+            case PRIVATE_ACTIVATE_OBJECT -> {
+                content = contentProcessor
+                        .createActivateObjectContent(
+                                properties);
+            }
             case PUBLIC_NEW_PRODUCT_CREATED -> {
                 content = contentProcessor
                         .createNewProductAvailableContent(
