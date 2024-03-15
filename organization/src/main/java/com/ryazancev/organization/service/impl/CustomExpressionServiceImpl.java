@@ -1,5 +1,6 @@
 package com.ryazancev.organization.service.impl;
 
+import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.organization.OrganizationEditDto;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.CustomExpressionService;
@@ -7,13 +8,14 @@ import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
-import static com.ryazancev.organization.util.exception.Message.*;
 
 /**
  * @author Oleg Ryazancev
@@ -27,6 +29,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     private final HttpServletRequest request;
     private final OrganizationRepository organizationRepository;
 
+    private final MessageSource messageSource;
+
     @Override
     public void checkAccountConditions() {
 
@@ -39,7 +43,14 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!canAccessOrganization(id)) {
             throw new AccessDeniedException(
-                    ACCESS_ORGANIZATION,
+                    messageSource.getMessage(
+                            "exception.organization.access_object",
+                            new Object[]{
+                                    ServiceStage.ORGANIZATION,
+                                    id
+                            },
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -49,7 +60,14 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!canAccessUser(organizationEditDto.getOwnerId())) {
             throw new AccessDeniedException(
-                    ACCESS_CUSTOMER,
+                    messageSource.getMessage(
+                            "exception.organization.access_object",
+                            new Object[]{
+                                    ServiceStage.CUSTOMER,
+                                    organizationEditDto.getOwnerId()
+                            },
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -61,7 +79,11 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (locked) {
             throw new AccessDeniedException(
-                    ACCOUNT_LOCKED,
+                    messageSource.getMessage(
+                            "exception.organization.account_locked",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -73,7 +95,11 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!confirmed) {
             throw new AccessDeniedException(
-                    EMAIL_NOT_CONFIRMED,
+                    messageSource.getMessage(
+                            "exception.organization.email_not_confirmed",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }

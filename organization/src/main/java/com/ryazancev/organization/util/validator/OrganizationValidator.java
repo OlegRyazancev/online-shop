@@ -1,15 +1,18 @@
 package com.ryazancev.organization.util.validator;
 
+import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import static com.ryazancev.organization.util.exception.Message.*;
+import java.util.Locale;
+
 
 /**
  * @author Oleg Ryazancev
@@ -21,14 +24,17 @@ public class OrganizationValidator {
 
     private final OrganizationRepository organizationRepository;
 
+    private final MessageSource messageSource;
+
     public void validateStatus(Organization organization,
                                OrganizationStatus status) {
         if (organization.getStatus() == status) {
 
             throw new AccessDeniedException(
-                    String.format(
-                            ORGANIZATION_STATUS_ACCESS,
-                            organization.getStatus().name()
+                    messageSource.getMessage(
+                            "exception.organization.status_access",
+                            new Object[]{organization.getStatus()},
+                            Locale.getDefault()
                     ),
                     HttpStatus.CONFLICT);
         }
@@ -49,7 +55,11 @@ public class OrganizationValidator {
                 .isPresent()) {
 
             throw new OrganizationCreationException(
-                    NAME_EXISTS,
+                    messageSource.getMessage(
+                            "exception.organization.name_exists",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -62,7 +72,11 @@ public class OrganizationValidator {
                 .isPresent()) {
 
             throw new OrganizationCreationException(
-                    DESCRIPTION_EXISTS,
+                    messageSource.getMessage(
+                            "exception.organization.description_exists",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST
             );
         }

@@ -17,14 +17,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.ryazancev.organization.util.exception.Message.ORGANIZATION_NOT_FOUND;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -41,6 +41,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationValidator organizationValidator;
 
     private final ClientsService clientsService;
+    private final MessageSource messageSource;
 
     @Override
     @Cacheable(value = "Organization::getAll")
@@ -178,7 +179,14 @@ public class OrganizationServiceImpl implements OrganizationService {
         existing.setLogo(fileName);
         organizationRepository.save(existing);
 
-        return "Logo uploaded successfully";
+        return messageSource.getMessage(
+                "service.organization.logo_uploaded",
+                new Object[]{
+                        id,
+                        fileName
+                },
+                Locale.getDefault()
+        );
     }
 
     @Override
@@ -222,14 +230,22 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationProducerService.sendMessageToProductTopic(id);
         organizationRepository.save(existing);
 
-        return "Organization successfully deleted";
+        return messageSource.getMessage(
+                "service.organization.deleted",
+                new Object[]{id},
+                Locale.getDefault()
+        );
     }
 
     private Organization findById(Long id) {
 
         return organizationRepository.findById(id)
                 .orElseThrow(() -> new OrganizationNotFoundException(
-                        ORGANIZATION_NOT_FOUND,
+                        messageSource.getMessage(
+                                "exception.organization.not_found",
+                                new Object[]{id},
+                                Locale.getDefault()
+                        ),
                         HttpStatus.NOT_FOUND
                 ));
     }
