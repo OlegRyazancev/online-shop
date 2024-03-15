@@ -25,12 +25,20 @@ public class MailMessageListener {
             containerFactory = "messageFactory"
     )
     void consumeMail(MailDto mailDto) {
+
         log.info("Received message to send email to: {}, email type: {}",
                 mailDto.getEmail(), mailDto.getType().name());
-        log.info("Sending message...");
 
-        mailService.sendEmail(mailDto);
+        try {
 
-        log.info("Mail successfully send to: {}", mailDto.getEmail());
+            log.trace("Sending message...");
+            mailService.sendEmail(mailDto);
+
+            log.info("Mail was send to: {}", mailDto.getEmail());
+        } catch (Exception e) {
+
+            log.error("Mail was not send to {}", mailDto.getEmail());
+        }
+
     }
 }
