@@ -33,7 +33,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
             ServiceUnavailableException e) {
 
-        log.error("Service unavailable exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -48,7 +49,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleUserNotFound(
             UserNotFoundException e) {
 
-        log.error("User not found exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -63,7 +65,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleUserCreation(
             UserCreationException e) {
 
-        log.error("User creation exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -78,7 +81,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleConfirmationToken(
             ConfirmationTokenException e) {
 
-        log.error("Confirmation token exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -93,7 +97,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleConfirmationToken(
             AccessDeniedException e) {
 
-        log.error("Access denied exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -107,9 +112,11 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(
             org.springframework.security.access.AccessDeniedException.class)
-    public ResponseEntity<ExceptionBody> handleAccessDeniedSecurity() {
+    public ResponseEntity<ExceptionBody> handleAccessDeniedSecurity(
+            AccessDeniedException e) {
 
-        log.error("Access denied security exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
@@ -124,7 +131,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
 
-        log.error("Constraint violation exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -144,7 +152,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
 
-        log.error("Method argument not valid exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -162,9 +171,11 @@ public class AuthExceptionHandler {
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ExceptionBody> handleAuthentication() {
+    public ResponseEntity<ExceptionBody> handleAuthentication(
+            AuthenticationException e) {
 
-        log.error("Authentication exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
@@ -180,9 +191,8 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
-        log.error("Online shop exception");
-
-        e.printStackTrace();
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -198,8 +208,7 @@ public class AuthExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
 
         log.error(e.getClass().getSimpleName());
-
-        e.printStackTrace();
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

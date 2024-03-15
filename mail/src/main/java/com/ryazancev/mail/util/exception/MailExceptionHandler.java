@@ -20,9 +20,8 @@ public class MailExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
-        log.error("Online shop exception");
-
-        e.printStackTrace();
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -38,8 +37,7 @@ public class MailExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
 
         log.error(e.getClass().getSimpleName());
-
-        e.printStackTrace();
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

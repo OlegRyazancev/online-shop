@@ -29,7 +29,8 @@ public class AdminExceptionHandler {
     public ResponseEntity<ExceptionBody> handleRequestNotFound(
             RequestNotFoundException e) {
 
-        log.error("Request not found exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -44,7 +45,8 @@ public class AdminExceptionHandler {
     public ResponseEntity<ExceptionBody> handleInvalidRequestStatus(
             InvalidRequestStatusException e) {
 
-        log.error("Invalid request status exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -59,7 +61,8 @@ public class AdminExceptionHandler {
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
 
-        log.error("Constraint violation exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -79,7 +82,8 @@ public class AdminExceptionHandler {
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
 
-        log.error("Method argument not valid exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -100,9 +104,8 @@ public class AdminExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
-        log.error("Online shop exception");
-
-        e.printStackTrace();
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -118,8 +121,7 @@ public class AdminExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
 
         log.error(e.getClass().getSimpleName());
-
-        e.printStackTrace();
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

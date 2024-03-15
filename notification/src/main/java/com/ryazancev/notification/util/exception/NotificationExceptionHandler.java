@@ -23,7 +23,8 @@ public class NotificationExceptionHandler {
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
             ServiceUnavailableException e) {
 
-        log.error("Service unavailable exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -38,7 +39,8 @@ public class NotificationExceptionHandler {
     public ResponseEntity<ExceptionBody> handleNotificationNotFound(
             NotificationNotFoundException e) {
 
-        log.error("Notification not found exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -53,7 +55,8 @@ public class NotificationExceptionHandler {
     public ResponseEntity<ExceptionBody> handleInvalidScope(
             NotificationNotFoundException e) {
 
-        log.error("Invalid scope exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -68,9 +71,8 @@ public class NotificationExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
-        log.error("Online shop exception");
-
-        e.printStackTrace();
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -86,8 +88,7 @@ public class NotificationExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
 
         log.error(e.getClass().getSimpleName());
-
-        e.printStackTrace();
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
