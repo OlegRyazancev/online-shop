@@ -10,11 +10,13 @@ import io.minio.PutObjectArgs;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,6 +31,7 @@ public class LogoServiceImpl implements LogoService {
 
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
+    private final MessageSource messageSource;
 
     @Override
     public String upload(MultipartFile file) {
@@ -37,14 +40,22 @@ public class LogoServiceImpl implements LogoService {
             createBucket();
         } catch (Exception e) {
             throw new LogoUploadException(
-                    "Logo upload failed " + e.getMessage(),
+                    messageSource.getMessage(
+                            "logo_upload_failed",
+                            new Object[]{e.getMessage()},
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST
             );
         }
 
         if (file.isEmpty() || file.getOriginalFilename() == null) {
             throw new LogoUploadException(
-                    "Logo must have name",
+                    messageSource.getMessage(
+                            "logo_must_have_name",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -56,7 +67,11 @@ public class LogoServiceImpl implements LogoService {
             inputStream = file.getInputStream();
         } catch (Exception e) {
             throw new LogoUploadException(
-                    "Logo upload failed " + e.getMessage(),
+                    messageSource.getMessage(
+                            "logo_upload_failed",
+                            new Object[]{e.getMessage()},
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST
             );
         }
