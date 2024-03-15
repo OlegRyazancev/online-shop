@@ -3,16 +3,19 @@ package com.ryazancev.customer.service.impl;
 import com.ryazancev.common.clients.NotificationClient;
 import com.ryazancev.common.clients.PurchaseClient;
 import com.ryazancev.common.clients.ReviewClient;
+import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.purchase.PurchaseEditDto;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.customer.service.ClientsService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static com.ryazancev.customer.util.exception.Message.*;
+import java.util.Locale;
+
 
 /**
  * @author Oleg Ryazancev
@@ -26,6 +29,8 @@ public class ClientsServiceImpl implements ClientsService {
     private final PurchaseClient purchaseClient;
     private final ReviewClient reviewClient;
     private final NotificationClient notificationClient;
+
+    private final MessageSource messageSource;
 
     @Override
     @CircuitBreaker(
@@ -95,21 +100,34 @@ public class ClientsServiceImpl implements ClientsService {
     private Object reviewServiceUnavailable(Exception e) {
 
         throw new ServiceUnavailableException(
-                REVIEW_SERVICE_UNAVAILABLE,
+                messageSource.getMessage(
+                        "service_unavailable",
+                        new Object[]{ServiceStage.REVIEW.toString()},
+                        Locale.getDefault()
+                ),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     private Object purchaseServiceUnavailable(Exception e) {
 
         throw new ServiceUnavailableException(
-                PURCHASE_SERVICE_UNAVAILABLE,
+
+                messageSource.getMessage(
+                        "service_unavailable",
+                        new Object[]{ServiceStage.PURCHASE.toString()},
+                        Locale.getDefault()
+                ),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     private Object notificationServiceUnavailable(Exception e) {
 
         throw new ServiceUnavailableException(
-                NOTIFICATION_SERVICE_UNAVAILABLE,
+                messageSource.getMessage(
+                        "service_unavailable",
+                        new Object[]{ServiceStage.NOTIFICATION.toString()},
+                        Locale.getDefault()
+                ),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 }
