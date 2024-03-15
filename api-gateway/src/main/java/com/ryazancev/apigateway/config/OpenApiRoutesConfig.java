@@ -70,6 +70,11 @@ public class OpenApiRoutesConfig {
                         .and()
                         .method(HttpMethod.GET)
                         .uri("lb://MAIL"))
+                .route(r -> r
+                        .path("/v3/api-docs/notification")
+                        .and()
+                        .method(HttpMethod.GET)
+                        .uri("lb://NOTIFICATION"))
                 .build();
     }
 }

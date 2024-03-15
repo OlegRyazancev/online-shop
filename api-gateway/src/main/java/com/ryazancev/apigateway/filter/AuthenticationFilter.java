@@ -2,13 +2,16 @@ package com.ryazancev.apigateway.filter;
 
 import com.ryazancev.apigateway.util.JwtUtil;
 import com.ryazancev.apigateway.util.exception.custom.UnauthorizedException;
+import org.springframework.cglib.core.Local;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -20,11 +23,15 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
     private final RouteValidator validator;
     private final JwtUtil jwtUtil;
+    private final MessageSource messageSource;
 
-    public AuthenticationFilter(RouteValidator validator, JwtUtil jwtUtil) {
+    public AuthenticationFilter(RouteValidator validator,
+                                JwtUtil jwtUtil,
+                                MessageSource messageSource) {
         super(Config.class);
         this.validator = validator;
         this.jwtUtil = jwtUtil;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -35,7 +42,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 if (!exchange.getRequest()
                         .getHeaders()
                         .containsKey(HttpHeaders.AUTHORIZATION)) {
-                    throw new UnauthorizedException("Unauthorized");
+                    throw new UnauthorizedException(
+                            messageSource.getMessage(
+                                    "exception.apigw.unauthorized",
+                                    null,
+                                    Locale.getDefault()
+                            )
+                    );
                 }
                 String token = Objects.requireNonNull(
                         exchange.getRequest()
@@ -49,7 +62,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
 
                 if (!jwtUtil.validateToken(token)) {
-                    throw new UnauthorizedException("Unauthorized request");
+                    throw new UnauthorizedException(
+                            messageSource.getMessage(
+                                    "exception.apigw.unauthorized_request",
+                                    null,
+                                    Locale.getDefault()
+                            )
+                    );
                 }
                 List<String> roles = jwtUtil.extractRoles(token);
 
@@ -58,8 +77,12 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
                     if (!roles.contains("ROLE_ADMIN")) {
                         throw new UnauthorizedException(
-                                "Insufficient privileges for " +
-                                        "admin microservice");
+                                messageSource.getMessage(
+                                        "exception.apigw.insufficient_privileges",
+                                        null,
+                                        Locale.getDefault()
+                                )
+                        );
                     }
                 }
                 String rolesString = String.join(" ", roles);
