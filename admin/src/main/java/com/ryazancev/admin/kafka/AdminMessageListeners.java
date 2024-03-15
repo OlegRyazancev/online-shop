@@ -39,20 +39,30 @@ public class AdminMessageListeners {
                 requestDto.getObjectToRegisterId(),
                 requestDto.getObjectType().name());
 
-        log.trace("Creating request...");
-        RegistrationRequest request =
-                adminMapper.toEntity(requestDto);
+        try {
 
-        adminService.create(request);
+            log.trace("Creating request...");
+            RegistrationRequest request =
+                    adminMapper.toEntity(requestDto);
 
-        NotificationRequest notificationRequest =
-                notificationProcessor.createNotification(
-                        request,
-                        NotificationScope.ADMIN);
+            adminService.create(request);
 
-        adminProducerService.sendNotification(notificationRequest);
+            log.trace("Creating admin notification...");
+            NotificationRequest notificationRequest =
+                    notificationProcessor.createNotification(
+                            request,
+                            NotificationScope.ADMIN);
 
-        log.info("Request successfully created");
+            log.trace("Sending admin notification...");
+            adminProducerService.sendNotification(notificationRequest);
+
+            log.info("Request was created");
+
+        } catch (Exception e) {
+
+            log.error("Request was not created");
+        }
+
     }
 }
 

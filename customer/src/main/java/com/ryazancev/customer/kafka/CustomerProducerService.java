@@ -46,7 +46,7 @@ public class CustomerProducerService {
             log.trace("sending request...}");
             longValueKafkaTemplate.send(deleteUserTopic, id);
 
-            log.debug("Request to {} was successfully send", deleteUserTopic);
+            log.debug("Request to {} was send", deleteUserTopic);
 
         } catch (Exception e) {
 
@@ -68,7 +68,7 @@ public class CustomerProducerService {
             log.trace("sending request...}");
             userUpdateKafkaTemplate.send(updateUserTopic, request);
 
-            log.debug("Request to {} was successfully send", updateUserTopic);
+            log.debug("Request to {} was send", updateUserTopic);
 
         } catch (Exception e) {
 

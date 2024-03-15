@@ -30,11 +30,19 @@ public class CustomerMessageListener {
         log.info("Received message to update customer balance with id: {}",
                 request.getCustomerId());
 
-        log.trace("Updating customer balance...");
-        Customer customer =
-                customerService.updateBalance(request);
+        try {
 
-        log.info("Customer successfully updated. Actual balance: {}",
-                customer.getBalance());
+            log.trace("Updating customer balance...");
+            Customer customer =
+                    customerService.updateBalance(request);
+
+            log.info("Customer was updated. Actual balance: {}",
+                    customer.getBalance());
+
+        } catch (Exception e) {
+
+            log.error("Customer was not updated");
+        }
+
     }
 }

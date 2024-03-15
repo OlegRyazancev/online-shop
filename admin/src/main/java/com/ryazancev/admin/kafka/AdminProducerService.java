@@ -95,7 +95,7 @@ public class AdminProducerService {
                             productRegisterTopic,
                             requestDto);
 
-                    log.debug("Request to {} was successfully send",
+                    log.debug("Request to {} was send",
                             productRegisterTopic);
                 }
                 case ORGANIZATION -> {
@@ -104,7 +104,7 @@ public class AdminProducerService {
                     registerKafkaTemplate.send(
                             organizationRegisterTopic, requestDto);
 
-                    log.debug("Request to {} was successfully send",
+                    log.debug("Request to {} was send",
                             organizationRegisterTopic);
                 }
                 default -> {
@@ -115,7 +115,7 @@ public class AdminProducerService {
         } catch (Exception e) {
 
             log.error("Request to send register response of {} with id:" +
-                            " {} was not successfully sent",
+                            " {} was not sent",
                     requestDto.getObjectType(),
                     requestDto.getObjectToRegisterId());
         }
@@ -137,7 +137,7 @@ public class AdminProducerService {
                     changeStatusKafkaTemplate.send(
                             productChangeStatusTopic, objectRequest);
 
-                    log.debug("Request to {} was successfully sent",
+                    log.debug("Request to {} was sent",
                             productChangeStatusTopic);
                 }
                 case ORGANIZATION -> {
@@ -146,7 +146,7 @@ public class AdminProducerService {
                     changeStatusKafkaTemplate.send(
                             organizationChangeStatusTopic, objectRequest);
 
-                    log.debug("Request to {} was successfully sent",
+                    log.debug("Request to {} was sent",
                             organizationChangeStatusTopic);
                 }
                 default -> {
@@ -156,7 +156,7 @@ public class AdminProducerService {
             }
         } catch (Exception e) {
 
-            log.error("Request to change {} status was not successfully sent",
+            log.error("Request to change {} status was not sent",
                     objectRequest.getObjectType());
         }
     }
@@ -172,7 +172,7 @@ public class AdminProducerService {
             log.trace("sending request...}");
             toggleUserLockKafkaTemplate.send(toggleUserLockTopic, request);
 
-            log.debug("Request to {} was successfully sent",
+            log.debug("Request to {} was sent",
                     toggleUserLockTopic);
 
         } catch (Exception e) {
@@ -195,7 +195,7 @@ public class AdminProducerService {
             log.trace("sending request...}");
             notificationKafkaTemplate.send(notificationTopic, request);
 
-            log.debug("Request to {} was successfully sent",
+            log.debug("Request to {} was sent",
                     notificationTopic);
 
         } catch (Exception e) {
