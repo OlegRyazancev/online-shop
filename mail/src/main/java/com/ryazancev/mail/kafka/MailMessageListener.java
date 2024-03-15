@@ -34,10 +34,13 @@ public class MailMessageListener {
             log.trace("Sending message...");
             mailService.sendEmail(mailDto);
 
-            log.info("Mail was send to: {}", mailDto.getEmail());
+            log.debug("Mail was sent to: {}", mailDto.getEmail());
+
         } catch (Exception e) {
 
-            log.error("Mail was not send to {}", mailDto.getEmail());
+            log.error("Mail was not sent to {}: {}",
+                    mailDto.getEmail(),
+                    e.getMessage());
         }
 
     }

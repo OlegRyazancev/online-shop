@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AuthMessageListeners {
+public class AuthMessageListener {
 
     private final UserService userService;
 
@@ -34,13 +34,14 @@ public class AuthMessageListeners {
             log.trace("Toggling user lock...");
             userService.toggleUserLock(request.getUserId(), request.isLock());
 
-            log.info("User with id {} was locked/unlocked",
+            log.debug("User with id {} was locked/unlocked",
                     request.getUserId());
 
         } catch (Exception e) {
 
-            log.info("User with id {} was not locked/unlocked",
-                    request.getUserId());
+            log.error("User with id {} was not locked/unlocked: {}",
+                    request.getUserId(),
+                    e.getMessage());
         }
     }
 
@@ -59,11 +60,11 @@ public class AuthMessageListeners {
             log.trace("Marking user as deleted...");
             userService.markUserAsDeletedByCustomerId(customerId);
 
-            log.info("User was marked as deleted");
+            log.debug("User was marked as deleted");
 
         } catch (Exception e) {
 
-            log.error("User was not marked as deleted");
+            log.error("User was not marked as deleted: {}", e.getMessage());
         }
     }
 
@@ -82,11 +83,11 @@ public class AuthMessageListeners {
             log.trace("Updating user...");
             userService.updateByCustomer(request);
 
-            log.info("User was updated");
+            log.debug("User was updated");
 
         } catch (Exception e) {
 
-            log.error("User was not updated");
+            log.error("User was not updated: {}", e.getMessage());
         }
     }
 }

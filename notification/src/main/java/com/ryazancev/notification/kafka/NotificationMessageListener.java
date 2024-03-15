@@ -50,7 +50,7 @@ public class NotificationMessageListener {
                             "/private",
                             notification);
 
-                    log.info("Private notification was successfully send");
+                    log.debug("Private notification was successfully send");
                 }
 
                 case PUBLIC -> {
@@ -67,7 +67,7 @@ public class NotificationMessageListener {
                             "/public",
                             notification);
 
-                    log.info("Public notification to users  " +
+                    log.debug("Public notification to users  " +
                             "was successfully send");
                 }
 
@@ -85,7 +85,7 @@ public class NotificationMessageListener {
                             "/admin",
                             notification);
 
-                    log.info("Public notification to users  " +
+                    log.debug("Public notification to users  " +
                             "was successfully send");
                 }
                 default -> {
@@ -96,7 +96,7 @@ public class NotificationMessageListener {
             }
         } catch (Exception e) {
 
-            log.error("Notification was not send");
+            log.error("Notification was not sent: {}", e.getMessage());
         }
 
     }

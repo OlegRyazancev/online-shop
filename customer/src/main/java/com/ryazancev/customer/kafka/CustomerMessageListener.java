@@ -36,12 +36,12 @@ public class CustomerMessageListener {
             Customer customer =
                     customerService.updateBalance(request);
 
-            log.info("Customer was updated. Actual balance: {}",
+            log.debug("Customer was updated. Actual balance: {}",
                     customer.getBalance());
 
         } catch (Exception e) {
 
-            log.error("Customer was not updated");
+            log.error("Customer was not updated: {}", e.getMessage());
         }
 
     }

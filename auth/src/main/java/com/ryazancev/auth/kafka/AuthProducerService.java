@@ -33,14 +33,16 @@ public class AuthProducerService {
 
         try {
 
-            log.trace("sending request");
+            log.trace("sending request...");
             mailKafkaTemplate.send(mailTopicName, mailDto);
 
-            log.info("Request to {} was sent", mailTopicName);
+            log.debug("Request to {} was sent", mailTopicName);
 
         } catch (Exception e) {
 
-            log.info("Request to {} was not sent", mailTopicName);
+            log.error("Request to {} was not sent: {}",
+                    mailTopicName,
+                    e.getMessage());
         }
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AdminMessageListeners {
+public class AdminMessageListener {
 
 
     private final AdminService adminService;
@@ -34,11 +34,9 @@ public class AdminMessageListeners {
     )
     void createRegistrationRequest(RegistrationRequestDto requestDto) {
 
-        log.info("Received message to register organization/product with id {}," +
-                        "and type: {}",
-                requestDto.getObjectToRegisterId(),
-                requestDto.getObjectType().name());
-
+        log.info("Received message to register {} with id {}",
+                requestDto.getObjectType(),
+                requestDto.getObjectToRegisterId());
         try {
 
             log.trace("Creating request...");
@@ -56,12 +54,12 @@ public class AdminMessageListeners {
             log.trace("Sending admin notification...");
             adminProducerService.sendNotification(notificationRequest);
 
-            log.info("Request was created with id: {}",
+            log.debug("Request was created with id: {}",
                     created.getId());
 
         } catch (Exception e) {
 
-            log.error("Request was not created");
+            log.error("Request was not created: {}", e.getMessage());
         }
 
     }

@@ -92,10 +92,9 @@ public class AdminProducerService {
 
                     log.trace("sending request...}");
                     registerKafkaTemplate.send(
-                            productRegisterTopic,
-                            requestDto);
+                            productRegisterTopic, requestDto);
 
-                    log.debug("Request to {} was send",
+                    log.debug("Request to {} was sent",
                             productRegisterTopic);
                 }
                 case ORGANIZATION -> {
@@ -104,7 +103,7 @@ public class AdminProducerService {
                     registerKafkaTemplate.send(
                             organizationRegisterTopic, requestDto);
 
-                    log.debug("Request to {} was send",
+                    log.debug("Request to {} was sent",
                             organizationRegisterTopic);
                 }
                 default -> {
@@ -115,9 +114,10 @@ public class AdminProducerService {
         } catch (Exception e) {
 
             log.error("Request to send register response of {} with id:" +
-                            " {} was not sent",
+                            " {} was not sent: {}",
                     requestDto.getObjectType(),
-                    requestDto.getObjectToRegisterId());
+                    requestDto.getObjectToRegisterId(),
+                    e.getMessage());
         }
     }
 
@@ -156,8 +156,9 @@ public class AdminProducerService {
             }
         } catch (Exception e) {
 
-            log.error("Request to change {} status was not sent",
-                    objectRequest.getObjectType());
+            log.error("Request to change {} status was not sent: {}",
+                    objectRequest.getObjectType(),
+                    e.getMessage());
         }
     }
 
@@ -177,8 +178,9 @@ public class AdminProducerService {
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not sent",
-                    toggleUserLockTopic);
+            log.error("Request to {} was not sent: {}",
+                    toggleUserLockTopic,
+                    e.getMessage());
         }
     }
 
@@ -200,8 +202,9 @@ public class AdminProducerService {
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not sent",
-                    notificationTopic);
+            log.error("Request to {} was not sent: {}",
+                    notificationTopic,
+                    e.getMessage());
         }
     }
 }

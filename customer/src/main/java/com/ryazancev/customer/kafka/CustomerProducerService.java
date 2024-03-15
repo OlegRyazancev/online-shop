@@ -46,12 +46,13 @@ public class CustomerProducerService {
             log.trace("sending request...}");
             longValueKafkaTemplate.send(deleteUserTopic, id);
 
-            log.debug("Request to {} was send", deleteUserTopic);
+            log.debug("Request to {} was sent", deleteUserTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not send",
-                    deleteUserTopic);
+            log.error("Request to {} was not sent: {}",
+                    deleteUserTopic,
+                    e.getMessage());
         }
     }
 
@@ -68,12 +69,13 @@ public class CustomerProducerService {
             log.trace("sending request...}");
             userUpdateKafkaTemplate.send(updateUserTopic, request);
 
-            log.debug("Request to {} was send", updateUserTopic);
+            log.debug("Request to {} was sent", updateUserTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not send",
-                    updateUserTopic);
+            log.error("Request to {} was not sent: {}",
+                    updateUserTopic,
+                    e.getMessage());
         }
     }
 }
