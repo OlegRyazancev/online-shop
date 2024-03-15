@@ -7,12 +7,14 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -27,6 +29,7 @@ public class MailServiceImpl implements MailService {
 
     private final Configuration configuration;
     private final JavaMailSender mailSender;
+    private final MessageSource messageSource;
 
     @Override
     public void sendEmail(MailDto mailDto) {
@@ -52,6 +55,8 @@ public class MailServiceImpl implements MailService {
             }
 
             default -> {
+
+                log.warn("Unknown mail type: {}", mailDto.getType());
             }
         }
     }
@@ -63,8 +68,12 @@ public class MailServiceImpl implements MailService {
         MimeMessageHelper helper =
                 new MimeMessageHelper(message, false, "UTF-8");
         helper.setSubject(
-                "Dear " + mailDto.getName() + "! Your registration " +
-                        "request were rejected!");
+                messageSource.getMessage(
+                        "rejected_registration_subject",
+                        new Object[]{mailDto.getName()},
+                        Locale.getDefault()
+                )
+        );
         helper.setTo(mailDto.getEmail());
 
         String emailContent = getObjectRegistrationEmailContent(
@@ -85,8 +94,12 @@ public class MailServiceImpl implements MailService {
         MimeMessageHelper helper =
                 new MimeMessageHelper(message, false, "UTF-8");
         helper.setSubject(
-                "Dear " + mailDto.getName() + "! Your registration " +
-                        "request were accepted!");
+                messageSource.getMessage(
+                        "accepted_registration_subject",
+                        new Object[]{mailDto.getName()},
+                        Locale.getDefault()
+                )
+        );
         helper.setTo(mailDto.getEmail());
 
         String emailContent = getObjectRegistrationEmailContent(
@@ -107,9 +120,12 @@ public class MailServiceImpl implements MailService {
         MimeMessageHelper helper =
                 new MimeMessageHelper(message, false, "UTF-8");
         helper.setSubject(
-                "Thank you for registration, "
-                        + mailDto.getName()
-                        + "!");
+                messageSource.getMessage(
+                        "registration_welcome_subject",
+                        new Object[]{mailDto.getName()},
+                        Locale.getDefault()
+                )
+        );
         helper.setTo(mailDto.getEmail());
 
         String emailContent = getRegistrationEmailContent(mailDto.getName());
@@ -128,7 +144,13 @@ public class MailServiceImpl implements MailService {
                         false,
                         "UTF-8"
                 );
-        helper.setSubject("Please, confirm your email address");
+        helper.setSubject(
+                messageSource.getMessage(
+                        "confirm_mail_subject",
+                        null,
+                        Locale.getDefault()
+                )
+        );
         helper.setTo(mailDto.getEmail());
 
         String emailContent = getConfirmationContent(
