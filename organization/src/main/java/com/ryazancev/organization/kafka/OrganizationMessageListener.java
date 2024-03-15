@@ -31,50 +31,60 @@ public class OrganizationMessageListener {
     )
     void completeRegistrationOfOrganization(RegistrationRequestDto requestDto) {
 
-        log.info("Received answer message from admin with response {} ",
-                requestDto.getStatus().name());
+        log.info("Received message from admin to register organization with" +
+                        " id {} with response: {}",
+                requestDto.getObjectToRegisterId(),
+                requestDto.getStatus());
 
-        switch (requestDto.getStatus()) {
-            case ACCEPTED -> {
+        try {
 
-                organizationService.changeStatus(
-                        requestDto.getObjectToRegisterId(),
-                        OrganizationStatus.ACTIVE);
-                organizationService.register(
-                        requestDto.getObjectToRegisterId()
-                );
+            switch (requestDto.getStatus()) {
+                case ACCEPTED -> {
 
-                try {
+                    log.trace("Changing status..");
+                    organizationService.changeStatus(
+                            requestDto.getObjectToRegisterId(),
+                            OrganizationStatus.ACTIVE);
+
+                    log.trace("Registering...");
+                    organizationService.register(
+                            requestDto.getObjectToRegisterId()
+                    );
+
+                    log.trace("Sending accepted email...");
                     mailProcessor.sendAcceptedMailToCustomerByOrganizationId(
                             requestDto.getObjectToRegisterId());
-                } catch (Exception e) {
-                    log.error("Error during sending email to customer: {}",
-                            e.getMessage());
-                }
 
-                log.info("Organization now is: {}",
-                        OrganizationStatus.ACTIVE);
-            }
-            case REJECTED -> {
-                organizationService.changeStatus(
-                        requestDto.getObjectToRegisterId(),
-                        OrganizationStatus.INACTIVE);
-                try {
+
+                    log.debug("Organization now is: {}",
+                            OrganizationStatus.ACTIVE);
+                }
+                case REJECTED -> {
+
+                    log.trace("Changing status..");
+                    organizationService.changeStatus(
+                            requestDto.getObjectToRegisterId(),
+                            OrganizationStatus.INACTIVE);
+
+                    log.trace("Sending rejected email...");
                     mailProcessor.sendRejectedMailToCustomerByOrganizationId(
                             requestDto.getObjectToRegisterId());
-                } catch (Exception e) {
-                    log.error("Error during sending email to customer: {}",
-                            e.getMessage());
-                }
 
-                log.info("Organization now is: {}",
-                        OrganizationStatus.INACTIVE);
+
+                    log.debug("Organization now is {}",
+                            OrganizationStatus.INACTIVE);
+                }
+                default -> {
+
+                    log.warn("Unknown request type: {} or status: {}",
+                            requestDto.getObjectType(),
+                            requestDto.getStatus());
+                }
             }
-            default -> {
-                log.info("Unknown request type({}) or status({})",
-                        requestDto.getObjectType(),
-                        requestDto.getStatus());
-            }
+        } catch (Exception e) {
+
+            log.error("Exception while registering organization {}",
+                    e.getMessage());
         }
     }
 
@@ -89,14 +99,22 @@ public class OrganizationMessageListener {
                         "organization with id: {}, to {}",
                 request.getObjectId(),
                 request.getObjectStatus());
+        try {
 
-        OrganizationStatus status =
-                (request.getObjectStatus() == ObjectStatus.ACTIVATE)
-                        ? OrganizationStatus.ACTIVE
-                        : OrganizationStatus.FROZEN;
+            OrganizationStatus status =
+                    (request.getObjectStatus() == ObjectStatus.ACTIVATE)
+                            ? OrganizationStatus.ACTIVE
+                            : OrganizationStatus.FROZEN;
 
-        organizationService.changeStatus(request.getObjectId(), status);
+            log.trace("Changing status...");
+            organizationService.changeStatus(request.getObjectId(), status);
 
-        log.info("Organization status successfully changed to: {}", status);
+            log.debug("Organization status was changed to: {}", status);
+
+        } catch (Exception e) {
+
+            log.error("Status was not changed: {}", e.getMessage());
+        }
+
     }
 }

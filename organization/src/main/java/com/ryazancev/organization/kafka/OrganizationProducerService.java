@@ -48,33 +48,63 @@ public class OrganizationProducerService {
     }
 
     public void sendMessageToAdminTopic(RegistrationRequestDto requestDto) {
+
+        log.info("Request to {} to make registration request " +
+                "of organization was received", adminTopic);
+
         try {
+
+            log.trace("sending request...");
             adminKafkaTemplate.send(adminTopic, requestDto);
-            log.info("Message to {} was successfully sent", adminTopic);
+
+            log.debug("Request to {} was sent", adminTopic);
+
         } catch (Exception e) {
-            log.info("Message to {} was not sent", adminTopic);
-            e.printStackTrace();
+
+            log.error("Request to {} was not sent: {}",
+                    adminTopic,
+                    e.getMessage());
         }
     }
 
     public void sendMessageToProductTopic(Long organizationId) {
-        try {
-            productKafkaTemplate.send(productTopic, organizationId);
-            log.info("Message to {} was successfully sent", productTopic);
-        } catch (Exception e) {
-            log.info("Message to {} was not sent", productTopic);
-            e.printStackTrace();
 
+        log.info("Request to send organizationId: {} to {} was received",
+                organizationId, productTopic);
+
+        try {
+
+            log.trace("sending request...");
+            productKafkaTemplate.send(productTopic, organizationId);
+
+            log.debug("Request to {} was sent", productTopic);
+
+        } catch (Exception e) {
+
+            log.error("Message to {} was not sent: {}",
+                    productTopic,
+                    e.getMessage());
         }
     }
 
     public void sendMessageToMailTopic(MailDto mailDto) {
+
+        log.info("Request to send {} email to {} was received",
+                mailDto.getType(),
+                mailDto.getEmail());
+
         try {
+
+            log.trace("sending request...");
             mailKafkaTemplate.send(mailTopic, mailDto);
-            log.info("Message to {} was successfully sent", mailTopic);
+
+            log.debug("Request to {} was sent", mailTopic);
+
         } catch (Exception e) {
-            log.info("Message to {} was not sent", mailTopic);
-            e.printStackTrace();
+
+            log.error("Request to {} was not sent:{}",
+                    mailTopic,
+                    e.getMessage());
 
         }
     }
