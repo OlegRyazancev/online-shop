@@ -110,8 +110,8 @@ public class AdminServiceImpl implements AdminService {
 
         adminProducerService.sendNotification(privateNotificationRequest);
 
-        if (updated.getObjectType().equals(ObjectType.PRODUCT)
-                && updated.getStatus().equals(RequestStatus.ACCEPTED)) {
+        if (updated.getObjectType() == ObjectType.PRODUCT
+                && updated.getStatus() == RequestStatus.ACCEPTED) {
 
             NotificationRequest publicNotificationRequest =
                     notificationProcessor
@@ -140,11 +140,15 @@ public class AdminServiceImpl implements AdminService {
 
         adminProducerService.sendNotification(privateNotificationRequest);
 
-        return String.format(
-                "Request to %s %s with id: %s successfully sent",
-                request.getObjectStatus().name().toLowerCase(),
-                request.getObjectType().name().toLowerCase(),
-                request.getObjectId());
+        return messageSource.getMessage(
+                "change_object_status_request",
+                new Object[]{
+                        request.getObjectStatus().name(),
+                        request.getObjectType().name(),
+                        request.getObjectId()
+                },
+                Locale.getDefault()
+        );
     }
 
     @Override
@@ -161,11 +165,14 @@ public class AdminServiceImpl implements AdminService {
 
         adminProducerService.sendNotification(privateNotificationRequest);
 
-        return String.format(
-                "Request to set locked to: %b of user with " +
-                        "id: %s successfully sent",
-                request.isLock(),
-                request.getUserId());
+        return messageSource.getMessage(
+                "toggle_account_lock_request",
+                new Object[]{
+                        request.isLock(),
+                        request.getUserId()
+                },
+                Locale.getDefault()
+        );
     }
 
     @Transactional
@@ -183,13 +190,12 @@ public class AdminServiceImpl implements AdminService {
                             allEntries = true)
             }
     )
-    public void create(RegistrationRequest registrationRequest) {
+    public RegistrationRequest create(RegistrationRequest registrationRequest) {
 
         registrationRequest.setCreatedAt(LocalDateTime.now());
         registrationRequest.setStatus(RequestStatus.ON_REVIEW);
 
-        //todo:send notification to Admin that new request here
-        adminRepository.save(registrationRequest);
+        return adminRepository.save(registrationRequest);
     }
 }
 

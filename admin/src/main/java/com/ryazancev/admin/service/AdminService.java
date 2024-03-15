@@ -27,5 +27,5 @@ public interface AdminService {
 
     String toggleUserLock(UserLockRequest request);
 
-    void create(RegistrationRequest registrationRequest);
+    RegistrationRequest create(RegistrationRequest registrationRequest);
 }

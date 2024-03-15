@@ -45,7 +45,7 @@ public class AdminMessageListeners {
             RegistrationRequest request =
                     adminMapper.toEntity(requestDto);
 
-            adminService.create(request);
+            RegistrationRequest created = adminService.create(request);
 
             log.trace("Creating admin notification...");
             NotificationRequest notificationRequest =
@@ -56,7 +56,8 @@ public class AdminMessageListeners {
             log.trace("Sending admin notification...");
             adminProducerService.sendNotification(notificationRequest);
 
-            log.info("Request was created");
+            log.info("Request was created with id: {}",
+                    created.getId());
 
         } catch (Exception e) {
 

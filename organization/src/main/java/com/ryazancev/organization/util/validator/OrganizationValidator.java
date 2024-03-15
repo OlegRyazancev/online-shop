@@ -23,7 +23,7 @@ public class OrganizationValidator {
 
     public void validateStatus(Organization organization,
                                OrganizationStatus status) {
-        if (organization.getStatus().equals(status)) {
+        if (organization.getStatus() == status) {
 
             throw new AccessDeniedException(
                     String.format(

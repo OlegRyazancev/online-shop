@@ -69,7 +69,7 @@ public class NotificationAttributeDeterminer {
 
             properties.setProperty(
                     "object_type",
-                    objectType.toString()
+                    objectType.name()
             );
             return properties;
         }
@@ -114,7 +114,7 @@ public class NotificationAttributeDeterminer {
                 NotificationType.PRIVATE_FREEZE_OBJECT) {
 
             properties.setProperty(
-                    "object_type", objectType.toString());
+                    "object_type", objectType.name());
             properties.setProperty(
                     "object_name", organizationDto.getName());
         }
@@ -146,7 +146,7 @@ public class NotificationAttributeDeterminer {
                 NotificationType.PRIVATE_FREEZE_OBJECT) {
 
             properties.setProperty(
-                    "object_type", objectType.toString()
+                    "object_type", objectType.name()
             );
             properties.setProperty(
                     "object_name", productDto.getProductName()

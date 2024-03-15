@@ -24,7 +24,7 @@ public class ProductValidator {
 
     public void validateStatus(Product product, ProductStatus status) {
 
-        if (product.getStatus().equals(status)) {
+        if (product.getStatus() == status) {
 
             throw new AccessDeniedException(
                     String.format(
