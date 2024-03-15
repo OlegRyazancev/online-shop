@@ -27,12 +27,20 @@ public class AuthProducerService {
     }
 
     public void sendMessageToMailTopic(MailDto mailDto) {
+
+        log.info("Request to mail topic was received. Email: {}",
+                mailDto.getEmail());
+
         try {
+
+            log.trace("sending request");
             mailKafkaTemplate.send(mailTopicName, mailDto);
-            log.info("Message to {} was successfully sent", mailTopicName);
+
+            log.info("Request to {} was sent", mailTopicName);
+
         } catch (Exception e) {
-            log.info("Message to {} was not sent", mailTopicName);
-            e.printStackTrace();
+
+            log.info("Request to {} was not sent", mailTopicName);
         }
     }
 }

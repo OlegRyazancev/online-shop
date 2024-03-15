@@ -29,15 +29,18 @@ public class AuthMessageListeners {
         log.info("Received message to lock: {}, user: {}",
                 request.isLock(),
                 request.getUserId());
+        try {
 
-        userService.toggleUserLock(request.getUserId(), request.isLock());
+            log.trace("Toggling user lock...");
+            userService.toggleUserLock(request.getUserId(), request.isLock());
 
-        if (request.isLock()) {
+            log.info("User with id {} was locked/unlocked",
+                    request.getUserId());
 
-            log.info("User was successfully locked");
-        } else {
+        } catch (Exception e) {
 
-            log.info("User was successfully unlocked");
+            log.info("User with id {} was not locked/unlocked",
+                    request.getUserId());
         }
     }
 
@@ -51,10 +54,17 @@ public class AuthMessageListeners {
         log.info("Received message to delete user where customerId: {}",
                 customerId);
 
-        userService.markUserAsDeletedByCustomerId(customerId);
+        try {
 
-        log.info("User was successfully marked as deleted");
+            log.trace("Marking user as deleted...");
+            userService.markUserAsDeletedByCustomerId(customerId);
 
+            log.info("User was marked as deleted");
+
+        } catch (Exception e) {
+
+            log.error("User was not marked as deleted");
+        }
     }
 
     @KafkaListener(
@@ -67,9 +77,16 @@ public class AuthMessageListeners {
         log.info("Received message to update user where customerId: {}",
                 request.getCustomerId());
 
-        userService.updateByCustomer(request);
+        try {
 
-        log.info("User was successfully updated");
+            log.trace("Updating user...");
+            userService.updateByCustomer(request);
+
+            log.info("User was updated");
+
+        } catch (Exception e) {
+
+            log.error("User was not updated");
+        }
     }
-
 }
