@@ -5,6 +5,7 @@ import com.ryazancev.common.exception.OnlineShopException;
 import com.ryazancev.logo.util.exception.custom.LogoUploadException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -20,11 +21,15 @@ import java.util.stream.Collectors;
  */
 
 @RestControllerAdvice
+@Slf4j
 public class LogoExceptionHandler {
 
     @ExceptionHandler(LogoUploadException.class)
     public ResponseEntity<ExceptionBody> handleLogoUpload(
             LogoUploadException e) {
+
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -38,6 +43,9 @@ public class LogoExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
+
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -56,6 +64,9 @@ public class LogoExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
+
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -76,6 +87,9 @@ public class LogoExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
+
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ExceptionBody(
@@ -88,6 +102,9 @@ public class LogoExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
