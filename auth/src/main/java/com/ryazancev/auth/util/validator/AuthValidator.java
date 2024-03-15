@@ -8,13 +8,14 @@ import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
 import com.ryazancev.auth.util.exception.custom.UserCreationException;
 import com.ryazancev.common.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-import static com.ryazancev.auth.util.exception.Message.*;
 
 /**
  * @author Oleg Ryazancev
@@ -26,6 +27,8 @@ public class AuthValidator {
 
     private final UserRepository userRepository;
 
+    private final MessageSource messageSource;
+
     public void validateUserAccess(User user) {
 
         if (user.getDeletedAt() != null) {
@@ -35,10 +38,12 @@ public class AuthValidator {
             String formattedDate = user.getDeletedAt().format(formatter);
 
             throw new AccessDeniedException(
-                    String.format(
-                            DELETED_ACCOUNT_FORMAT,
-                            user.getEmail(),
-                            formattedDate), HttpStatus.FORBIDDEN);
+                    messageSource.getMessage(
+                            "deleted_account_format",
+                            new Object[]{user.getEmail(), formattedDate},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.FORBIDDEN);
         }
     }
 
@@ -46,7 +51,11 @@ public class AuthValidator {
 
         if (confirmationToken.getConfirmedAt() != null) {
             throw new ConfirmationTokenException(
-                    EMAIL_CONFIRMED,
+                    messageSource.getMessage(
+                            "email_confirmed",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST);
         }
     }
@@ -57,7 +66,11 @@ public class AuthValidator {
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
             throw new ConfirmationTokenException(
-                    TOKEN_EXPIRED,
+                    messageSource.getMessage(
+                            "token_expired",
+                            new Object[]{expiredAt},
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST);
         }
     }
@@ -66,7 +79,11 @@ public class AuthValidator {
 
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             throw new UserCreationException(
-                    EMAIL_EXISTS,
+                    messageSource.getMessage(
+                            "email_exists",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST);
         }
     }
@@ -75,7 +92,11 @@ public class AuthValidator {
 
         if (!userDto.getPassword().equals(userDto.getPasswordConfirmation())) {
             throw new UserCreationException(
-                    PASSWORD_MISMATCH,
+                    messageSource.getMessage(
+                            "password_mismatch",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST);
         }
     }

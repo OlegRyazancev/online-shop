@@ -2,15 +2,17 @@ package com.ryazancev.auth.service.impl;
 
 import com.ryazancev.auth.service.ClientsService;
 import com.ryazancev.common.clients.CustomerClient;
+import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.customer.CustomerDto;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static com.ryazancev.auth.util.exception.Message.CUSTOMER_SERVICE_UNAVAILABLE;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -22,6 +24,7 @@ import static com.ryazancev.auth.util.exception.Message.CUSTOMER_SERVICE_UNAVAIL
 public class ClientsServiceImpl implements ClientsService {
 
     private final CustomerClient customerClient;
+    private final MessageSource messageSource;
 
     @Override
     @CircuitBreaker(
@@ -36,7 +39,11 @@ public class ClientsServiceImpl implements ClientsService {
     private Object customerServiceUnavailable(Exception e) {
 
         throw new ServiceUnavailableException(
-                CUSTOMER_SERVICE_UNAVAILABLE,
+                messageSource.getMessage(
+                        "service_unavailable",
+                        new Object[]{ServiceStage.CUSTOMER},
+                        Locale.getDefault()
+                ),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 }

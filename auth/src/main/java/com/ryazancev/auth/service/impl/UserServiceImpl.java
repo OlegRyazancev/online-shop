@@ -18,15 +18,16 @@ import com.ryazancev.common.dto.user.UserDto;
 import com.ryazancev.common.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Set;
 
-import static com.ryazancev.auth.util.exception.Message.USER_NOT_FOUND;
 
 /**
  * @author Oleg Ryazancev
@@ -50,6 +51,7 @@ public class UserServiceImpl implements UserService {
     private final ConfirmationTokenService confirmationTokenService;
 
     private final PasswordEncoder passwordEncoder;
+    private final MessageSource messageSource;
 
 
     @Transactional
@@ -97,7 +99,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UserNotFoundException(
-                                USER_NOT_FOUND,
+                                messageSource.getMessage(
+                                        "user_not_found_by_email",
+                                        new Object[]{email},
+                                        Locale.getDefault()
+                                ),
                                 HttpStatus.NOT_FOUND));
     }
 
@@ -107,7 +113,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() ->
                         new UserNotFoundException(
-                                USER_NOT_FOUND,
+                                messageSource.getMessage(
+                                        "user_not_found_by_id",
+                                        new Object[]{id},
+                                        Locale.getDefault()
+                                ),
                                 HttpStatus.NOT_FOUND));
     }
 
@@ -130,7 +140,11 @@ public class UserServiceImpl implements UserService {
                 .findByCustomerId(customerId)
                 .orElseThrow(() ->
                         new UserNotFoundException(
-                                USER_NOT_FOUND,
+                                messageSource.getMessage(
+                                        "user_not_found_by_customer_id",
+                                        new Object[]{customerId},
+                                        Locale.getDefault()
+                                ),
                                 HttpStatus.NOT_FOUND
                         ));
 
@@ -148,7 +162,11 @@ public class UserServiceImpl implements UserService {
                 .findByCustomerId(request.getCustomerId())
                 .orElseThrow(() ->
                         new UserNotFoundException(
-                                USER_NOT_FOUND,
+                                messageSource.getMessage(
+                                        "user_not_found_by_customer_id",
+                                        new Object[]{request.getCustomerId()},
+                                        Locale.getDefault()
+                                ),
                                 HttpStatus.NOT_FOUND));
 
         existing.setName(request.getName());

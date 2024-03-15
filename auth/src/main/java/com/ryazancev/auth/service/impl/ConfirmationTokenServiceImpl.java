@@ -11,11 +11,12 @@ import com.ryazancev.auth.util.validator.AuthValidator;
 import com.ryazancev.common.dto.mail.MailDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ryazancev.auth.util.exception.Message.TOKEN_NOT_FOUND;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -34,6 +35,8 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final UserRepository userRepository;
 
+    private final MessageSource messageSource;
+
     @Transactional
     @Override
     public String confirm(String token) {
@@ -41,7 +44,11 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
                 .findByToken(token)
                 .orElseThrow(() ->
                         new ConfirmationTokenException(
-                                TOKEN_NOT_FOUND,
+                                messageSource.getMessage(
+                                        "token_not_found",
+                                        null,
+                                        Locale.getDefault()
+                                ),
                                 HttpStatus.NOT_FOUND));
 
         authValidator.validateConfirmationStatus(confirmationToken);
@@ -56,7 +63,11 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
         MailDto mailDto = authUtil.createRegistrationMailDto(email, name);
         authProducerService.sendMessageToMailTopic(mailDto);
 
-        return "Email confirmed successfully!";
+        return messageSource.getMessage(
+                "email_confirmed_successfully",
+                null,
+                Locale.getDefault()
+        );
     }
 
 
