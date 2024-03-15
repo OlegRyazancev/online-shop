@@ -50,8 +50,8 @@ public class CustomerProducerService {
 
         } catch (Exception e) {
 
-            log.error("Request to auth service to delete user " +
-                    "with id: {} was not sent", id);
+            log.error("Request to {} was not send",
+                    deleteUserTopic);
         }
     }
 
@@ -68,11 +68,12 @@ public class CustomerProducerService {
             log.trace("sending request...}");
             userUpdateKafkaTemplate.send(updateUserTopic, request);
 
-            log.debug("Request to {} was successfully send", deleteUserTopic);
+            log.debug("Request to {} was successfully send", updateUserTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to auth topic to update user was not sent");
+            log.error("Request to {} was not send",
+                    updateUserTopic);
         }
     }
 }

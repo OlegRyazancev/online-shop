@@ -113,6 +113,7 @@ public class AdminProducerService {
                 }
             }
         } catch (Exception e) {
+
             log.error("Request to send register response of {} with id:" +
                             " {} was not successfully sent",
                     requestDto.getObjectType(),
@@ -154,6 +155,7 @@ public class AdminProducerService {
                 }
             }
         } catch (Exception e) {
+
             log.error("Request to change {} status was not successfully sent",
                     objectRequest.getObjectType());
         }
@@ -172,11 +174,11 @@ public class AdminProducerService {
 
             log.debug("Request to {} was successfully sent",
                     toggleUserLockTopic);
+
         } catch (Exception e) {
-            log.error("Request to toggle user by id: {} lock {} " +
-                            "was not successfully sent",
-                    request.getUserId(),
-                    request.isLock());
+
+            log.error("Request to {} was not sent",
+                    toggleUserLockTopic);
         }
     }
 
@@ -195,14 +197,11 @@ public class AdminProducerService {
 
             log.debug("Request to {} was successfully sent",
                     notificationTopic);
+
         } catch (Exception e) {
-            log.error("Request to send {} notification {} to user with id: " +
-                            "{} from admin if exists: {} was NOT " +
-                            "successfully sent",
-                    request.getScope(),
-                    request.getType(),
-                    request.getRecipientId(),
-                    request.getSenderId());
+
+            log.error("Request to {} was not sent",
+                    notificationTopic);
         }
     }
 }
