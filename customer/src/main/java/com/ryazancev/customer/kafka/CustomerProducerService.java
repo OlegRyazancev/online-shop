@@ -39,32 +39,40 @@ public class CustomerProducerService {
 
     public void sendMessageToAuthDeleteTopic(Long id) {
 
+        log.info("Request to auth topic to delete user with id {} was" +
+                " received", id);
         try {
+
+            log.trace("sending request...}");
             longValueKafkaTemplate.send(deleteUserTopic, id);
 
-            log.info("Message to auth service to delete user " +
-                    "with customer id: {} was successfully sent", id);
+            log.debug("Request to {} was successfully send", deleteUserTopic);
 
         } catch (Exception e) {
-            log.info("Message to auth service to delete user " +
+
+            log.error("Request to auth service to delete user " +
                     "with id: {} was not sent", id);
         }
     }
 
     public void sendMessageToAuthUpdateTopic(UserUpdateRequest request) {
 
+        log.info("Request to auth topic to update user " +
+                        "with id:{}, email:{}, name: {} was received",
+                request.getCustomerId(),
+                request.getEmail(),
+                request.getName());
+
         try {
+
+            log.trace("sending request...}");
             userUpdateKafkaTemplate.send(updateUserTopic, request);
 
-            log.info("Message to auth service to update user by customer id " +
-                            "with customer id: {} was successfully sent",
-                    request.getCustomerId());
-
+            log.debug("Request to {} was successfully send", deleteUserTopic);
 
         } catch (Exception e) {
-            log.info("Message to auth service to update user by customer id" +
-                            "with id: {} was not sent",
-                    request.getCustomerId());
+
+            log.error("Request to auth topic to update user was not sent");
         }
     }
 }

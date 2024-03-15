@@ -26,11 +26,11 @@ public class CustomerMessageListener {
             containerFactory = "messageFactory"
     )
     void updateCustomerBalance(UpdateBalanceRequest request) {
-        log.info("Received message to update customer: {}",
+
+        log.info("Received message to update customer balance with id: {}",
                 request.getCustomerId());
 
-        log.info("Updating customer...");
-
+        log.trace("Updating customer balance...");
         Customer customer =
                 customerService.updateBalance(request);
 
