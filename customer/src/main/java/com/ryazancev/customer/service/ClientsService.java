@@ -13,4 +13,10 @@ public interface ClientsService {
     Object getPurchasesByCustomerId(Long customerId);
 
     Object getReviewsByCustomerId(Long customerId);
+
+    Object getNotificationsByCustomerId(Long customerId, String scope);
+
+    Object getNotificationById(String notificationId, String scope);
+
+    Object getRecipientIdByPrivateNotificationId(String notificationId);
 }

@@ -11,4 +11,8 @@ public interface CustomExpressionService {
     void checkAccessCustomer(Long id);
 
     void checkIfAccountLocked();
+
+    void checkIfCustomerIsAdmin(Long id);
+
+    void checkAccessPrivateNotification(Long customerId, String notificationId);
 }

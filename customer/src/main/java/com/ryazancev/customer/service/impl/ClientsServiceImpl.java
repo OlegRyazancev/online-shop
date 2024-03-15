@@ -1,5 +1,6 @@
 package com.ryazancev.customer.service.impl;
 
+import com.ryazancev.common.clients.NotificationClient;
 import com.ryazancev.common.clients.PurchaseClient;
 import com.ryazancev.common.clients.ReviewClient;
 import com.ryazancev.common.dto.purchase.PurchaseEditDto;
@@ -11,8 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static com.ryazancev.customer.util.exception.Message.PURCHASE_SERVICE_UNAVAILABLE;
-import static com.ryazancev.customer.util.exception.Message.REVIEW_SERVICE_UNAVAILABLE;
+import static com.ryazancev.customer.util.exception.Message.*;
 
 /**
  * @author Oleg Ryazancev
@@ -25,6 +25,7 @@ public class ClientsServiceImpl implements ClientsService {
 
     private final PurchaseClient purchaseClient;
     private final ReviewClient reviewClient;
+    private final NotificationClient notificationClient;
 
     @Override
     @CircuitBreaker(
@@ -56,6 +57,39 @@ public class ClientsServiceImpl implements ClientsService {
         return reviewClient.getByCustomerId(customerId);
     }
 
+    @Override
+    @CircuitBreaker(
+            name = "customer",
+            fallbackMethod = "notificationServiceUnavailable"
+    )
+    public Object getNotificationsByCustomerId(Long customerId,
+                                               String scope) {
+        return notificationClient
+                .getNotificationsByRecipientId(customerId, scope);
+    }
+
+    @Override
+    @CircuitBreaker(
+            name = "customer",
+            fallbackMethod = "notificationServiceUnavailable"
+    )
+    public Object getNotificationById(String id, String scope) {
+
+        return notificationClient.getNotificationById(id, scope);
+    }
+
+    @Override
+    @CircuitBreaker(
+            name = "customer",
+            fallbackMethod = "notificationServiceUnavailable"
+    )
+    public Object getRecipientIdByPrivateNotificationId(
+            String notificationId) {
+
+        return notificationClient
+                .getRecipientIdByPrivateNotificationId(notificationId);
+    }
+
     //Fallback methods
 
     private Object reviewServiceUnavailable(Exception e) {
@@ -67,10 +101,15 @@ public class ClientsServiceImpl implements ClientsService {
 
     private Object purchaseServiceUnavailable(Exception e) {
 
-        e.printStackTrace();
-
         throw new ServiceUnavailableException(
                 PURCHASE_SERVICE_UNAVAILABLE,
+                HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    private Object notificationServiceUnavailable(Exception e) {
+
+        throw new ServiceUnavailableException(
+                NOTIFICATION_SERVICE_UNAVAILABLE,
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 }

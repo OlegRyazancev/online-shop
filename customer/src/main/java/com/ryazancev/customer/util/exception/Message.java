@@ -9,6 +9,13 @@ public class Message {
     public static final String ACCESS_CUSTOMER =
             "You do not have permission to access this customer";
 
+    public static final String ACCESS_NOTIFICATIONS =
+            "You do not have permission to access this notifications";
+
+    public static final String ACCESS_PRIVATE_NOTIFICATION =
+            "You do not have permission to access this private " +
+                    "notification with id %s";
+
     public static final String ACCOUNT_LOCKED =
             "Access denied because your account is locked";
 
@@ -26,5 +33,9 @@ public class Message {
 
     public static final String REVIEW_SERVICE_UNAVAILABLE =
             "The review service is currently unavailable. Please try again later";
+
+    public static final String NOTIFICATION_SERVICE_UNAVAILABLE =
+            "The notification service is currently unavailable. Please try again later";
+
 
 }

@@ -2,6 +2,8 @@ package com.ryazancev.customer.controller;
 
 import com.ryazancev.common.dto.customer.CustomerDto;
 import com.ryazancev.common.dto.customer.CustomerPurchasesResponse;
+import com.ryazancev.common.dto.notification.NotificationDto;
+import com.ryazancev.common.dto.notification.NotificationsSimpleResponse;
 import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.common.dto.purchase.PurchaseEditDto;
 import com.ryazancev.common.dto.review.ReviewsResponse;
@@ -110,7 +112,46 @@ public class CustomerController {
         return customerService.markCustomerAsDeleted(id);
     }
 
-    //todo: add method to watch notifications
+    @GetMapping("{id}/notifications")
+    public NotificationsSimpleResponse getNotificationsByCustomerId(
+            @PathVariable("id") Long id,
+            @RequestParam("scope") String scope) {
+
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessCustomer(id);
+
+        if (scope.equals("admin")) {
+            customExpressionService.checkIfCustomerIsAdmin(id);
+        }
+
+        return (NotificationsSimpleResponse)
+                clientsService.getNotificationsByCustomerId(id, scope);
+    }
+
+    @GetMapping("{customerId}/notifications/{notificationId}")
+    public NotificationDto getNotificationById(
+            @PathVariable("customerId") Long customerId,
+            @PathVariable("notificationId") String notificationId,
+            @RequestParam("scope") String scope) {
+
+        customExpressionService.checkIfAccountLocked();
+        customExpressionService.checkAccessCustomer(customerId);
+
+        switch (scope) {
+            case "admin" -> {
+                customExpressionService.checkIfCustomerIsAdmin(customerId);
+            }
+            case "private" -> {
+                customExpressionService
+                        .checkAccessPrivateNotification(
+                                customerId,
+                                notificationId);
+            }
+        }
+
+        return (NotificationDto)
+                clientsService.getNotificationById(notificationId, scope);
+    }
 
 //    Endpoints only  for feign clients
 

@@ -1,15 +1,13 @@
 package com.ryazancev.customer.service.impl;
 
+import com.ryazancev.customer.service.ClientsService;
 import com.ryazancev.customer.service.CustomExpressionService;
+import com.ryazancev.customer.util.RequestHeadersProperties;
 import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
 
 import static com.ryazancev.customer.util.exception.Message.*;
 
@@ -18,23 +16,38 @@ import static com.ryazancev.customer.util.exception.Message.*;
  */
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class CustomExpressionServiceImpl implements CustomExpressionService {
 
-    private final HttpServletRequest request;
+    private final ClientsService clientsService;
+
+    private final RequestHeadersProperties headersProperties;
+
+    public CustomExpressionServiceImpl(final HttpServletRequest request,
+                                       ClientsService clientsService) {
+        this.clientsService = clientsService;
+        this.headersProperties = new RequestHeadersProperties(request);
+    }
 
     @Override
     public void checkAccountConditions() {
 
         checkIfAccountLocked();
-        checkIfEmailConfirmed();
+        checkIfAccountConfirmed();
+    }
+
+    private void checkIfAccountConfirmed() {
+        if (!headersProperties.isConfirmed()) {
+            throw new AccessDeniedException(
+                    EMAIL_NOT_CONFIRMED,
+                    HttpStatus.FORBIDDEN);
+        }
     }
 
     @Override
     public void checkAccessCustomer(Long customerId) {
 
-        if (!canAccessCustomer(customerId)) {
+        if (!(headersProperties.getUserId().equals(customerId)
+                || headersProperties.getRoles().contains("ROLE_ADMIN"))) {
 
             throw new AccessDeniedException(
                     ACCESS_CUSTOMER,
@@ -45,9 +58,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkIfAccountLocked() {
 
-        boolean locked = Boolean.parseBoolean(request.getHeader("locked"));
-
-        if (locked) {
+        if (headersProperties.isLocked()) {
             throw new AccessDeniedException(
                     ACCOUNT_LOCKED,
                     HttpStatus.FORBIDDEN);
@@ -55,28 +66,29 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         }
     }
 
-    private void checkIfEmailConfirmed() {
+    @Override
+    public void checkIfCustomerIsAdmin(Long id) {
 
-        boolean confirmed = Boolean.parseBoolean(
-                request.getHeader("confirmed"));
+        if (!headersProperties.getRoles().contains("ROLE_ADMIN")) {
 
-        if (!confirmed) {
             throw new AccessDeniedException(
-                    EMAIL_NOT_CONFIRMED,
+                    ACCESS_NOTIFICATIONS,
                     HttpStatus.FORBIDDEN);
         }
     }
 
-    private boolean canAccessCustomer(Long id) {
+    @Override
+    public void checkAccessPrivateNotification(Long customerId,
+                                               String notificationId) {
 
-        Long userId = Long.valueOf(request.getHeader("userId"));
-        List<String> userRoles = Arrays
-                .stream(request
-                        .getHeader("roles")
-                        .split(" ")).toList();
+        Long recipientId = (Long) clientsService
+                .getRecipientIdByPrivateNotificationId(notificationId);
 
-        return userId.equals(id) || userRoles.contains("ROLE_ADMIN");
+        if (!recipientId.equals(headersProperties.getUserId())) {
+            throw new AccessDeniedException(
+                    String.format(ACCESS_PRIVATE_NOTIFICATION, notificationId),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
     }
-
-
 }
