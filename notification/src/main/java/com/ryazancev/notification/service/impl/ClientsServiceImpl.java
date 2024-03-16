@@ -37,7 +37,7 @@ public class ClientsServiceImpl implements ClientsService {
         return Fallback.builder()
                 .message(
                         messageSource.getMessage(
-                                "customer_service_unavailable",
+                                "exception.notification.service_unavailable",
                                 null,
                                 Locale.getDefault()
                         )

@@ -45,7 +45,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
                 .orElseThrow(() ->
                         new ConfirmationTokenException(
                                 messageSource.getMessage(
-                                        "token_not_found",
+                                        "exception.auth.token_not_found",
                                         null,
                                         Locale.getDefault()
                                 ),
@@ -64,7 +64,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
         authProducerService.sendMessageToMailTopic(mailDto);
 
         return messageSource.getMessage(
-                "email_confirmed_successfully",
+                "service.auth.email_confirmed_successfully",
                 null,
                 Locale.getDefault()
         );

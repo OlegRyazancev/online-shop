@@ -26,7 +26,7 @@ public class AdminUtil {
         } catch (Exception e) {
             throw new InvalidRequestStatusException(
                     messageSource.getMessage(
-                            "invalid_request_status",
+                            "exception.admin.invalid_status",
                             new Object[]{status},
                             Locale.getDefault()
                     ),

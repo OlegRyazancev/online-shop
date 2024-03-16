@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new UserNotFoundException(
                                 messageSource.getMessage(
-                                        "user_not_found_by_email",
+                                        "exception.auth.user_not_found_by_email",
                                         new Object[]{email},
                                         Locale.getDefault()
                                 ),
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new UserNotFoundException(
                                 messageSource.getMessage(
-                                        "user_not_found_by_id",
+                                        "exception.auth.user_not_found_by_id",
                                         new Object[]{id},
                                         Locale.getDefault()
                                 ),
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new UserNotFoundException(
                                 messageSource.getMessage(
-                                        "user_not_found_by_customer_id",
+                                        "exception.auth.user_not_found_by_customer_id",
                                         new Object[]{customerId},
                                         Locale.getDefault()
                                 ),
@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new UserNotFoundException(
                                 messageSource.getMessage(
-                                        "user_not_found_by_customer_id",
+                                        "exception.auth.user_not_found_by_customer_id",
                                         new Object[]{request.getCustomerId()},
                                         Locale.getDefault()
                                 ),

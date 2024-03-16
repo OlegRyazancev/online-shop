@@ -26,12 +26,12 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "product_registration_accepted.header",
+                "content.notification.product_registration_accepted.header",
                 null,
                 Locale.getDefault());
 
         String body = messageSource.getMessage(
-                "product_registration_accepted.body",
+                "content.notification.product_registration_accepted.body",
                 new Object[]{
                         properties.getProperty("product_name")
                 },
@@ -45,13 +45,13 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "product_registration_rejected.header",
+                "content.notification.product_registration_rejected.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "product_registration_rejected.body",
+                "content.notification.product_registration_rejected.body",
                 new Object[]{
                         properties.getProperty("product_name"),
                         mail
@@ -66,13 +66,13 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "organization_registration_accepted.header",
+                "content.notification.organization_registration_accepted.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "organization_registration_accepted.body",
+                "content.notification.organization_registration_accepted.body",
                 new Object[]{
                         properties.getProperty("organization_name")
                 },
@@ -86,13 +86,13 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "organization_registration_rejected.header",
+                "content.notification.organization_registration_rejected.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "organization_registration_rejected.body",
+                "content.notification.organization_registration_rejected.body",
                 new Object[]{
                         properties.getProperty("organization_name"),
                         mail
@@ -106,13 +106,13 @@ public class ContentProcessor {
     public Content createAccountLockedContent() {
 
         String header = messageSource.getMessage(
-                "account_locked.header",
+                "content.notification.account_locked.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "account_locked.body",
+                "content.notification.account_locked.body",
                 new Object[]{
                         mail
                 },
@@ -125,12 +125,12 @@ public class ContentProcessor {
     public Content createAccountUnlockedContent() {
 
         String header = messageSource.getMessage(
-                "account_unlocked.header",
+                "content.notification.account_unlocked.header",
                 null,
                 Locale.getDefault()
         );
         String body = messageSource.getMessage(
-                "account_unlocked.body",
+                "content.notification.account_unlocked.body",
                 null,
                 Locale.getDefault()
         );
@@ -142,13 +142,13 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "review_received.header",
+                "content.notification.review_received.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "review_received.body",
+                "content.notification.review_received.body",
                 new Object[]{
                         properties.getProperty("product_rating"),
                         properties.getProperty("product_name")
@@ -163,13 +163,13 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "purchase_processed.header",
+                "content.notification.purchase_processed.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "purchase_processed.body",
+                "content.notification.purchase_processed.body",
                 new Object[]{
                         properties.getProperty("product_name")
                 },
@@ -183,13 +183,13 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "new_product_available.header",
+                "content.notification.new_product_available.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "new_product_available.body",
+                "content.notification.new_product_available.body",
                 new Object[]{
                         properties.getProperty("product_name"),
                         properties.getProperty("product_price")
@@ -204,7 +204,7 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "object_freeze.header",
+                "content.notification.object_freeze.header",
                 new Object[]{
                         properties.getProperty("object_type")
                 },
@@ -212,7 +212,7 @@ public class ContentProcessor {
         );
 
         String body = messageSource.getMessage(
-                "object_freeze.body",
+                "content.notification.object_freeze.body",
                 new Object[]{
                         properties.getProperty("object_name"),
                         mail
@@ -227,7 +227,7 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "object_activate.header",
+                "content.notification.object_activate.header",
                 new Object[]{
                         properties.getProperty("object_type")
                 },
@@ -235,7 +235,7 @@ public class ContentProcessor {
         );
 
         String body = messageSource.getMessage(
-                "object_activate.body",
+                "content.notification.object_activate.body",
                 new Object[]{
                         properties.getProperty("object_name")
                 },
@@ -249,13 +249,13 @@ public class ContentProcessor {
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "new_registration_request_received.header",
+                "content.notification.new_registration_request_received.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "new_registration_request_received.body",
+                "content.notification.new_registration_request_received.body",
                 new Object[]{
                         properties.getProperty("object_type")
                 },

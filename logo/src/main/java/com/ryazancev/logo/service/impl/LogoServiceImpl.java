@@ -41,7 +41,7 @@ public class LogoServiceImpl implements LogoService {
         } catch (Exception e) {
             throw new LogoUploadException(
                     messageSource.getMessage(
-                            "logo_upload_failed",
+                            "exception.logo.upload_failed",
                             new Object[]{e.getMessage()},
                             Locale.getDefault()
                     ),
@@ -52,7 +52,7 @@ public class LogoServiceImpl implements LogoService {
         if (file.isEmpty() || file.getOriginalFilename() == null) {
             throw new LogoUploadException(
                     messageSource.getMessage(
-                            "logo_must_have_name",
+                            "exception.logo.must_have_name",
                             null,
                             Locale.getDefault()
                     ),
@@ -68,7 +68,7 @@ public class LogoServiceImpl implements LogoService {
         } catch (Exception e) {
             throw new LogoUploadException(
                     messageSource.getMessage(
-                            "logo_upload_failed",
+                            "exception.logo.upload_failed",
                             new Object[]{e.getMessage()},
                             Locale.getDefault()
                     ),

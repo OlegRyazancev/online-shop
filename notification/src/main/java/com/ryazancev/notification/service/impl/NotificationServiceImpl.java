@@ -86,7 +86,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "notification_by_id_not_found",
+                                        "exception.notification.not_found_by_id",
                                         new Object[]{castedScope, id},
                                         Locale.getDefault()
                                 ),
@@ -105,7 +105,7 @@ public class NotificationServiceImpl implements NotificationService {
                 return publicRepository.findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "notification_by_id_not_found",
+                                        "exception.notification.not_found_by_id",
                                         new Object[]{castedScope, id},
                                         Locale.getDefault()
                                 ),
@@ -116,7 +116,7 @@ public class NotificationServiceImpl implements NotificationService {
                 return adminRepository.findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "notification_by_id_not_found",
+                                        "exception.notification.not_found_by_id",
                                         new Object[]{castedScope, id},
                                         Locale.getDefault()
                                 ),
@@ -167,7 +167,7 @@ public class NotificationServiceImpl implements NotificationService {
                 privateRepository.findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "notification_by_id_not_found",
+                                        "exception.notification.not_found_by_id",
                                         new Object[]{
                                                 NotificationScope.PRIVATE,
                                                 id

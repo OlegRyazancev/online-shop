@@ -80,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerRepository.findByEmail(customer.getEmail()).isPresent()) {
             throw new CustomerCreationException(
                     messageSource.getMessage(
-                            "customer_email_exists",
+                            "exception.customer.customer_email_exists",
                             null,
                             Locale.getDefault()
                     ),
@@ -134,7 +134,7 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(existing);
 
         return messageSource.getMessage(
-                "customer_deleted",
+                "service.customer.deleted",
                 new Object[]{id},
                 Locale.getDefault()
         );
@@ -146,7 +146,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() ->
                         new CustomerNotFoundException(
                                 messageSource.getMessage(
-                                        "customer_not_found_by_id",
+                                        "exception.customer.customer_not_found_by_id",
                                         new Object[]{id},
                                         Locale.getDefault()
                                 ),

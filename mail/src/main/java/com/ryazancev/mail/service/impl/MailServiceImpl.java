@@ -69,7 +69,7 @@ public class MailServiceImpl implements MailService {
                 new MimeMessageHelper(message, false, "UTF-8");
         helper.setSubject(
                 messageSource.getMessage(
-                        "rejected_registration_subject",
+                        "service.mail.rejected_registration_subject",
                         new Object[]{mailDto.getName()},
                         Locale.getDefault()
                 )
@@ -95,7 +95,7 @@ public class MailServiceImpl implements MailService {
                 new MimeMessageHelper(message, false, "UTF-8");
         helper.setSubject(
                 messageSource.getMessage(
-                        "accepted_registration_subject",
+                        "service.mail.accepted_registration_subject",
                         new Object[]{mailDto.getName()},
                         Locale.getDefault()
                 )
@@ -121,7 +121,7 @@ public class MailServiceImpl implements MailService {
                 new MimeMessageHelper(message, false, "UTF-8");
         helper.setSubject(
                 messageSource.getMessage(
-                        "registration_welcome_subject",
+                        "service.mail.registration_welcome_subject",
                         new Object[]{mailDto.getName()},
                         Locale.getDefault()
                 )
@@ -146,7 +146,7 @@ public class MailServiceImpl implements MailService {
                 );
         helper.setSubject(
                 messageSource.getMessage(
-                        "confirm_mail_subject",
+                        "service.mail.confirm_mail_subject",
                         null,
                         Locale.getDefault()
                 )

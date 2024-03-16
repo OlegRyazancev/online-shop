@@ -39,7 +39,7 @@ public class AuthValidator {
 
             throw new AccessDeniedException(
                     messageSource.getMessage(
-                            "deleted_account_format",
+                            "exception.auth.deleted_account_format",
                             new Object[]{user.getEmail(), formattedDate},
                             Locale.getDefault()
                     ),
@@ -52,7 +52,7 @@ public class AuthValidator {
         if (confirmationToken.getConfirmedAt() != null) {
             throw new ConfirmationTokenException(
                     messageSource.getMessage(
-                            "email_confirmed",
+                            "exception.auth.email_confirmed",
                             null,
                             Locale.getDefault()
                     ),
@@ -67,7 +67,7 @@ public class AuthValidator {
         if (expiredAt.isBefore(LocalDateTime.now())) {
             throw new ConfirmationTokenException(
                     messageSource.getMessage(
-                            "token_expired",
+                            "exception.auth.token_expired",
                             new Object[]{expiredAt},
                             Locale.getDefault()
                     ),
@@ -80,7 +80,7 @@ public class AuthValidator {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             throw new UserCreationException(
                     messageSource.getMessage(
-                            "email_exists",
+                            "exception.auth.email_exists",
                             null,
                             Locale.getDefault()
                     ),
@@ -93,7 +93,7 @@ public class AuthValidator {
         if (!userDto.getPassword().equals(userDto.getPasswordConfirmation())) {
             throw new UserCreationException(
                     messageSource.getMessage(
-                            "password_mismatch",
+                            "exception.auth.password_mismatch",
                             null,
                             Locale.getDefault()
                     ),

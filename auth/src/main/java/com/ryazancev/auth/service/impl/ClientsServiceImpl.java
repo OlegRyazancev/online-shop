@@ -40,7 +40,7 @@ public class ClientsServiceImpl implements ClientsService {
 
         throw new ServiceUnavailableException(
                 messageSource.getMessage(
-                        "service_unavailable",
+                        "exception.auth.service_unavailable",
                         new Object[]{ServiceStage.CUSTOMER},
                         Locale.getDefault()
                 ),

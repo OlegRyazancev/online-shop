@@ -43,7 +43,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!headersProperties.isConfirmed()) {
             throw new AccessDeniedException(
                     messageSource.getMessage(
-                            "email_not_confirmed",
+                            "exception.customer.email_not_confirmed",
                             null,
                             Locale.getDefault()
                     ),
@@ -59,7 +59,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw new AccessDeniedException(
                     messageSource.getMessage(
-                            "access_customer",
+                            "exception.customer.access_customer",
                             null,
                             Locale.getDefault()
                     ),
@@ -73,7 +73,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (headersProperties.isLocked()) {
             throw new AccessDeniedException(
                     messageSource.getMessage(
-                            "account_locked",
+                            "exception.customer.account_locked",
                             null,
                             Locale.getDefault()
                     ),
@@ -89,7 +89,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw new AccessDeniedException(
                     messageSource.getMessage(
-                            "access_notifications",
+                            "exception.customer.access_notifications",
                             null,
                             Locale.getDefault()
                     ),
@@ -107,7 +107,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!recipientId.equals(headersProperties.getUserId())) {
             throw new AccessDeniedException(
                     messageSource.getMessage(
-                            "access_private_notification",
+                            "exception.customer.access_private_notification",
                             new Object[]{notificationId},
                             Locale.getDefault()
                     ),

@@ -3,6 +3,7 @@ package com.ryazancev.admin.service.impl;
 import com.ryazancev.admin.service.ClientsService;
 import com.ryazancev.common.clients.OrganizationClient;
 import com.ryazancev.common.clients.ProductClient;
+import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.Fallback;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -73,8 +74,8 @@ public class ClientsServiceImpl implements ClientsService {
         return Fallback.builder()
                 .message(
                         messageSource.getMessage(
-                                "customer_service_unavailable",
-                                null,
+                                "exception.admin.service_unavailable",
+                                new Object[]{ServiceStage.CUSTOMER},
                                 Locale.getDefault()
                         )
                 )
@@ -86,8 +87,8 @@ public class ClientsServiceImpl implements ClientsService {
         return Fallback.builder()
                 .message(
                         messageSource.getMessage(
-                                "organization_service_unavailable",
-                                null,
+                                "exception.admin.service_unavailable",
+                                new Object[]{ServiceStage.ORGANIZATION},
                                 Locale.getDefault()
                         )
                 )

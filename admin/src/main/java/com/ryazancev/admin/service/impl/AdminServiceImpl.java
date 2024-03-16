@@ -87,7 +87,7 @@ public class AdminServiceImpl implements AdminService {
                 adminRepository.findById(requestId)
                         .orElseThrow(() -> new RequestNotFoundException(
                                 messageSource.getMessage(
-                                        "request_not_found_by_id",
+                                        "exception.admin.not_found_by_id",
                                         new Object[]{requestId},
                                         Locale.getDefault()
                                 ),
@@ -141,7 +141,7 @@ public class AdminServiceImpl implements AdminService {
         adminProducerService.sendNotification(privateNotificationRequest);
 
         return messageSource.getMessage(
-                "change_object_status_request",
+                "service.admin.change_status_request",
                 new Object[]{
                         request.getObjectStatus().name(),
                         request.getObjectType().name(),
@@ -166,7 +166,7 @@ public class AdminServiceImpl implements AdminService {
         adminProducerService.sendNotification(privateNotificationRequest);
 
         return messageSource.getMessage(
-                "toggle_account_lock_request",
+                "service.admin.toggle_account_lock_request",
                 new Object[]{
                         request.isLock(),
                         request.getUserId()

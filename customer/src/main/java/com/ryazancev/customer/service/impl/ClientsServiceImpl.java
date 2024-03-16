@@ -101,7 +101,7 @@ public class ClientsServiceImpl implements ClientsService {
 
         throw new ServiceUnavailableException(
                 messageSource.getMessage(
-                        "service_unavailable",
+                        "exception.customer.service_unavailable",
                         new Object[]{ServiceStage.REVIEW.toString()},
                         Locale.getDefault()
                 ),
@@ -113,7 +113,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw new ServiceUnavailableException(
 
                 messageSource.getMessage(
-                        "service_unavailable",
+                        "exception.customer.service_unavailable",
                         new Object[]{ServiceStage.PURCHASE.toString()},
                         Locale.getDefault()
                 ),
@@ -124,7 +124,7 @@ public class ClientsServiceImpl implements ClientsService {
 
         throw new ServiceUnavailableException(
                 messageSource.getMessage(
-                        "service_unavailable",
+                        "exception.customer.service_unavailable",
                         new Object[]{ServiceStage.NOTIFICATION.toString()},
                         Locale.getDefault()
                 ),

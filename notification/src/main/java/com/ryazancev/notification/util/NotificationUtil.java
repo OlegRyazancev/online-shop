@@ -38,7 +38,7 @@ public class NotificationUtil {
 
             throw new InvalidScopeException(
                     messageSource.getMessage(
-                            "invalid_scope",
+                            "exception.notification.invalid_scope",
                             null, Locale.getDefault()
                     ),
                     HttpStatus.BAD_REQUEST
