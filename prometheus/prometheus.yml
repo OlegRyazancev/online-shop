@@ -65,3 +65,10 @@ scrape_configs:
       - targets: [ 'review:8086' ]
         labels:
           application: 'Review Service Application'
+
+  - job_name: 'notification'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'notification:9092' ]
+        labels:
+          application: 'Notification Service Application'
