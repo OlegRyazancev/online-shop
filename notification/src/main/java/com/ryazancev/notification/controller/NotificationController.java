@@ -5,8 +5,8 @@ import com.ryazancev.common.dto.notification.NotificationsSimpleResponse;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.notification.model.notification.Notification;
 import com.ryazancev.notification.service.NotificationService;
-import com.ryazancev.notification.util.processor.DtoProcessor;
 import com.ryazancev.notification.util.NotificationUtil;
+import com.ryazancev.notification.util.processor.DtoProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

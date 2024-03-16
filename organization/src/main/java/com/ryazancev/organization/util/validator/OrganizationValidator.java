@@ -1,6 +1,5 @@
 package com.ryazancev.organization.util.validator;
 
-import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;

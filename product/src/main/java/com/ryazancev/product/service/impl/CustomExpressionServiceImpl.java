@@ -11,12 +11,10 @@ import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.RequestHeader;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 

@@ -1,20 +1,15 @@
 package com.ryazancev.organization.service.impl;
 
 import com.ryazancev.common.config.ServiceStage;
-import com.ryazancev.common.dto.organization.OrganizationEditDto;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.util.RequestHeader;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 

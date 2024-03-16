@@ -2,7 +2,6 @@ package com.ryazancev.apigateway.filter;
 
 import com.ryazancev.apigateway.util.JwtUtil;
 import com.ryazancev.apigateway.util.exception.custom.UnauthorizedException;
-import org.springframework.cglib.core.Local;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.context.MessageSource;
