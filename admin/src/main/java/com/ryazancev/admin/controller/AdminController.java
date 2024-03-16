@@ -97,7 +97,4 @@ public class AdminController {
 
         return adminService.toggleUserLock(request);
     }
-
-    //todo: send notification to user
-
 }

@@ -19,7 +19,6 @@ import java.util.Locale;
  */
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ClientsServiceImpl implements ClientsService {
 
