@@ -30,7 +30,9 @@ public class ReviewExceptionHandler {
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
             ServiceUnavailableException e) {
 
-        log.error("Service unavailable exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -45,7 +47,9 @@ public class ReviewExceptionHandler {
     public ResponseEntity<ExceptionBody> handleReviewCreation(
             ReviewCreationException e) {
 
-        log.error("Review creation exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -60,7 +64,9 @@ public class ReviewExceptionHandler {
     public ResponseEntity<ExceptionBody> handleReviewNotFound(
             ReviewNotFoundException e) {
 
-        log.error("Review not found exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -75,7 +81,9 @@ public class ReviewExceptionHandler {
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
 
-        log.error("Constraint violation exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -95,7 +103,9 @@ public class ReviewExceptionHandler {
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
 
-        log.error("Method argument not valid exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -116,9 +126,9 @@ public class ReviewExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
-        log.error("Online shop exception");
-
-        e.printStackTrace();
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -135,8 +145,8 @@ public class ReviewExceptionHandler {
             Exception e) {
 
         log.error(e.getClass().getSimpleName());
-
-        e.printStackTrace();
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
