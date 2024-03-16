@@ -36,17 +36,24 @@ public class ProductMessageListeners {
     )
     public void updateQuantity(UpdateQuantityRequest request) {
 
-        log.info("Received message to update quantity of: {}, set to: {}",
+        log.info("Received message to update product quantity with id: {}, " +
+                        "set to: {}",
                 request.getProductId(),
                 request.getQuantityInStock());
+        try {
 
-        log.info("Updating product...");
+            log.trace("Updating quantity...");
+            productService.updateQuantity(
+                    request.getProductId(),
+                    request.getQuantityInStock());
 
-        productService.updateQuantity(
-                request.getProductId(),
-                request.getQuantityInStock());
+            log.debug("Quantity was updated successfully");
 
-        log.info("Product successfully updated");
+        } catch (Exception e) {
+
+            log.error("Failed to update quantity: {}", e.getMessage());
+        }
+
     }
 
     @KafkaListener(
@@ -56,48 +63,58 @@ public class ProductMessageListeners {
     )
     public void changeStatusAndRegister(RegistrationRequestDto requestDto) {
 
-        log.info("Received answer message from admin with response {}",
+        log.info("Received message from admin to change status of " +
+                        "product with id: {}, to {}",
+                requestDto.getObjectToRegisterId(),
                 requestDto.getStatus());
 
-        switch (requestDto.getStatus()) {
-            case ACCEPTED -> {
-                productService.changeStatus(
-                        requestDto.getObjectToRegisterId(),
-                        ProductStatus.ACTIVE);
+        try {
 
-                productService.register(
-                        requestDto.getObjectToRegisterId());
+            switch (requestDto.getStatus()) {
+                case ACCEPTED -> {
 
-                try {
+                    log.trace("Changing status to ACTIVE..");
+                    productService.changeStatus(
+                            requestDto.getObjectToRegisterId(),
+                            ProductStatus.ACTIVE);
+
+                    log.trace("Registering product...");
+                    productService.register(
+                            requestDto.getObjectToRegisterId());
+
+                    log.trace("Sending accepted email...");
                     mailProcessor.sendAcceptedMailToCustomerByProductId(
                             requestDto.getObjectToRegisterId());
-                } catch (Exception e) {
-                    log.error("Error during sending email to customer: {}",
-                            e.getMessage());
+
+                    log.debug("Product status is now: {}",
+                            ProductStatus.ACTIVE);
                 }
+                case REJECTED -> {
 
+                    log.trace("Changing status to INACTIVE..");
+                    productService.changeStatus(
+                            requestDto.getObjectToRegisterId(),
+                            ProductStatus.INACTIVE);
 
-                log.info("Product now is: {}",
-                        ProductStatus.ACTIVE);
-            }
-            case REJECTED -> {
-                productService.changeStatus(
-                        requestDto.getObjectToRegisterId(),
-                        ProductStatus.INACTIVE);
-
-                try {
+                    log.trace("Sending rejected email...");
                     mailProcessor.sendRejectedMailToCustomerByProductId(
                             requestDto.getObjectToRegisterId());
-                } catch (Exception e) {
-                    log.error("Error during sending email to customer: {}",
-                            e.getMessage());
-                }
 
-                log.info("Product now is: {}",
-                        ProductStatus.INACTIVE);
+                    log.debug("Product status is now: {}",
+                            ProductStatus.INACTIVE);
+                }
+                default -> {
+
+                    log.warn("Received unexpected request type {}" +
+                                    " or status: {}",
+                            requestDto.getObjectType(),
+                            requestDto.getStatus());
+                }
             }
-            default -> {
-            }
+        } catch (Exception e) {
+
+            log.error("Exception occurred while registering product: {}",
+                    e.getMessage());
         }
     }
 
@@ -109,17 +126,23 @@ public class ProductMessageListeners {
 
     public void deleteProductsByOrganizationId(Long organizationId) {
 
-        log.info("Received message from organization to delete " +
-                        "product where organization id: {}",
+        log.info("Received message to delete products by organization id: {}",
                 organizationId);
+        try {
 
-        List<Product> products = productService
-                .getByOrganizationId(organizationId);
+            List<Product> products = productService
+                    .getByOrganizationId(organizationId);
 
-        products.forEach(product ->
-                productService.markProductAsDeleted(product.getId()));
+            log.trace("Deleting {} products", products.size());
+            products.forEach(product ->
+                    productService.markProductAsDeleted(product.getId()));
 
-        log.info("Products successfully deleted");
+            log.info("Products were deleted successfully");
+
+        } catch (Exception e) {
+
+            log.error("Failed to delete products: {}", e.getMessage());
+        }
     }
 
     @KafkaListener(
@@ -134,13 +157,22 @@ public class ProductMessageListeners {
                 request.getObjectId(),
                 request.getObjectStatus());
 
-        ProductStatus status =
-                (request.getObjectStatus() == ObjectStatus.ACTIVATE)
-                        ? ProductStatus.ACTIVE
-                        : ProductStatus.FROZEN;
+        try {
 
-        productService.changeStatus(request.getObjectId(), status);
+            ProductStatus status =
+                    (request.getObjectStatus() == ObjectStatus.ACTIVATE)
+                            ? ProductStatus.ACTIVE
+                            : ProductStatus.FROZEN;
 
-        log.info("Product status successfully changed to: {}", status);
+            log.trace("Changing status...");
+            productService.changeStatus(request.getObjectId(), status);
+
+            log.debug("Product status changed to: {}", status);
+
+        } catch (Exception e) {
+
+            log.error("Failed to change status: {}", e.getMessage());
+        }
+
     }
 }
