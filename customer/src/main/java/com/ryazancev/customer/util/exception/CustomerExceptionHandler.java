@@ -32,7 +32,8 @@ public class CustomerExceptionHandler {
             ServiceUnavailableException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -48,7 +49,8 @@ public class CustomerExceptionHandler {
             CustomerNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -64,7 +66,8 @@ public class CustomerExceptionHandler {
             CustomerCreationException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -80,7 +83,8 @@ public class CustomerExceptionHandler {
             ConstraintViolationException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -101,7 +105,8 @@ public class CustomerExceptionHandler {
             MethodArgumentNotValidException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -123,7 +128,8 @@ public class CustomerExceptionHandler {
             AccessDeniedException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -139,9 +145,8 @@ public class CustomerExceptionHandler {
             OnlineShopException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
-
-        e.printStackTrace();
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -157,9 +162,8 @@ public class CustomerExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
-
-        e.printStackTrace();
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

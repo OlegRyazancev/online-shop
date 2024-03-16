@@ -30,7 +30,8 @@ public class AdminExceptionHandler {
             RequestNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -46,7 +47,8 @@ public class AdminExceptionHandler {
             InvalidRequestStatusException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -62,7 +64,8 @@ public class AdminExceptionHandler {
             ConstraintViolationException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -83,7 +86,8 @@ public class AdminExceptionHandler {
             MethodArgumentNotValidException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -105,7 +109,8 @@ public class AdminExceptionHandler {
             OnlineShopException e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -121,7 +126,8 @@ public class AdminExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
 
         log.error(e.getClass().getSimpleName());
-        log.error(e.getMessage());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
