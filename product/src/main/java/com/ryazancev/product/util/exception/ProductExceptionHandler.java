@@ -31,7 +31,8 @@ public class ProductExceptionHandler {
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
             ServiceUnavailableException e) {
 
-        log.error("Service unavailable exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -46,7 +47,8 @@ public class ProductExceptionHandler {
     public ResponseEntity<ExceptionBody> handleProductCreation(
             ProductCreationException e) {
 
-        log.error("Product creation exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -61,7 +63,8 @@ public class ProductExceptionHandler {
     public ResponseEntity<ExceptionBody> handleProductNotFound(
             ProductNotFoundException e) {
 
-        log.error("Product not found exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -76,7 +79,8 @@ public class ProductExceptionHandler {
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
 
-        log.error("Constraint violation exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -96,7 +100,8 @@ public class ProductExceptionHandler {
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
 
-        log.error("Method argument not valid exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -117,7 +122,8 @@ public class ProductExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAccessDenied(
             AccessDeniedException e) {
 
-        log.error("Access denied exception");
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -132,9 +138,8 @@ public class ProductExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
-        log.error("Online shop exception");
-
-        e.printStackTrace();
+        log.error(e.getClass().getSimpleName());
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -150,8 +155,7 @@ public class ProductExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
 
         log.error(e.getClass().getSimpleName());
-
-        e.printStackTrace();
+        log.error(e.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
