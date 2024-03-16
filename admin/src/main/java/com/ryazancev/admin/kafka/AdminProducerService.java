@@ -80,41 +80,41 @@ public class AdminProducerService {
         RegistrationRequestDto requestDto =
                 adminMapper.toDto(request);
 
-        log.info("Request to send register response of {} with status: {} " +
-                        "with id: {} was received",
+        log.info("Received request to send register" +
+                        " response of {} with status: {} with id: {}",
                 requestDto.getObjectType(),
                 requestDto.getStatus(),
                 request.getObjectToRegisterId());
+
         try {
+
+            String topic;
+
             switch (requestDto.getObjectType()) {
 
                 case PRODUCT -> {
 
-                    log.trace("sending request...}");
-                    registerKafkaTemplate.send(
-                            productRegisterTopic, requestDto);
-
-                    log.debug("Request to {} was sent",
-                            productRegisterTopic);
+                    topic = productRegisterTopic;
                 }
                 case ORGANIZATION -> {
 
-                    log.trace("sending request...}");
-                    registerKafkaTemplate.send(
-                            organizationRegisterTopic, requestDto);
-
-                    log.debug("Request to {} was sent",
-                            organizationRegisterTopic);
+                    topic = organizationRegisterTopic;
                 }
                 default -> {
                     log.warn("Unknown request/object type: {}",
                             requestDto.getObjectType());
+                    return;
                 }
             }
+
+            log.trace("Sending register response request...");
+            registerKafkaTemplate.send(topic, requestDto);
+
+            log.debug("Register response request sent to topic: {}", topic);
+
         } catch (Exception e) {
 
-            log.error("Request to send register response of {} with id:" +
-                            " {} was not sent: {}",
+            log.error("Failed to send register response of {} with id: {}: {}",
                     requestDto.getObjectType(),
                     requestDto.getObjectToRegisterId(),
                     e.getMessage());
@@ -123,37 +123,38 @@ public class AdminProducerService {
 
     public void sendMessageToChangeObjectStatus(ObjectRequest objectRequest) {
 
-        log.info("Request to change {} status to {} with object " +
-                        "id: {} was received",
+        log.info("Received request to change {} status to {} with " +
+                        "object id: {} was received",
                 objectRequest.getObjectType(),
                 objectRequest.getObjectStatus(),
                 objectRequest.getObjectId());
 
         try {
+
+            String topic;
+
             switch (objectRequest.getObjectType()) {
+
                 case PRODUCT -> {
 
-                    log.trace("sending request...}");
-                    changeStatusKafkaTemplate.send(
-                            productChangeStatusTopic, objectRequest);
-
-                    log.debug("Request to {} was sent",
-                            productChangeStatusTopic);
+                    topic = productChangeStatusTopic;
                 }
                 case ORGANIZATION -> {
 
-                    log.trace("sending request...}");
-                    changeStatusKafkaTemplate.send(
-                            organizationChangeStatusTopic, objectRequest);
-
-                    log.debug("Request to {} was sent",
-                            organizationChangeStatusTopic);
+                    topic = organizationChangeStatusTopic;
                 }
                 default -> {
                     log.warn("Unknown request/object type: {}",
                             objectRequest.getObjectType());
+                    return;
                 }
             }
+
+            log.trace("Sending change object status request...");
+            changeStatusKafkaTemplate.send(topic, objectRequest);
+
+            log.debug("Change object status request sent to topic: {}", topic);
+
         } catch (Exception e) {
 
             log.error("Request to change {} status was not sent: {}",
@@ -164,46 +165,46 @@ public class AdminProducerService {
 
     public void sendMessageToToggleUserLock(UserLockRequest request) {
 
-        log.info("Request to toggle user by id: {} lock {} " +
-                        "was received",
+        log.info("Received request to toggle user by id: {} " +
+                        "lock {} was received",
                 request.getUserId(),
                 request.isLock());
+
         try {
 
-            log.trace("sending request...}");
+            log.trace("Sending toggle user lock request...");
             toggleUserLockKafkaTemplate.send(toggleUserLockTopic, request);
 
-            log.debug("Request to {} was sent",
+            log.debug("Toggle user lock request sent to topic: {}",
                     toggleUserLockTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not sent: {}",
-                    toggleUserLockTopic,
+            log.error("Failed to send toggle user lock request: {}",
                     e.getMessage());
         }
     }
 
     public void sendNotification(NotificationRequest request) {
 
-        log.info("Request to send {} notification {} to user with id: " +
-                        "{} from admin if exists: {} was received",
+        log.info("Received request to send {} notification {} to user " +
+                        "with id: {} from admin if exists: {} was received",
                 request.getScope(),
                 request.getType(),
                 request.getRecipientId(),
                 request.getSenderId());
+
         try {
 
-            log.trace("sending request...}");
+            log.trace("Sending notification request...");
             notificationKafkaTemplate.send(notificationTopic, request);
 
-            log.debug("Request to {} was sent",
+            log.debug("Notification request sent to topic: {}",
                     notificationTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not sent: {}",
-                    notificationTopic,
+            log.error("Failed to send notification request: {}",
                     e.getMessage());
         }
     }

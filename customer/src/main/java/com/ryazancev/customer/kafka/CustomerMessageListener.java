@@ -27,7 +27,7 @@ public class CustomerMessageListener {
     )
     void updateCustomerBalance(UpdateBalanceRequest request) {
 
-        log.info("Received message to update customer balance with id: {}",
+        log.info("Received request to update customer balance with id: {}",
                 request.getCustomerId());
 
         try {
@@ -36,13 +36,12 @@ public class CustomerMessageListener {
             Customer customer =
                     customerService.updateBalance(request);
 
-            log.debug("Customer was updated. Actual balance: {}",
+            log.debug("Customer balance updated successfully. New balance: {}",
                     customer.getBalance());
 
         } catch (Exception e) {
 
-            log.error("Customer was not updated: {}", e.getMessage());
+            log.error("Failed to update balance: {}", e.getMessage());
         }
-
     }
 }

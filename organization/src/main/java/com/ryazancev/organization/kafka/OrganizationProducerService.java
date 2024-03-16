@@ -49,19 +49,19 @@ public class OrganizationProducerService {
 
     public void sendMessageToAdminTopic(RegistrationRequestDto requestDto) {
 
-        log.info("Request to {} to make registration request " +
-                "of organization was received", adminTopic);
+        log.info("Received request to make registration request " +
+                "of organization on topic: {}", adminTopic);
 
         try {
 
-            log.trace("sending request...");
+            log.trace("Sending request...");
             adminKafkaTemplate.send(adminTopic, requestDto);
 
             log.debug("Request to {} was sent", adminTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not sent: {}",
+            log.error("Failed to send request to {}: {}",
                     adminTopic,
                     e.getMessage());
         }
@@ -69,19 +69,19 @@ public class OrganizationProducerService {
 
     public void sendMessageToProductTopic(Long organizationId) {
 
-        log.info("Request to send organizationId: {} to {} was received",
+        log.info("Received request to send productId {} to topic: {}",
                 organizationId, productTopic);
 
         try {
 
-            log.trace("sending request...");
+            log.trace("Sending request...");
             productKafkaTemplate.send(productTopic, organizationId);
 
             log.debug("Request to {} was sent", productTopic);
 
         } catch (Exception e) {
 
-            log.error("Message to {} was not sent: {}",
+            log.error("Failed to send message to {}: {}",
                     productTopic,
                     e.getMessage());
         }
@@ -89,23 +89,23 @@ public class OrganizationProducerService {
 
     public void sendMessageToMailTopic(MailDto mailDto) {
 
-        log.info("Request to send {} email to {} was received",
+        log.info("Received request to send {} email to {} on topic: {}",
                 mailDto.getType(),
-                mailDto.getEmail());
+                mailDto.getEmail(),
+                mailTopic);
 
         try {
 
-            log.trace("sending request...");
+            log.trace("Sending request...");
             mailKafkaTemplate.send(mailTopic, mailDto);
 
             log.debug("Request to {} was sent", mailTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not sent:{}",
+            log.error("Failed to send request to {}: {}",
                     mailTopic,
                     e.getMessage());
-
         }
     }
 }

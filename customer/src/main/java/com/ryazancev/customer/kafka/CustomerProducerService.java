@@ -39,18 +39,19 @@ public class CustomerProducerService {
 
     public void sendMessageToAuthDeleteTopic(Long id) {
 
-        log.info("Request to auth topic to delete user with id {} was" +
-                " received", id);
+        log.info("Received request to delete user with id {} " +
+                "in the auth topic", id);
+
         try {
 
-            log.trace("sending request...}");
+            log.trace("Sending delete user request...");
             longValueKafkaTemplate.send(deleteUserTopic, id);
 
-            log.debug("Request to {} was sent", deleteUserTopic);
+            log.debug("Delete user request sent to topic: {}", deleteUserTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not sent: {}",
+            log.error("Failed to send delete user request to {}: {}",
                     deleteUserTopic,
                     e.getMessage());
         }
@@ -58,22 +59,23 @@ public class CustomerProducerService {
 
     public void sendMessageToAuthUpdateTopic(UserUpdateRequest request) {
 
-        log.info("Request to auth topic to update user " +
-                        "with id:{}, email:{}, name: {} was received",
+        log.info("Received request to update user with id: {}, email: {}, " +
+                        "name: {} in the auth topic",
                 request.getCustomerId(),
                 request.getEmail(),
                 request.getName());
 
         try {
 
-            log.trace("sending request...}");
+            log.trace("Sending update user request...");
             userUpdateKafkaTemplate.send(updateUserTopic, request);
 
-            log.debug("Request to {} was sent", updateUserTopic);
+            log.debug("Update user request sent to topic: {}",
+                    updateUserTopic);
 
         } catch (Exception e) {
 
-            log.error("Request to {} was not sent: {}",
+            log.error("Failed to send update user request to {}: {}",
                     updateUserTopic,
                     e.getMessage());
         }

@@ -29,7 +29,7 @@ public class OrganizationMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "registrationMessageFactory"
     )
-    void completeRegistrationOfOrganization(RegistrationRequestDto requestDto) {
+    void changeStatusAndRegister(RegistrationRequestDto requestDto) {
 
         log.info("Received message from admin to register organization with" +
                         " id {} with response: {}",
@@ -41,12 +41,12 @@ public class OrganizationMessageListener {
             switch (requestDto.getStatus()) {
                 case ACCEPTED -> {
 
-                    log.trace("Changing status..");
+                    log.trace("Changing status to ACTIVE...");
                     organizationService.changeStatus(
                             requestDto.getObjectToRegisterId(),
                             OrganizationStatus.ACTIVE);
 
-                    log.trace("Registering...");
+                    log.trace("Registering organization...");
                     organizationService.register(
                             requestDto.getObjectToRegisterId()
                     );
@@ -55,13 +55,12 @@ public class OrganizationMessageListener {
                     mailProcessor.sendAcceptedMailToCustomerByOrganizationId(
                             requestDto.getObjectToRegisterId());
 
-
-                    log.debug("Organization now is: {}",
+                    log.debug("Organization status is now: {}",
                             OrganizationStatus.ACTIVE);
                 }
                 case REJECTED -> {
 
-                    log.trace("Changing status..");
+                    log.trace("Changing status to INACTIVE..");
                     organizationService.changeStatus(
                             requestDto.getObjectToRegisterId(),
                             OrganizationStatus.INACTIVE);
@@ -70,20 +69,20 @@ public class OrganizationMessageListener {
                     mailProcessor.sendRejectedMailToCustomerByOrganizationId(
                             requestDto.getObjectToRegisterId());
 
-
-                    log.debug("Organization now is {}",
+                    log.debug("Organization status is now: {}",
                             OrganizationStatus.INACTIVE);
                 }
                 default -> {
 
-                    log.warn("Unknown request type: {} or status: {}",
+                    log.warn("Received unexpected request type {}" +
+                                    " or status: {}",
                             requestDto.getObjectType(),
                             requestDto.getStatus());
                 }
             }
         } catch (Exception e) {
 
-            log.error("Exception while registering organization {}",
+            log.error("Exception occurred while registering organization: {}",
                     e.getMessage());
         }
     }
@@ -109,11 +108,11 @@ public class OrganizationMessageListener {
             log.trace("Changing status...");
             organizationService.changeStatus(request.getObjectId(), status);
 
-            log.debug("Organization status was changed to: {}", status);
+            log.debug("Organization status changed to: {}", status);
 
         } catch (Exception e) {
 
-            log.error("Status was not changed: {}", e.getMessage());
+            log.error("Failed to change status: {}", e.getMessage());
         }
 
     }

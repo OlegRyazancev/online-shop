@@ -39,7 +39,7 @@ public class AdminMessageListener {
                 requestDto.getObjectToRegisterId());
         try {
 
-            log.trace("Creating request...");
+            log.trace("Creating registration request...");
             RegistrationRequest request =
                     adminMapper.toEntity(requestDto);
 
@@ -54,12 +54,13 @@ public class AdminMessageListener {
             log.trace("Sending admin notification...");
             adminProducerService.sendNotification(notificationRequest);
 
-            log.debug("Request was created with id: {}",
+            log.debug("Registration request created successfully with id: {}",
                     created.getId());
 
         } catch (Exception e) {
 
-            log.error("Request was not created: {}", e.getMessage());
+            log.error("Failed to create registration request: {}",
+                    e.getMessage());
         }
 
     }

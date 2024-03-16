@@ -30,7 +30,7 @@ public class NotificationMessageListener {
     )
     void consumeMessage(NotificationRequest request) {
 
-        log.info("Receive request to send {} notification",
+        log.info("Received request to send {} notification",
                 request.getScope());
 
         try {
@@ -50,7 +50,9 @@ public class NotificationMessageListener {
                             "/private",
                             notification);
 
-                    log.debug("Private notification was successfully send");
+                    log.debug("Private notification with id {} " +
+                                    "was successfully sent",
+                            notification.getId());
                 }
 
                 case PUBLIC -> {
@@ -67,8 +69,10 @@ public class NotificationMessageListener {
                             "/public",
                             notification);
 
-                    log.debug("Public notification to users  " +
-                            "was successfully send");
+                    log.debug("Public notification with id {} was " +
+                                    "successfully sent",
+                            notification.getId());
+
                 }
 
                 case ADMIN -> {
@@ -85,9 +89,11 @@ public class NotificationMessageListener {
                             "/admin",
                             notification);
 
-                    log.debug("Public notification to users  " +
-                            "was successfully send");
+                    log.debug("Admin notification with id {} was " +
+                                    "successfully sent",
+                            notification.getId());
                 }
+
                 default -> {
 
                     log.warn("Unknown scope: {}", request.getScope());
@@ -96,7 +102,7 @@ public class NotificationMessageListener {
             }
         } catch (Exception e) {
 
-            log.error("Notification was not sent: {}", e.getMessage());
+            log.error("Failed to send notification: {}", e.getMessage());
         }
 
     }

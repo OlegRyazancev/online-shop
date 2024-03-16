@@ -26,19 +26,19 @@ public class MailMessageListener {
     )
     void consumeMail(MailDto mailDto) {
 
-        log.info("Received message to send email to: {}, email type: {}",
-                mailDto.getEmail(), mailDto.getType().name());
+        log.info("Received message to send {} email to: {}",
+                mailDto.getType(), mailDto.getEmail());
 
         try {
 
             log.trace("Sending message...");
             mailService.sendEmail(mailDto);
 
-            log.debug("Mail was sent to: {}", mailDto.getEmail());
+            log.debug("Email sent successfully to: {}", mailDto.getEmail());
 
         } catch (Exception e) {
 
-            log.error("Mail was not sent to {}: {}",
+            log.error("Failed to send email to {}: {}",
                     mailDto.getEmail(),
                     e.getMessage());
         }
