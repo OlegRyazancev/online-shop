@@ -4,6 +4,7 @@ import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.organization.OrganizationEditDto;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.CustomExpressionService;
+import com.ryazancev.organization.util.RequestHeader;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +22,22 @@ import java.util.Locale;
  * @author Oleg Ryazancev
  */
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class CustomExpressionServiceImpl implements CustomExpressionService {
 
-    private final HttpServletRequest request;
     private final OrganizationRepository organizationRepository;
 
     private final MessageSource messageSource;
+
+    private final RequestHeader requestHeader;
+
+    public CustomExpressionServiceImpl(final HttpServletRequest request,
+                                       OrganizationRepository organizationRepository,
+                                       MessageSource messageSource) {
+        this.requestHeader = new RequestHeader(request);
+        this.organizationRepository = organizationRepository;
+        this.messageSource = messageSource;
+    }
 
     @Override
     public void checkAccountConditions() {
@@ -38,10 +46,27 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         checkIfEmailConfirmed();
     }
 
+    private void checkIfEmailConfirmed() {
+
+        if (!requestHeader.isConfirmed()) {
+
+            throw new AccessDeniedException(
+                    messageSource.getMessage(
+                            "exception.organization.email_not_confirmed",
+                            null,
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.FORBIDDEN);
+        }
+    }
+
     @Override
     public void checkAccessOrganization(Long id) {
 
-        if (!canAccessOrganization(id)) {
+        if (!organizationRepository.isOrganizationOwner(
+                requestHeader.getUserId(), id)
+                || requestHeader.getRoles().contains("ROLE_ADMIN")) {
+
             throw new AccessDeniedException(
                     messageSource.getMessage(
                             "exception.organization.access_object",
@@ -56,15 +81,17 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessUser(OrganizationEditDto organizationEditDto) {
+    public void checkAccessUser(Long customerId) {
 
-        if (!canAccessUser(organizationEditDto.getOwnerId())) {
+        if (!(customerId.equals(requestHeader.getUserId())
+                || requestHeader.getRoles().contains("ROLE_ADMIN"))) {
+
             throw new AccessDeniedException(
                     messageSource.getMessage(
                             "exception.organization.access_object",
                             new Object[]{
                                     ServiceStage.CUSTOMER,
-                                    organizationEditDto.getOwnerId()
+                                    customerId
                             },
                             Locale.getDefault()
                     ),
@@ -75,9 +102,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkIfAccountLocked() {
 
-        boolean locked = Boolean.parseBoolean(request.getHeader("locked"));
-
-        if (locked) {
+        if (requestHeader.isLocked()) {
             throw new AccessDeniedException(
                     messageSource.getMessage(
                             "exception.organization.account_locked",
@@ -87,52 +112,4 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
                     HttpStatus.FORBIDDEN);
         }
     }
-
-    private void checkIfEmailConfirmed() {
-
-        boolean confirmed = Boolean.parseBoolean(
-                request.getHeader("confirmed"));
-
-        if (!confirmed) {
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.organization.email_not_confirmed",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
-        }
-    }
-
-    private boolean canAccessOrganization(Long organizationId) {
-
-        Long currentUserId = getUserIdFromRequest();
-        List<String> userRoles = getUserRolesFromRequest();
-
-        return organizationRepository
-                .isOrganizationOwner(currentUserId, organizationId)
-                || userRoles.contains("ROLE_ADMIN");
-    }
-
-    private boolean canAccessUser(Long userId) {
-
-        Long currentUserId = getUserIdFromRequest();
-        List<String> userRoles = getUserRolesFromRequest();
-
-        return userId.equals(currentUserId)
-                || userRoles.contains("ROLE_ADMIN");
-    }
-
-
-    private Long getUserIdFromRequest() {
-
-        return Long.valueOf(request.getHeader("userId"));
-    }
-
-    private List<String> getUserRolesFromRequest() {
-
-        return Arrays.asList(request.getHeader("roles").split(" "));
-    }
-
-
 }

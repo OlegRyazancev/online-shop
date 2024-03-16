@@ -1,7 +1,5 @@
 package com.ryazancev.organization.service;
 
-import com.ryazancev.common.dto.organization.OrganizationEditDto;
-
 /**
  * @author Oleg Ryazancev
  */
@@ -10,7 +8,7 @@ public interface CustomExpressionService {
 
     void checkAccountConditions();
 
-    void checkAccessUser(OrganizationEditDto organizationEditDto);
+    void checkAccessUser(Long customerId);
 
     void checkAccessOrganization(Long id);
 

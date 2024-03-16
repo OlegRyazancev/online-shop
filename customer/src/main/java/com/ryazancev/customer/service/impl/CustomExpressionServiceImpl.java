@@ -2,7 +2,7 @@ package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.customer.service.ClientsService;
 import com.ryazancev.customer.service.CustomExpressionService;
-import com.ryazancev.customer.util.RequestHeadersProperties;
+import com.ryazancev.customer.util.RequestHeader;
 import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.MessageSource;
@@ -22,12 +22,12 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     private final ClientsService clientsService;
     private final MessageSource messageSource;
 
-    private final RequestHeadersProperties headersProperties;
+    private final RequestHeader requestHeader;
 
     public CustomExpressionServiceImpl(final HttpServletRequest request,
                                        ClientsService clientsService,
                                        MessageSource messageSource) {
-        this.headersProperties = new RequestHeadersProperties(request);
+        this.requestHeader = new RequestHeader(request);
         this.clientsService = clientsService;
         this.messageSource = messageSource;
     }
@@ -36,11 +36,13 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     public void checkAccountConditions() {
 
         checkIfAccountLocked();
-        checkIfAccountConfirmed();
+        checkIfEmailConfirmed();
     }
 
-    private void checkIfAccountConfirmed() {
-        if (!headersProperties.isConfirmed()) {
+    private void checkIfEmailConfirmed() {
+
+        if (!requestHeader.isConfirmed()) {
+
             throw new AccessDeniedException(
                     messageSource.getMessage(
                             "exception.customer.email_not_confirmed",
@@ -52,10 +54,10 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessCustomer(Long customerId) {
+    public void checkAccessUser(Long customerId) {
 
-        if (!(headersProperties.getUserId().equals(customerId)
-                || headersProperties.getRoles().contains("ROLE_ADMIN"))) {
+        if (!(requestHeader.getUserId().equals(customerId)
+                || requestHeader.getRoles().contains("ROLE_ADMIN"))) {
 
             throw new AccessDeniedException(
                     messageSource.getMessage(
@@ -70,7 +72,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkIfAccountLocked() {
 
-        if (headersProperties.isLocked()) {
+        if (requestHeader.isLocked()) {
+
             throw new AccessDeniedException(
                     messageSource.getMessage(
                             "exception.customer.account_locked",
@@ -85,7 +88,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkIfCustomerIsAdmin(Long id) {
 
-        if (!headersProperties.getRoles().contains("ROLE_ADMIN")) {
+        if (!requestHeader.getRoles().contains("ROLE_ADMIN")) {
 
             throw new AccessDeniedException(
                     messageSource.getMessage(
@@ -104,7 +107,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         Long recipientId = (Long) clientsService
                 .getRecipientIdByPrivateNotificationId(notificationId);
 
-        if (!recipientId.equals(headersProperties.getUserId())) {
+        if (!recipientId.equals(requestHeader.getUserId())) {
+
             throw new AccessDeniedException(
                     messageSource.getMessage(
                             "exception.customer.access_private_notification",

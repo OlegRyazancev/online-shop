@@ -8,6 +8,7 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.RequestHeader;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +25,41 @@ import java.util.Locale;
  */
 
 @Service
-@RequiredArgsConstructor
 public class CustomExpressionServiceImpl implements CustomExpressionService {
 
-    private final HttpServletRequest request;
     private final ProductService productService;
     private final ClientsService clientsService;
     private final MessageSource messageSource;
+    private final RequestHeader requestHeader;
+
+    public CustomExpressionServiceImpl(final HttpServletRequest request,
+                                       ClientsService clientsService,
+                                       ProductService productService,
+                                       MessageSource messageSource) {
+        this.requestHeader = new RequestHeader(request);
+        this.productService = productService;
+        this.clientsService = clientsService;
+        this.messageSource = messageSource;
+    }
 
     @Override
     public void checkAccountConditions() {
         checkIfAccountLocked();
         checkIfEmailConfirmed();
+    }
+
+    private void checkIfEmailConfirmed() {
+
+        if (!requestHeader.isConfirmed()) {
+
+            throw new AccessDeniedException(
+                    messageSource.getMessage(
+                            "exception.product.email_not_confirmed",
+                            null,
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.FORBIDDEN);
+        }
     }
 
     @Override
@@ -77,9 +101,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkIfAccountLocked() {
 
-        boolean locked = Boolean.parseBoolean(request.getHeader("locked"));
-
-        if (locked) {
+        if (requestHeader.isLocked()) {
 
             throw new AccessDeniedException(
                     messageSource.getMessage(
@@ -94,7 +116,17 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkAccessPurchase(String purchaseId) {
 
-        if (!canAccessPurchase(purchaseId)) {
+        PurchaseDto purchaseDto = (PurchaseDto) clientsService
+                .getPurchaseById(purchaseId);
+
+        CustomerDto customerDto = purchaseDto.getCustomer()
+                .safelyCast(CustomerDto.class, true);
+
+        boolean canAccessPurchase =
+                requestHeader.getUserId().equals(customerDto.getId())
+                        || requestHeader.getRoles().contains("ROLE_ADMIN");
+
+        if (!canAccessPurchase) {
 
             throw new AccessDeniedException(
                     messageSource.getMessage(
@@ -103,38 +135,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
                                     ServiceStage.PURCHASE,
                                     purchaseId
                             },
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
-        }
-    }
-
-    private boolean canAccessPurchase(String purchaseId) {
-
-        Long userId = getUserIdFromRequest(request);
-        List<String> userRoles = getRolesFromRequest(request);
-
-        PurchaseDto purchaseDto = (PurchaseDto) clientsService
-                .getPurchaseById(purchaseId);
-
-        CustomerDto customerDto = purchaseDto.getCustomer()
-                .safelyCast(CustomerDto.class, true);
-
-        return userId.equals(customerDto.getId())
-                || userRoles.contains("ROLE_ADMIN");
-    }
-
-    private void checkIfEmailConfirmed() {
-
-        boolean confirmed = Boolean.parseBoolean(
-                request.getHeader("confirmed"));
-
-        if (!confirmed) {
-
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.product.email_not_confirmed",
-                            null,
                             Locale.getDefault()
                     ),
                     HttpStatus.FORBIDDEN);
@@ -150,7 +150,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (canAccessOrganization(organizationId)) {
 
-            List<String> userRoles = getRolesFromRequest(request);
             List<Product> products =
                     productService.getByOrganizationId(organizationId);
 
@@ -158,7 +157,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
                     .stream()
                     .anyMatch(productDto ->
                             productDto.getId().equals(productId))
-                    || userRoles.contains("ROLE_ADMIN");
+                    || requestHeader.getRoles().contains("ROLE_ADMIN");
         }
 
         return false;
@@ -166,25 +165,11 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private boolean canAccessOrganization(Long organizationId) {
 
-        Long userId = getUserIdFromRequest(request);
-        List<String> userRoles = getRolesFromRequest(request);
-
         Long ownerId = (Long) clientsService
                 .getOrganizationOwnerIdById(organizationId);
 
-        return userId.equals(ownerId)
-                || userRoles.contains("ROLE_ADMIN");
-    }
-
-
-    private List<String> getRolesFromRequest(HttpServletRequest request) {
-
-        return Arrays.asList(request.getHeader("roles").split(" "));
-    }
-
-    private Long getUserIdFromRequest(HttpServletRequest request) {
-
-        return Long.valueOf(request.getHeader("userId"));
+        return requestHeader.getUserId().equals(ownerId)
+                || requestHeader.getRoles().contains("ROLE_ADMIN");
     }
 
 }

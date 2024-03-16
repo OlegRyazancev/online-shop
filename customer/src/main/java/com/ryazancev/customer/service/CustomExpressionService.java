@@ -8,7 +8,7 @@ public interface CustomExpressionService {
 
     void checkAccountConditions();
 
-    void checkAccessCustomer(Long id);
+    void checkAccessUser(Long id);
 
     void checkIfAccountLocked();
 
