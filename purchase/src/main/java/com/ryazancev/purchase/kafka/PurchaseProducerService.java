@@ -2,6 +2,7 @@ package com.ryazancev.purchase.kafka;
 
 import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.common.dto.product.UpdateQuantityRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
+@Slf4j
 public class PurchaseProducerService {
 
     private final KafkaTemplate<
@@ -35,19 +37,47 @@ public class PurchaseProducerService {
         this.customerKafkaTemplate = customerKafkaTemplate;
     }
 
-    public void sendMessageToProductTopic(UpdateQuantityRequest message) {
+    public void sendMessageToProductTopic(UpdateQuantityRequest request) {
+
+        log.info("Received request to update product's quantity with id: {} " +
+                        "quantity: {} on topic: {}",
+                request.getProductId(),
+                request.getQuantityInStock(),
+                productTopic);
         try {
-            productKafkaTemplate.send(productTopic, message);
+
+            log.trace("Sending update quantity request...");
+            productKafkaTemplate.send(productTopic, request);
+
+            log.debug("Request to {} was sent", productTopic);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            log.error("Failed to send request to {}: {}",
+                    productTopic,
+                    e.getMessage());
         }
     }
 
-    public void sendMessageToCustomerTopic(UpdateBalanceRequest message) {
+    public void sendMessageToCustomerTopic(UpdateBalanceRequest request) {
+
+        log.info("Received request to update user's balance with id: {} " +
+                        "balance: {} on topic: {}",
+                request.getCustomerId(),
+                request.getBalance(),
+                customerTopic);
         try {
-            customerKafkaTemplate.send(customerTopic, message);
+
+            log.trace("Sending update balance request...");
+            customerKafkaTemplate.send(customerTopic, request);
+
+            log.debug("Request to {} was sent", customerTopic);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            log.error("Failed to send request to {}: {}",
+                    customerTopic,
+                    e.getMessage());
         }
     }
 }
