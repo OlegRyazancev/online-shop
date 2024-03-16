@@ -18,5 +18,5 @@ public interface ReviewService {
 
     Double getAverageRatingByProductId(Long productId);
 
-    void deleteByProductId(Long productId);
+    String deleteByProductId(Long productId);
 }

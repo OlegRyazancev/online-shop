@@ -27,8 +27,8 @@ public class ReviewMessageListeners {
         log.info("Receive message to delete reviews of product with id: {}",
                 productId);
 
-        reviewService.deleteByProductId(productId);
+        String result = reviewService.deleteByProductId(productId);
 
-        log.info("Reviews successfully deleted");
+        log.info(result);
     }
 }

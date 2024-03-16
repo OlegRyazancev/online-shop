@@ -15,13 +15,13 @@ import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.ryazancev.review.util.exception.Message.DUPLICATE_REVIEW;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -37,6 +37,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final DtoProcessor dtoProcessor;
     private final ClientsService clientsService;
+
+    private final MessageSource messageSource;
 
     @Override
     public ReviewsResponse getByCustomerId(Long customerId) {
@@ -66,7 +68,11 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (reviewRepository.findByPurchaseId(purchaseId).isPresent()) {
             throw new ReviewCreationException(
-                    DUPLICATE_REVIEW,
+                    messageSource.getMessage(
+                            "exception.review.duplicate_review",
+                            new Object[]{reviewEditDto.getPurchaseId()},
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -77,7 +83,6 @@ public class ReviewServiceImpl implements ReviewService {
                 .safelyCast(CustomerDto.class, true);
         ProductDto productDto = purchaseDto.getProduct()
                 .safelyCast(ProductDto.class, true);
-
 
         Review toSave = reviewMapper.toEntity(reviewEditDto);
 
@@ -102,10 +107,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void deleteByProductId(Long productId) {
+    public String deleteByProductId(Long productId) {
 
         List<Review> reviews = reviewRepository.findByProductId(productId);
 
         reviewRepository.deleteAll(reviews);
+
+        return messageSource.getMessage(
+                "exception.review.deleted",
+                new Object[]{reviews.size()},
+                Locale.getDefault()
+        );
     }
 }
