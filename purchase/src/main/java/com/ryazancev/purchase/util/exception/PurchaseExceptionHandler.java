@@ -32,7 +32,9 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
             ServiceUnavailableException e) {
 
-        log.error("Service unavailable exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -47,7 +49,9 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handlePurchaseNotFound(
             PurchaseNotFoundException e) {
 
-        log.error("Purchase not found exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -62,7 +66,9 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleIncorrectBalance(
             IncorrectBalanceException e) {
 
-        log.error("Incorrect balance exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -77,7 +83,9 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handlePurchasesNotFound(
             PurchasesNotFoundException e) {
 
-        log.error("Purchases not found exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -92,7 +100,9 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOutOfStock(
             OutOfStockException e) {
 
-        log.error("Out of stock exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -107,7 +117,9 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
             ConstraintViolationException e) {
 
-        log.error("Constraint violation exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -127,7 +139,9 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
 
-        log.error("Method argument not valid exception");
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -148,9 +162,9 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleOnlineShop(
             OnlineShopException e) {
 
-        log.error("Online shop exception");
-
-        e.printStackTrace();
+        log.error(e.getClass().getSimpleName());
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -166,8 +180,8 @@ public class PurchaseExceptionHandler {
     public ResponseEntity<ExceptionBody> handleAny(Exception e) {
 
         log.error(e.getClass().getSimpleName());
-
-        e.printStackTrace();
+        log.debug(e.getMessage());
+        log.trace("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
