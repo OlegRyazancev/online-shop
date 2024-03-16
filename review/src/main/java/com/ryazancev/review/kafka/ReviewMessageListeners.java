@@ -24,11 +24,19 @@ public class ReviewMessageListeners {
     )
     public void deleteReviewsByProductId(Long productId) {
 
-        log.info("Receive message to delete reviews of product with id: {}",
+        log.info("Received message to delete reviews for product with ID: {}",
                 productId);
+        try {
 
-        String result = reviewService.deleteByProductId(productId);
+            log.trace("Deleting reviews...");
+            String deletionResult = reviewService.deleteByProductId(productId);
 
-        log.info(result);
+            log.debug(deletionResult);
+
+        } catch (Exception e) {
+
+            log.error("Failed to delete reviews for product with ID {}: {}",
+                    productId, e.getMessage());
+        }
     }
 }
