@@ -7,7 +7,6 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import com.ryazancev.product.util.validator.ProductValidator;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +15,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.ryazancev.product.util.exception.Message.ORGANIZATION_NOT_FOUND;
-import static com.ryazancev.product.util.exception.Message.PRODUCT_NOT_FOUND;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -38,8 +36,9 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductValidator productValidator;
-
     private final ProductProducerService productProducerService;
+
+    private final MessageSource messageSource;
 
     @Override
     @Cacheable(value = "Product::getAll")
@@ -71,10 +70,13 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getByOrganizationId(Long organizationId) {
 
         return productRepository.findByOrganizationId(organizationId)
-                .orElseThrow(() ->
-                        new OrganizationNotFoundException(
-                                ORGANIZATION_NOT_FOUND,
-                                HttpStatus.NOT_FOUND)
+                .orElseThrow(() -> new ProductNotFoundException(
+                        messageSource.getMessage(
+                                "exception.product.not_found_by_organization_id",
+                                new Object[]{organizationId},
+                                Locale.getDefault()
+                        ),
+                        HttpStatus.NOT_FOUND)
                 );
     }
 
@@ -227,14 +229,22 @@ public class ProductServiceImpl implements ProductService {
         productProducerService.sendMessageToReviewTopic(id);
         productRepository.save(existing);
 
-        return "Product was successfully deleted";
+        return messageSource.getMessage(
+                "service.product.deleted",
+                null,
+                Locale.getDefault()
+        );
     }
 
     private Product findById(Long productId) {
 
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(
-                        PRODUCT_NOT_FOUND,
+                        messageSource.getMessage(
+                                "exception.product.not_found",
+                                new Object[]{productId},
+                                Locale.getDefault()
+                        ),
                         HttpStatus.NOT_FOUND
                 ));
     }

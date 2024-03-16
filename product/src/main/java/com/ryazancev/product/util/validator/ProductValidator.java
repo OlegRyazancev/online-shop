@@ -6,11 +6,11 @@ import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import static com.ryazancev.product.util.exception.Message.NAME_EXISTS;
-import static com.ryazancev.product.util.exception.Message.PRODUCT_STATUS_ACCESS;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -21,15 +21,17 @@ import static com.ryazancev.product.util.exception.Message.PRODUCT_STATUS_ACCESS
 public class ProductValidator {
 
     private final ProductRepository productRepository;
+    private final MessageSource messageSource;
 
     public void validateStatus(Product product, ProductStatus status) {
 
         if (product.getStatus() == status) {
 
             throw new AccessDeniedException(
-                    String.format(
-                            PRODUCT_STATUS_ACCESS,
-                            product.getStatus().name()
+                    messageSource.getMessage(
+                            "exception.product.status_access",
+                            new Object[]{product.getStatus()},
+                            Locale.getDefault()
                     ),
                     HttpStatus.CONFLICT);
         }
@@ -47,8 +49,13 @@ public class ProductValidator {
 
         if (productRepository.findByProductName(
                 product.getProductName()).isPresent()) {
+
             throw new ProductCreationException(
-                    NAME_EXISTS,
+                    messageSource.getMessage(
+                            "exception.product.name_exists",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST
             );
         }

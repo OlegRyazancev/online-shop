@@ -4,7 +4,6 @@ import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.exception.OnlineShopException;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
-import com.ryazancev.product.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
 import jakarta.validation.ConstraintViolation;
@@ -48,21 +47,6 @@ public class ProductExceptionHandler {
             ProductCreationException e) {
 
         log.error("Product creation exception");
-
-        return ResponseEntity
-                .status(e.getHttpStatus())
-                .body(new ExceptionBody(
-                        e.getMessage(),
-                        ServiceStage.PRODUCT,
-                        e.getHttpStatus()
-                ));
-    }
-
-    @ExceptionHandler(OrganizationNotFoundException.class)
-    public ResponseEntity<ExceptionBody> handleOrganizationNotFound(
-            OrganizationNotFoundException e) {
-
-        log.error("Organization not found exception");
 
         return ResponseEntity
                 .status(e.getHttpStatus())

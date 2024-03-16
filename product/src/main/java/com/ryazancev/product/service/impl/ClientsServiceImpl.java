@@ -4,6 +4,7 @@ import com.ryazancev.common.clients.CustomerClient;
 import com.ryazancev.common.clients.OrganizationClient;
 import com.ryazancev.common.clients.PurchaseClient;
 import com.ryazancev.common.clients.ReviewClient;
+import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.Fallback;
 import com.ryazancev.common.dto.review.ReviewEditDto;
@@ -11,10 +12,11 @@ import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.product.service.ClientsService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static com.ryazancev.product.util.exception.Message.*;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -29,6 +31,8 @@ public class ClientsServiceImpl implements ClientsService {
     private final ReviewClient reviewClient;
     private final CustomerClient customerClient;
     private final PurchaseClient purchaseClient;
+
+    private final MessageSource messageSource;
 
     @Override
     @CircuitBreaker(
@@ -107,49 +111,75 @@ public class ClientsServiceImpl implements ClientsService {
     private Object customerServiceUnavailable(Exception e) {
 
         throw new ServiceUnavailableException(
-                CUSTOMER_SERVICE_UNAVAILABLE,
+                messageSource.getMessage(
+                        "exception.product.service_unavailable",
+                        new Object[]{ServiceStage.CUSTOMER},
+                        Locale.getDefault()
+                ),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     private Object organizationServiceUnavailable(Exception e) {
 
         throw new ServiceUnavailableException(
-                ORGANIZATION_SERVICE_UNAVAILABLE,
+                messageSource.getMessage(
+                        "exception.product.service_unavailable",
+                        new Object[]{ServiceStage.ORGANIZATION},
+                        Locale.getDefault()
+                ),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     private Object reviewServiceUnavailable(Exception e) {
 
-        e.printStackTrace();
+        throw new ServiceUnavailableException(
+                messageSource.getMessage(
+                        "exception.product.service_unavailable",
+                        new Object[]{ServiceStage.REVIEW},
+                        Locale.getDefault()
+                ),
+                HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    private Object purchaseServiceUnavailable(Exception e) {
 
         throw new ServiceUnavailableException(
-                REVIEW_SERVICE_UNAVAILABLE,
+                messageSource.getMessage(
+                        "exception.product.service_unavailable",
+                        new Object[]{ServiceStage.PURCHASE},
+                        Locale.getDefault()
+                ),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     private Object getSimpleCustomerFallback(Exception e) {
 
         return Fallback.builder()
-                .message(CUSTOMER_SERVICE_UNAVAILABLE)
+                .message(
+                        messageSource.getMessage(
+                                "exception.product.service_unavailable",
+                                new Object[]{ServiceStage.CUSTOMER},
+                                Locale.getDefault()
+                        )
+                )
                 .build();
     }
 
     private Object getSimpleOrganizationFallback(Exception e) {
 
         return Fallback.builder()
-                .message(ORGANIZATION_SERVICE_UNAVAILABLE)
+                .message(
+                        messageSource.getMessage(
+                                "exception.product.service_unavailable",
+                                new Object[]{ServiceStage.ORGANIZATION},
+                                Locale.getDefault()
+                        )
+                )
                 .build();
     }
 
     private Double getAverageRatingFallback(Exception e) {
 
         return -1.0;
-    }
-
-    private Object purchaseServiceUnavailable(Exception e) {
-
-        throw new ServiceUnavailableException(
-                PURCHASE_SERVICE_UNAVAILABLE,
-                HttpStatus.SERVICE_UNAVAILABLE);
     }
 }

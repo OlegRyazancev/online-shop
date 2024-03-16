@@ -1,5 +1,6 @@
 package com.ryazancev.product.service.impl;
 
+import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.customer.CustomerDto;
 import com.ryazancev.common.dto.product.ProductEditDto;
 import com.ryazancev.common.dto.purchase.PurchaseDto;
@@ -10,13 +11,13 @@ import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static com.ryazancev.product.util.exception.Message.*;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -27,10 +28,9 @@ import static com.ryazancev.product.util.exception.Message.*;
 public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final HttpServletRequest request;
-
     private final ProductService productService;
-
     private final ClientsService clientsService;
+    private final MessageSource messageSource;
 
     @Override
     public void checkAccountConditions() {
@@ -44,7 +44,14 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!canAccessProduct(id)) {
 
             throw new AccessDeniedException(
-                    ACCESS_PRODUCT,
+                    messageSource.getMessage(
+                            "exception.product.access_object",
+                            new Object[]{
+                                    ServiceStage.PRODUCT,
+                                    id
+                            },
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -55,7 +62,14 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!canAccessOrganization(productEditDto.getOrganizationId())) {
 
             throw new AccessDeniedException(
-                    ACCESS_ORGANIZATION,
+                    messageSource.getMessage(
+                            "exception.product.access_object",
+                            new Object[]{
+                                    ServiceStage.ORGANIZATION,
+                                    productEditDto.getOrganizationId()
+                            },
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -68,7 +82,11 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (locked) {
 
             throw new AccessDeniedException(
-                    ACCOUNT_LOCKED,
+                    messageSource.getMessage(
+                            "exception.product.account_locked",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -79,7 +97,14 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!canAccessPurchase(purchaseId)) {
 
             throw new AccessDeniedException(
-                    ACCESS_PURCHASE,
+                    messageSource.getMessage(
+                            "exception.product.access_object",
+                            new Object[]{
+                                    ServiceStage.PURCHASE,
+                                    purchaseId
+                            },
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }
@@ -107,7 +132,11 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!confirmed) {
 
             throw new AccessDeniedException(
-                    EMAIL_NOT_CONFIRMED,
+                    messageSource.getMessage(
+                            "exception.product.email_not_confirmed",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.FORBIDDEN);
         }
     }
