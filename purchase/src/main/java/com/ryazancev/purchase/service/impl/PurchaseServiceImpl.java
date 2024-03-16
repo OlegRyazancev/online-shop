@@ -15,13 +15,13 @@ import com.ryazancev.purchase.util.mapper.PurchaseMapper;
 import com.ryazancev.purchase.util.validator.PurchaseValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.ryazancev.purchase.util.exception.Message.PURCHASE_NOT_FOUND;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -40,16 +40,20 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final DtoProcessor dtoProcessor;
 
     private final ClientsService clientsService;
+    private final MessageSource messageSource;
 
 
     @Override
     public PurchaseDto getById(String id) {
 
         Purchase purchase = purchaseRepository.findById(id)
-                .orElseThrow(() ->
-                        new PurchaseNotFoundException(
-                                PURCHASE_NOT_FOUND,
-                                HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new PurchaseNotFoundException(
+                        messageSource.getMessage(
+                                "exception.purchase.not_found_by_id",
+                                new Object[]{id},
+                                Locale.getDefault()
+                        ),
+                        HttpStatus.NOT_FOUND));
 
         return dtoProcessor.createPurchaseDto(purchase);
     }

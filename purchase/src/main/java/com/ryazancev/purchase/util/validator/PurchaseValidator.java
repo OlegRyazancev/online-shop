@@ -2,19 +2,22 @@ package com.ryazancev.purchase.util.validator;
 
 import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import static com.ryazancev.purchase.util.exception.Message.INSUFFICIENT_FUNDS;
-import static com.ryazancev.purchase.util.exception.Message.NO_PRODUCTS_IN_STOCK;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
  */
 
 @Component
+@RequiredArgsConstructor
 public class PurchaseValidator {
 
+    private final MessageSource messageSource;
 
     public void
     validateSufficientBalance(Double availableCustomerBalance,
@@ -22,7 +25,11 @@ public class PurchaseValidator {
 
         if (availableCustomerBalance < selectedProductPrice) {
             throw new IncorrectBalanceException(
-                    INSUFFICIENT_FUNDS,
+                    messageSource.getMessage(
+                            "exception.purchase.insufficient_funds",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -33,7 +40,11 @@ public class PurchaseValidator {
 
         if (availableProductsInStock == 0) {
             throw new OutOfStockException(
-                    NO_PRODUCTS_IN_STOCK,
+                    messageSource.getMessage(
+                            "exception.purchase.no_products_in_stock",
+                            null,
+                            Locale.getDefault()
+                    ),
                     HttpStatus.CONFLICT
             );
         }
