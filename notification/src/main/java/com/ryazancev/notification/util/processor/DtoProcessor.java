@@ -1,4 +1,4 @@
-package com.ryazancev.notification.util;
+package com.ryazancev.notification.util.processor;
 
 import com.ryazancev.common.dto.notification.NotificationDto;
 import com.ryazancev.common.dto.notification.NotificationsSimpleResponse;

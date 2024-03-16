@@ -7,7 +7,7 @@ import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.MailProcessor;
+import com.ryazancev.product.util.processor.MailProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

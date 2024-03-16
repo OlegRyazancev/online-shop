@@ -41,7 +41,7 @@ public class CustomerController {
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessCustomer(id);
+        customExpressionService.checkAccessUser(id);
 
         Customer customer = customerService.getById(id);
 
@@ -55,7 +55,7 @@ public class CustomerController {
             CustomerDto customerDto) {
 
         customExpressionService.checkAccountConditions();
-        customExpressionService.checkAccessCustomer(customerDto.getId());
+        customExpressionService.checkAccessUser(customerDto.getId());
 
         Customer customer = customerMapper.toEntity(customerDto);
         Customer updated = customerService.update(customer);
@@ -68,7 +68,7 @@ public class CustomerController {
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessCustomer(id);
+        customExpressionService.checkAccessUser(id);
 
         Customer customer = customerService.getById(id);
 
@@ -81,7 +81,7 @@ public class CustomerController {
             @PathVariable("id") Long id) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessCustomer(id);
+        customExpressionService.checkAccessUser(id);
 
         Customer customer = customerService.getById(id);
 
@@ -97,7 +97,7 @@ public class CustomerController {
 
         customExpressionService.checkAccountConditions();
         customExpressionService
-                .checkAccessCustomer(purchaseEditDto.getCustomerId());
+                .checkAccessUser(purchaseEditDto.getCustomerId());
 
         return (PurchaseDto) clientsService
                 .processPurchase(purchaseEditDto);
@@ -107,7 +107,7 @@ public class CustomerController {
     public String deleteCustomerById(@PathVariable("id") Long id) {
 
         customExpressionService.checkAccountConditions();
-        customExpressionService.checkAccessCustomer(id);
+        customExpressionService.checkAccessUser(id);
 
         return customerService.markCustomerAsDeleted(id);
     }
@@ -118,7 +118,7 @@ public class CustomerController {
             @RequestParam("scope") String scope) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessCustomer(id);
+        customExpressionService.checkAccessUser(id);
 
         if (scope.equals("admin")) {
             customExpressionService.checkIfCustomerIsAdmin(id);
@@ -135,7 +135,7 @@ public class CustomerController {
             @RequestParam("scope") String scope) {
 
         customExpressionService.checkIfAccountLocked();
-        customExpressionService.checkAccessCustomer(customerId);
+        customExpressionService.checkAccessUser(customerId);
 
         switch (scope) {
             case "admin" -> {

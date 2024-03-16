@@ -10,7 +10,7 @@ import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
 import com.ryazancev.review.service.ClientsService;
 import com.ryazancev.review.service.ReviewService;
-import com.ryazancev.review.util.DtoProcessor;
+import com.ryazancev.review.util.processor.DtoProcessor;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;

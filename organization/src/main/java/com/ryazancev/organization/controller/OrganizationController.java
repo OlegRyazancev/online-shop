@@ -10,7 +10,7 @@ import com.ryazancev.common.validation.OnUpdate;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.util.DtoProcessor;
+import com.ryazancev.organization.util.processor.DtoProcessor;
 import com.ryazancev.organization.util.mapper.OrganizationMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -103,7 +103,8 @@ public class OrganizationController {
             OrganizationEditDto organizationEditDto) {
 
         customExpressionService.checkAccountConditions();
-        customExpressionService.checkAccessUser(organizationEditDto);
+        customExpressionService.checkAccessUser(
+                organizationEditDto.getOwnerId());
 
         Organization organization =
                 organizationMapper.toEntity(organizationEditDto);

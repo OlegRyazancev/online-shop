@@ -1,4 +1,4 @@
-package com.ryazancev.purchase.util;
+package com.ryazancev.purchase.util.processor;
 
 import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.common.dto.product.UpdateQuantityRequest;

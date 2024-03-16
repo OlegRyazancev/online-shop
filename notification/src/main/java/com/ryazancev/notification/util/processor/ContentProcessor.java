@@ -1,4 +1,4 @@
-package com.ryazancev.notification.util;
+package com.ryazancev.notification.util.processor;
 
 import com.ryazancev.notification.model.Content;
 import lombok.RequiredArgsConstructor;

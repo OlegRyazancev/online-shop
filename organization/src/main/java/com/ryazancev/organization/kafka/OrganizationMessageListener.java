@@ -5,7 +5,7 @@ import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import com.ryazancev.common.dto.admin.enums.ObjectStatus;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.util.MailProcessor;
+import com.ryazancev.organization.util.processor.MailProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

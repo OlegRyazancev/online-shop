@@ -2,7 +2,6 @@ package com.ryazancev.customer.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
  */
 
 @Getter
-public class RequestHeadersProperties {
+public class RequestHeader {
 
 
     private final Long userId;
@@ -23,7 +22,7 @@ public class RequestHeadersProperties {
 
     private final List<String> roles;
 
-    public RequestHeadersProperties(HttpServletRequest request) {
+    public RequestHeader(HttpServletRequest request) {
         this.userId = Long.valueOf(
                 request.getHeader("userId"));
         this.locked = Boolean.parseBoolean(

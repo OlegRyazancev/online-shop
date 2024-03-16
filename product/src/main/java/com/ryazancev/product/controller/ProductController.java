@@ -13,7 +13,7 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.DtoProcessor;
+import com.ryazancev.product.util.processor.DtoProcessor;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.product.util.validator.ProductValidator;
 import lombok.RequiredArgsConstructor;

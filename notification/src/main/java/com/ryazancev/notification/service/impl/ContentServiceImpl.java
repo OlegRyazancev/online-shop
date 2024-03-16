@@ -3,7 +3,7 @@ package com.ryazancev.notification.service.impl;
 import com.ryazancev.common.dto.notification.enums.NotificationType;
 import com.ryazancev.notification.model.Content;
 import com.ryazancev.notification.service.ContentService;
-import com.ryazancev.notification.util.ContentProcessor;
+import com.ryazancev.notification.util.processor.ContentProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

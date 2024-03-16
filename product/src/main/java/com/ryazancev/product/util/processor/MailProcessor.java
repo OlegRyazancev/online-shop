@@ -1,4 +1,4 @@
-package com.ryazancev.product.util;
+package com.ryazancev.product.util.processor;
 
 import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.customer.CustomerDto;

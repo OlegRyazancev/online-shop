@@ -1,4 +1,4 @@
-package com.ryazancev.review.util;
+package com.ryazancev.review.util.processor;
 
 import com.ryazancev.common.dto.customer.CustomerDto;
 import com.ryazancev.common.dto.product.ProductDto;
