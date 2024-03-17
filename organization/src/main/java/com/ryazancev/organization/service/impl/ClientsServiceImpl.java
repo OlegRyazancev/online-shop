@@ -8,6 +8,7 @@ import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.Fallback;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.organization.service.ClientsService;
+import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -77,36 +78,48 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Object customerServiceUnavailable(Exception e) {
+    private Object customerServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.organization.service_unavailable",
-                        new Object[]{ServiceStage.CUSTOMER},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.organization.service_unavailable",
+                            new Object[]{ServiceStage.CUSTOMER},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 
-    private Object logoServiceUnavailable(Exception e) {
+    private Object logoServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.organization.service_unavailable",
-                        new Object[]{ServiceStage.LOGO},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.organization.service_unavailable",
+                            new Object[]{ServiceStage.LOGO},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 
-    private Object productServiceUnavailable(Exception e) {
+    private Object productServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.organization.service_unavailable",
-                        new Object[]{ServiceStage.PRODUCT},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.organization.service_unavailable",
+                            new Object[]{ServiceStage.PRODUCT},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 }

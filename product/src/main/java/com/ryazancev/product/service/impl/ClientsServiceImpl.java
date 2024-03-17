@@ -10,6 +10,7 @@ import com.ryazancev.common.dto.Fallback;
 import com.ryazancev.common.dto.review.ReviewEditDto;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.product.service.ClientsService;
+import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -108,51 +109,67 @@ public class ClientsServiceImpl implements ClientsService {
 
     //Fallback methods
 
-    private Object customerServiceUnavailable(Exception e) {
+    private Object customerServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.product.service_unavailable",
-                        new Object[]{ServiceStage.CUSTOMER},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.product.service_unavailable",
+                            new Object[]{ServiceStage.CUSTOMER},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 
-    private Object organizationServiceUnavailable(Exception e) {
+    private Object organizationServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.product.service_unavailable",
-                        new Object[]{ServiceStage.ORGANIZATION},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.product.service_unavailable",
+                            new Object[]{ServiceStage.ORGANIZATION},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 
-    private Object reviewServiceUnavailable(Exception e) {
+    private Object reviewServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.product.service_unavailable",
-                        new Object[]{ServiceStage.REVIEW},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.product.service_unavailable",
+                            new Object[]{ServiceStage.REVIEW},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 
-    private Object purchaseServiceUnavailable(Exception e) {
+    private Object purchaseServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.product.service_unavailable",
-                        new Object[]{ServiceStage.PURCHASE},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.product.service_unavailable",
+                            new Object[]{ServiceStage.PURCHASE},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 
-    private Object getSimpleCustomerFallback(Exception e) {
+    private Element getSimpleCustomerFallback(Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -165,7 +182,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Object getSimpleOrganizationFallback(Exception e) {
+    private Element getSimpleOrganizationFallback(Exception e) {
 
         return Fallback.builder()
                 .message(

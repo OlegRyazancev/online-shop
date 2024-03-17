@@ -5,6 +5,7 @@ import com.ryazancev.common.clients.CustomerClient;
 import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.customer.CustomerDto;
 import com.ryazancev.common.exception.ServiceUnavailableException;
+import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -34,14 +35,18 @@ public class ClientsServiceImpl implements ClientsService {
         return customerClient.createCustomer(customerDto);
     }
 
-    private Object customerServiceUnavailable(Exception e) {
+    private Object customerServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.auth.service_unavailable",
-                        new Object[]{ServiceStage.CUSTOMER},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.auth.service_unavailable",
+                            new Object[]{ServiceStage.CUSTOMER},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 }

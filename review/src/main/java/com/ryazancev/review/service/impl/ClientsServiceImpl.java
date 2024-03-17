@@ -8,6 +8,7 @@ import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.Fallback;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.review.service.ClientsService;
+import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -99,15 +100,19 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Object purchaseServiceUnavailable(Exception e) {
+    private Object purchaseServiceUnavailable(Exception e)
+            throws Exception {
 
-        throw new ServiceUnavailableException(
-                messageSource.getMessage(
-                        "exception.review.service_unavailable",
-                        new Object[]{ServiceStage.PURCHASE},
-                        Locale.getDefault()
-                ),
-                HttpStatus.SERVICE_UNAVAILABLE);
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.review.service_unavailable",
+                            new Object[]{ServiceStage.PURCHASE},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        throw e;
     }
 
     private Long getOwnerIdFallback(Exception e) {
