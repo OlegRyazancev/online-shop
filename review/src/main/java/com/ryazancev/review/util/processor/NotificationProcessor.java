@@ -21,9 +21,7 @@ public class NotificationProcessor {
 
     private final ClientsService clientsService;
 
-    public NotificationRequest createNotification(Review review,
-                                                  NotificationScope scope) {
-
+    public NotificationRequest createNotification(Review review) {
 
         Properties properties = new Properties();
 
@@ -45,7 +43,7 @@ public class NotificationProcessor {
                 clientsService.getOwnerIdByProductId(review.getProductId());
 
         return NotificationRequest.builder()
-                .scope(scope)
+                .scope(NotificationScope.PRIVATE)
                 .type(NotificationType.PRIVATE_REVIEW_CREATED)
                 .properties(properties)
                 .senderId(review.getCustomerId())
