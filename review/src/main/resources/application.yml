@@ -1,6 +1,12 @@
 server:
   port: ${REVIEW_PORT}
 
+logging:
+  level:
+    com.ryazancev.review.kafka.ReviewProducerService: debug
+    com.ryazancev.review.kafka.ReviewMessageListeners: debug
+    com.ryazancev.review.util.exception.ReviewExceptionHandler: debug
+
 spring:
   profiles:
     active: default

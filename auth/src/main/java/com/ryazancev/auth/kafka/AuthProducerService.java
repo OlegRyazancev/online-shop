@@ -33,7 +33,7 @@ public class AuthProducerService {
 
         try {
 
-            log.trace("Sending request...");
+            log.debug("Sending request...");
             mailKafkaTemplate.send(mailTopicName, mailDto);
 
             log.debug("Request to send email to {} was sent successfully",

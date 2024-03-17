@@ -44,7 +44,7 @@ public class CustomerProducerService {
 
         try {
 
-            log.trace("Sending delete user request...");
+            log.debug("Sending delete user request...");
             longValueKafkaTemplate.send(deleteUserTopic, id);
 
             log.debug("Delete user request sent to topic: {}", deleteUserTopic);
@@ -67,7 +67,7 @@ public class CustomerProducerService {
 
         try {
 
-            log.trace("Sending update user request...");
+            log.debug("Sending update user request...");
             userUpdateKafkaTemplate.send(updateUserTopic, request);
 
             log.debug("Update user request sent to topic: {}",

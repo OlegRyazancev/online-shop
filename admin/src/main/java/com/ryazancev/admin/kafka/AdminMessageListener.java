@@ -36,13 +36,13 @@ public class AdminMessageListener {
                 requestDto.getObjectToRegisterId());
         try {
 
-            log.trace("Creating registration request...");
+            log.debug("Creating registration request...");
             RegistrationRequest request =
                     adminMapper.toEntity(requestDto);
 
             RegistrationRequest created = adminService.create(request);
 
-            log.trace("Sending admin notification...");
+            log.debug("Sending admin notification...");
             kafkaMessageProcessor.sendAdminNotification(request);
 
             log.debug("Registration request created successfully with id: {}",

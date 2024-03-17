@@ -54,7 +54,7 @@ public class ProductProducerService {
 
         try {
 
-            log.trace("Sending request...");
+            log.debug("Sending request...");
             adminKafkaTemplate.send(adminTopic, requestDto);
 
             log.debug("Request to {} was sent", adminTopic);
@@ -74,7 +74,7 @@ public class ProductProducerService {
 
         try {
 
-            log.trace("Sending request...");
+            log.debug("Sending request...");
             reviewKafkaTemplate.send(reviewTopic, productId);
 
             log.debug("Request to {} was sent", reviewTopic);
@@ -96,7 +96,7 @@ public class ProductProducerService {
 
         try {
 
-            log.trace("Sending request...");
+            log.debug("Sending request...");
             mailKafkaTemplate.send(mailTopic, mailDto);
 
             log.debug("Request to {} was sent", mailTopic);

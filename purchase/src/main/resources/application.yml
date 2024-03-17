@@ -3,6 +3,11 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.purchase.kafka.PurchaseProducerService: debug
+    com.ryazancev.purchase.util.exception.PurchaseExceptionHandler: debug
+
 spring:
   profiles:
     active: default

@@ -3,6 +3,7 @@ package com.ryazancev.organization.kafka;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import com.ryazancev.common.dto.admin.enums.ObjectStatus;
+import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.processor.KafkaMessageProcessor;
@@ -41,7 +42,7 @@ public class OrganizationMessageListener {
             switch (requestDto.getStatus()) {
                 case ACCEPTED -> {
 
-                    log.trace("Changing status to ACTIVE...");
+                    log.debug("Changing status to ACTIVE...");
                     organizationService.changeStatus(
                             requestDto.getObjectToRegisterId(),
                             OrganizationStatus.ACTIVE);
@@ -50,8 +51,9 @@ public class OrganizationMessageListener {
                     organizationService.register(
                             requestDto.getObjectToRegisterId()
                     );
+                    log.debug("Registering organization...");
 
-                    log.trace("Sending accepted email...");
+                    log.debug("Sending accepted email...");
                     kafkaMessageProcessor
                             .sendAcceptedMailToCustomerByOrganizationId(
                                     requestDto.getObjectToRegisterId());
@@ -61,12 +63,12 @@ public class OrganizationMessageListener {
                 }
                 case REJECTED -> {
 
-                    log.trace("Changing status to INACTIVE..");
+                    log.debug("Changing status to INACTIVE..");
                     organizationService.changeStatus(
                             requestDto.getObjectToRegisterId(),
                             OrganizationStatus.INACTIVE);
 
-                    log.trace("Sending rejected email...");
+                    log.debug("Sending rejected email...");
                     kafkaMessageProcessor
                             .sendRejectedMailToCustomerByOrganizationId(
                                     requestDto.getObjectToRegisterId());
@@ -107,7 +109,7 @@ public class OrganizationMessageListener {
                             ? OrganizationStatus.ACTIVE
                             : OrganizationStatus.FROZEN;
 
-            log.trace("Changing status...");
+            log.debug("Changing status...");
             organizationService.changeStatus(request.getObjectId(), status);
 
             log.debug("Organization status changed to: {}", status);

@@ -28,7 +28,7 @@ public class ReviewMessageListeners {
                 productId);
         try {
 
-            log.trace("Deleting reviews...");
+            log.debug("Deleting reviews...");
             String deletionResult = reviewService.deleteByProductId(productId);
 
             log.debug(deletionResult);

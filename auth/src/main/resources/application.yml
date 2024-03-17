@@ -3,12 +3,18 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.auth.kafka.AuthMessageListener: debug
+    com.ryazancev.auth.kafka.AuthProducerService: debug
+    com.ryazancev.auth.util.exception.AuthExceptionHandler: debug
+
 spring:
   profiles:
     active: default
   config:
-    import: classpath:openapi/open-api-config.yml, 
-            optional:file:.env[.properties]
+    import: classpath:openapi/open-api-config.yml,
+      optional:file:.env[.properties]
   messages:
     always-use-message-format: false
     fallback-to-system-locale: true

@@ -28,7 +28,6 @@ public class ProductMessageListeners {
     private final ProductService productService;
     private final KafkaMessageProcessor kafkaMessageProcessor;
 
-
     @KafkaListener(
             topics = "${spring.kafka.topic.product.update}",
             groupId = "${spring.kafka.consumer.group-id}",
@@ -42,7 +41,7 @@ public class ProductMessageListeners {
                 request.getQuantityInStock());
         try {
 
-            log.trace("Updating quantity...");
+            log.debug("Updating quantity...");
             productService.updateQuantity(
                     request.getProductId(),
                     request.getQuantityInStock());
@@ -73,7 +72,7 @@ public class ProductMessageListeners {
             switch (requestDto.getStatus()) {
                 case ACCEPTED -> {
 
-                    log.trace("Changing status to ACTIVE..");
+                    log.debug("Changing status to ACTIVE..");
                     productService.changeStatus(
                             requestDto.getObjectToRegisterId(),
                             ProductStatus.ACTIVE);
@@ -81,27 +80,25 @@ public class ProductMessageListeners {
                     log.trace("Registering product...");
                     productService.register(
                             requestDto.getObjectToRegisterId());
+                    log.debug("Registering product...");
 
-                    log.trace("Sending accepted email...");
-
+                    log.debug("Sending accepted email...");
                     kafkaMessageProcessor
-                            .sendAcceptedMailToCustomerByProductId(
-                                    requestDto.getObjectToRegisterId());
+                            .sendAcceptedMailToCustomerByProductId(product);
 
                     log.debug("Product status is now: {}",
                             ProductStatus.ACTIVE);
                 }
                 case REJECTED -> {
 
-                    log.trace("Changing status to INACTIVE..");
+                    log.debug("Changing status to INACTIVE..");
                     productService.changeStatus(
-                            requestDto.getObjectToRegisterId(),
+                            productId,
                             ProductStatus.INACTIVE);
 
-                    log.trace("Sending rejected email...");
+                    log.debug("Sending rejected email...");
                     kafkaMessageProcessor
-                            .sendRejectedMailToCustomerByProductId(
-                                    requestDto.getObjectToRegisterId());
+                            .sendRejectedMailToCustomerByProductId(product);
 
                     log.debug("Product status is now: {}",
                             ProductStatus.INACTIVE);
@@ -136,7 +133,7 @@ public class ProductMessageListeners {
             List<Product> products = productService
                     .getByOrganizationId(organizationId);
 
-            log.trace("Deleting {} products", products.size());
+            log.debug("Deleting {} products", products.size());
             products.forEach(product ->
                     productService.markProductAsDeleted(product.getId()));
 
@@ -167,7 +164,7 @@ public class ProductMessageListeners {
                             ? ProductStatus.ACTIVE
                             : ProductStatus.FROZEN;
 
-            log.trace("Changing status...");
+            log.debug("Changing status...");
             productService.changeStatus(request.getObjectId(), status);
 
             log.debug("Product status changed to: {}", status);

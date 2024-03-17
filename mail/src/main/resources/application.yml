@@ -3,12 +3,17 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.mail.kafka.MailMessageListener: debug
+    com.ryazancev.mail.util.exception.MailExceptionHandler: debug
+
 spring:
   profiles:
     active: default
   config:
-    import: classpath:openapi/open-api-config.yml, 
-            optional:file:.env[.properties]
+    import: classpath:openapi/open-api-config.yml,
+      optional:file:.env[.properties]
   messages:
     always-use-message-format: false
     fallback-to-system-locale: true

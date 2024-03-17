@@ -31,7 +31,7 @@ public class MailMessageListener {
 
         try {
 
-            log.trace("Sending message...");
+            log.debug("Sending message...");
             mailService.sendEmail(mailDto);
 
             log.debug("Email sent successfully to: {}", mailDto.getEmail());

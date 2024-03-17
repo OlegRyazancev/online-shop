@@ -30,19 +30,21 @@ public class NotificationMessageListener {
     )
     void consumeMessage(NotificationRequest request) {
 
-        log.info("Received request to send {} notification",
-                request.getScope());
+        log.info("Received request to send {} notification to user: {} from: {}",
+                request.getScope(),
+                request.getRecipientId(),
+                request.getSenderId());
 
         try {
             switch (request.getScope()) {
                 case PRIVATE -> {
 
-                    log.trace("Creating private notification...");
+                    log.debug("Creating private notification...");
                     PrivateNotification notification =
                             notificationService
                                     .createPrivateNotification(request);
 
-                    log.trace("Sending private notification with id {} " +
+                    log.debug("Sending private notification with id {} " +
                                     "by websocket...",
                             notification.getId());
                     messagingTemplate.convertAndSendToUser(
@@ -57,12 +59,12 @@ public class NotificationMessageListener {
 
                 case PUBLIC -> {
 
-                    log.trace("Creating public notification...");
+                    log.debug("Creating public notification...");
                     PublicNotification notification =
                             notificationService
                                     .createPublicNotification(request);
 
-                    log.trace("Sending public notification with id {} " +
+                    log.debug("Sending public notification with id {} " +
                                     "by websocket...",
                             notification.getId());
                     messagingTemplate.convertAndSend(
@@ -77,12 +79,12 @@ public class NotificationMessageListener {
 
                 case ADMIN -> {
 
-                    log.trace("Creating admin notification...");
+                    log.debug("Creating admin notification...");
                     AdminNotification notification =
                             notificationService
                                     .createAdminNotification(request);
 
-                    log.trace("Sending admin notification with id {} " +
+                    log.debug("Sending admin notification with id {} " +
                                     "by websocket...",
                             notification.getId());
                     messagingTemplate.convertAndSend(

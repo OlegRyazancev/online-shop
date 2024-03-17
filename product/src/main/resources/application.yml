@@ -3,6 +3,12 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.product.kafka.ProductProducerService: debug
+    com.ryazancev.product.kafka.ProductMessageListeners: debug
+    com.ryazancev.product.util.exception.ProductExceptionHandler: debug
+
 spring:
   profiles:
     active: default

@@ -3,6 +3,10 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.logo.util.exception.LogoExceptionHandler: debug
+
 spring:
   profiles:
     active: default

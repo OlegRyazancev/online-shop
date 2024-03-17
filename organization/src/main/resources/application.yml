@@ -3,6 +3,12 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.organization.kafka.OrganizationProducerService: debug
+    com.ryazancev.organization.kafka.OrganizationMessageListener: debug
+    com.ryazancev.organization.util.exception.OrganizationExceptionHandler: debug
+
 spring:
   profiles:
     active: default

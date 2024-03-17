@@ -40,7 +40,7 @@ public class ReviewProducerService {
 
         try {
 
-            log.trace("Sending notification request...");
+            log.debug("Sending notification request...");
             notificationKafkaTemplate.send(notificationTopic, request);
 
             log.debug("Notification request sent to topic: {}",

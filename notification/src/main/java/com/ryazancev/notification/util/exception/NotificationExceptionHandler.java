@@ -25,7 +25,7 @@ public class NotificationExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -42,7 +42,7 @@ public class NotificationExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -59,7 +59,7 @@ public class NotificationExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -76,7 +76,7 @@ public class NotificationExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -93,7 +93,7 @@ public class NotificationExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

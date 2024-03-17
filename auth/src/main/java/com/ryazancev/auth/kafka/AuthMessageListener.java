@@ -32,7 +32,7 @@ public class AuthMessageListener {
 
         try {
 
-            log.trace("Toggling user lock...");
+            log.debug("Toggling user lock...");
             userService.toggleUserLock(request.getUserId(), request.isLock());
 
             log.debug("User with id {} was {}ed",
@@ -62,7 +62,7 @@ public class AuthMessageListener {
 
         try {
 
-            log.trace("Marking user as deleted...");
+            log.debug("Marking user as deleted...");
             userService.markUserAsDeletedByCustomerId(customerId);
 
             log.debug("User with customerId {} was marked as deleted",
@@ -88,7 +88,7 @@ public class AuthMessageListener {
 
         try {
 
-            log.trace("Updating user...");
+            log.debug("Updating user...");
             userService.updateByCustomer(request);
 
             log.debug("User with customerId {} was updated",

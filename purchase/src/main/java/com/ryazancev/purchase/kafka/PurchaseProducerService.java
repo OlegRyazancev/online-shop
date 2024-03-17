@@ -59,7 +59,7 @@ public class PurchaseProducerService {
                 productTopic);
         try {
 
-            log.trace("Sending update quantity request...");
+            log.debug("Sending update quantity request...");
             productKafkaTemplate.send(productTopic, request);
 
             log.debug("Request to {} was sent", productTopic);
@@ -81,7 +81,7 @@ public class PurchaseProducerService {
                 customerTopic);
         try {
 
-            log.trace("Sending update balance request...");
+            log.debug("Sending update balance request...");
             customerKafkaTemplate.send(customerTopic, request);
 
             log.debug("Request to {} was sent", customerTopic);
@@ -105,7 +105,7 @@ public class PurchaseProducerService {
 
         try {
 
-            log.trace("Sending notification request...");
+            log.debug("Sending notification request...");
             notificationKafkaTemplate.send(notificationTopic, request);
 
             log.debug("Notification request sent to topic: {}",

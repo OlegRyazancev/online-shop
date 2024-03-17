@@ -32,7 +32,7 @@ public class CustomerMessageListener {
 
         try {
 
-            log.trace("Updating customer balance...");
+            log.debug("Updating customer balance...");
             Customer customer =
                     customerService.updateBalance(request);
 

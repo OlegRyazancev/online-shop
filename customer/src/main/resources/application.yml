@@ -3,12 +3,18 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.customer.kafka.CustomerProducerService: debug
+    com.ryazancev.customer.kafka.CustomerMessageListener: debug
+    com.ryazancev.customer.util.exception.CustomerExceptionHandler: debug
+
 spring:
   profiles:
     active: default
   config:
-    import: classpath:openapi/open-api-config.yml, 
-            optional:file:.env[.properties]
+    import: classpath:openapi/open-api-config.yml,
+      optional:file:.env[.properties]
   messages:
     always-use-message-format: false
     fallback-to-system-locale: true

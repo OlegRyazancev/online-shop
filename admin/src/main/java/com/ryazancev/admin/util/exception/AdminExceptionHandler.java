@@ -31,7 +31,7 @@ public class AdminExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -48,7 +48,7 @@ public class AdminExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -65,7 +65,7 @@ public class AdminExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         exceptionBody.setErrors(e.getConstraintViolations().stream()
@@ -87,7 +87,7 @@ public class AdminExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
@@ -110,7 +110,7 @@ public class AdminExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(e.getHttpStatus())
@@ -127,7 +127,7 @@ public class AdminExceptionHandler {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
-        log.trace("Exception stack trace:", e);
+        log.debug("Exception stack trace:", e);
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

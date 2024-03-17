@@ -105,7 +105,7 @@ public class AdminProducerService {
                 }
             }
 
-            log.trace("Sending register response request...");
+            log.debug("Sending register response request...");
             registerKafkaTemplate.send(topic, requestDto);
 
             log.debug("Register response request sent to topic: {}", topic);
@@ -122,7 +122,7 @@ public class AdminProducerService {
     public void sendMessageToChangeObjectStatus(ObjectRequest objectRequest) {
 
         log.info("Received request to change {} status to {} with " +
-                        "object id: {} was received",
+                        "object id: {}",
                 objectRequest.getObjectType(),
                 objectRequest.getObjectStatus(),
                 objectRequest.getObjectId());
@@ -148,7 +148,7 @@ public class AdminProducerService {
                 }
             }
 
-            log.trace("Sending change object status request...");
+            log.debug("Sending change object status request...");
             changeStatusKafkaTemplate.send(topic, objectRequest);
 
             log.debug("Change object status request sent to topic: {}", topic);
@@ -170,7 +170,7 @@ public class AdminProducerService {
 
         try {
 
-            log.trace("Sending toggle user lock request...");
+            log.debug("Sending toggle user lock request...");
             toggleUserLockKafkaTemplate.send(toggleUserLockTopic, request);
 
             log.debug("Toggle user lock request sent to topic: {}",
@@ -194,7 +194,7 @@ public class AdminProducerService {
 
         try {
 
-            log.trace("Sending notification request...");
+            log.debug("Sending notification request...");
             notificationKafkaTemplate.send(notificationTopic, request);
 
             log.debug("Notification request sent to topic: {}",

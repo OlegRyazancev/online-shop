@@ -3,6 +3,12 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.admin.kafka.AdminMessageListener: debug
+    com.ryazancev.admin.kafka.AdminProducerService: debug
+    com.ryazancev.admin.util.exception.AdminExceptionHandler: debug
+
 spring:
   profiles:
     active: default
