@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-
 public class AdminProducerService {
 
     private final KafkaTemplate<String,
@@ -188,7 +187,7 @@ public class AdminProducerService {
     public void sendNotification(NotificationRequest request) {
 
         log.info("Received request to send {} notification {} to user " +
-                        "with id: {} from admin if exists: {} was received",
+                        "with id: {} from admin if exists: {}",
                 request.getScope(),
                 request.getType(),
                 request.getRecipientId(),
