@@ -5,7 +5,7 @@ import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import com.ryazancev.common.dto.admin.enums.ObjectStatus;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.service.OrganizationService;
-import com.ryazancev.organization.util.processor.MailProcessor;
+import com.ryazancev.organization.util.processor.KafkaMessageProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -22,7 +22,7 @@ public class OrganizationMessageListener {
 
 
     private final OrganizationService organizationService;
-    private final MailProcessor mailProcessor;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     @KafkaListener(
             topics = "${spring.kafka.topic.organization.register}",
@@ -52,8 +52,9 @@ public class OrganizationMessageListener {
                     );
 
                     log.trace("Sending accepted email...");
-                    mailProcessor.sendAcceptedMailToCustomerByOrganizationId(
-                            requestDto.getObjectToRegisterId());
+                    kafkaMessageProcessor
+                            .sendAcceptedMailToCustomerByOrganizationId(
+                                    requestDto.getObjectToRegisterId());
 
                     log.debug("Organization status is now: {}",
                             OrganizationStatus.ACTIVE);
@@ -66,8 +67,9 @@ public class OrganizationMessageListener {
                             OrganizationStatus.INACTIVE);
 
                     log.trace("Sending rejected email...");
-                    mailProcessor.sendRejectedMailToCustomerByOrganizationId(
-                            requestDto.getObjectToRegisterId());
+                    kafkaMessageProcessor
+                            .sendRejectedMailToCustomerByOrganizationId(
+                                    requestDto.getObjectToRegisterId());
 
                     log.debug("Organization status is now: {}",
                             OrganizationStatus.INACTIVE);

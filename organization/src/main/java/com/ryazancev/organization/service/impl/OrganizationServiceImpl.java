@@ -1,15 +1,13 @@
 package com.ryazancev.organization.service.impl;
 
-import com.ryazancev.common.dto.admin.RegistrationRequestDto;
-import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.logo.LogoDto;
-import com.ryazancev.organization.kafka.OrganizationProducerService;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
+import com.ryazancev.organization.util.processor.KafkaMessageProcessor;
 import com.ryazancev.organization.util.validator.OrganizationValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +35,8 @@ import java.util.Locale;
 public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository organizationRepository;
-    private final OrganizationProducerService organizationProducerService;
     private final OrganizationValidator organizationValidator;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final ClientsService clientsService;
     private final MessageSource messageSource;
@@ -84,7 +82,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization saved = organizationRepository.save(organization);
 
-        sendRegistrationRequestToAdmin(saved.getId());
+        kafkaMessageProcessor.sendRegistrationRequestToAdmin(saved.getId());
 
         return saved;
     }
@@ -227,7 +225,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         existing.setDescription("DELETED");
         existing.setStatus(OrganizationStatus.DELETED);
 
-        organizationProducerService.sendMessageToProductTopic(id);
+        kafkaMessageProcessor
+                .sendProductIdToDeleteProductTopic(id);
+
         organizationRepository.save(existing);
 
         return messageSource.getMessage(
@@ -250,15 +250,6 @@ public class OrganizationServiceImpl implements OrganizationService {
                 ));
     }
 
-    private void sendRegistrationRequestToAdmin(Long organizationId) {
-
-        RegistrationRequestDto requestDto = RegistrationRequestDto.builder()
-                .objectToRegisterId(organizationId)
-                .objectType(ObjectType.ORGANIZATION)
-                .build();
-
-        organizationProducerService.sendMessageToAdminTopic(requestDto);
-    }
 }
 
 
