@@ -1,13 +1,11 @@
 package com.ryazancev.product.service.impl;
 
-import com.ryazancev.common.dto.admin.RegistrationRequestDto;
-import com.ryazancev.common.dto.admin.enums.ObjectType;
-import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
+import com.ryazancev.product.util.processor.KafkaMessageProcessor;
 import com.ryazancev.product.util.validator.ProductValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductValidator productValidator;
-    private final ProductProducerService productProducerService;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final MessageSource messageSource;
 
@@ -101,7 +99,9 @@ public class ProductServiceImpl implements ProductService {
 
         Product saved = productRepository.save(product);
 
-        sendRegistrationRequestToAdmin(saved.getId());
+        kafkaMessageProcessor
+                .sendRegistrationRequestToAdminTopic(saved.getId());
+
 
         return saved;
     }
@@ -226,7 +226,8 @@ public class ProductServiceImpl implements ProductService {
         existing.setQuantityInStock(0);
         existing.setStatus(ProductStatus.DELETED);
 
-        productProducerService.sendMessageToReviewTopic(id);
+        kafkaMessageProcessor.sendProductIdToDeleteReviewTopic(id);
+
         productRepository.save(existing);
 
         return messageSource.getMessage(
@@ -247,15 +248,5 @@ public class ProductServiceImpl implements ProductService {
                         ),
                         HttpStatus.NOT_FOUND
                 ));
-    }
-
-    private void sendRegistrationRequestToAdmin(Long productId) {
-
-        RegistrationRequestDto requestDto = RegistrationRequestDto.builder()
-                .objectToRegisterId(productId)
-                .objectType(ObjectType.PRODUCT)
-                .build();
-
-        productProducerService.sendMessageToAdminTopic(requestDto);
     }
 }

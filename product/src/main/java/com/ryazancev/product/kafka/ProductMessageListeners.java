@@ -7,7 +7,7 @@ import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.processor.MailProcessor;
+import com.ryazancev.product.util.processor.KafkaMessageProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,7 +26,7 @@ public class ProductMessageListeners {
 
 
     private final ProductService productService;
-    private final MailProcessor mailProcessor;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
 
     @KafkaListener(
@@ -83,8 +83,10 @@ public class ProductMessageListeners {
                             requestDto.getObjectToRegisterId());
 
                     log.trace("Sending accepted email...");
-                    mailProcessor.sendAcceptedMailToCustomerByProductId(
-                            requestDto.getObjectToRegisterId());
+
+                    kafkaMessageProcessor
+                            .sendAcceptedMailToCustomerByProductId(
+                                    requestDto.getObjectToRegisterId());
 
                     log.debug("Product status is now: {}",
                             ProductStatus.ACTIVE);
@@ -97,8 +99,9 @@ public class ProductMessageListeners {
                             ProductStatus.INACTIVE);
 
                     log.trace("Sending rejected email...");
-                    mailProcessor.sendRejectedMailToCustomerByProductId(
-                            requestDto.getObjectToRegisterId());
+                    kafkaMessageProcessor
+                            .sendRejectedMailToCustomerByProductId(
+                                    requestDto.getObjectToRegisterId());
 
                     log.debug("Product status is now: {}",
                             ProductStatus.INACTIVE);
