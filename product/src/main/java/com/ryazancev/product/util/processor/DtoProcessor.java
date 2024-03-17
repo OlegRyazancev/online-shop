@@ -30,7 +30,6 @@ public class DtoProcessor {
 
     private final ProductMapper productMapper;
     private final ClientsService clientsService;
-    private final ProductService productService;
 
     public ProductsSimpleResponse createProductsSimpleResponse(
             List<Product> products) {
@@ -94,15 +93,11 @@ public class DtoProcessor {
                 .getOrganizationOwnerIdById(organizationId);
     }
 
-    public MailDto createMailDto(Long productId,
+    public MailDto createMailDto(Product product,
                                   MailType mailType) {
 
-        boolean statusCheck = false;
-        Product registered = productService.getById(
-                productId, statusCheck);
-
         Long customerId = (Long) clientsService
-                .getOrganizationOwnerIdById(registered.getOrganizationId());
+                .getOrganizationOwnerIdById(product.getOrganizationId());
 
         CustomerDto customerDto = clientsService
                 .getSimpleCustomerById(customerId)
@@ -111,7 +106,7 @@ public class DtoProcessor {
         Properties properties = new Properties();
 
         properties.setProperty(
-                "object_name", registered.getProductName());
+                "object_name", product.getProductName());
         properties.setProperty(
                 "object_type", ObjectType.PRODUCT.name().toLowerCase());
 

@@ -67,6 +67,13 @@ public class ProductMessageListeners {
                 requestDto.getObjectToRegisterId(),
                 requestDto.getStatus());
 
+        Product product = productService.getById(
+                requestDto.getObjectToRegisterId(),
+                false
+        );
+
+        Long productId = product.getId();
+
         try {
 
             switch (requestDto.getStatus()) {
@@ -74,13 +81,11 @@ public class ProductMessageListeners {
 
                     log.debug("Changing status to ACTIVE..");
                     productService.changeStatus(
-                            requestDto.getObjectToRegisterId(),
+                            productId,
                             ProductStatus.ACTIVE);
 
-                    log.trace("Registering product...");
-                    productService.register(
-                            requestDto.getObjectToRegisterId());
                     log.debug("Registering product...");
+                    productService.register(productId);
 
                     log.debug("Sending accepted email...");
                     kafkaMessageProcessor

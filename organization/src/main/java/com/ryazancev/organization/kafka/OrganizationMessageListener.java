@@ -37,6 +37,13 @@ public class OrganizationMessageListener {
                 requestDto.getObjectToRegisterId(),
                 requestDto.getStatus());
 
+        Organization organization = organizationService.getById(
+                requestDto.getObjectToRegisterId(),
+                false
+        );
+
+        Long organizationId = organization.getId();
+
         try {
 
             switch (requestDto.getStatus()) {
@@ -44,19 +51,16 @@ public class OrganizationMessageListener {
 
                     log.debug("Changing status to ACTIVE...");
                     organizationService.changeStatus(
-                            requestDto.getObjectToRegisterId(),
+                            organizationId,
                             OrganizationStatus.ACTIVE);
 
-                    log.trace("Registering organization...");
-                    organizationService.register(
-                            requestDto.getObjectToRegisterId()
-                    );
                     log.debug("Registering organization...");
+                    organizationService.register(organizationId);
 
                     log.debug("Sending accepted email...");
                     kafkaMessageProcessor
                             .sendAcceptedMailToCustomerByOrganizationId(
-                                    requestDto.getObjectToRegisterId());
+                                    organization);
 
                     log.debug("Organization status is now: {}",
                             OrganizationStatus.ACTIVE);
@@ -65,13 +69,13 @@ public class OrganizationMessageListener {
 
                     log.debug("Changing status to INACTIVE..");
                     organizationService.changeStatus(
-                            requestDto.getObjectToRegisterId(),
+                            organizationId,
                             OrganizationStatus.INACTIVE);
 
                     log.debug("Sending rejected email...");
                     kafkaMessageProcessor
                             .sendRejectedMailToCustomerByOrganizationId(
-                                    requestDto.getObjectToRegisterId());
+                                    organization);
 
                     log.debug("Organization status is now: {}",
                             OrganizationStatus.INACTIVE);

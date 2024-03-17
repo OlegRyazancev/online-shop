@@ -5,7 +5,9 @@ import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.mail.MailDto;
 import com.ryazancev.common.dto.mail.MailType;
 import com.ryazancev.organization.kafka.OrganizationProducerService;
+import com.ryazancev.organization.model.Organization;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,10 +26,10 @@ public class KafkaMessageProcessor {
         organizationProducerService.sendMessageToProductTopic(productId);
     }
 
-    public void sendRegistrationRequestToAdmin(Long organizationId) {
+    public void sendRegistrationRequestToAdmin(Organization organization) {
 
         RegistrationRequestDto requestDto = RegistrationRequestDto.builder()
-                .objectToRegisterId(organizationId)
+                .objectToRegisterId(organization.getId())
                 .objectType(ObjectType.ORGANIZATION)
                 .build();
 
@@ -35,20 +37,20 @@ public class KafkaMessageProcessor {
     }
 
     public void sendAcceptedMailToCustomerByOrganizationId(
-            Long organizationId) {
+            Organization organization) {
 
         MailDto mailDto = dtoProcessor.createMail(
-                organizationId,
+                organization,
                 MailType.OBJECT_REGISTRATION_ACCEPTED);
 
         organizationProducerService.sendMessageToMailTopic(mailDto);
     }
 
     public void sendRejectedMailToCustomerByOrganizationId(
-            Long organizationId) {
+            Organization organization) {
 
         MailDto mailDto = dtoProcessor.createMail(
-                organizationId,
+                organization,
                 MailType.OBJECT_REGISTRATION_REJECTED);
 
         organizationProducerService.sendMessageToMailTopic(mailDto);

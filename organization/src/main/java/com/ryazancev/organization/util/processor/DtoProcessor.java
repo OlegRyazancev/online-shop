@@ -27,7 +27,6 @@ public class DtoProcessor {
 
     private final OrganizationMapper organizationMapper;
     private final ClientsService clientsService;
-    private final OrganizationService organizationService;
 
     public OrganizationsSimpleResponse createOrganizationsSimpleResponse(
             List<Organization> organizations) {
@@ -62,21 +61,18 @@ public class DtoProcessor {
                 .getProductsByOrganizationId(id);
     }
 
-    public MailDto createMail(Long organizationId,
+    public MailDto createMail(Organization organization,
                                MailType mailType) {
 
-        boolean statusCheck = false;
-        Organization registered = organizationService.getById(
-                organizationId, statusCheck);
 
         CustomerDto customerDto = clientsService
-                .getSimpleCustomerById(registered.getOwnerId())
+                .getSimpleCustomerById(organization.getOwnerId())
                 .safelyCast(CustomerDto.class, true);
 
         Properties properties = new Properties();
 
         properties.setProperty(
-                "object_name", registered.getName());
+                "object_name", organization.getName());
         properties.setProperty(
                 "object_type", ObjectType.ORGANIZATION.name().toLowerCase());
 

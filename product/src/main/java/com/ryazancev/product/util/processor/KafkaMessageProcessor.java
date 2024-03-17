@@ -5,6 +5,7 @@ import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.mail.MailDto;
 import com.ryazancev.common.dto.mail.MailType;
 import com.ryazancev.product.kafka.ProductProducerService;
+import com.ryazancev.product.model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -34,18 +35,18 @@ public class KafkaMessageProcessor {
         productProducerService.sendMessageToAdminTopic(requestDto);
     }
 
-    public void sendAcceptedMailToCustomerByProductId(Long productId) {
+    public void sendAcceptedMailToCustomerByProductId(Product product) {
         MailDto mailDto = dtoProcessor.createMailDto(
-                productId,
+                product,
                 MailType.OBJECT_REGISTRATION_ACCEPTED);
 
         productProducerService.sendMessageToMailTopic(mailDto);
     }
 
-    public void sendRejectedMailToCustomerByProductId(Long productId) {
+    public void sendRejectedMailToCustomerByProductId(Product product) {
 
         MailDto mailDto = dtoProcessor.createMailDto(
-                productId,
+                product,
                 MailType.OBJECT_REGISTRATION_REJECTED);
 
         productProducerService.sendMessageToMailTopic(mailDto);

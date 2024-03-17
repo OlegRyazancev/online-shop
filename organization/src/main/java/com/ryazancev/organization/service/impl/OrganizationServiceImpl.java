@@ -82,7 +82,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Organization saved = organizationRepository.save(organization);
 
-        kafkaMessageProcessor.sendRegistrationRequestToAdmin(saved.getId());
+        kafkaMessageProcessor.sendRegistrationRequestToAdmin(saved);
 
         return saved;
     }
