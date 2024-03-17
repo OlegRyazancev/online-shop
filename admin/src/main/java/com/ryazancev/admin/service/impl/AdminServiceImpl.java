@@ -1,17 +1,14 @@
 package com.ryazancev.admin.service.impl;
 
-import com.ryazancev.admin.kafka.AdminProducerService;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.repository.AdminRepository;
 import com.ryazancev.admin.service.AdminService;
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
-import com.ryazancev.admin.util.notification.NotificationProcessor;
+import com.ryazancev.admin.util.processor.KafkaMessageProcessor;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
 import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.admin.enums.RequestStatus;
-import com.ryazancev.common.dto.notification.NotificationRequest;
-import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -37,8 +34,7 @@ import java.util.Locale;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
-    private final AdminProducerService adminProducerService;
-    private final NotificationProcessor notificationProcessor;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final MessageSource messageSource;
 
@@ -98,29 +94,13 @@ public class AdminServiceImpl implements AdminService {
         RegistrationRequest updated =
                 adminRepository.save(existing);
 
-        adminProducerService.sendRegisterResponse(updated);
-
-
-        NotificationRequest privateNotificationRequest =
-                notificationProcessor
-                        .createNotification(
-                                updated,
-                                NotificationScope.PRIVATE
-                        );
-
-        adminProducerService.sendNotification(privateNotificationRequest);
+        kafkaMessageProcessor.sendRegisterResponse(updated);
+        kafkaMessageProcessor.sendPrivateNotification(updated);
 
         if (updated.getObjectType() == ObjectType.PRODUCT
                 && updated.getStatus() == RequestStatus.ACCEPTED) {
 
-            NotificationRequest publicNotificationRequest =
-                    notificationProcessor
-                            .createNotification(
-                                    updated,
-                                    NotificationScope.PUBLIC
-                            );
-
-            adminProducerService.sendNotification(publicNotificationRequest);
+            kafkaMessageProcessor.sendPublicNotification(updated);
         }
 
         return updated;
@@ -129,16 +109,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String changeObjectStatus(ObjectRequest request) {
 
-        adminProducerService.sendMessageToChangeObjectStatus(request);
-
-        NotificationRequest privateNotificationRequest =
-                notificationProcessor
-                        .createNotification(
-                                request,
-                                NotificationScope.PRIVATE
-                        );
-
-        adminProducerService.sendNotification(privateNotificationRequest);
+        kafkaMessageProcessor.sendMessageToChangeObjectStatus(request);
+        kafkaMessageProcessor.sendPrivateNotification(request);
 
         return messageSource.getMessage(
                 "service.admin.change_status_request",
@@ -154,16 +126,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String toggleUserLock(UserLockRequest request) {
 
-        adminProducerService.sendMessageToToggleUserLock(request);
-
-        NotificationRequest privateNotificationRequest =
-                notificationProcessor
-                        .createNotification(
-                                request,
-                                NotificationScope.PRIVATE
-                        );
-
-        adminProducerService.sendNotification(privateNotificationRequest);
+        kafkaMessageProcessor.sendMessageToToggleUserLock(request);
+        kafkaMessageProcessor.sendPrivateNotification(request);
 
         return messageSource.getMessage(
                 "service.admin.toggle_account_lock_request",

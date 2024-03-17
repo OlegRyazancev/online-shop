@@ -75,7 +75,6 @@ public class AdminProducerService {
 
     public void sendRegisterResponse(RegistrationRequest request) {
 
-        //todo: change here
         RegistrationRequestDto requestDto =
                 adminMapper.toDto(request);
 
@@ -83,7 +82,7 @@ public class AdminProducerService {
                         " response of {} with status: {} with id: {}",
                 requestDto.getObjectType(),
                 requestDto.getStatus(),
-                request.getObjectToRegisterId());
+                requestDto.getObjectToRegisterId());
 
         try {
 

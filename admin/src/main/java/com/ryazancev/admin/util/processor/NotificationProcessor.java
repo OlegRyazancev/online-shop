@@ -1,6 +1,7 @@
-package com.ryazancev.admin.util.notification;
+package com.ryazancev.admin.util.processor;
 
 import com.ryazancev.admin.model.RegistrationRequest;
+import com.ryazancev.admin.util.notification.NotificationAttributeDeterminer;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
 import com.ryazancev.common.dto.notification.NotificationRequest;

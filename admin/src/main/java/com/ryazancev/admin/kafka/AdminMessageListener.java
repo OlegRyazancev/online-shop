@@ -3,10 +3,8 @@ package com.ryazancev.admin.kafka;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.AdminService;
 import com.ryazancev.admin.util.mapper.AdminMapper;
-import com.ryazancev.admin.util.notification.NotificationProcessor;
+import com.ryazancev.admin.util.processor.KafkaMessageProcessor;
 import com.ryazancev.common.dto.admin.RegistrationRequestDto;
-import com.ryazancev.common.dto.notification.NotificationRequest;
-import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,8 +22,7 @@ public class AdminMessageListener {
 
     private final AdminService adminService;
     private final AdminMapper adminMapper;
-    private final NotificationProcessor notificationProcessor;
-    private final AdminProducerService adminProducerService;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     @KafkaListener(
             topics = "${spring.kafka.topic.admin}",
@@ -45,14 +42,8 @@ public class AdminMessageListener {
 
             RegistrationRequest created = adminService.create(request);
 
-            log.trace("Creating admin notification...");
-            NotificationRequest notificationRequest =
-                    notificationProcessor.createNotification(
-                            request,
-                            NotificationScope.ADMIN);
-
             log.trace("Sending admin notification...");
-            adminProducerService.sendNotification(notificationRequest);
+            kafkaMessageProcessor.sendAdminNotification(request);
 
             log.debug("Registration request created successfully with id: {}",
                     created.getId());
