@@ -7,7 +7,6 @@ import com.ryazancev.common.dto.product.ProductDto;
 import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.service.ClientsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;

@@ -2,7 +2,6 @@ package com.ryazancev.purchase.util.processor;
 
 import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.common.dto.notification.NotificationRequest;
-import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import com.ryazancev.purchase.kafka.PurchaseProducerService;
 import com.ryazancev.purchase.model.Purchase;
