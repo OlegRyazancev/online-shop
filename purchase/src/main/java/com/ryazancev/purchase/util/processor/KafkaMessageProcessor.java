@@ -1,8 +1,11 @@
 package com.ryazancev.purchase.util.processor;
 
 import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
+import com.ryazancev.common.dto.notification.NotificationRequest;
+import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import com.ryazancev.purchase.kafka.PurchaseProducerService;
+import com.ryazancev.purchase.model.Purchase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class KafkaMessageProcessor {
 
     private final PurchaseProducerService purchaseProducerService;
+    private final NotificationProcessor notificationProcessor;
 
     public void updateProductQuantity(Long productId,
                                       Integer availableProductsInStock) {
@@ -36,5 +40,13 @@ public class KafkaMessageProcessor {
                         .balance(updatedBalance)
                         .build()
         );
+    }
+
+    public void sendPurchaseProcessedNotification(Purchase purchase) {
+
+        NotificationRequest privateNotificationRequest =
+                notificationProcessor.createNotification(purchase);
+
+        purchaseProducerService.sendNotification(privateNotificationRequest);
     }
 }

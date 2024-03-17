@@ -1,6 +1,8 @@
 package com.ryazancev.purchase.service.impl;
 
 import com.ryazancev.common.dto.customer.CustomerPurchasesResponse;
+import com.ryazancev.common.dto.notification.NotificationRequest;
+import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.product.PriceQuantityResponse;
 import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.common.dto.purchase.PurchaseEditDto;
@@ -103,6 +105,8 @@ public class PurchaseServiceImpl implements PurchaseService {
                 ownerBalance + selectedProductPrice);
 
         Purchase saved = purchaseRepository.save(toSave);
+
+        kafkaMessageProcessor.sendPurchaseProcessedNotification(saved);
 
         return dtoProcessor.createPurchaseDto(saved);
     }

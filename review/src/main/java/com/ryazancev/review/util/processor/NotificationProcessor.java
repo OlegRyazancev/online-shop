@@ -1,4 +1,4 @@
-package com.ryazancev.review.util.notification;
+package com.ryazancev.review.util.processor;
 
 import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;

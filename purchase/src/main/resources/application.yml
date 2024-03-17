@@ -40,6 +40,7 @@ spring:
         update: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
       product:
         update: ${KAFKA_UPDATE_PRODUCT_TOPIC}
+      notification: ${KAFKA_NOTIFICATION_TOPIC}
 
 #Zipkin
 management:

@@ -14,17 +14,20 @@ import org.springframework.kafka.config.TopicBuilder;
 public class PurchaseTopicConfig {
 
     @Value("${spring.kafka.topic.customer.update}")
-    private String customerUpdateTopicName;
+    private String customerUpdateTopic;
 
     @Value("${spring.kafka.topic.product.update}")
-    private String productUpdateTopicName;
+    private String productUpdateTopic;
+
+    @Value("${spring.kafka.topic.notification}")
+    private String notificationTopic;
 
 
     @Bean
     public NewTopic customerUpdateEventsTopic() {
 
         return TopicBuilder
-                .name(customerUpdateTopicName)
+                .name(customerUpdateTopic)
                 .build();
     }
 
@@ -32,7 +35,15 @@ public class PurchaseTopicConfig {
     public NewTopic productUpdateEventsTopic() {
 
         return TopicBuilder
-                .name(productUpdateTopicName)
+                .name(productUpdateTopic)
+                .build();
+    }
+
+    @Bean
+    public NewTopic notificationEventsTopic() {
+
+        return TopicBuilder
+                .name(notificationTopic)
                 .build();
     }
 }

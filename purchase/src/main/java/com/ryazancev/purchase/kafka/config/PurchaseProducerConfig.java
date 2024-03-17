@@ -1,6 +1,7 @@
 package com.ryazancev.purchase.kafka.config;
 
 import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
+import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -53,6 +54,14 @@ public class PurchaseProducerConfig {
 
         return createKafkaTemplate(
                 createProducerFactory(UpdateQuantityRequest.class));
+    }
+
+    @Bean
+    public KafkaTemplate<String, NotificationRequest>
+    notificationKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createProducerFactory(NotificationRequest.class));
     }
 
     private <T> ProducerFactory<String, T>
