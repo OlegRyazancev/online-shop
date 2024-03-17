@@ -11,6 +11,7 @@ import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.RequestHeader;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,22 +24,13 @@ import java.util.Locale;
  */
 
 @Service
+@RequiredArgsConstructor
 public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final ProductService productService;
     private final ClientsService clientsService;
     private final MessageSource messageSource;
-    private final RequestHeader requestHeader;
-
-    public CustomExpressionServiceImpl(final HttpServletRequest request,
-                                       ClientsService clientsService,
-                                       ProductService productService,
-                                       MessageSource messageSource) {
-        this.requestHeader = new RequestHeader(request);
-        this.productService = productService;
-        this.clientsService = clientsService;
-        this.messageSource = messageSource;
-    }
+    private final HttpServletRequest request;
 
     @Override
     public void checkAccountConditions() {
@@ -47,6 +39,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     private void checkIfEmailConfirmed() {
+
+        RequestHeader requestHeader = new RequestHeader(request);
 
         if (!requestHeader.isConfirmed()) {
 
@@ -99,6 +93,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkIfAccountLocked() {
 
+        RequestHeader requestHeader = new RequestHeader(request);
+
         if (requestHeader.isLocked()) {
 
             throw new AccessDeniedException(
@@ -113,6 +109,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     @Override
     public void checkAccessPurchase(String purchaseId) {
+
+        RequestHeader requestHeader = new RequestHeader(request);
 
         PurchaseDto purchaseDto = (PurchaseDto) clientsService
                 .getPurchaseById(purchaseId);
@@ -141,6 +139,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private boolean canAccessProduct(Long productId) {
 
+        RequestHeader requestHeader = new RequestHeader(request);
+
         boolean statusCheck = true;
 
         Product product = productService.getById(productId, statusCheck);
@@ -163,11 +163,12 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private boolean canAccessOrganization(Long organizationId) {
 
+        RequestHeader requestHeader = new RequestHeader(request);
+
         Long ownerId = (Long) clientsService
                 .getOrganizationOwnerIdById(organizationId);
 
         return requestHeader.getUserId().equals(ownerId)
                 || requestHeader.getRoles().contains("ROLE_ADMIN");
     }
-
 }

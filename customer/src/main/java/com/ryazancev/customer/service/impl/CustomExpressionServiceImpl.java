@@ -5,6 +5,7 @@ import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.util.RequestHeader;
 import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,20 +17,12 @@ import java.util.Locale;
  */
 
 @Service
+@RequiredArgsConstructor
 public class CustomExpressionServiceImpl implements CustomExpressionService {
 
+    private final HttpServletRequest request;
     private final ClientsService clientsService;
     private final MessageSource messageSource;
-
-    private final RequestHeader requestHeader;
-
-    public CustomExpressionServiceImpl(final HttpServletRequest request,
-                                       ClientsService clientsService,
-                                       MessageSource messageSource) {
-        this.requestHeader = new RequestHeader(request);
-        this.clientsService = clientsService;
-        this.messageSource = messageSource;
-    }
 
     @Override
     public void checkAccountConditions() {
@@ -39,6 +32,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     private void checkIfEmailConfirmed() {
+
+        RequestHeader requestHeader = new RequestHeader(request);
 
         if (!requestHeader.isConfirmed()) {
 
@@ -54,6 +49,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     @Override
     public void checkAccessUser(Long customerId) {
+
+        RequestHeader requestHeader = new RequestHeader(request);
 
         if (!(requestHeader.getUserId().equals(customerId)
                 || requestHeader.getRoles().contains("ROLE_ADMIN"))) {
@@ -71,6 +68,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkIfAccountLocked() {
 
+        RequestHeader requestHeader = new RequestHeader(request);
+
         if (requestHeader.isLocked()) {
 
             throw new AccessDeniedException(
@@ -87,6 +86,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkIfCustomerIsAdmin(Long id) {
 
+        RequestHeader requestHeader = new RequestHeader(request);
+
         if (!requestHeader.getRoles().contains("ROLE_ADMIN")) {
 
             throw new AccessDeniedException(
@@ -102,6 +103,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     @Override
     public void checkAccessPrivateNotification(Long customerId,
                                                String notificationId) {
+
+        RequestHeader requestHeader = new RequestHeader(request);
 
         Long recipientId = (Long) clientsService
                 .getRecipientIdByPrivateNotificationId(notificationId);
