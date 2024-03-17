@@ -12,7 +12,6 @@ import com.ryazancev.common.dto.review.ReviewEditDto;
 import com.ryazancev.common.dto.review.ReviewsResponse;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ClientsService;
-import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

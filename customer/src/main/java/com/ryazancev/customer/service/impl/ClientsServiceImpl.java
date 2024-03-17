@@ -7,7 +7,6 @@ import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.purchase.PurchaseEditDto;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.customer.service.ClientsService;
-import feign.FeignException;
 import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;

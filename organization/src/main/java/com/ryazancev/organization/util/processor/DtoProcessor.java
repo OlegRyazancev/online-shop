@@ -9,7 +9,6 @@ import com.ryazancev.common.dto.organization.OrganizationsSimpleResponse;
 import com.ryazancev.common.dto.product.ProductsSimpleResponse;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.service.ClientsService;
-import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.mapper.OrganizationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
