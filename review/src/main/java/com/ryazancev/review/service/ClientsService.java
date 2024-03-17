@@ -13,4 +13,6 @@ public interface ClientsService {
     Element getSimpleCustomerById(Long customerId);
 
     Object getPurchaseById(String purchaseId);
+
+    Long getOwnerIdByProductId(Long productId);
 }

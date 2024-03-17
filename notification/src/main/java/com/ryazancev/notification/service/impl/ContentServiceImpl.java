@@ -55,9 +55,9 @@ public class ContentServiceImpl implements ContentService {
                 content = contentProcessor
                         .createAccountUnlockedContent();
             }
-            case PRIVATE_REVIEW_RECEIVED -> {
+            case PRIVATE_REVIEW_CREATED -> {
                 content = contentProcessor
-                        .createReviewReceivedContent(
+                        .createReviewCreatedContent(
                                 properties);
             }
             case PRIVATE_PURCHASE_PROCESSED -> {

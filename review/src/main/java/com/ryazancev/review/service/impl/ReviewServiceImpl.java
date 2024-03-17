@@ -1,15 +1,19 @@
 package com.ryazancev.review.service.impl;
 
 import com.ryazancev.common.dto.customer.CustomerDto;
+import com.ryazancev.common.dto.notification.NotificationRequest;
+import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.product.ProductDto;
 import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.common.dto.review.ReviewDto;
 import com.ryazancev.common.dto.review.ReviewEditDto;
 import com.ryazancev.common.dto.review.ReviewsResponse;
+import com.ryazancev.review.kafka.ReviewProducerService;
 import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
 import com.ryazancev.review.service.ClientsService;
 import com.ryazancev.review.service.ReviewService;
+import com.ryazancev.review.util.notification.NotificationProcessor;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import com.ryazancev.review.util.processor.DtoProcessor;
@@ -34,10 +38,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
+    private final ReviewProducerService reviewProducerService;
 
     private final DtoProcessor dtoProcessor;
     private final ClientsService clientsService;
 
+    private final NotificationProcessor notificationProcessor;
     private final MessageSource messageSource;
 
     @Override
@@ -91,6 +97,15 @@ public class ReviewServiceImpl implements ReviewService {
         toSave.setCreatedAt(LocalDateTime.now());
 
         Review saved = reviewRepository.insert(toSave);
+
+        NotificationRequest privateNotificationRequest =
+                notificationProcessor
+                        .createNotification(
+                                saved,
+                                NotificationScope.PUBLIC
+                        );
+
+        reviewProducerService.sendNotification(privateNotificationRequest);
 
         return dtoProcessor.createReviewDtoWithPurchaseDto(saved, purchaseDto);
     }

@@ -138,17 +138,17 @@ public class ContentProcessor {
         return buildContent(header, body);
     }
 
-    public Content createReviewReceivedContent(
+    public Content createReviewCreatedContent(
             Properties properties) {
 
         String header = messageSource.getMessage(
-                "content.notification.review_received.header",
+                "content.notification.review_created.header",
                 null,
                 Locale.getDefault()
         );
 
         String body = messageSource.getMessage(
-                "content.notification.review_received.body",
+                "content.notification.review_created.body",
                 new Object[]{
                         properties.getProperty("product_rating"),
                         properties.getProperty("product_name")

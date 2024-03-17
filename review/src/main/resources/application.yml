@@ -38,6 +38,7 @@ spring:
       group-id: ${KAFKA_REVIEW_GROUP}
     topic:
       review: ${KAFKA_DELETE_REVIEW_TOPIC}
+      notification: ${KAFKA_NOTIFICATION_TOPIC}
 
 #Zipkin
 management:

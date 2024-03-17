@@ -61,6 +61,16 @@ public class ClientsServiceImpl implements ClientsService {
         return purchaseClient.getById(purchaseId);
     }
 
+    @Override
+    @CircuitBreaker(
+            name = "review",
+            fallbackMethod = "getOwnerIdFallback"
+    )
+    public Long getOwnerIdByProductId(Long productId) {
+
+        return productClient.getOwnerId(productId);
+    }
+
 //    Fallback methods
 
     private Element getSimpleProductFallback(Exception e) {
@@ -98,5 +108,10 @@ public class ClientsServiceImpl implements ClientsService {
                         Locale.getDefault()
                 ),
                 HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    private Long getOwnerIdFallback(Exception e) {
+
+        return -1L;
     }
 }
