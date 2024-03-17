@@ -1,14 +1,12 @@
 package com.ryazancev.auth.service.impl;
 
-import com.ryazancev.auth.kafka.AuthProducerService;
 import com.ryazancev.auth.model.ConfirmationToken;
 import com.ryazancev.auth.repository.ConfirmationTokenRepository;
 import com.ryazancev.auth.repository.UserRepository;
 import com.ryazancev.auth.service.ConfirmationTokenService;
-import com.ryazancev.auth.util.AuthUtil;
 import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
+import com.ryazancev.auth.util.processor.KafkaMessageProcessor;
 import com.ryazancev.auth.util.validator.AuthValidator;
-import com.ryazancev.common.dto.mail.MailDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -28,14 +26,13 @@ import java.util.Locale;
 @Transactional(readOnly = true)
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
-    private final AuthUtil authUtil;
     private final AuthValidator authValidator;
-    private final AuthProducerService authProducerService;
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final UserRepository userRepository;
 
     private final MessageSource messageSource;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     @Transactional
     @Override
@@ -54,14 +51,12 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
         authValidator.validateConfirmationStatus(confirmationToken);
         authValidator.validateExpiration(confirmationToken);
 
-        String email = confirmationToken.getUser().getEmail();
-        String name = confirmationToken.getUser().getName();
+
 
         confirmationTokenRepository.updateConfirmedAt(token);
-        userRepository.enableUser(email);
+        userRepository.enableUser(confirmationToken.getUser().getEmail());
 
-        MailDto mailDto = authUtil.createRegistrationMailDto(email, name);
-        authProducerService.sendMessageToMailTopic(mailDto);
+        kafkaMessageProcessor.sendRegistrationMailToCustomer(confirmationToken);
 
         return messageSource.getMessage(
                 "service.auth.email_confirmed_successfully",

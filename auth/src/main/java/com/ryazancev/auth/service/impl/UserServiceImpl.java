@@ -1,6 +1,5 @@
 package com.ryazancev.auth.service.impl;
 
-import com.ryazancev.auth.kafka.AuthProducerService;
 import com.ryazancev.auth.model.ConfirmationToken;
 import com.ryazancev.auth.model.Role;
 import com.ryazancev.auth.model.User;
@@ -8,12 +7,12 @@ import com.ryazancev.auth.repository.UserRepository;
 import com.ryazancev.auth.service.ClientsService;
 import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.service.UserService;
-import com.ryazancev.auth.util.AuthUtil;
 import com.ryazancev.auth.util.exception.custom.UserNotFoundException;
 import com.ryazancev.auth.util.mappers.UserMapper;
+import com.ryazancev.auth.util.processor.KafkaMessageProcessor;
+import com.ryazancev.auth.util.processor.TokenProcessor;
 import com.ryazancev.auth.util.validator.AuthValidator;
 import com.ryazancev.common.dto.customer.CustomerDto;
-import com.ryazancev.common.dto.mail.MailDto;
 import com.ryazancev.common.dto.user.UserDto;
 import com.ryazancev.common.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
@@ -39,18 +38,19 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final AuthUtil authUtil;
-    private final AuthValidator authValidator;
-    private final AuthProducerService authProducerService;
-
-    private final ClientsService clientsService;
-
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    private final AuthValidator authValidator;
+
+    private final ClientsService clientsService;
     private final ConfirmationTokenService confirmationTokenService;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final KafkaMessageProcessor kafkaMessageProcessor;
+    private final TokenProcessor tokenProcessor;
+
     private final MessageSource messageSource;
 
 
@@ -78,16 +78,10 @@ public class UserServiceImpl implements UserService {
 
         User saved = userRepository.save(user);
 
-        ConfirmationToken token = authUtil.getConfirmationToken(saved);
+        ConfirmationToken token = tokenProcessor.createConfirmationToken(saved);
         confirmationTokenService.save(token);
 
-
-        MailDto mailDto = authUtil.createConfirmationMailDto(
-                saved.getEmail(),
-                saved.getName(),
-                token.getToken());
-
-        authProducerService.sendMessageToMailTopic(mailDto);
+        kafkaMessageProcessor.sendConfirmationMailToCustomer(saved, token);
 
         return userMapper.toDto(saved);
     }

@@ -1,13 +1,12 @@
 package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
-import com.ryazancev.common.dto.user.UserUpdateRequest;
-import com.ryazancev.customer.kafka.CustomerProducerService;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
+import com.ryazancev.customer.util.processor.KafkaMessageProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -33,8 +32,8 @@ import java.util.Locale;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final CustomerProducerService customerProducerService;
 
+    private final KafkaMessageProcessor kafkaMessageProcessor;
     private final MessageSource messageSource;
 
     @Override
@@ -105,13 +104,7 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setEmail(customer.getEmail());
         existing.setBalance(customer.getBalance());
 
-        UserUpdateRequest request = UserUpdateRequest.builder()
-                .customerId(customer.getId())
-                .email(customer.getEmail())
-                .name(customer.getUsername())
-                .build();
-
-        customerProducerService.sendMessageToAuthUpdateTopic(request);
+        kafkaMessageProcessor.sendUpdateUserRequestToAuthUpdateTopic(existing);
 
         return customerRepository.save(existing);
     }
@@ -130,7 +123,8 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setBalance(0.0);
         existing.setDeletedAt(LocalDateTime.now());
 
-        customerProducerService.sendMessageToAuthDeleteTopic(id);
+        kafkaMessageProcessor.sendCustomerIdToAuthDeleteTopic(id);
+
         customerRepository.save(existing);
 
         return messageSource.getMessage(
