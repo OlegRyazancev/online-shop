@@ -13,11 +13,10 @@ import java.io.Serializable;
  * @author Oleg Ryazancev
  */
 
-@Document(collection = "admin-notifications")
-@Data
 @EqualsAndHashCode(callSuper = true)
+@Document(collection = "admin-notifications")
 @SuperBuilder
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
 public class AdminNotification
         extends Notification
