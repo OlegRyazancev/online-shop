@@ -2,6 +2,7 @@ package com.ryazancev.organization.kafka.config;
 
 import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import com.ryazancev.common.dto.mail.MailDto;
+import com.ryazancev.common.dto.notification.NotificationRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -40,36 +41,6 @@ public class OrganizationProducerConfig {
         return props;
     }
 
-
-    @Bean
-    public KafkaTemplate<String, RegistrationRequestDto>
-    adminKafkaTemplate() {
-
-        return createKafkaTemplate(
-                createProducerFactory(RegistrationRequestDto.class));
-    }
-
-    @Bean
-    public KafkaTemplate<String, MailDto>
-    mailKafkaTemplate() {
-        return createKafkaTemplate(
-                createProducerFactory(MailDto.class));
-    }
-
-    private <T> ProducerFactory<String, T>
-    createProducerFactory(Class<T> valueType) {
-
-        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
-    }
-
-
-    private <T> KafkaTemplate<String, T>
-    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
-
-        return new KafkaTemplate<>(producerFactory);
-    }
-
-
     public Map<String, Object> longValueProducerConfig() {
         Map<String, Object> props = new HashMap<>();
 
@@ -83,16 +54,54 @@ public class OrganizationProducerConfig {
         return props;
     }
 
-    @Bean
-    public ProducerFactory<String, Long> productProducerFactory() {
+
+    private <T> ProducerFactory<String, T>
+    createJsonProducerFactory(Class<T> valueType) {
+
+        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
+    }
+
+    private <T> ProducerFactory<String, T>
+    createLongValueProducerFactory(Class<T> valueType) {
 
         return new DefaultKafkaProducerFactory<>(longValueProducerConfig());
     }
 
-    @Bean
-    public KafkaTemplate<String, Long> productKafkaTemplate(
-            ProducerFactory<String, Long> producerFactory) {
+    private <T> KafkaTemplate<String, T>
+    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean
+    public KafkaTemplate<String, RegistrationRequestDto>
+    adminKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createJsonProducerFactory(RegistrationRequestDto.class));
+    }
+
+    @Bean
+    public KafkaTemplate<String, MailDto>
+    mailKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createJsonProducerFactory(MailDto.class));
+    }
+
+    @Bean
+    public KafkaTemplate<String, Long>
+    productKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createLongValueProducerFactory(Long.class));
+    }
+
+    @Bean
+    public KafkaTemplate<String, NotificationRequest>
+    notificationKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createJsonProducerFactory(NotificationRequest.class));
     }
 }

@@ -25,6 +25,9 @@ public class OrganizationTopicConfig {
     @Value("${spring.kafka.topic.organization.change-status}")
     private String organizationChangeStatusTopicName;
 
+    @Value("${spring.kafka.topic.notification}")
+    private String notificationTopicName;
+
 
     @Bean
     public NewTopic adminEventsTopic() {
@@ -51,6 +54,13 @@ public class OrganizationTopicConfig {
     public NewTopic productChangeStatusEventsTopic() {
         return TopicBuilder
                 .name(organizationChangeStatusTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic notificationEventsTopic() {
+        return TopicBuilder
+                .name(notificationTopicName)
                 .build();
     }
 }

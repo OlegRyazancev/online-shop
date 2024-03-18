@@ -99,9 +99,9 @@ public class ProductServiceImpl implements ProductService {
 
         Product saved = productRepository.save(product);
 
-        kafkaMessageProcessor.sendNewRegistrationRequestNotification();
         kafkaMessageProcessor
                 .sendRegistrationRequestToAdminTopic(saved.getId());
+        kafkaMessageProcessor.sendNewRegistrationRequestNotification();
 
 
         return saved;
