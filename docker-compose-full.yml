@@ -384,6 +384,24 @@ services:
     networks:
       - online-shop
 
+  notification:
+    container_name: notification
+    image: extenz16/notification_online-shop:latest
+    ports:
+      - "9092:9092"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - zipkin
+      - eureka-server
+      - kafka
+      - mongodb
+    networks:
+      - online-shop
 
 #Prometheus and grafana
 
