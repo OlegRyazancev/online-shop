@@ -24,6 +24,10 @@ public class CustomerTopicConfig {
     private String userUpdateTopicName;
 
 
+    @Value("${spring.kafka.topic.notification}")
+    private String notificationTopicName;
+
+
     @Bean
     public NewTopic customerUpdateEventsTopic() {
         return TopicBuilder
@@ -42,6 +46,13 @@ public class CustomerTopicConfig {
     public NewTopic userUpdateEventsTopic() {
         return TopicBuilder
                 .name(userUpdateTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic notificationEventsTopic() {
+        return TopicBuilder
+                .name(notificationTopicName)
                 .build();
     }
 }

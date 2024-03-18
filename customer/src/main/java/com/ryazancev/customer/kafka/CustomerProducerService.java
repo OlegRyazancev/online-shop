@@ -1,5 +1,6 @@
 package com.ryazancev.customer.kafka;
 
+import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.user.UserUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,9 +18,10 @@ public class CustomerProducerService {
 
     private final KafkaTemplate<
             String, Long> longValueKafkaTemplate;
-
     private final KafkaTemplate<
             String, UserUpdateRequest> userUpdateKafkaTemplate;
+    private final KafkaTemplate<
+            String, NotificationRequest> notificationKafkaTemplate;
 
     @Value("${spring.kafka.topic.user.delete}")
     private String deleteUserTopic;
@@ -27,14 +29,23 @@ public class CustomerProducerService {
     @Value("${spring.kafka.topic.user.update}")
     private String updateUserTopic;
 
+    @Value("${spring.kafka.topic.notification}")
+    private String notificationTopic;
+
     public CustomerProducerService(
             @Qualifier("longValueKafkaTemplate")
-            KafkaTemplate<String, Long> longValueKafkaTemplate,
+            KafkaTemplate<String, Long>
+                    longValueKafkaTemplate,
             @Qualifier("userUpdateKafkaTemplate")
-            KafkaTemplate<String, UserUpdateRequest> userUpdateKafkaTemplate) {
+            KafkaTemplate<String, UserUpdateRequest>
+                    userUpdateKafkaTemplate,
+            @Qualifier("notificationKafkaTemplate")
+            KafkaTemplate<String, NotificationRequest>
+                    notificationKafkaTemplate){
 
         this.longValueKafkaTemplate = longValueKafkaTemplate;
         this.userUpdateKafkaTemplate = userUpdateKafkaTemplate;
+        this.notificationKafkaTemplate=notificationKafkaTemplate;
     }
 
     public void sendMessageToAuthDeleteTopic(Long id) {
@@ -80,4 +91,29 @@ public class CustomerProducerService {
                     e.getMessage());
         }
     }
+
+    public void sendNotification(NotificationRequest request) {
+
+        log.info("Received request to send {} notification {} to user " +
+                        "with id: {} from recipient with id: {}",
+                request.getScope(),
+                request.getType(),
+                request.getRecipientId(),
+                request.getSenderId());
+
+        try {
+
+            log.debug("Sending notification request...");
+            notificationKafkaTemplate.send(notificationTopic, request);
+
+            log.debug("Notification request sent to topic: {}",
+                    notificationTopic);
+
+        } catch (Exception e) {
+
+            log.error("Failed to send notification request: {}",
+                    e.getMessage());
+        }
+    }
+
 }

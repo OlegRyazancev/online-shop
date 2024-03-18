@@ -36,6 +36,7 @@ public class KafkaMessageProcessor {
     }
 
     public void sendAcceptedMailToCustomerByProductId(Product product) {
+
         MailDto mailDto = dtoProcessor.createMailDto(
                 product,
                 MailType.OBJECT_REGISTRATION_ACCEPTED);

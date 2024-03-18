@@ -30,7 +30,7 @@ public class ClientsServiceImpl implements ClientsService {
     @Override
     @CircuitBreaker(
             name = "admin",
-            fallbackMethod = "getSimpleCustomerFallback"
+            fallbackMethod = "getSimpleProductFallback"
     )
     public Element getSimpleProductById(Long productId) {
 
@@ -69,19 +69,6 @@ public class ClientsServiceImpl implements ClientsService {
 
 //    Fallback methods
 
-    private Element getSimpleCustomerFallback(Exception e) {
-
-        return Fallback.builder()
-                .message(
-                        messageSource.getMessage(
-                                "exception.admin.service_unavailable",
-                                new Object[]{ServiceStage.CUSTOMER},
-                                Locale.getDefault()
-                        )
-                )
-                .build();
-    }
-
     private Element getSimpleOrganizationFallback(Exception e) {
 
         return Fallback.builder()
@@ -89,6 +76,19 @@ public class ClientsServiceImpl implements ClientsService {
                         messageSource.getMessage(
                                 "exception.admin.service_unavailable",
                                 new Object[]{ServiceStage.ORGANIZATION},
+                                Locale.getDefault()
+                        )
+                )
+                .build();
+    }
+
+    private Element getSimpleProductFallback(Exception e) {
+
+        return Fallback.builder()
+                .message(
+                        messageSource.getMessage(
+                                "exception.admin.service_unavailable",
+                                new Object[]{ServiceStage.PRODUCT},
                                 Locale.getDefault()
                         )
                 )

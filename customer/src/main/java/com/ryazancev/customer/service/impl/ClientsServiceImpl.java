@@ -1,9 +1,12 @@
 package com.ryazancev.customer.service.impl;
 
 import com.ryazancev.common.clients.NotificationClient;
+import com.ryazancev.common.clients.ProductClient;
 import com.ryazancev.common.clients.PurchaseClient;
 import com.ryazancev.common.clients.ReviewClient;
 import com.ryazancev.common.config.ServiceStage;
+import com.ryazancev.common.dto.Element;
+import com.ryazancev.common.dto.Fallback;
 import com.ryazancev.common.dto.purchase.PurchaseEditDto;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.customer.service.ClientsService;
@@ -28,6 +31,7 @@ public class ClientsServiceImpl implements ClientsService {
     private final PurchaseClient purchaseClient;
     private final ReviewClient reviewClient;
     private final NotificationClient notificationClient;
+    private final ProductClient productClient;
 
     private final MessageSource messageSource;
 
@@ -94,6 +98,26 @@ public class ClientsServiceImpl implements ClientsService {
                 .getRecipientIdByPrivateNotificationId(notificationId);
     }
 
+    @Override
+    @CircuitBreaker(
+            name = "customer",
+            fallbackMethod = "productServiceUnavailable"
+    )
+    public Object getProductOwnerId(Long productId) {
+
+        return productClient.getOwnerId(productId);
+    }
+
+    @Override
+    @CircuitBreaker(
+            name = "customer",
+            fallbackMethod = "getSimpleProductFallback"
+    )
+    public Element getSimpleProductById(Long productId) {
+
+        return productClient.getSimpleById(productId);
+    }
+
     //Fallback methods
 
     private Object reviewServiceUnavailable(Exception e)
@@ -104,6 +128,22 @@ public class ClientsServiceImpl implements ClientsService {
                     messageSource.getMessage(
                             "exception.customer.service_unavailable",
                             new Object[]{ServiceStage.REVIEW.toString()},
+                            Locale.getDefault()
+                    ),
+                    HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        throw e;
+    }
+
+    private Object productServiceUnavailable(Exception e)
+            throws Exception {
+
+        if (e instanceof RetryableException) {
+            throw new ServiceUnavailableException(
+                    messageSource.getMessage(
+                            "exception.customer.service_unavailable",
+                            new Object[]{ServiceStage.PRODUCT.name()},
                             Locale.getDefault()
                     ),
                     HttpStatus.SERVICE_UNAVAILABLE);
@@ -140,5 +180,18 @@ public class ClientsServiceImpl implements ClientsService {
                     HttpStatus.SERVICE_UNAVAILABLE);
         }
         throw e;
+    }
+
+    private Element getSimpleProductFallback(Exception e) {
+
+        return Fallback.builder()
+                .message(
+                        messageSource.getMessage(
+                                "exception.admin.service_unavailable",
+                                new Object[]{ServiceStage.PRODUCT},
+                                Locale.getDefault()
+                        )
+                )
+                .build();
     }
 }

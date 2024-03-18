@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 public class KafkaMessageProcessor {
 
     private final PurchaseProducerService purchaseProducerService;
-    private final NotificationProcessor notificationProcessor;
 
     public void updateProductQuantity(Long productId,
                                       Integer availableProductsInStock) {
@@ -39,13 +38,5 @@ public class KafkaMessageProcessor {
                         .balance(updatedBalance)
                         .build()
         );
-    }
-
-    public void sendPurchaseProcessedNotification(Purchase purchase) {
-
-        NotificationRequest privateNotificationRequest =
-                notificationProcessor.createNotification(purchase);
-
-        purchaseProducerService.sendNotification(privateNotificationRequest);
     }
 }

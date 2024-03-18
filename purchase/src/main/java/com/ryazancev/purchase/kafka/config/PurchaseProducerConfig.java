@@ -56,14 +56,6 @@ public class PurchaseProducerConfig {
                 createProducerFactory(UpdateQuantityRequest.class));
     }
 
-    @Bean
-    public KafkaTemplate<String, NotificationRequest>
-    notificationKafkaTemplate() {
-
-        return createKafkaTemplate(
-                createProducerFactory(NotificationRequest.class));
-    }
-
     private <T> ProducerFactory<String, T>
     createProducerFactory(Class<T> valueType) {
 

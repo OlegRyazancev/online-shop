@@ -104,8 +104,6 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         Purchase saved = purchaseRepository.save(toSave);
 
-        kafkaMessageProcessor.sendPurchaseProcessedNotification(saved);
-
         return dtoProcessor.createPurchaseDto(saved);
     }
 

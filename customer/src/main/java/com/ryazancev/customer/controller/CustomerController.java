@@ -14,6 +14,7 @@ import com.ryazancev.customer.service.ClientsService;
 import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.service.CustomerService;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
+import com.ryazancev.customer.util.processor.KafkaMessageProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +34,8 @@ public class CustomerController {
     private final CustomerService customerService;
     private final CustomExpressionService customExpressionService;
     private final CustomerMapper customerMapper;
+
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final ClientsService clientsService;
 
@@ -99,8 +102,13 @@ public class CustomerController {
         customExpressionService
                 .checkAccessUser(purchaseEditDto.getCustomerId());
 
-        return (PurchaseDto) clientsService
+        PurchaseDto created = (PurchaseDto) clientsService
                 .processPurchase(purchaseEditDto);
+
+        kafkaMessageProcessor
+                .sendPurchaseProcessedNotification(purchaseEditDto);
+
+        return created;
     }
 
     @DeleteMapping("{id}")

@@ -1,11 +1,13 @@
-package com.ryazancev.purchase.util.processor;
+package com.ryazancev.customer.util.processor;
 
 import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.notification.enums.NotificationType;
 import com.ryazancev.common.dto.product.ProductDto;
-import com.ryazancev.purchase.model.Purchase;
-import com.ryazancev.purchase.service.ClientsService;
+import com.ryazancev.common.dto.purchase.PurchaseEditDto;
+import com.ryazancev.customer.service.ClientsService;
+import com.ryazancev.customer.util.RequestHeader;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,27 +22,29 @@ import java.util.Properties;
 public class NotificationProcessor {
 
     private final ClientsService clientsService;
+    private final HttpServletRequest request;
 
-    public NotificationRequest createNotification(Purchase purchase) {
+    public NotificationRequest createNotification(
+            PurchaseEditDto purchaseEditDto) {
+
+        Long recipientId = (Long) clientsService
+                .getProductOwnerId(purchaseEditDto.getProductId());
 
         Properties properties = new Properties();
 
         String productName = clientsService
-                .getSimpleProductById(purchase.getProductId())
+                .getSimpleProductById(purchaseEditDto.getProductId())
                 .safelyCast(ProductDto.class, false)
                 .getProductName();
 
         properties.setProperty("product_name", productName);
 
-        Long recipientId = (Long) clientsService
-                .getProductOwnerId(purchase.getProductId());
-
         return NotificationRequest.builder()
                 .scope(NotificationScope.PRIVATE)
                 .type(NotificationType.PRIVATE_PURCHASE_PROCESSED)
-                .properties(properties)
-                .senderId(purchase.getCustomerId())
                 .recipientId(recipientId)
+                .senderId(new RequestHeader(request).getUserId())
+                .properties(properties)
                 .build();
 
     }

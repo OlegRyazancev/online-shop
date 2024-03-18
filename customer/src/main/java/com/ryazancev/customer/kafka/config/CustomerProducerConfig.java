@@ -1,6 +1,7 @@
 package com.ryazancev.customer.kafka.config;
 
 
+import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.user.UserUpdateRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
@@ -53,32 +54,48 @@ public class CustomerProducerConfig {
         return props;
     }
 
-    @Bean
-    public ProducerFactory<String, Long> longValueProducerFactory() {
-
-        return new DefaultKafkaProducerFactory<>(longValueProducerConfig());
-    }
-
-    @Bean
-    public KafkaTemplate<String, Long> longValueKafkaTemplate(
-            ProducerFactory<String, Long> longValueProducerFactory) {
-
-        return new KafkaTemplate<>(longValueProducerFactory);
-    }
-
-    @Bean
-    public ProducerFactory<String, UserUpdateRequest>
-    userUpdateProducerFactory() {
+    private <T> ProducerFactory<String, T>
+    createJsonProducerFactory(Class<T> valueType) {
 
         return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
     }
 
+    private <T> ProducerFactory<String, T>
+    createLongProducerFactory(Class<T> valueType) {
+
+        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
+    }
+
+
+    private <T> KafkaTemplate<String, T>
+    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
+
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean
+    public KafkaTemplate<String, Long>
+    longValueKafkaTemplate() {
+
+        return createKafkaTemplate(
+                createLongProducerFactory(Long.class));
+    }
+
     @Bean
     public KafkaTemplate<String, UserUpdateRequest>
-    userUpdateKafkaTemplate(ProducerFactory<
-            String, UserUpdateRequest> userUpdateProducerFactory) {
+    userUpdateKafkaTemplate() {
 
-        return new KafkaTemplate<>(userUpdateProducerFactory);
+        return createKafkaTemplate(
+                createJsonProducerFactory(UserUpdateRequest.class));
     }
+
+    @Bean
+    public KafkaTemplate<String, NotificationRequest>
+    notificationKafkaTemplate(){
+
+        return createKafkaTemplate(
+                createJsonProducerFactory(NotificationRequest.class)) ;
+    }
+
 
 }

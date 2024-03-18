@@ -19,10 +19,6 @@ public class PurchaseTopicConfig {
     @Value("${spring.kafka.topic.product.update}")
     private String productUpdateTopic;
 
-    @Value("${spring.kafka.topic.notification}")
-    private String notificationTopic;
-
-
     @Bean
     public NewTopic customerUpdateEventsTopic() {
 
@@ -36,14 +32,6 @@ public class PurchaseTopicConfig {
 
         return TopicBuilder
                 .name(productUpdateTopic)
-                .build();
-    }
-
-    @Bean
-    public NewTopic notificationEventsTopic() {
-
-        return TopicBuilder
-                .name(notificationTopic)
                 .build();
     }
 }

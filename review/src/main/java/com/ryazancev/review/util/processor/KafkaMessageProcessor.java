@@ -1,6 +1,7 @@
 package com.ryazancev.review.util.processor;
 
 import com.ryazancev.common.dto.notification.NotificationRequest;
+import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.review.kafka.ReviewProducerService;
 import com.ryazancev.review.model.Review;
 import lombok.RequiredArgsConstructor;

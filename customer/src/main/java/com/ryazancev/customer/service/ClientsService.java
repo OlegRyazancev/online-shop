@@ -1,5 +1,6 @@
 package com.ryazancev.customer.service;
 
+import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.purchase.PurchaseEditDto;
 
 /**
@@ -19,4 +20,8 @@ public interface ClientsService {
     Object getNotificationById(String notificationId, String scope);
 
     Object getRecipientIdByPrivateNotificationId(String notificationId);
+
+    Object getProductOwnerId(Long productId);
+
+    Element getSimpleProductById(Long productId);
 }
