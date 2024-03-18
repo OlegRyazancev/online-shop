@@ -123,3 +123,6 @@ springdoc:
 
       - url: /v3/api-docs/mail
         name: Mail Service
+
+      - url: /v3/api-docs/notification
+        name: Notification Service

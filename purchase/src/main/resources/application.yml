@@ -86,7 +86,6 @@ resilience4j:
         sliding-window-size: 10
         register-health-indicator: true
 
-
 #Eureka
 eureka:
   client:

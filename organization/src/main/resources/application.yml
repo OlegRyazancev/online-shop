@@ -23,7 +23,6 @@ spring:
   application:
     name: organization
 
-
   #Kafka
   kafka:
     bootstrap-servers: localhost:29092
