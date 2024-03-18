@@ -3,9 +3,20 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.auth.kafka.AuthMessageListener: debug
+    com.ryazancev.auth.kafka.AuthProducerService: debug
+    com.ryazancev.auth.util.exception.AuthExceptionHandler: debug
+
 spring:
   config:
     import: classpath:openapi/open-api-config.yml
+  messages:
+    always-use-message-format: false
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    basename: messages/messages
   application:
     name: auth
 
@@ -32,11 +43,13 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: true
     show-sql: true
+
   #Liquibase
   liquibase:
     change-log: classpath:liquibase/db.changelog.yml
     enabled: true
 
+#Security
 security:
   jwt:
     access: ${JWT_ACCESS}

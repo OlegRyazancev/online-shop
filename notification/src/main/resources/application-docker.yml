@@ -1,13 +1,12 @@
 server:
-  port: ${CUSTOMER_PORT}
+  port: ${NOTIFICATION_PORT}
   servlet:
     context-path: /
 
 logging:
   level:
-    com.ryazancev.customer.kafka.CustomerProducerService: debug
-    com.ryazancev.customer.kafka.CustomerMessageListener: debug
-    com.ryazancev.customer.util.exception.CustomerExceptionHandler: debug
+    com.ryazancev.notification.kafka.NotificationMessageListener: debug
+    com.ryazancev.notification.util.exception.NotificationExceptionHandler: debug
 
 spring:
   config:
@@ -18,47 +17,32 @@ spring:
     encoding: UTF-8
     basename: messages/messages
   application:
-    name: customer
+    name: notification
 
-  #PostgreSQL connection
-  datasource:
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://postgres:5432/${POSTGRES_CUSTOMER_DATABASE}?currentSchema=${POSTGRES_CUSTOMER_SCHEMA}
+  mail: ${MAIL_USERNAME}
+
+  #MongoDB connection
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      authentication-database: admin
+      database: ${MONGO_NOTIFICATION_DATABASE}
+      username: ${MONGO_INITDB_ROOT_USERNAME}
+      password: ${MONGO_INITDB_ROOT_PASSWORD}
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MongoDBDialect
         format_sql: true
     show-sql: true
-
-  #Redis
-  cache:
-    type: redis
-    cache-names: redis-cache
-  data:
-    redis:
-      host: redis
-      port: 6379
-      password: ${REDIS_PASSWORD}
 
   #Kafka
   kafka:
     bootstrap-servers: kafka:9092
     consumer:
-      group-id: ${KAFKA_CUSTOMER_GROUP}
-    topic:
-      customer:
-        update: ${KAFKA_UPDATE_CUSTOMER_TOPIC}
-      user:
-        update: ${KAFKA_UPDATE_USER_TOPIC}
-        delete: ${KAFKA_DELETE_USER_TOPIC}
-      notification: ${KAFKA_NOTIFICATION_TOPIC}
-
-  #Liquibase
-  liquibase:
-    change-log: classpath:liquibase/db.changelog.yaml
-    enabled: true
+      group-id: ${KAFKA_NOTIFICATION_GROUP}
+    topic: ${KAFKA_NOTIFICATION_TOPIC}
 
 #Zipkin
 management:
@@ -93,7 +77,7 @@ management:
 resilience4j:
   circuitbreaker:
     instances:
-      customer:
+      notification:
         sliding-window-type: COUNT_BASED
         failure-rate-threshold: 50
         minimum-number-of-calls: 5
@@ -114,9 +98,10 @@ eureka:
 #OpenApi
 openapi:
   service:
-    url: http://localhost:8080
+    url: http://localhost:${NOTIFICATION_PORT}
 springdoc:
   api-docs:
-    path: /v3/api-docs/customer
+    path: /v3/api-docs/notification
   swagger-ui:
-    path: /swagger-ui.html/customer
+    path: /swagger-ui.html/notification
+

@@ -3,9 +3,19 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.review.kafka.ReviewMessageListeners: debug
+    com.ryazancev.review.util.exception.ReviewExceptionHandler: debug
+
 spring:
   config:
     import: classpath:openapi/open-api-config.yml
+  messages:
+    always-use-message-format: false
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    basename: messages/messages
   application:
     name: review
 

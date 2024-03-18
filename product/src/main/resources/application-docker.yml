@@ -3,9 +3,20 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.product.kafka.ProductProducerService: debug
+    com.ryazancev.product.kafka.ProductMessageListeners: debug
+    com.ryazancev.product.util.exception.ProductExceptionHandler: debug
+
 spring:
   config:
     import: classpath:openapi/open-api-config.yml
+  messages:
+    always-use-message-format: false
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    basename: messages/messages
   application:
     name: product
 
@@ -31,7 +42,6 @@ spring:
       port: 6379
       password: ${REDIS_PASSWORD}
 
-
   #Kafka
   kafka:
     bootstrap-servers: kafka:9092
@@ -46,6 +56,7 @@ spring:
         delete: ${KAFKA_DELETE_PRODUCT_TOPIC}
         change-status: ${KAFKA_CHANGE_STATUS_PRODUCT_TOPIC}
       mail: ${KAFKA_MAIL_TOPIC}
+      notification: ${KAFKA_NOTIFICATION_TOPIC}
 
   #Liquibase
   liquibase:

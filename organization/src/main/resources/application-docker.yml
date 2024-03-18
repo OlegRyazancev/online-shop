@@ -3,12 +3,22 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.organization.kafka.OrganizationProducerService: debug
+    com.ryazancev.organization.kafka.OrganizationMessageListener: debug
+    com.ryazancev.organization.util.exception.OrganizationExceptionHandler: debug
+
 spring:
   config:
     import: classpath:openapi/open-api-config.yml
+  messages:
+    always-use-message-format: false
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    basename: messages/messages
   application:
     name: organization
-
 
   #Kafka
   kafka:
@@ -20,6 +30,7 @@ spring:
         change-status: ${KAFKA_CHANGE_STATUS_ORGANIZATION_TOPIC}
       product: ${KAFKA_DELETE_PRODUCT_TOPIC}
       mail: ${KAFKA_MAIL_TOPIC}
+      notification: ${KAFKA_NOTIFICATION_TOPIC}
     consumer:
       group-id: ${KAFKA_ORGANIZATION_GROUP}
 

@@ -3,9 +3,20 @@ server:
   servlet:
     context-path: /
 
+logging:
+  level:
+    com.ryazancev.admin.kafka.AdminMessageListener: debug
+    com.ryazancev.admin.kafka.AdminProducerService: debug
+    com.ryazancev.admin.util.exception.AdminExceptionHandler: debug
+
 spring:
   config:
     import: classpath:openapi/open-api-config.yml
+  messages:
+    always-use-message-format: false
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    basename: messages/messages
   application:
     name: admin
 
@@ -23,6 +34,7 @@ spring:
       product:
         register: ${KAFKA_REGISTER_PRODUCT_TOPIC}
         change-status: ${KAFKA_CHANGE_STATUS_PRODUCT_TOPIC}
+      notification: ${KAFKA_NOTIFICATION_TOPIC}
 
 
   #PostgreSQL connection
@@ -74,6 +86,23 @@ management:
     distribution:
       percentiles-histogram:
         "[http.server.requests]": true
+  health:
+    circuitbreakers:
+      enabled: true
+
+#Resilience4j
+resilience4j:
+  circuitbreaker:
+    instances:
+      admin:
+        sliding-window-type: COUNT_BASED
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        register-health-indicator: true
 
 #Eureka
 eureka:

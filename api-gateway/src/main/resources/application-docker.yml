@@ -8,6 +8,11 @@ spring:
     import: classpath:openapi/open-api-config.yml
   application:
     name: api-gateway
+  messages:
+    always-use-message-format: false
+    fallback-to-system-locale: true
+    encoding: UTF-8
+    basename: messages/messages
   cloud:
     gateway:
       routes:
@@ -119,3 +124,6 @@ springdoc:
 
       - url: /v3/api-docs/mail
         name: Mail Service
+
+      - url: /v3/api-docs/notification
+        name: Notification Service
