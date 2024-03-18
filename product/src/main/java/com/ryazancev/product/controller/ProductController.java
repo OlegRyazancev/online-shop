@@ -4,6 +4,7 @@ import com.ryazancev.common.dto.product.PriceQuantityResponse;
 import com.ryazancev.common.dto.product.ProductDto;
 import com.ryazancev.common.dto.product.ProductEditDto;
 import com.ryazancev.common.dto.product.ProductsSimpleResponse;
+import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.common.dto.review.ReviewDto;
 import com.ryazancev.common.dto.review.ReviewEditDto;
 import com.ryazancev.common.dto.review.ReviewsResponse;
@@ -15,6 +16,7 @@ import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.product.util.processor.DtoProcessor;
+import com.ryazancev.product.util.processor.KafkaMessageProcessor;
 import com.ryazancev.product.util.validator.ProductValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,7 @@ public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final ProductValidator productValidator;
+    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final DtoProcessor dtoProcessor;
     private final CustomExpressionService customExpressionService;
@@ -130,7 +133,21 @@ public class ProductController {
         customExpressionService.checkAccessPurchase(
                 reviewEditDto.getPurchaseId());
 
-        return dtoProcessor.createReviewDto(reviewEditDto);
+        ReviewDto created = dtoProcessor.createReviewDto(reviewEditDto);
+        Long productId = created
+                .getPurchase().safelyCast(PurchaseDto.class, false)
+                .getProduct().safelyCast(ProductDto.class, false)
+                .getId();
+
+        Long organizationId =
+                productService
+                        .getById(productId, false)
+                        .getOrganizationId();
+
+        kafkaMessageProcessor
+                .sendReviewCreatedNotification(created, organizationId);
+
+        return created;
     }
 
     //    Endpoints only  for feign clients
@@ -179,6 +196,6 @@ public class ProductController {
         Product product = productService.getById(productId, statusCheck);
 
         return dtoProcessor
-                .getOrganizationOwnerDtoById(product.getOrganizationId());
+                .getOrganizationOwnerId(product.getOrganizationId());
     }
 }

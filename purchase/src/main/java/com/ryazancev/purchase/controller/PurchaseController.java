@@ -40,5 +40,4 @@ public class PurchaseController {
 
         return purchaseService.getById(id);
     }
-
 }

@@ -86,17 +86,17 @@ public class DtoProcessor {
                 .build();
     }
 
-    public Long getOrganizationOwnerDtoById(Long organizationId) {
+    public Long getOrganizationOwnerId(Long organizationId) {
 
         return (Long) clientsService
-                .getOrganizationOwnerIdById(organizationId);
+                .getOwnerByOrganizationId(organizationId);
     }
 
     public MailDto createMailDto(Product product,
                                   MailType mailType) {
 
         Long customerId = (Long) clientsService
-                .getOrganizationOwnerIdById(product.getOrganizationId());
+                .getOwnerByOrganizationId(product.getOrganizationId());
 
         CustomerDto customerDto = clientsService
                 .getSimpleCustomerById(customerId)

@@ -166,7 +166,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         RequestHeader requestHeader = new RequestHeader(request);
 
         Long ownerId = (Long) clientsService
-                .getOrganizationOwnerIdById(organizationId);
+                .getOwnerByOrganizationId(organizationId);
 
         return requestHeader.getUserId().equals(ownerId)
                 || requestHeader.getRoles().contains("ROLE_ADMIN");

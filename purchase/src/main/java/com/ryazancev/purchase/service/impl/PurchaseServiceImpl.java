@@ -46,14 +46,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public PurchaseDto getById(String id) {
 
-        Purchase purchase = purchaseRepository.findById(id)
-                .orElseThrow(() -> new PurchaseNotFoundException(
-                        messageSource.getMessage(
-                                "exception.purchase.not_found_by_id",
-                                new Object[]{id},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND));
+        Purchase purchase = findById(id);
 
         return dtoProcessor.createPurchaseDto(purchase);
     }
@@ -115,6 +108,17 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .findByCustomerId(customerId);
 
         return dtoProcessor.createCustomerPurchasesResponse(purchases);
+    }
+
+    private Purchase findById(String id) {
+        return purchaseRepository.findById(id)
+                .orElseThrow(() -> new PurchaseNotFoundException(
+                        messageSource.getMessage(
+                                "exception.purchase.not_found_by_id",
+                                new Object[]{id},
+                                Locale.getDefault()
+                        ),
+                        HttpStatus.NOT_FOUND));
     }
 
 }

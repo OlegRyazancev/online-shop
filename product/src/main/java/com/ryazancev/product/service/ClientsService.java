@@ -15,7 +15,7 @@ public interface ClientsService {
 
     Double getAverageRatingByProductId(Long id);
 
-    Object getOrganizationOwnerIdById(Long organizationId);
+    Object getOwnerByOrganizationId(Long organizationId);
 
     Object getReviewsByProductId(Long id);
 

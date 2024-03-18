@@ -13,7 +13,6 @@ import com.ryazancev.review.service.ReviewService;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import com.ryazancev.review.util.processor.DtoProcessor;
-import com.ryazancev.review.util.processor.KafkaMessageProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -38,7 +37,6 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     private final DtoProcessor dtoProcessor;
-    private final KafkaMessageProcessor kafkaMessageProcessor;
     private final ClientsService clientsService;
 
     private final MessageSource messageSource;
@@ -94,8 +92,6 @@ public class ReviewServiceImpl implements ReviewService {
         toSave.setCreatedAt(LocalDateTime.now());
 
         Review saved = reviewRepository.insert(toSave);
-
-        kafkaMessageProcessor.sendReviewCreatedNotification(saved);
 
         return dtoProcessor.createReviewDtoWithPurchaseDto(saved, purchaseDto);
     }

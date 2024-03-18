@@ -31,6 +31,9 @@ public class ProductTopicConfig {
     @Value("${spring.kafka.topic.mail}")
     private String mailTopicName;
 
+    @Value("${spring.kafka.topic.notification}")
+    private String notificationTopic;
+
 
     @Bean
     public NewTopic adminEventsTopic() {
@@ -72,12 +75,18 @@ public class ProductTopicConfig {
                 .build();
     }
 
-
     @Bean
     public NewTopic deleteReviewTopic() {
 
         return TopicBuilder
                 .name(deleteReviewTopicName)
+                .build();
+    }
+
+    @Bean
+    public NewTopic notificationEventsTopic() {
+        return TopicBuilder
+                .name(notificationTopic)
                 .build();
     }
 }

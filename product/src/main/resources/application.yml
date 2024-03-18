@@ -45,7 +45,6 @@ spring:
       port: 6379
       password: ${REDIS_PASSWORD}
 
-
   #Kafka
   kafka:
     bootstrap-servers: localhost:29092
@@ -60,6 +59,7 @@ spring:
         delete: ${KAFKA_DELETE_PRODUCT_TOPIC}
         change-status: ${KAFKA_CHANGE_STATUS_PRODUCT_TOPIC}
       mail: ${KAFKA_MAIL_TOPIC}
+      notification: ${KAFKA_NOTIFICATION_TOPIC}
 
   #Liquibase
   liquibase:

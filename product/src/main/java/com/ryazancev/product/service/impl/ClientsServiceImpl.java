@@ -71,7 +71,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "product",
             fallbackMethod = "organizationServiceUnavailable"
     )
-    public Object getOrganizationOwnerIdById(Long organizationId) {
+    public Object getOwnerByOrganizationId(Long organizationId) {
 
         return organizationClient.getOwnerId(organizationId);
     }

@@ -3,7 +3,6 @@ server:
 
 logging:
   level:
-    com.ryazancev.review.kafka.ReviewProducerService: debug
     com.ryazancev.review.kafka.ReviewMessageListeners: debug
     com.ryazancev.review.util.exception.ReviewExceptionHandler: debug
 
@@ -44,7 +43,6 @@ spring:
       group-id: ${KAFKA_REVIEW_GROUP}
     topic:
       review: ${KAFKA_DELETE_REVIEW_TOPIC}
-      notification: ${KAFKA_NOTIFICATION_TOPIC}
 
 #Zipkin
 management:

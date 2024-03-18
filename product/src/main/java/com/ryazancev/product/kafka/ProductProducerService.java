@@ -2,6 +2,7 @@ package com.ryazancev.product.kafka;
 
 import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import com.ryazancev.common.dto.mail.MailDto;
+import com.ryazancev.common.dto.notification.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,9 @@ public class ProductProducerService {
     private final KafkaTemplate<String, MailDto>
             mailKafkaTemplate;
 
+    private final KafkaTemplate<String, NotificationRequest>
+            notificationKafkaTemplate;
+
     @Value("${spring.kafka.topic.admin}")
     private String adminTopic;
 
@@ -33,18 +37,28 @@ public class ProductProducerService {
     @Value("${spring.kafka.topic.mail}")
     private String mailTopic;
 
+    @Value("${spring.kafka.topic.notification}")
+    private String notificationTopic;
+
 
     public ProductProducerService(
             @Qualifier("adminKafkaTemplate")
-            KafkaTemplate<String, RegistrationRequestDto> adminKafkaTemplate,
+            KafkaTemplate<String, RegistrationRequestDto>
+                    adminKafkaTemplate,
             @Qualifier("reviewKafkaTemplate")
-            KafkaTemplate<String, Long> reviewKafkaTemplate,
+            KafkaTemplate<String, Long>
+                    reviewKafkaTemplate,
             @Qualifier("mailKafkaTemplate")
-            KafkaTemplate<String, MailDto> mailKafkaTemplate) {
+            KafkaTemplate<String, MailDto>
+                    mailKafkaTemplate,
+            @Qualifier("notificationKafkaTemplate")
+            KafkaTemplate<String, NotificationRequest>
+                    notificationKafkaTemplate) {
 
         this.adminKafkaTemplate = adminKafkaTemplate;
         this.reviewKafkaTemplate = reviewKafkaTemplate;
         this.mailKafkaTemplate = mailKafkaTemplate;
+        this.notificationKafkaTemplate = notificationKafkaTemplate;
     }
 
     public void sendMessageToAdminTopic(RegistrationRequestDto requestDto) {
@@ -105,6 +119,30 @@ public class ProductProducerService {
 
             log.error("Failed to send request to {}: {}",
                     mailTopic,
+                    e.getMessage());
+        }
+    }
+
+    public void sendNotification(NotificationRequest request) {
+
+        log.info("Received request to send {} notification {} to user " +
+                        "with id: {} from recipient with id: {}",
+                request.getScope(),
+                request.getType(),
+                request.getRecipientId(),
+                request.getSenderId());
+
+        try {
+
+            log.debug("Sending notification request...");
+            notificationKafkaTemplate.send(notificationTopic, request);
+
+            log.debug("Notification request sent to topic: {}",
+                    notificationTopic);
+
+        } catch (Exception e) {
+
+            log.error("Failed to send notification request: {}",
                     e.getMessage());
         }
     }
