@@ -1,16 +1,13 @@
 package com.ryazancev.product.util.processor;
 
-import com.ryazancev.common.dto.customer.CustomerDto;
+import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.notification.enums.NotificationType;
 import com.ryazancev.common.dto.product.ProductDto;
 import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.common.dto.review.ReviewDto;
-import com.ryazancev.common.dto.review.ReviewEditDto;
-import com.ryazancev.product.model.Product;
 import com.ryazancev.product.service.ClientsService;
-import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.RequestHeader;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +23,13 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class NotificationProcessor {
 
+    private final HttpServletRequest request;
     private final ClientsService clientsService;
 
-    public NotificationRequest createNotification(
+    public NotificationRequest createAdminNotification(
             ReviewDto reviewDto, Long organizationId) {
 
-        Long senderId = reviewDto
-                .getPurchase().safelyCast(PurchaseDto.class, false)
-                .getCustomer().safelyCast(CustomerDto.class, false)
-                .getId();
+        Long senderId = new RequestHeader(request).getUserId();
 
         Long recipientId =
                 (Long) clientsService
@@ -59,6 +54,19 @@ public class NotificationProcessor {
                 .senderId(senderId)
                 .recipientId(recipientId)
                 .properties(properties)
+                .build();
+    }
+
+    public NotificationRequest createAdminNotification() {
+
+        Properties properties = new Properties();
+        properties.setProperty("object_type", ObjectType.PRODUCT.name());
+
+        return NotificationRequest.builder()
+                .type(NotificationType.ADMIN_NEW_REGISTRATION_REQUEST_RECEIVED)
+                .scope(NotificationScope.ADMIN)
+                .properties(properties)
+                .senderId(new RequestHeader(request).getUserId())
                 .build();
     }
 }

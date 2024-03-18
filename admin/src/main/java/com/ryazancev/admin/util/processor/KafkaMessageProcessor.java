@@ -20,16 +20,6 @@ public class KafkaMessageProcessor {
     private final NotificationProcessor notificationProcessor;
     private final AdminProducerService adminProducerService;
 
-    public void sendAdminNotification(RegistrationRequest request) {
-
-        NotificationRequest notificationRequest =
-                notificationProcessor.createNotification(
-                        request,
-                        NotificationScope.ADMIN);
-
-        adminProducerService.sendNotification(notificationRequest);
-    }
-
     public void sendRegisterResponse(RegistrationRequest request) {
 
         adminProducerService.sendRegisterResponse(request);

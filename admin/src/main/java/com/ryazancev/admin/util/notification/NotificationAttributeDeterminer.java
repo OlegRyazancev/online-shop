@@ -64,16 +64,6 @@ public class NotificationAttributeDeterminer {
 
         Properties properties = new Properties();
 
-        if (notificationType ==
-                NotificationType.ADMIN_NEW_REGISTRATION_REQUEST_RECEIVED) {
-
-            properties.setProperty(
-                    "object_type",
-                    objectType.name()
-            );
-            return properties;
-        }
-
         switch (objectType) {
 
             case PRODUCT -> {
@@ -157,9 +147,8 @@ public class NotificationAttributeDeterminer {
     public NotificationType determineNotificationType(
             RegistrationRequest request, NotificationScope scope) {
 
-        if (scope == NotificationScope.ADMIN) {
-            return NotificationType.ADMIN_NEW_REGISTRATION_REQUEST_RECEIVED;
-        } else if (scope == NotificationScope.PUBLIC
+
+        if (scope == NotificationScope.PUBLIC
                 && request.getStatus() == RequestStatus.ACCEPTED
                 && request.getObjectType() == ObjectType.PRODUCT) {
             return NotificationType.PUBLIC_NEW_PRODUCT_CREATED;

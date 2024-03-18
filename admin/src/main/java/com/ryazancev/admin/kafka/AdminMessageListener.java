@@ -17,12 +17,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AdminMessageListener {
+public class
+AdminMessageListener {
 
 
     private final AdminService adminService;
     private final AdminMapper adminMapper;
-    private final KafkaMessageProcessor kafkaMessageProcessor;
 
     @KafkaListener(
             topics = "${spring.kafka.topic.admin}",
@@ -41,9 +41,6 @@ public class AdminMessageListener {
                     adminMapper.toEntity(requestDto);
 
             RegistrationRequest created = adminService.create(request);
-
-            log.debug("Sending admin notification...");
-            kafkaMessageProcessor.sendAdminNotification(request);
 
             log.debug("Registration request created successfully with id: {}",
                     created.getId());
