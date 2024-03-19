@@ -55,7 +55,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessProduct(Long id) {
+    public void checkAccessProduct(final Long id) {
 
         if (!canAccessProduct(id)) {
 
@@ -73,7 +73,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessOrganization(ProductEditDto productEditDto) {
+    public void checkAccessOrganization(final ProductEditDto productEditDto) {
 
         if (!canAccessOrganization(productEditDto.getOrganizationId())) {
 
@@ -108,7 +108,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessPurchase(String purchaseId) {
+    public void checkAccessPurchase(final String purchaseId) {
 
         RequestHeader requestHeader = new RequestHeader(request);
 
@@ -137,7 +137,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         }
     }
 
-    private boolean canAccessProduct(Long productId) {
+    private boolean canAccessProduct(final Long productId) {
 
         RequestHeader requestHeader = new RequestHeader(request);
 
@@ -161,7 +161,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         return false;
     }
 
-    private boolean canAccessOrganization(Long organizationId) {
+    private boolean canAccessOrganization(final Long organizationId) {
 
         RequestHeader requestHeader = new RequestHeader(request);
 

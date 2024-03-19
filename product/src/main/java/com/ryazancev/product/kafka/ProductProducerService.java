@@ -42,18 +42,14 @@ public class ProductProducerService {
 
 
     public ProductProducerService(
-            @Qualifier("adminKafkaTemplate")
-            KafkaTemplate<String, RegistrationRequestDto>
-                    adminKafkaTemplate,
-            @Qualifier("reviewKafkaTemplate")
-            KafkaTemplate<String, Long>
-                    reviewKafkaTemplate,
-            @Qualifier("mailKafkaTemplate")
-            KafkaTemplate<String, MailDto>
-                    mailKafkaTemplate,
-            @Qualifier("notificationKafkaTemplate")
-            KafkaTemplate<String, NotificationRequest>
-                    notificationKafkaTemplate) {
+            @Qualifier("adminKafkaTemplate") final KafkaTemplate<
+                    String, RegistrationRequestDto> adminKafkaTemplate,
+            @Qualifier("reviewKafkaTemplate") final KafkaTemplate<
+                    String, Long> reviewKafkaTemplate,
+            @Qualifier("mailKafkaTemplate") final KafkaTemplate<
+                    String, MailDto> mailKafkaTemplate,
+            @Qualifier("notificationKafkaTemplate") final KafkaTemplate<
+                    String, NotificationRequest> notificationKafkaTemplate) {
 
         this.adminKafkaTemplate = adminKafkaTemplate;
         this.reviewKafkaTemplate = reviewKafkaTemplate;
@@ -61,10 +57,11 @@ public class ProductProducerService {
         this.notificationKafkaTemplate = notificationKafkaTemplate;
     }
 
-    public void sendMessageToAdminTopic(RegistrationRequestDto requestDto) {
+    public void sendMessageToAdminTopic(
+            final RegistrationRequestDto requestDto) {
 
-        log.info("Received request to make registration request " +
-                "of product on topic: {}", adminTopic);
+        log.info("Received request to make registration request "
+                + "of product on topic: {}", adminTopic);
 
         try {
 
@@ -81,7 +78,7 @@ public class ProductProducerService {
         }
     }
 
-    public void sendMessageToReviewTopic(Long productId) {
+    public void sendMessageToReviewTopic(final Long productId) {
 
         log.info("Received request to send productId {} to topic: {}",
                 productId, reviewTopic);
@@ -101,7 +98,7 @@ public class ProductProducerService {
         }
     }
 
-    public void sendMessageToMailTopic(MailDto mailDto) {
+    public void sendMessageToMailTopic(final MailDto mailDto) {
 
         log.info("Received request to send {} email to {} on topic: {}",
                 mailDto.getType(),
@@ -123,10 +120,10 @@ public class ProductProducerService {
         }
     }
 
-    public void sendNotification(NotificationRequest request) {
+    public void sendNotification(final NotificationRequest request) {
 
-        log.info("Received request to send {} notification {} to user " +
-                        "with id: {} from recipient with id: {}",
+        log.info("Received request to send {} notification {} to user "
+                        + "with id: {} from recipient with id: {}",
                 request.getScope(),
                 request.getType(),
                 request.getRecipientId(),

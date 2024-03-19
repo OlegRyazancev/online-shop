@@ -12,6 +12,7 @@ import java.util.List;
 
 @Getter
 public class RequestHeader {
+
     private final Long userId;
 
     private final boolean locked;
@@ -20,7 +21,7 @@ public class RequestHeader {
 
     private final List<String> roles;
 
-    public RequestHeader(HttpServletRequest request) {
+    public RequestHeader(final HttpServletRequest request) {
         this.userId = Long.valueOf(
                 request.getHeader("userId"));
         this.locked = Boolean.parseBoolean(

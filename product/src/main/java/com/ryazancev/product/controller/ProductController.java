@@ -44,7 +44,6 @@ public class ProductController {
     private final DtoProcessor dtoProcessor;
     private final CustomExpressionService customExpressionService;
 
-
     @GetMapping
     public ProductsSimpleResponse getAll() {
 
@@ -57,7 +56,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ProductDto getById(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkIfAccountLocked();
 
@@ -69,12 +68,11 @@ public class ProductController {
                 .createProductDetailedDtoWithOrganizationAndAvgRating(product);
     }
 
-
     @PostMapping
     public ProductDto makeRegistrationRequestOfProduct(
             @RequestBody
             @Validated(OnCreate.class)
-            ProductEditDto productEditDto) {
+            final ProductEditDto productEditDto) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessOrganization(productEditDto);
@@ -89,7 +87,7 @@ public class ProductController {
     public ProductDto updateProduct(
             @RequestBody
             @Validated(OnUpdate.class)
-            ProductEditDto productEditDto) {
+            final ProductEditDto productEditDto) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessProduct(productEditDto.getId());
@@ -102,7 +100,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteProductById(@PathVariable("id") Long id) {
+    public String deleteProductById(
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessProduct(id);
@@ -112,7 +111,7 @@ public class ProductController {
 
     @GetMapping("/{id}/reviews")
     public ReviewsResponse getReviewsByProductId(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkIfAccountLocked();
 
@@ -126,8 +125,8 @@ public class ProductController {
     @PostMapping("/reviews")
     public ReviewDto createReview(
             @RequestBody
-            @Validated({OnCreate.class})
-            ReviewEditDto reviewEditDto) {
+            @Validated(OnCreate.class)
+            final ReviewEditDto reviewEditDto) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessPurchase(
@@ -152,10 +151,9 @@ public class ProductController {
 
     //    Endpoints only  for feign clients
 
-
     @GetMapping("/{id}/simple")
     public ProductDto getSimpleById(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         boolean statusCheck = false;
 
@@ -166,7 +164,7 @@ public class ProductController {
 
     @GetMapping("/{id}/price-quantity")
     public PriceQuantityResponse getPriceAndQuantityByProductId(
-            @PathVariable("id") Long productId) {
+            @PathVariable("id") final Long productId) {
 
         boolean statusCheck = true;
 
@@ -179,7 +177,7 @@ public class ProductController {
 
     @GetMapping("/organizations/{id}")
     public ProductsSimpleResponse getProductsByOrganizationId(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         List<Product> organizationProducts =
                 productService.getByOrganizationId(id);
@@ -189,7 +187,7 @@ public class ProductController {
 
     @GetMapping("/{id}/owner-id")
     public Long getOwnerId(
-            @PathVariable("id") Long productId) {
+            @PathVariable("id") final Long productId) {
 
         boolean statusCheck = false;
 

@@ -33,10 +33,10 @@ public class ProductMessageListeners {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "updateQuantityMessageFactory"
     )
-    public void updateQuantity(UpdateQuantityRequest request) {
+    public void updateQuantity(final UpdateQuantityRequest request) {
 
-        log.info("Received message to update product quantity with id: {}, " +
-                        "set to: {}",
+        log.info("Received message to update product quantity with id: {}, "
+                        + "set to: {}",
                 request.getProductId(),
                 request.getQuantityInStock());
         try {
@@ -60,10 +60,11 @@ public class ProductMessageListeners {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "changeRegistrationStatusMessageFactory"
     )
-    public void changeStatusAndRegister(RegistrationRequestDto requestDto) {
+    public void changeStatusAndRegister(
+            final RegistrationRequestDto requestDto) {
 
-        log.info("Received message from admin to change status of " +
-                        "product with id: {}, to {}",
+        log.info("Received message from admin to change status of "
+                        + "product with id: {}, to {}",
                 requestDto.getObjectToRegisterId(),
                 requestDto.getStatus());
 
@@ -110,8 +111,8 @@ public class ProductMessageListeners {
                 }
                 default -> {
 
-                    log.warn("Received unexpected request type {}" +
-                                    " or status: {}",
+                    log.warn("Received unexpected request type {} "
+                                    + "or status: {}",
                             requestDto.getObjectType(),
                             requestDto.getStatus());
                 }
@@ -129,7 +130,7 @@ public class ProductMessageListeners {
             containerFactory = "longValueMessageFactory"
     )
 
-    public void deleteProductsByOrganizationId(Long organizationId) {
+    public void deleteProductsByOrganizationId(final Long organizationId) {
 
         log.info("Received message to delete products by organization id: {}",
                 organizationId);
@@ -155,10 +156,10 @@ public class ProductMessageListeners {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "changeObjectStatusMessageFactory"
     )
-    public void changeProductStatus(ObjectRequest request) {
+    public void changeProductStatus(final ObjectRequest request) {
 
-        log.info("Received message from admin to change status of " +
-                        "product with id: {}, to {}",
+        log.info("Received message from admin to change status of "
+                        + "product with id: {}, to {}",
                 request.getObjectId(),
                 request.getObjectStatus());
 

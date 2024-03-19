@@ -40,7 +40,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "product",
             fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Element getSimpleCustomerById(Long customerId) {
+    public Element getSimpleCustomerById(final Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
@@ -50,7 +50,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "product",
             fallbackMethod = "getSimpleOrganizationFallback"
     )
-    public Element getSimpleOrganizationById(Long organizationId) {
+    public Element getSimpleOrganizationById(final Long organizationId) {
 
         return organizationClient.getSimpleById(organizationId);
     }
@@ -60,29 +60,27 @@ public class ClientsServiceImpl implements ClientsService {
             name = "product",
             fallbackMethod = "getAverageRatingFallback"
     )
-    public Double getAverageRatingByProductId(Long id) {
+    public Double getAverageRatingByProductId(final Long id) {
 
         return reviewClient.getAverageRatingByProductId(id);
     }
-
 
     @Override
     @CircuitBreaker(
             name = "product",
             fallbackMethod = "organizationServiceUnavailable"
     )
-    public Object getOwnerByOrganizationId(Long organizationId) {
+    public Object getOwnerByOrganizationId(final Long organizationId) {
 
         return organizationClient.getOwnerId(organizationId);
     }
-
 
     @Override
     @CircuitBreaker(
             name = "product",
             fallbackMethod = "reviewServiceUnavailable"
     )
-    public Object getReviewsByProductId(Long id) {
+    public Object getReviewsByProductId(final Long id) {
 
         return reviewClient.getByProductId(id);
     }
@@ -92,7 +90,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "product",
             fallbackMethod = "reviewServiceUnavailable"
     )
-    public Object createReview(ReviewEditDto reviewEditDto) {
+    public Object createReview(final ReviewEditDto reviewEditDto) {
 
         return reviewClient.create(reviewEditDto);
     }
@@ -102,14 +100,14 @@ public class ClientsServiceImpl implements ClientsService {
             name = "product",
             fallbackMethod = "purchaseServiceUnavailable"
     )
-    public Object getPurchaseById(String purchaseId) {
+    public Object getPurchaseById(final String purchaseId) {
 
         return purchaseClient.getById(purchaseId);
     }
 
     //Fallback methods
 
-    private Object customerServiceUnavailable(Exception e)
+    private Object customerServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -124,7 +122,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object organizationServiceUnavailable(Exception e)
+    private Object organizationServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -139,7 +137,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object reviewServiceUnavailable(Exception e)
+    private Object reviewServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -154,7 +152,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object purchaseServiceUnavailable(Exception e)
+    private Object purchaseServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -169,7 +167,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Element getSimpleCustomerFallback(Exception e) {
+    private Element getSimpleCustomerFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -182,7 +180,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Element getSimpleOrganizationFallback(Exception e) {
+    private Element getSimpleOrganizationFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -195,7 +193,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Double getAverageRatingFallback(Exception e) {
+    private Double getAverageRatingFallback(final Exception e) {
 
         return -1.0;
     }

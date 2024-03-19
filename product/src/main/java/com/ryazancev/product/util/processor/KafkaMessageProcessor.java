@@ -23,12 +23,12 @@ public class KafkaMessageProcessor {
     private final DtoProcessor dtoProcessor;
     private final NotificationProcessor notificationProcessor;
 
-    public void sendProductIdToDeleteReviewTopic(Long id) {
+    public void sendProductIdToDeleteReviewTopic(final Long id) {
 
         productProducerService.sendMessageToReviewTopic(id);
     }
 
-    public void sendRegistrationRequestToAdminTopic(Long productId) {
+    public void sendRegistrationRequestToAdminTopic(final Long productId) {
 
         RegistrationRequestDto requestDto = RegistrationRequestDto.builder()
                 .objectToRegisterId(productId)
@@ -38,7 +38,7 @@ public class KafkaMessageProcessor {
         productProducerService.sendMessageToAdminTopic(requestDto);
     }
 
-    public void sendAcceptedMailToCustomerByProductId(Product product) {
+    public void sendAcceptedMailToCustomerByProductId(final Product product) {
 
         MailDto mailDto = dtoProcessor.createMailDto(
                 product,
@@ -47,7 +47,7 @@ public class KafkaMessageProcessor {
         productProducerService.sendMessageToMailTopic(mailDto);
     }
 
-    public void sendRejectedMailToCustomerByProductId(Product product) {
+    public void sendRejectedMailToCustomerByProductId(final Product product) {
 
         MailDto mailDto = dtoProcessor.createMailDto(
                 product,
@@ -56,8 +56,8 @@ public class KafkaMessageProcessor {
         productProducerService.sendMessageToMailTopic(mailDto);
     }
 
-    public void sendReviewCreatedNotification(
-            ReviewDto reviewDto, Long organizationId) {
+    public void sendReviewCreatedNotification(final ReviewDto reviewDto,
+                                              final Long organizationId) {
 
         NotificationRequest privateNotificationRequest =
                 notificationProcessor

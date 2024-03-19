@@ -31,7 +31,7 @@ public class DtoProcessor {
     private final ClientsService clientsService;
 
     public ProductsSimpleResponse createProductsSimpleResponse(
-            List<Product> products) {
+            final List<Product> products) {
 
         return ProductsSimpleResponse.builder()
                 .products(productMapper.toSimpleListDto(products))
@@ -39,7 +39,7 @@ public class DtoProcessor {
     }
 
     public ProductDto createProductDetailedDtoWithOrganizationAndAvgRating(
-            Product product) {
+            final Product product) {
 
         ProductDto productDto =
                 createProductDetailedDtoWithOrganization(product);
@@ -52,7 +52,7 @@ public class DtoProcessor {
     }
 
     public ProductDto createProductDetailedDtoWithOrganization(
-            Product product) {
+            final Product product) {
 
         ProductDto productDto = productMapper.toDetailedDto(product);
 
@@ -63,22 +63,26 @@ public class DtoProcessor {
         return productDto;
     }
 
-    public ReviewsResponse getReviewsResponseByProductId(Long id) {
+    public ReviewsResponse getReviewsResponseByProductId(
+            final Long id) {
 
         return (ReviewsResponse) clientsService.getReviewsByProductId(id);
     }
 
-    public ReviewDto createReviewDto(ReviewEditDto reviewEditDto) {
+    public ReviewDto createReviewDto(
+            final ReviewEditDto reviewEditDto) {
 
         return (ReviewDto) clientsService.createReview(reviewEditDto);
     }
 
-    public ProductDto createProductSimpleDto(Product product) {
+    public ProductDto createProductSimpleDto(
+            final Product product) {
 
         return productMapper.toSimpleDto(product);
     }
 
-    public PriceQuantityResponse createPriceQuantityResponse(Product product) {
+    public PriceQuantityResponse createPriceQuantityResponse(
+            final Product product) {
 
         return PriceQuantityResponse.builder()
                 .price(product.getPrice())
@@ -86,14 +90,15 @@ public class DtoProcessor {
                 .build();
     }
 
-    public Long getOrganizationOwnerId(Long organizationId) {
+    public Long getOrganizationOwnerId(
+            final Long organizationId) {
 
         return (Long) clientsService
                 .getOwnerByOrganizationId(organizationId);
     }
 
-    public MailDto createMailDto(Product product,
-                                  MailType mailType) {
+    public MailDto createMailDto(final Product product,
+                                 final MailType mailType) {
 
         Long customerId = (Long) clientsService
                 .getOwnerByOrganizationId(product.getOrganizationId());

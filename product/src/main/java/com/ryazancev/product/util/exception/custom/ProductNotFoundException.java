@@ -12,11 +12,12 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProductNotFoundException extends RuntimeException{
+public class ProductNotFoundException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-    public ProductNotFoundException(String message, HttpStatus httpStatus) {
+    public ProductNotFoundException(final String message,
+                                    final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

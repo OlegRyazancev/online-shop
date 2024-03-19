@@ -34,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductValidator productValidator;
+
     private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final MessageSource messageSource;
@@ -50,7 +51,9 @@ public class ProductServiceImpl implements ProductService {
             value = "Product::getById",
             key = "#id"
     )
-    public Product getById(Long id, boolean statusCheck) {
+    public Product getById(final Long id,
+                           final boolean statusCheck) {
+
         Product existing = findById(id);
 
         if (statusCheck) {
@@ -65,12 +68,12 @@ public class ProductServiceImpl implements ProductService {
             value = "Product::getByOrganizationId",
             key = "#organizationId"
     )
-    public List<Product> getByOrganizationId(Long organizationId) {
+    public List<Product> getByOrganizationId(final Long organizationId) {
 
         return productRepository.findByOrganizationId(organizationId)
                 .orElseThrow(() -> new ProductNotFoundException(
                         messageSource.getMessage(
-                                "exception.product.not_found_by_organization_id",
+                                "exception.product.not_found_by_org_id",
                                 new Object[]{organizationId},
                                 Locale.getDefault()
                         ),
@@ -91,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
                             key = "#product.organizationId"
                     )}
     )
-    public Product makeRegistrationRequest(Product product) {
+    public Product makeRegistrationRequest(final Product product) {
 
         productValidator.validateNameUniqueness(product);
 
@@ -119,8 +122,8 @@ public class ProductServiceImpl implements ProductService {
                     allEntries = true
             )}
     )
-    public void changeStatus(Long id,
-                             ProductStatus status) {
+    public void changeStatus(final Long id,
+                             final ProductStatus status) {
 
         Product existing = findById(id);
 
@@ -141,7 +144,7 @@ public class ProductServiceImpl implements ProductService {
                     allEntries = true
             )}
     )
-    public void register(Long id) {
+    public void register(final Long id) {
 
         Product existing = findById(id);
 
@@ -149,7 +152,6 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.save(existing);
     }
-
 
     @Override
     @Transactional
@@ -170,7 +172,7 @@ public class ProductServiceImpl implements ProductService {
                             key = "#product.id"
                     )}
     )
-    public Product update(Product product) {
+    public Product update(final Product product) {
 
         Product existing = findById(product.getId());
 
@@ -191,14 +193,14 @@ public class ProductServiceImpl implements ProductService {
             value = "Product::getById",
             key = "#productId"
     )
-    public void updateQuantity(Long productId, Integer quantityInStock) {
+    public void updateQuantity(final Long productId,
+                               final Integer quantityInStock) {
 
         Product existing = findById(productId);
         existing.setQuantityInStock(quantityInStock);
 
         productRepository.save(existing);
     }
-
 
     @Override
     @Transactional
@@ -215,7 +217,7 @@ public class ProductServiceImpl implements ProductService {
                     key = "#id"
             )
     })
-    public String markProductAsDeleted(Long id) {
+    public String markProductAsDeleted(final Long id) {
 
         Product existing = findById(id);
 
@@ -238,7 +240,7 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
-    private Product findById(Long productId) {
+    private Product findById(final Long productId) {
 
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(

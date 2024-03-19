@@ -60,7 +60,7 @@ public class ProductConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, UpdateQuantityRequest>>
-    updateQuantityMessageFactory(ConsumerFactory<
+    updateQuantityMessageFactory(final ConsumerFactory<
             String, UpdateQuantityRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String,
@@ -90,7 +90,7 @@ public class ProductConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, RegistrationRequestDto>>
-    changeRegistrationStatusMessageFactory(ConsumerFactory<
+    changeRegistrationStatusMessageFactory(final ConsumerFactory<
             String, RegistrationRequestDto> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String,
@@ -115,7 +115,7 @@ public class ProductConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, Long>>
-    longValueMessageFactory(ConsumerFactory<
+    longValueMessageFactory(final ConsumerFactory<
             String, Long> longValueConsumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
@@ -144,7 +144,7 @@ public class ProductConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, ObjectRequest>>
-    changeObjectStatusMessageFactory(ConsumerFactory<
+    changeObjectStatusMessageFactory(final ConsumerFactory<
             String, ObjectRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<

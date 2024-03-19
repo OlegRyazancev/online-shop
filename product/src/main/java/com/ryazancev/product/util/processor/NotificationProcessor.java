@@ -27,7 +27,7 @@ public class NotificationProcessor {
     private final ClientsService clientsService;
 
     public NotificationRequest createAdminNotification(
-            ReviewDto reviewDto, Long organizationId) {
+            final ReviewDto reviewDto, final Long organizationId) {
 
         Long senderId = new RequestHeader(request).getUserId();
 

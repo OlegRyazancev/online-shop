@@ -23,7 +23,8 @@ public class ProductValidator {
     private final ProductRepository productRepository;
     private final MessageSource messageSource;
 
-    public void validateStatus(Product product, ProductStatus status) {
+    public void validateStatus(final Product product,
+                               final ProductStatus status) {
 
         if (product.getStatus() == status) {
 
@@ -38,14 +39,14 @@ public class ProductValidator {
     }
 
 
-    public void validateAllStatus(Product product) {
+    public void validateAllStatus(final Product product) {
 
         validateStatus(product, ProductStatus.DELETED);
         validateStatus(product, ProductStatus.FROZEN);
         validateStatus(product, ProductStatus.INACTIVE);
     }
 
-    public void validateNameUniqueness(Product product) {
+    public void validateNameUniqueness(final Product product) {
 
         if (productRepository.findByProductName(
                 product.getProductName()).isPresent()) {

@@ -29,7 +29,7 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler(ServiceUnavailableException.class)
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
-            ServiceUnavailableException e) {
+            final ServiceUnavailableException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -46,7 +46,7 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler(ProductCreationException.class)
     public ResponseEntity<ExceptionBody> handleProductCreation(
-            ProductCreationException e) {
+            final ProductCreationException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -63,7 +63,7 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ExceptionBody> handleProductNotFound(
-            ProductNotFoundException e) {
+            final ProductNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -80,7 +80,7 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            ConstraintViolationException e) {
+            final ConstraintViolationException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -102,7 +102,7 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException e) {
+            final MethodArgumentNotValidException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -125,7 +125,7 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ExceptionBody> handleAccessDenied(
-            AccessDeniedException e) {
+            final AccessDeniedException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -142,7 +142,7 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(
-            OnlineShopException e) {
+            final OnlineShopException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -159,7 +159,8 @@ public class ProductExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(
+            final Exception e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());

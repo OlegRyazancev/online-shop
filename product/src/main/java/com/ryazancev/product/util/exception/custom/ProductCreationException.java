@@ -12,10 +12,12 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProductCreationException extends RuntimeException{
+public class ProductCreationException extends RuntimeException {
+
     private HttpStatus httpStatus;
 
-    public ProductCreationException(String message, HttpStatus httpStatus) {
+    public ProductCreationException(final String message,
+                                    final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

@@ -29,7 +29,7 @@ import org.springframework.context.annotation.PropertySources;
         })
 public class ProductApplication {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(ProductApplication.class, args);
     }
 
