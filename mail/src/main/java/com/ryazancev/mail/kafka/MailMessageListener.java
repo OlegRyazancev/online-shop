@@ -24,7 +24,7 @@ public class MailMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void consumeMail(MailDto mailDto) {
+    void consumeMail(final MailDto mailDto) {
 
         log.info("Received message to send {} email to: {}",
                 mailDto.getType(), mailDto.getEmail());

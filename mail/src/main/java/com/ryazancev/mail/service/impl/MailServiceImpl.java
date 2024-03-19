@@ -32,7 +32,9 @@ public class MailServiceImpl implements MailService {
     private final MessageSource messageSource;
 
     @Override
-    public void sendEmail(MailDto mailDto) {
+    public void sendEmail(
+            final MailDto mailDto) {
+
         switch (mailDto.getType()) {
 
             case USER_REGISTRATION -> {
@@ -62,7 +64,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private void sendRejectedObjectRegistrationEmail(MailDto mailDto) {
+    private void sendRejectedObjectRegistrationEmail(
+            final MailDto mailDto) {
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper =
@@ -88,7 +91,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private void sendAcceptedObjectRegistrationEmail(MailDto mailDto) {
+    private void sendAcceptedObjectRegistrationEmail(
+            final MailDto mailDto) {
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper =
@@ -112,9 +116,9 @@ public class MailServiceImpl implements MailService {
         mailSender.send(message);
     }
 
-
     @SneakyThrows
-    private void sendRegistrationEmail(MailDto mailDto) {
+    private void sendRegistrationEmail(
+            final MailDto mailDto) {
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper =
@@ -135,7 +139,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private void sendConfirmationEmail(MailDto mailDto) {
+    private void sendConfirmationEmail(
+            final MailDto mailDto) {
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper =
@@ -162,7 +167,9 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private String getRegistrationEmailContent(String name) {
+    private String getRegistrationEmailContent(
+            final String name) {
+
         StringWriter writer = new StringWriter();
         Map<String, Object> model = new HashMap<>();
 
@@ -175,8 +182,9 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private String getConfirmationContent(String name,
-                                          Properties properties) {
+    private String getConfirmationContent(final String name,
+                                          final Properties properties) {
+
         StringWriter writer = new StringWriter();
         Map<String, Object> model = new HashMap<>();
 
@@ -190,9 +198,10 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private String getObjectRegistrationEmailContent(String name,
-                                                     Properties properties,
-                                                     String template) {
+    private String getObjectRegistrationEmailContent(
+            final String name,
+            final Properties properties,
+            final String template) {
 
         StringWriter writer = new StringWriter();
         Map<String, Object> model = new HashMap<>();

@@ -56,7 +56,7 @@ public class MailConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, CustomerDto>>
-    messageFactory(ConsumerFactory<
+    messageFactory(final ConsumerFactory<
             String, CustomerDto> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, CustomerDto> factory =
@@ -66,5 +66,4 @@ public class MailConsumerConfig {
 
         return factory;
     }
-
 }

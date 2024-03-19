@@ -19,7 +19,7 @@ import org.springframework.context.annotation.PropertySources;
 })
 public class MailApplication {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(MailApplication.class, args);
     }
 }

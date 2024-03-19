@@ -20,6 +20,7 @@ public class OpenApiProperties {
 
     @Data
     protected static class Contact {
+
         private String name;
         private String email;
     }

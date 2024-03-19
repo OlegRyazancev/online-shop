@@ -18,7 +18,7 @@ public class MailExceptionHandler {
 
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(
-            OnlineShopException e) {
+            final OnlineShopException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -35,7 +35,8 @@ public class MailExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(
+            final Exception e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());

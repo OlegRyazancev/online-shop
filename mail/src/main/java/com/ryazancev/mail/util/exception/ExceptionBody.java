@@ -14,6 +14,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 public class ExceptionBody {
+
     private String message;
 
     private Map<String, String> errors;
@@ -22,13 +23,9 @@ public class ExceptionBody {
 
     private HttpStatus httpStatus;
 
-    public ExceptionBody(String message) {
-        this.message = message;
-    }
-
-    public ExceptionBody(String message,
-                         ServiceStage serviceStage,
-                         HttpStatus httpStatus) {
+    public ExceptionBody(final String message,
+                         final ServiceStage serviceStage,
+                         final HttpStatus httpStatus) {
         this.message = message;
         this.serviceStage = serviceStage;
         this.httpStatus = httpStatus;
