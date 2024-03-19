@@ -23,7 +23,6 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenApi() {
 
-
         return new OpenAPI()
                 .info(new Info()
                         .title(properties.getTitle())
@@ -34,7 +33,5 @@ public class OpenApiConfig {
                                 .email(properties.getContact().getEmail())
                         )
                 );
-
     }
 }
-

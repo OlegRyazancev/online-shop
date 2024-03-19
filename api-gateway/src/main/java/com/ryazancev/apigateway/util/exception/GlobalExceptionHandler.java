@@ -20,7 +20,8 @@ import reactor.core.publisher.Mono;
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+    public Mono<Void> handle(final ServerWebExchange exchange,
+                             final Throwable ex) {
 
         ServerHttpResponse response = exchange.getResponse();
 
@@ -39,9 +40,9 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         return handleDefaultException(response, ex);
     }
 
-    private Mono<Void> handleResponseStatusException
-            (ServerHttpResponse response,
-             ResponseStatusException ex) {
+    private Mono<Void> handleResponseStatusException(
+            final ServerHttpResponse response,
+            final ResponseStatusException ex) {
 
         response.setStatusCode(ex.getStatusCode());
 
@@ -49,8 +50,8 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     }
 
     private Mono<Void> handleUnauthorizedException(
-            ServerHttpResponse response,
-            UnauthorizedException ex) {
+            final ServerHttpResponse response,
+            final UnauthorizedException ex) {
 
         ExceptionBody exceptionBody = new ExceptionBody(
                 ex.getMessage(),
@@ -60,8 +61,8 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     }
 
     private Mono<Void> handleDefaultException(
-            ServerHttpResponse response,
-            Throwable ex) {
+            final ServerHttpResponse response,
+            final Throwable ex) {
 
         ExceptionBody exceptionBody = new ExceptionBody(
                 "Internal Server Error: " + ex.getMessage(),
@@ -71,19 +72,19 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     }
 
     private Mono<Void> writeErrorResponse(
-            ServerHttpResponse response,
-            ExceptionBody exceptionBody) {
+            final ServerHttpResponse response,
+            final ExceptionBody exceptionBody) {
 
         response.setStatusCode(exceptionBody.getHttpStatus());
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         String responseBody = "{"
-                + "\"message\":\"" +
-                exceptionBody.getMessage() + "\","
-
-                + "\"httpStatus\":\"" +
-                exceptionBody.getHttpStatus().value() + "\""
-
+                + "\"message\":\""
+                + exceptionBody.getMessage()
+                + "\","
+                + "\"httpStatus\":\""
+                + exceptionBody.getHttpStatus().value()
+                + "\""
                 + "}";
 
         return response.writeWith(

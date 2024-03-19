@@ -23,14 +23,13 @@ public class JwtUtil {
     @Value("${spring.security.jwt.secret}")
     private String secret;
 
-
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(final String token) {
 
         Jws<Claims> claimsJws = Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
@@ -43,12 +42,12 @@ public class JwtUtil {
                 .before(new Date());
     }
 
-    public String extractEmail(String token) {
+    public String extractEmail(final String token) {
 
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String extractId(String token) {
+    public String extractId(final String token) {
 
         return extractClaim(
                 token,
@@ -57,14 +56,14 @@ public class JwtUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> extractRoles(String token) {
+    public List<String> extractRoles(final String token) {
         return extractClaim(
                 token,
                 claims -> claims.get("roles", List.class)
         );
     }
 
-    public String extractLocked(String token) {
+    public String extractLocked(final String token) {
 
         return extractClaim(
                 token,
@@ -72,7 +71,7 @@ public class JwtUtil {
         ).toString();
     }
 
-    public String extractConfirmed(String token) {
+    public String extractConfirmed(final String token) {
 
         return extractClaim(
                 token,
@@ -81,15 +80,15 @@ public class JwtUtil {
     }
 
 
-    public <T> T extractClaim(String token,
-                              Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(final String token,
+                              final Function<Claims, T> claimsResolver) {
 
         final Claims claims = extractAllClaims(token);
 
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(final String token) {
 
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())

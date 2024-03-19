@@ -18,15 +18,16 @@ import java.util.Objects;
  */
 
 @Component
-public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
+public class AuthenticationFilter
+        extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
     private final RouteValidator validator;
     private final JwtUtil jwtUtil;
     private final MessageSource messageSource;
 
-    public AuthenticationFilter(RouteValidator validator,
-                                JwtUtil jwtUtil,
-                                MessageSource messageSource) {
+    public AuthenticationFilter(final RouteValidator validator,
+                                final JwtUtil jwtUtil,
+                                final MessageSource messageSource) {
         super(Config.class);
         this.validator = validator;
         this.jwtUtil = jwtUtil;
@@ -34,13 +35,17 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     }
 
     @Override
-    public GatewayFilter apply(Config config) {
+    public GatewayFilter apply(final Config config) {
+
         return (((exchange, chain) -> {
             ServerHttpRequest request = null;
-            if (validator.isSecured.test(exchange.getRequest())) {
+
+            if (validator.getIsSecured().test(exchange.getRequest())) {
+
                 if (!exchange.getRequest()
                         .getHeaders()
                         .containsKey(HttpHeaders.AUTHORIZATION)) {
+
                     throw new UnauthorizedException(
                             messageSource.getMessage(
                                     "exception.apigw.unauthorized",
@@ -61,13 +66,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
 
                 if (!jwtUtil.validateToken(token)) {
+
                     throw new UnauthorizedException(
                             messageSource.getMessage(
                                     "exception.apigw.unauthorized_request",
                                     null,
                                     Locale.getDefault()
-                            )
-                    );
+                            ));
                 }
                 List<String> roles = jwtUtil.extractRoles(token);
 
@@ -75,9 +80,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                         .contains("/admin")) {
 
                     if (!roles.contains("ROLE_ADMIN")) {
+
                         throw new UnauthorizedException(
                                 messageSource.getMessage(
-                                        "exception.apigw.insufficient_privileges",
+                                        "exception.apigw.insuff_priv",
                                         null,
                                         Locale.getDefault()
                                 )
@@ -85,6 +91,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     }
                 }
                 String rolesString = String.join(" ", roles);
+
                 request = exchange.getRequest()
                         .mutate()
                         .header("userId",
@@ -108,6 +115,5 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     }
 
     public static class Config {
-
     }
 }

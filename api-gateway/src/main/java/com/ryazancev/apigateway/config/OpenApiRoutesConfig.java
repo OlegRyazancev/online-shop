@@ -21,7 +21,7 @@ public class OpenApiRoutesConfig {
     }
 
     @Bean
-    public RouteLocator routeLocator(RouteLocatorBuilder builder) {
+    public RouteLocator routeLocator(final RouteLocatorBuilder builder) {
 
         return builder
                 .routes()
