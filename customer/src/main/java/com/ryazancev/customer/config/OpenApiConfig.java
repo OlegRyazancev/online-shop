@@ -28,7 +28,7 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenApi(
-            @Value("${openapi.service.url}") String url) {
+            @Value("${openapi.service.url}") final String url) {
 
         final String securitySchemeName = "bearerAuth";
 
@@ -52,6 +52,5 @@ public class OpenApiConfig {
                         .contact(new Contact()
                                 .name(properties.getContact().getName())
                                 .email(properties.getContact().getEmail())));
-
     }
 }

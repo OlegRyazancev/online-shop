@@ -48,7 +48,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessUser(Long customerId) {
+    public void checkAccessUser(final Long customerId) {
 
         RequestHeader requestHeader = new RequestHeader(request);
 
@@ -84,7 +84,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkIfCustomerIsAdmin(Long id) {
+    public void checkIfCustomerIsAdmin(final Long id) {
 
         RequestHeader requestHeader = new RequestHeader(request);
 
@@ -101,8 +101,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessPrivateNotification(Long customerId,
-                                               String notificationId) {
+    public void checkAccessPrivateNotification(final Long customerId,
+                                               final String notificationId) {
 
         RequestHeader requestHeader = new RequestHeader(request);
 

@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Cacheable(
             value = "Customer::getById", key = "#id"
     )
-    public Customer getById(Long id) {
+    public Customer getById(final Long id) {
 
         return findById(id);
     }
@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
             value = "Customer::getById",
             key = "#request.customerId"
     )
-    public Customer updateBalance(UpdateBalanceRequest request) {
+    public Customer updateBalance(final UpdateBalanceRequest request) {
 
         Customer existing = findById(request.getCustomerId());
         existing.setBalance(request.getBalance());
@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Double getBalanceByCustomerId(Long id) {
+    public Double getBalanceByCustomerId(final Long id) {
 
         Customer existing = findById(id);
 
@@ -74,7 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
             condition = "#customer.id!=null",
             key = "#customer.id"
     )
-    public Customer create(Customer customer) {
+    public Customer create(final Customer customer) {
 
         if (customerRepository.findByEmail(customer.getEmail()).isPresent()) {
             throw new CustomerCreationException(
@@ -96,7 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
             value = "Customer::getById",
             key = "#customer.id"
     )
-    public Customer update(Customer customer) {
+    public Customer update(final Customer customer) {
 
         Customer existing = findById(customer.getId());
 
@@ -115,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
             value = "Customer::getById",
             key = "#id"
     )
-    public String markCustomerAsDeleted(Long id) {
+    public String markCustomerAsDeleted(final Long id) {
 
         Customer existing = findById(id);
 
@@ -134,18 +134,17 @@ public class CustomerServiceImpl implements CustomerService {
         );
     }
 
-    private Customer findById(Long id) {
+    private Customer findById(final Long id) {
 
         return customerRepository.findById(id)
-                .orElseThrow(() ->
-                        new CustomerNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.customer.customer_not_found_by_id",
-                                        new Object[]{id},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.NOT_FOUND
-                        ));
+                .orElseThrow(() -> new CustomerNotFoundException(
+                        messageSource.getMessage(
+                                "exception.customer.not_found_by_id",
+                                new Object[]{id},
+                                Locale.getDefault()
+                        ),
+                        HttpStatus.NOT_FOUND
+                ));
     }
 
 }

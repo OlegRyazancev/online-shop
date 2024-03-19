@@ -14,7 +14,8 @@ public class CustomerNotFoundException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-    public CustomerNotFoundException(String message, HttpStatus httpStatus) {
+    public CustomerNotFoundException(final String message,
+                                     final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

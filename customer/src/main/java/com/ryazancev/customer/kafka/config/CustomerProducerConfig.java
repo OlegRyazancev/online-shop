@@ -55,20 +55,20 @@ public class CustomerProducerConfig {
     }
 
     private <T> ProducerFactory<String, T>
-    createJsonProducerFactory(Class<T> valueType) {
+    createJsonProducerFactory(final Class<T> valueType) {
 
         return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
     }
 
     private <T> ProducerFactory<String, T>
-    createLongProducerFactory(Class<T> valueType) {
+    createLongProducerFactory(final Class<T> valueType) {
 
-        return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
+        return new DefaultKafkaProducerFactory<>(longValueProducerConfig());
     }
 
 
     private <T> KafkaTemplate<String, T>
-    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
+    createKafkaTemplate(final ProducerFactory<String, T> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
@@ -91,10 +91,10 @@ public class CustomerProducerConfig {
 
     @Bean
     public KafkaTemplate<String, NotificationRequest>
-    notificationKafkaTemplate(){
+    notificationKafkaTemplate() {
 
         return createKafkaTemplate(
-                createJsonProducerFactory(NotificationRequest.class)) ;
+                createJsonProducerFactory(NotificationRequest.class));
     }
 
 

@@ -25,7 +25,7 @@ public class NotificationProcessor {
     private final HttpServletRequest request;
 
     public NotificationRequest createNotification(
-            PurchaseEditDto purchaseEditDto) {
+            final PurchaseEditDto purchaseEditDto) {
 
         Long recipientId = (Long) clientsService
                 .getProductOwnerId(purchaseEditDto.getProductId());

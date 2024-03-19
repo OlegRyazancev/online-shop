@@ -40,7 +40,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "customer",
             fallbackMethod = "purchaseServiceUnavailable"
     )
-    public Object processPurchase(PurchaseEditDto purchaseEditDto) {
+    public Object processPurchase(final PurchaseEditDto purchaseEditDto) {
 
         return purchaseClient.processPurchase(purchaseEditDto);
     }
@@ -50,7 +50,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "customer",
             fallbackMethod = "purchaseServiceUnavailable"
     )
-    public Object getPurchasesByCustomerId(Long customerId) {
+    public Object getPurchasesByCustomerId(final Long customerId) {
 
         return purchaseClient.getByCustomerId(customerId);
     }
@@ -60,7 +60,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "customer",
             fallbackMethod = "reviewServiceUnavailable"
     )
-    public Object getReviewsByCustomerId(Long customerId) {
+    public Object getReviewsByCustomerId(final Long customerId) {
 
         return reviewClient.getByCustomerId(customerId);
     }
@@ -70,8 +70,8 @@ public class ClientsServiceImpl implements ClientsService {
             name = "customer",
             fallbackMethod = "notificationServiceUnavailable"
     )
-    public Object getNotificationsByCustomerId(Long customerId,
-                                               String scope) {
+    public Object getNotificationsByCustomerId(final Long customerId,
+                                               final String scope) {
         return notificationClient
                 .getNotificationsByRecipientId(customerId, scope);
     }
@@ -81,7 +81,8 @@ public class ClientsServiceImpl implements ClientsService {
             name = "customer",
             fallbackMethod = "notificationServiceUnavailable"
     )
-    public Object getNotificationById(String id, String scope) {
+    public Object getNotificationById(final String id,
+                                      final String scope) {
 
         return notificationClient.getNotificationById(id, scope);
     }
@@ -92,7 +93,7 @@ public class ClientsServiceImpl implements ClientsService {
             fallbackMethod = "notificationServiceUnavailable"
     )
     public Object getRecipientIdByPrivateNotificationId(
-            String notificationId) {
+            final String notificationId) {
 
         return notificationClient
                 .getRecipientIdByPrivateNotificationId(notificationId);
@@ -103,7 +104,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "customer",
             fallbackMethod = "productServiceUnavailable"
     )
-    public Object getProductOwnerId(Long productId) {
+    public Object getProductOwnerId(final Long productId) {
 
         return productClient.getOwnerId(productId);
     }
@@ -113,14 +114,14 @@ public class ClientsServiceImpl implements ClientsService {
             name = "customer",
             fallbackMethod = "getSimpleProductFallback"
     )
-    public Element getSimpleProductById(Long productId) {
+    public Element getSimpleProductById(final Long productId) {
 
         return productClient.getSimpleById(productId);
     }
 
     //Fallback methods
 
-    private Object reviewServiceUnavailable(Exception e)
+    private Object reviewServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -136,7 +137,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object productServiceUnavailable(Exception e)
+    private Object productServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -152,7 +153,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object purchaseServiceUnavailable(Exception e)
+    private Object purchaseServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -167,10 +168,10 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object notificationServiceUnavailable(Exception e)
+    private Object notificationServiceUnavailable(final Exception e)
             throws Exception {
 
-        if (e instanceof RetryableException){
+        if (e instanceof RetryableException) {
             throw new ServiceUnavailableException(
                     messageSource.getMessage(
                             "exception.customer.service_unavailable",
@@ -182,7 +183,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Element getSimpleProductFallback(Exception e) {
+    private Element getSimpleProductFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(

@@ -41,7 +41,7 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public CustomerDto getById(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessUser(id);
@@ -54,8 +54,7 @@ public class CustomerController {
     @PutMapping
     public CustomerDto updateCustomer(
             @RequestBody
-            @Validated(OnUpdate.class)
-            CustomerDto customerDto) {
+            @Validated(OnUpdate.class) final CustomerDto customerDto) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessUser(customerDto.getId());
@@ -68,7 +67,7 @@ public class CustomerController {
 
     @GetMapping("/{id}/reviews")
     public ReviewsResponse getReviewsByCustomerId(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessUser(id);
@@ -81,7 +80,7 @@ public class CustomerController {
 
     @GetMapping("/{id}/purchases")
     public CustomerPurchasesResponse getPurchasesByCustomerId(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessUser(id);
@@ -95,8 +94,7 @@ public class CustomerController {
     @PostMapping("/purchases")
     public PurchaseDto processPurchase(
             @RequestBody
-            @Validated(OnCreate.class)
-            PurchaseEditDto purchaseEditDto) {
+            @Validated(OnCreate.class) final PurchaseEditDto purchaseEditDto) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService
@@ -112,7 +110,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("{id}")
-    public String deleteCustomerById(@PathVariable("id") Long id) {
+    public String deleteCustomerById(@PathVariable("id") final Long id) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessUser(id);
@@ -122,8 +120,8 @@ public class CustomerController {
 
     @GetMapping("{id}/notifications")
     public NotificationsSimpleResponse getNotificationsByCustomerId(
-            @PathVariable("id") Long id,
-            @RequestParam("scope") String scope) {
+            @PathVariable("id") final Long id,
+            @RequestParam("scope") final String scope) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessUser(id);
@@ -138,9 +136,9 @@ public class CustomerController {
 
     @GetMapping("{customerId}/notifications/{notificationId}")
     public NotificationDto getNotificationById(
-            @PathVariable("customerId") Long customerId,
-            @PathVariable("notificationId") String notificationId,
-            @RequestParam("scope") String scope) {
+            @PathVariable("customerId") final Long customerId,
+            @PathVariable("notificationId") final String notificationId,
+            @RequestParam("scope") final String scope) {
 
         customExpressionService.checkIfAccountLocked();
         customExpressionService.checkAccessUser(customerId);
@@ -155,6 +153,9 @@ public class CustomerController {
                                 customerId,
                                 notificationId);
             }
+            default -> {
+
+            }
         }
 
         return (NotificationDto)
@@ -165,7 +166,7 @@ public class CustomerController {
 
     @GetMapping("/{id}/simple")
     public CustomerDto getSimpleById(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         Customer customer = customerService.getById(id);
 
@@ -174,7 +175,7 @@ public class CustomerController {
 
     @GetMapping("/{id}/balance")
     public Double getBalanceById(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         return customerService.getBalanceByCustomerId(id);
     }
@@ -182,8 +183,7 @@ public class CustomerController {
     @PostMapping
     public CustomerDto createCustomer(
             @RequestBody
-            @Validated(OnCreate.class)
-            CustomerDto customerDto) {
+            @Validated(OnCreate.class) final CustomerDto customerDto) {
 
         Customer customer = customerMapper.toEntity(customerDto);
         Customer created = customerService.create(customer);

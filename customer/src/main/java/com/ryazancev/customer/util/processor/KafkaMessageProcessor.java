@@ -19,7 +19,8 @@ public class KafkaMessageProcessor {
     private final CustomerProducerService customerProducerService;
     private final NotificationProcessor notificationProcessor;
 
-    public void sendUpdateUserRequestToAuthUpdateTopic(Customer customer) {
+    public void sendUpdateUserRequestToAuthUpdateTopic(
+            final Customer customer) {
 
         UserUpdateRequest request = UserUpdateRequest.builder()
                 .customerId(customer.getId())
@@ -30,13 +31,13 @@ public class KafkaMessageProcessor {
         customerProducerService.sendMessageToAuthUpdateTopic(request);
     }
 
-    public void sendCustomerIdToAuthDeleteTopic(Long id) {
+    public void sendCustomerIdToAuthDeleteTopic(final Long id) {
 
         customerProducerService.sendMessageToAuthDeleteTopic(id);
     }
 
     public void sendPurchaseProcessedNotification(
-            PurchaseEditDto purchaseEditDto) {
+            final PurchaseEditDto purchaseEditDto) {
 
         NotificationRequest privateNotificationRequest =
                 notificationProcessor.createNotification(purchaseEditDto);

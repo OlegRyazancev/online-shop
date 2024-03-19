@@ -14,7 +14,8 @@ public class CustomerCreationException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-    public CustomerCreationException(String message, HttpStatus httpStatus) {
+    public CustomerCreationException(final String message,
+                                     final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

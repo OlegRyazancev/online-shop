@@ -33,25 +33,22 @@ public class CustomerProducerService {
     private String notificationTopic;
 
     public CustomerProducerService(
-            @Qualifier("longValueKafkaTemplate")
-            KafkaTemplate<String, Long>
-                    longValueKafkaTemplate,
-            @Qualifier("userUpdateKafkaTemplate")
-            KafkaTemplate<String, UserUpdateRequest>
-                    userUpdateKafkaTemplate,
-            @Qualifier("notificationKafkaTemplate")
-            KafkaTemplate<String, NotificationRequest>
-                    notificationKafkaTemplate){
+            @Qualifier("longValueKafkaTemplate") final KafkaTemplate<
+                    String, Long> longValueKafkaTemplate,
+            @Qualifier("userUpdateKafkaTemplate") final KafkaTemplate<
+                    String, UserUpdateRequest> userUpdateKafkaTemplate,
+            @Qualifier("notificationKafkaTemplate") final KafkaTemplate<
+                    String, NotificationRequest> notificationKafkaTemplate) {
 
         this.longValueKafkaTemplate = longValueKafkaTemplate;
         this.userUpdateKafkaTemplate = userUpdateKafkaTemplate;
-        this.notificationKafkaTemplate=notificationKafkaTemplate;
+        this.notificationKafkaTemplate = notificationKafkaTemplate;
     }
 
-    public void sendMessageToAuthDeleteTopic(Long id) {
+    public void sendMessageToAuthDeleteTopic(final Long id) {
 
-        log.info("Received request to delete user with id {} " +
-                "in the auth topic", id);
+        log.info("Received request to delete user with id {} "
+                + "in the auth topic", id);
 
         try {
 
@@ -68,10 +65,10 @@ public class CustomerProducerService {
         }
     }
 
-    public void sendMessageToAuthUpdateTopic(UserUpdateRequest request) {
+    public void sendMessageToAuthUpdateTopic(final UserUpdateRequest request) {
 
-        log.info("Received request to update user with id: {}, email: {}, " +
-                        "name: {} in the auth topic",
+        log.info("Received request to update user with id: {}, email: {}, "
+                        + "name: {} in the auth topic",
                 request.getCustomerId(),
                 request.getEmail(),
                 request.getName());
@@ -92,10 +89,10 @@ public class CustomerProducerService {
         }
     }
 
-    public void sendNotification(NotificationRequest request) {
+    public void sendNotification(final NotificationRequest request) {
 
-        log.info("Received request to send {} notification {} to user " +
-                        "with id: {} from recipient with id: {}",
+        log.info("Received request to send {} notification {} to user "
+                        + "with id: {} from recipient with id: {}",
                 request.getScope(),
                 request.getType(),
                 request.getRecipientId(),

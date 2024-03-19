@@ -25,7 +25,7 @@ public class CustomerMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void updateCustomerBalance(UpdateBalanceRequest request) {
+    void updateCustomerBalance(final UpdateBalanceRequest request) {
 
         log.info("Received request to update customer balance with id: {}",
                 request.getCustomerId());

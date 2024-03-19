@@ -57,7 +57,7 @@ public class CustomerConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, UpdateBalanceRequest>>
-    messageFactory(ConsumerFactory<
+    messageFactory(final ConsumerFactory<
             String, UpdateBalanceRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String,
