@@ -14,8 +14,8 @@ public class ReviewNotFoundException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-
-    public ReviewNotFoundException(String message, HttpStatus httpStatus) {
+    public ReviewNotFoundException(final String message,
+                                   final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

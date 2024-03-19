@@ -28,7 +28,7 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(ServiceUnavailableException.class)
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
-            ServiceUnavailableException e) {
+            final ServiceUnavailableException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -45,7 +45,7 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(ReviewCreationException.class)
     public ResponseEntity<ExceptionBody> handleReviewCreation(
-            ReviewCreationException e) {
+            final ReviewCreationException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -62,7 +62,7 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(ReviewNotFoundException.class)
     public ResponseEntity<ExceptionBody> handleReviewNotFound(
-            ReviewNotFoundException e) {
+            final ReviewNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -79,7 +79,7 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            ConstraintViolationException e) {
+            final ConstraintViolationException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -101,7 +101,7 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException e) {
+            final MethodArgumentNotValidException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -124,7 +124,7 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(
-            OnlineShopException e) {
+            final OnlineShopException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -142,7 +142,7 @@ public class ReviewExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionBody> handleAny(
-            Exception e) {
+            final Exception e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());

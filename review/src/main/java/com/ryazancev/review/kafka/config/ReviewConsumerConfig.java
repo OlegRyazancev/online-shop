@@ -54,7 +54,7 @@ public class ReviewConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, Long>>
-    messageFactory(ConsumerFactory<
+    messageFactory(final ConsumerFactory<
             String, Long> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =

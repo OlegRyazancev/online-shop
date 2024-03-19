@@ -22,7 +22,7 @@ public class ReviewMessageListeners {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    public void deleteReviewsByProductId(Long productId) {
+    public void deleteReviewsByProductId(final Long productId) {
 
         log.info("Received message to delete reviews for product with ID: {}",
                 productId);

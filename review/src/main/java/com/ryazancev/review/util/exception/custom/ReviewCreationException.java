@@ -10,12 +10,12 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public class ReviewCreationException extends RuntimeException{
+public class ReviewCreationException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-
-    public ReviewCreationException(String message, HttpStatus httpStatus) {
+    public ReviewCreationException(final String message,
+                                   final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

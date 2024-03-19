@@ -35,14 +35,13 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
 
-
     private final DtoProcessor dtoProcessor;
     private final ClientsService clientsService;
 
     private final MessageSource messageSource;
 
     @Override
-    public ReviewsResponse getByCustomerId(Long customerId) {
+    public ReviewsResponse getByCustomerId(final Long customerId) {
 
         List<Review> reviews = reviewRepository
                 .findByCustomerId(customerId);
@@ -52,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewsResponse getByProductId(Long productId) {
+    public ReviewsResponse getByProductId(final Long productId) {
 
         List<Review> reviews = reviewRepository
                 .findByProductId(productId);
@@ -63,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewDto create(ReviewEditDto reviewEditDto) {
+    public ReviewDto create(final ReviewEditDto reviewEditDto) {
 
         String purchaseId = reviewEditDto.getPurchaseId();
 
@@ -97,7 +96,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Double getAverageRatingByProductId(Long productId) {
+    public Double getAverageRatingByProductId(final Long productId) {
 
         List<Review> reviews = reviewRepository.findByProductId(productId);
 
@@ -108,7 +107,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public String deleteByProductId(Long productId) {
+    public String deleteByProductId(final Long productId) {
 
         List<Review> reviews = reviewRepository.findByProductId(productId);
 

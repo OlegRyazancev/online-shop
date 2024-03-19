@@ -37,7 +37,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "review",
             fallbackMethod = "getSimpleProductFallback"
     )
-    public Element getSimpleProductById(Long productId) {
+    public Element getSimpleProductById(final Long productId) {
 
         return productClient.getSimpleById(productId);
     }
@@ -47,7 +47,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "review",
             fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Element getSimpleCustomerById(Long customerId) {
+    public Element getSimpleCustomerById(final Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
@@ -57,7 +57,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "review",
             fallbackMethod = "purchaseServiceUnavailable"
     )
-    public Object getPurchaseById(String purchaseId) {
+    public Object getPurchaseById(final String purchaseId) {
 
         return purchaseClient.getById(purchaseId);
     }
@@ -67,14 +67,14 @@ public class ClientsServiceImpl implements ClientsService {
             name = "review",
             fallbackMethod = "getOwnerIdFallback"
     )
-    public Long getOwnerIdByProductId(Long productId) {
+    public Long getOwnerIdByProductId(final Long productId) {
 
         return productClient.getOwnerId(productId);
     }
 
 //    Fallback methods
 
-    private Element getSimpleProductFallback(Exception e) {
+    private Element getSimpleProductFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -87,7 +87,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Element getSimpleCustomerFallback(Exception e) {
+    private Element getSimpleCustomerFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -100,7 +100,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Object purchaseServiceUnavailable(Exception e)
+    private Object purchaseServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -115,7 +115,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Long getOwnerIdFallback(Exception e) {
+    private Long getOwnerIdFallback(final Exception e) {
 
         return -1L;
     }

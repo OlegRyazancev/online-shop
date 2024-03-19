@@ -24,28 +24,28 @@ public class ReviewController {
 
     @GetMapping("/customer/{id}")
     public ReviewsResponse getByCustomerId(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         return reviewService.getByCustomerId(id);
     }
 
     @GetMapping("/product/{id}")
     public ReviewsResponse getByProductId(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         return reviewService.getByProductId(id);
     }
 
     @GetMapping("/product/{id}/average-rating")
     public Double getAverageRatingByProductId(
-            @PathVariable("id") Long productId) {
+            @PathVariable("id") final Long productId) {
 
         return reviewService.getAverageRatingByProductId(productId);
     }
 
     @PostMapping
     public ReviewDto create(
-            @RequestBody ReviewEditDto reviewEditDto) {
+            @RequestBody final ReviewEditDto reviewEditDto) {
 
         return reviewService.create(reviewEditDto);
     }

@@ -26,7 +26,8 @@ public class DtoProcessor {
     private final ClientsService clientsService;
 
     public ReviewDto createReviewDtoWithPurchaseDto(
-            Review review, PurchaseDto purchaseDto) {
+            final Review review,
+            final PurchaseDto purchaseDto) {
 
         ReviewDto reviewDto = reviewMapper.toDto(review);
 
@@ -36,7 +37,8 @@ public class DtoProcessor {
     }
 
     public ReviewsResponse createReviewsResponseWithSupplier(
-            List<Review> reviews, Class<?> dtoClass) {
+            final List<Review> reviews,
+            final Class<?> dtoClass) {
 
         List<ReviewDto> reviewsDto = Collections.emptyList();
 

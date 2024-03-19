@@ -26,7 +26,7 @@ import org.springframework.context.annotation.PropertySources;
                 "com.ryazancev.review"
         })
 public class ReviewApplication {
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(ReviewApplication.class, args);
     }
 }
