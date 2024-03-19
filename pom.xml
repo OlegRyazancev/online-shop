@@ -42,6 +42,8 @@
         <jib.maven.plugin.version>3.4.0</jib.maven.plugin.version>
         <shakeyaml.version>2.2</shakeyaml.version>
         <image>extenz16/${project.artifactId}_online-shop:${project.version}</image>
+        <checkstyle.version>3.3.1</checkstyle.version>
+        <xml-format.version>3.3.1</xml-format.version>
     </properties>
 
     <dependencyManagement>
@@ -172,6 +174,49 @@
                             <goals>
                                 <goal>build</goal>
                             </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>au.com.acegi</groupId>
+                    <artifactId>xml-format-maven-plugin</artifactId>
+                    <version>${xml-format.version}</version>
+                    <executions>
+                        <execution>
+                            <id>xml-format</id>
+                            <goals>
+                                <goal>xml-format</goal>
+                            </goals>
+                            <configuration>
+                                <indentSize>4</indentSize>
+                                <keepBlankLines>true</keepBlankLines>
+                                <lineEnding>LF</lineEnding>
+                                <includes>pom.xml</includes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle.version}</version>
+                    <configuration>
+                        <configLocation>sun_checks.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <failsOnError>true</failsOnError>
+                        <linkXRef>false</linkXRef>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+                                <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
