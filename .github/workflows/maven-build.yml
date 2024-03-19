@@ -32,4 +32,9 @@ jobs:
         run: mvn clean install
 
       - name: Push to DockerHub via Jib-Maven-Plugin
-        run: mvn clean package -P build-docker-image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+          mvn clean package -P build-docker-image
