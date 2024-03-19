@@ -57,7 +57,7 @@ public class AdminConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, RegistrationRequestDto>>
-    messageFactory(ConsumerFactory<
+    messageFactory(final ConsumerFactory<
             String, RegistrationRequestDto> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<

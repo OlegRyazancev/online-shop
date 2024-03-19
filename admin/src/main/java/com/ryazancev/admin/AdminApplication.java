@@ -32,7 +32,7 @@ import org.springframework.context.annotation.PropertySources;
 )
 public class AdminApplication {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(AdminApplication.class, args);
     }
 }

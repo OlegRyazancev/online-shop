@@ -3,7 +3,6 @@ package com.ryazancev.admin.kafka;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.AdminService;
 import com.ryazancev.admin.util.mapper.AdminMapper;
-import com.ryazancev.admin.util.processor.KafkaMessageProcessor;
 import com.ryazancev.common.dto.admin.RegistrationRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class
-AdminMessageListener {
-
+public class AdminMessageListener {
 
     private final AdminService adminService;
     private final AdminMapper adminMapper;
@@ -29,7 +26,7 @@ AdminMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void createRegistrationRequest(RegistrationRequestDto requestDto) {
+    void createRegistrationRequest(final RegistrationRequestDto requestDto) {
 
         log.info("Received message to register {} with id {}",
                 requestDto.getObjectType(),
@@ -50,7 +47,5 @@ AdminMessageListener {
             log.error("Failed to create registration request: {}",
                     e.getMessage());
         }
-
     }
 }
-

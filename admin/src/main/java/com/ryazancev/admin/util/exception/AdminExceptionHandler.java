@@ -27,7 +27,7 @@ public class AdminExceptionHandler {
 
     @ExceptionHandler(RequestNotFoundException.class)
     public ResponseEntity<ExceptionBody> handleRequestNotFound(
-            RequestNotFoundException e) {
+            final RequestNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -44,7 +44,7 @@ public class AdminExceptionHandler {
 
     @ExceptionHandler(InvalidRequestStatusException.class)
     public ResponseEntity<ExceptionBody> handleInvalidRequestStatus(
-            InvalidRequestStatusException e) {
+            final InvalidRequestStatusException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -61,7 +61,7 @@ public class AdminExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            ConstraintViolationException e) {
+            final ConstraintViolationException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -83,7 +83,7 @@ public class AdminExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException e) {
+            final MethodArgumentNotValidException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -106,7 +106,7 @@ public class AdminExceptionHandler {
 
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(
-            OnlineShopException e) {
+            final OnlineShopException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -123,7 +123,8 @@ public class AdminExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(
+            final Exception e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());

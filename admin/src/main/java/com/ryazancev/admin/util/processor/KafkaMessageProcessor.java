@@ -20,12 +20,12 @@ public class KafkaMessageProcessor {
     private final NotificationProcessor notificationProcessor;
     private final AdminProducerService adminProducerService;
 
-    public void sendRegisterResponse(RegistrationRequest request) {
+    public void sendRegisterResponse(final RegistrationRequest request) {
 
         adminProducerService.sendRegisterResponse(request);
     }
 
-    public void sendPrivateNotification(RegistrationRequest request) {
+    public void sendPrivateNotification(final RegistrationRequest request) {
 
         NotificationRequest privateNotificationRequest =
                 notificationProcessor
@@ -37,7 +37,7 @@ public class KafkaMessageProcessor {
         adminProducerService.sendNotification(privateNotificationRequest);
     }
 
-    public void sendPublicNotification(RegistrationRequest request) {
+    public void sendPublicNotification(final RegistrationRequest request) {
 
         NotificationRequest publicNotificationRequest =
                 notificationProcessor
@@ -49,7 +49,7 @@ public class KafkaMessageProcessor {
         adminProducerService.sendNotification(publicNotificationRequest);
     }
 
-    public void sendPrivateNotification(ObjectRequest request) {
+    public void sendPrivateNotification(final ObjectRequest request) {
 
         NotificationRequest privateNotificationRequest =
                 notificationProcessor
@@ -61,7 +61,7 @@ public class KafkaMessageProcessor {
         adminProducerService.sendNotification(privateNotificationRequest);
     }
 
-    public void sendPrivateNotification(UserLockRequest request) {
+    public void sendPrivateNotification(final UserLockRequest request) {
 
         NotificationRequest privateNotificationRequest =
                 notificationProcessor
@@ -73,12 +73,12 @@ public class KafkaMessageProcessor {
         adminProducerService.sendNotification(privateNotificationRequest);
     }
 
-    public void sendMessageToChangeObjectStatus(ObjectRequest request) {
+    public void sendMessageToChangeObjectStatus(final ObjectRequest request) {
 
         adminProducerService.sendMessageToChangeObjectStatus(request);
     }
 
-    public void sendMessageToToggleUserLock(UserLockRequest request) {
+    public void sendMessageToToggleUserLock(final UserLockRequest request) {
 
         adminProducerService.sendMessageToToggleUserLock(request);
     }

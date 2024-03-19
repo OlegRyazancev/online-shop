@@ -22,8 +22,9 @@ public class NotificationProcessor {
 
     private final NotificationAttributeDeterminer determiner;
 
-    public NotificationRequest createNotification(RegistrationRequest request,
-                                                  NotificationScope scope) {
+    public NotificationRequest createNotification(
+            final RegistrationRequest request,
+            final NotificationScope scope) {
 
         NotificationType type =
                 determiner.determineNotificationType(
@@ -54,14 +55,18 @@ public class NotificationProcessor {
                 .type(type)
                 .properties(properties)
                 .senderId(senderId)
-                .recipientId(scope == NotificationScope.ADMIN ?
-                        null : recipientId)
+                .recipientId(
+                        scope == NotificationScope.ADMIN
+                                ? null
+                                : recipientId
+                )
                 .build();
     }
 
 
-    public NotificationRequest createNotification(ObjectRequest request,
-                                                  NotificationScope scope) {
+    public NotificationRequest createNotification(
+            final ObjectRequest request,
+            final NotificationScope scope) {
 
         NotificationType type = determiner.determineNotificationType(request);
 
@@ -92,8 +97,9 @@ public class NotificationProcessor {
 
     }
 
-    public NotificationRequest createNotification(UserLockRequest request,
-                                                  NotificationScope scope) {
+    public NotificationRequest createNotification(
+            final UserLockRequest request,
+            final NotificationScope scope) {
 
         NotificationType type = determiner.determineNotificationType(request);
 

@@ -52,19 +52,15 @@ public class AdminProducerService {
     private String notificationTopic;
 
     public AdminProducerService(
-            @Qualifier("registerKafkaTemplate")
-            KafkaTemplate<String, RegistrationRequestDto>
-                    registerKafkaTemplate,
-            @Qualifier("changeStatusKafkaTemplate")
-            KafkaTemplate<String, ObjectRequest>
-                    changeStatusKafkaTemplate,
-            @Qualifier("toggleUserLockKafkaTemplate")
-            KafkaTemplate<String, UserLockRequest>
-                    toggleUserLockKafkaTemplate,
-            @Qualifier("notificationKafkaTemplate")
-            KafkaTemplate<String, NotificationRequest>
-                    notificationKafkaTemplate,
-            AdminMapper adminMapper) {
+            @Qualifier("registerKafkaTemplate") final KafkaTemplate<
+                    String, RegistrationRequestDto> registerKafkaTemplate,
+            @Qualifier("changeStatusKafkaTemplate") final KafkaTemplate<
+                    String, ObjectRequest> changeStatusKafkaTemplate,
+            @Qualifier("toggleUserLockKafkaTemplate") final KafkaTemplate<
+                    String, UserLockRequest> toggleUserLockKafkaTemplate,
+            @Qualifier("notificationKafkaTemplate") final KafkaTemplate<
+                    String, NotificationRequest> notificationKafkaTemplate,
+            final AdminMapper adminMapper) {
 
         this.registerKafkaTemplate = registerKafkaTemplate;
         this.changeStatusKafkaTemplate = changeStatusKafkaTemplate;
@@ -73,13 +69,14 @@ public class AdminProducerService {
         this.adminMapper = adminMapper;
     }
 
-    public void sendRegisterResponse(RegistrationRequest request) {
+    public void sendRegisterResponse(
+            final RegistrationRequest request) {
 
         RegistrationRequestDto requestDto =
                 adminMapper.toDto(request);
 
-        log.info("Received request to send register" +
-                        " response of {} with status: {} with id: {}",
+        log.info("Received request to send register"
+                        + " response of {} with status: {} with id: {}",
                 requestDto.getObjectType(),
                 requestDto.getStatus(),
                 requestDto.getObjectToRegisterId());
@@ -119,10 +116,11 @@ public class AdminProducerService {
         }
     }
 
-    public void sendMessageToChangeObjectStatus(ObjectRequest objectRequest) {
+    public void sendMessageToChangeObjectStatus(
+            final ObjectRequest objectRequest) {
 
-        log.info("Received request to change {} status to {} with " +
-                        "object id: {}",
+        log.info("Received request to change {} status to {} with "
+                        + "object id: {}",
                 objectRequest.getObjectType(),
                 objectRequest.getObjectStatus(),
                 objectRequest.getObjectId());
@@ -161,10 +159,11 @@ public class AdminProducerService {
         }
     }
 
-    public void sendMessageToToggleUserLock(UserLockRequest request) {
+    public void sendMessageToToggleUserLock(
+            final UserLockRequest request) {
 
-        log.info("Received request to toggle user by id: {} " +
-                        "lock {} was received",
+        log.info("Received request to toggle user by id: {} "
+                        + "lock {} was received",
                 request.getUserId(),
                 request.isLock());
 
@@ -183,10 +182,11 @@ public class AdminProducerService {
         }
     }
 
-    public void sendNotification(NotificationRequest request) {
+    public void sendNotification(
+            final NotificationRequest request) {
 
-        log.info("Received request to send {} notification {} to user " +
-                        "with id: {} from admin if exists: {}",
+        log.info("Received request to send {} notification {} to user "
+                        + "with id: {} from admin if exists: {}",
                 request.getScope(),
                 request.getType(),
                 request.getRecipientId(),

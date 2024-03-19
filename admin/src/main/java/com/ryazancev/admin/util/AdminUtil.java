@@ -19,7 +19,7 @@ public class AdminUtil {
 
     private final MessageSource messageSource;
 
-    public RequestStatus castStatus(String status) {
+    public RequestStatus castStatus(final String status) {
 
         try {
             return RequestStatus.valueOf(status.toUpperCase());

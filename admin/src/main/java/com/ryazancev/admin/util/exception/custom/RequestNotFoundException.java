@@ -14,10 +14,8 @@ public class RequestNotFoundException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-    public RequestNotFoundException(
-            String message,
-            HttpStatus httpStatus) {
-
+    public RequestNotFoundException(final String message,
+                                    final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

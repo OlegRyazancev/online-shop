@@ -32,18 +32,19 @@ public class NotificationAttributeDeterminer {
         return Long.valueOf(servletRequest.getHeader("userId"));
     }
 
-    public Long determineSenderId(NotificationScope scope,
+    public Long determineSenderId(final NotificationScope scope,
+                                  final Long recipientId) {
 
-                                  Long recipientId) {
-        return scope == NotificationScope.ADMIN ?
-                recipientId : determineSenderId();
+        return scope == NotificationScope.ADMIN
+                ? recipientId
+                : determineSenderId();
     }
 
-    public Long determineRecipientId(ObjectType objectType,
-                                     Long objectId,
-                                     NotificationScope notificationScope) {
+    public Long determineRecipientId(final ObjectType objectType,
+                                     final Long objectId,
+                                     final NotificationScope scope) {
 
-        if (notificationScope == NotificationScope.PRIVATE) {
+        if (scope == NotificationScope.PRIVATE) {
             switch (objectType) {
                 case PRODUCT -> {
 
@@ -53,14 +54,16 @@ public class NotificationAttributeDeterminer {
 
                     return clientsService.getOwnerIdByOrganizationId(objectId);
                 }
+                default -> {
+                }
             }
         }
         return null;
     }
 
-    public Properties determineProperties(ObjectType objectType,
-                                          Long objectId,
-                                          NotificationType notificationType) {
+    public Properties determineProperties(final ObjectType objectType,
+                                          final Long objectId,
+                                          final NotificationType type) {
 
         Properties properties = new Properties();
 
@@ -71,7 +74,7 @@ public class NotificationAttributeDeterminer {
                 setProductProperties(
                         objectType,
                         objectId,
-                        notificationType,
+                        type,
                         properties);
             }
             case ORGANIZATION -> {
@@ -79,17 +82,19 @@ public class NotificationAttributeDeterminer {
                 setOrganizationProperties(
                         objectType,
                         objectId,
-                        notificationType,
+                        type,
                         properties);
+            }
+            default -> {
             }
         }
         return properties;
     }
 
-    private void setOrganizationProperties(ObjectType objectType,
-                                           Long objectId,
-                                           NotificationType notificationType,
-                                           Properties properties) {
+    private void setOrganizationProperties(final ObjectType objectType,
+                                           final Long objectId,
+                                           final NotificationType type,
+                                           final Properties properties) {
 
         OrganizationDto organizationDto = clientsService
                 .getSimpleOrganizationById(objectId)
@@ -98,10 +103,8 @@ public class NotificationAttributeDeterminer {
         properties.setProperty(
                 "organization_name", organizationDto.getName());
 
-        if (notificationType ==
-                NotificationType.PRIVATE_ACTIVATE_OBJECT
-                || notificationType ==
-                NotificationType.PRIVATE_FREEZE_OBJECT) {
+        if (type == NotificationType.PRIVATE_ACTIVATE_OBJECT
+                || type == NotificationType.PRIVATE_FREEZE_OBJECT) {
 
             properties.setProperty(
                     "object_type", objectType.name());
@@ -110,10 +113,10 @@ public class NotificationAttributeDeterminer {
         }
     }
 
-    private void setProductProperties(ObjectType objectType,
-                                      Long objectId,
-                                      NotificationType notificationType,
-                                      Properties properties) {
+    private void setProductProperties(final ObjectType objectType,
+                                      final Long objectId,
+                                      final NotificationType type,
+                                      final Properties properties) {
 
         ProductDto productDto = clientsService
                 .getSimpleProductById(objectId)
@@ -123,17 +126,14 @@ public class NotificationAttributeDeterminer {
                 "product_name", productDto.getProductName()
         );
 
-        if (notificationType ==
-                NotificationType.PUBLIC_NEW_PRODUCT_CREATED) {
+        if (type == NotificationType.PUBLIC_NEW_PRODUCT_CREATED) {
 
             properties.setProperty(
                     "product_price", productDto.getPrice().toString()
             );
         }
-        if (notificationType ==
-                NotificationType.PRIVATE_ACTIVATE_OBJECT
-                || notificationType ==
-                NotificationType.PRIVATE_FREEZE_OBJECT) {
+        if (type == NotificationType.PRIVATE_ACTIVATE_OBJECT
+                || type == NotificationType.PRIVATE_FREEZE_OBJECT) {
 
             properties.setProperty(
                     "object_type", objectType.name()
@@ -145,8 +145,8 @@ public class NotificationAttributeDeterminer {
     }
 
     public NotificationType determineNotificationType(
-            RegistrationRequest request, NotificationScope scope) {
-
+            final RegistrationRequest request,
+            final NotificationScope scope) {
 
         if (scope == NotificationScope.PUBLIC
                 && request.getStatus() == RequestStatus.ACCEPTED
@@ -156,7 +156,8 @@ public class NotificationAttributeDeterminer {
             switch (request.getObjectType()) {
                 case PRODUCT -> {
 
-                    return request.getStatus() == RequestStatus.ACCEPTED ?
+                    return request.getStatus() == RequestStatus.ACCEPTED
+                            ?
                             NotificationType
                                     .PRIVATE_PRODUCT_REGISTRATION_ACCEPTED
                             :
@@ -165,7 +166,8 @@ public class NotificationAttributeDeterminer {
                 }
                 case ORGANIZATION -> {
 
-                    return request.getStatus() == RequestStatus.ACCEPTED ?
+                    return request.getStatus() == RequestStatus.ACCEPTED
+                            ?
                             NotificationType
                                     .PRIVATE_ORGANIZATION_REGISTRATION_ACCEPTED
                             :
@@ -180,7 +182,8 @@ public class NotificationAttributeDeterminer {
         }
     }
 
-    public NotificationType determineNotificationType(ObjectRequest request) {
+    public NotificationType determineNotificationType(
+            final ObjectRequest request) {
 
         return switch (request.getObjectStatus()) {
             case ACTIVATE -> NotificationType.PRIVATE_ACTIVATE_OBJECT;
@@ -188,10 +191,11 @@ public class NotificationAttributeDeterminer {
         };
     }
 
-    public NotificationType determineNotificationType(UserLockRequest request) {
+    public NotificationType determineNotificationType(
+            final UserLockRequest request) {
 
-        return request.isLock() ?
-                NotificationType.PRIVATE_ACCOUNT_LOCKED
+        return request.isLock()
+                ? NotificationType.PRIVATE_ACCOUNT_LOCKED
                 : NotificationType.PRIVATE_ACCOUNT_UNLOCKED;
     }
 }

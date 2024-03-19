@@ -32,7 +32,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "admin",
             fallbackMethod = "getSimpleProductFallback"
     )
-    public Element getSimpleProductById(Long productId) {
+    public Element getSimpleProductById(final Long productId) {
 
         return productClient.getSimpleById(productId);
     }
@@ -42,7 +42,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "admin",
             fallbackMethod = "getSimpleOrganizationFallback"
     )
-    public Element getSimpleOrganizationById(Long organizationId) {
+    public Element getSimpleOrganizationById(final Long organizationId) {
 
         return organizationClient.getSimpleById(organizationId);
     }
@@ -52,7 +52,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "admin",
             fallbackMethod = "getOwnerIdFallback"
     )
-    public Long getOwnerIdByProductId(Long productId) {
+    public Long getOwnerIdByProductId(final Long productId) {
 
         return productClient.getOwnerId(productId);
     }
@@ -62,14 +62,14 @@ public class ClientsServiceImpl implements ClientsService {
             name = "admin",
             fallbackMethod = "getOwnerIdFallback"
     )
-    public Long getOwnerIdByOrganizationId(Long organizationId) {
+    public Long getOwnerIdByOrganizationId(final Long organizationId) {
 
         return organizationClient.getOwnerId(organizationId);
     }
 
 //    Fallback methods
 
-    private Element getSimpleOrganizationFallback(Exception e) {
+    private Element getSimpleOrganizationFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -82,7 +82,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Element getSimpleProductFallback(Exception e) {
+    private Element getSimpleProductFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -95,7 +95,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Long getOwnerIdFallback(Exception e) {
+    private Long getOwnerIdFallback(final Exception e) {
 
         return -1L;
     }

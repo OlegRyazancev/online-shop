@@ -14,10 +14,8 @@ public class InvalidRequestStatusException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-    public InvalidRequestStatusException(
-            String message,
-            HttpStatus httpStatus) {
-
+    public InvalidRequestStatusException(final String message,
+                                         final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

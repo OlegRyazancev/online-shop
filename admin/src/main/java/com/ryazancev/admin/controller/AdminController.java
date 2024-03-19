@@ -31,7 +31,6 @@ public class AdminController {
     private final AdminMapper adminMapper;
     private final AdminUtil adminUtil;
 
-
     @GetMapping("/requests")
     public RegistrationRequestsResponse getAllRegistrationRequests() {
 
@@ -69,8 +68,8 @@ public class AdminController {
 
     @PutMapping("/requests/{id}")
     public RegistrationRequestDto changeRegistrationRequestStatus(
-            @PathVariable("id") Long id,
-            @RequestParam("status") String status) {
+            @PathVariable("id") final Long id,
+            @RequestParam("status") final String status) {
 
         RequestStatus statusEnum = adminUtil.castStatus(status);
         RegistrationRequest request = adminService
@@ -83,8 +82,7 @@ public class AdminController {
     @PutMapping("/change-object-status")
     public String changeObjectStatus(
             @Validated
-            @RequestBody
-            ObjectRequest request) {
+            @RequestBody final ObjectRequest request) {
 
         return adminService.changeObjectStatus(request);
     }
@@ -92,8 +90,7 @@ public class AdminController {
     @PutMapping("/toggle-user-lock")
     public String toggleUserLock(
             @Validated
-            @RequestBody
-            UserLockRequest request) {
+            @RequestBody final UserLockRequest request) {
 
         return adminService.toggleUserLock(request);
     }

@@ -76,8 +76,9 @@ public class AdminServiceImpl implements AdminService {
                             allEntries = true)
             }
     )
-    public RegistrationRequest changeRegistrationStatus(Long requestId,
-                                                        RequestStatus status) {
+    public RegistrationRequest changeRegistrationStatus(
+            final Long requestId,
+            final RequestStatus status) {
 
         RegistrationRequest existing =
                 adminRepository.findById(requestId)
@@ -107,7 +108,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public String changeObjectStatus(ObjectRequest request) {
+    public String changeObjectStatus(
+            final ObjectRequest request) {
 
         kafkaMessageProcessor.sendMessageToChangeObjectStatus(request);
         kafkaMessageProcessor.sendPrivateNotification(request);
@@ -124,7 +126,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public String toggleUserLock(UserLockRequest request) {
+    public String toggleUserLock(
+            final UserLockRequest request) {
 
         kafkaMessageProcessor.sendMessageToToggleUserLock(request);
         kafkaMessageProcessor.sendPrivateNotification(request);
@@ -154,7 +157,8 @@ public class AdminServiceImpl implements AdminService {
                             allEntries = true)
             }
     )
-    public RegistrationRequest create(RegistrationRequest registrationRequest) {
+    public RegistrationRequest create(
+            final RegistrationRequest registrationRequest) {
 
         registrationRequest.setCreatedAt(LocalDateTime.now());
         registrationRequest.setStatus(RequestStatus.ON_REVIEW);
@@ -162,4 +166,3 @@ public class AdminServiceImpl implements AdminService {
         return adminRepository.save(registrationRequest);
     }
 }
-

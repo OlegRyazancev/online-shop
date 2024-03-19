@@ -74,14 +74,14 @@ public class AdminProducerConfig {
     }
 
     private <T> ProducerFactory<String, T>
-    createProducerFactory(Class<T> valueType) {
+    createProducerFactory(final Class<T> valueType) {
 
         return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
     }
 
 
     private <T> KafkaTemplate<String, T>
-    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
+    createKafkaTemplate(final ProducerFactory<String, T> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }
