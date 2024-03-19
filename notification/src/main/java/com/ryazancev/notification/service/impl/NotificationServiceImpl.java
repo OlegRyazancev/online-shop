@@ -43,7 +43,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<Notification> getNotificationsByRecipientId(
-            Long customerId, NotificationScope castedScope) {
+            final Long customerId,
+            final NotificationScope castedScope) {
 
         switch (castedScope) {
             case PUBLIC -> {
@@ -70,13 +71,16 @@ public class NotificationServiceImpl implements NotificationService {
                         .map(an -> (Notification) an)
                         .toList();
             }
+            default -> {
+            }
         }
 
         return null;
     }
 
     @Override
-    public Notification getById(String id, NotificationScope castedScope) {
+    public Notification getById(final String id,
+                                final NotificationScope castedScope) {
 
         switch (castedScope) {
 
@@ -86,7 +90,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "exception.notification.not_found_by_id",
+                                        "exception.notification.not_found",
                                         new Object[]{castedScope, id},
                                         Locale.getDefault()
                                 ),
@@ -105,7 +109,7 @@ public class NotificationServiceImpl implements NotificationService {
                 return publicRepository.findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "exception.notification.not_found_by_id",
+                                        "exception.notification.not_found",
                                         new Object[]{castedScope, id},
                                         Locale.getDefault()
                                 ),
@@ -116,12 +120,14 @@ public class NotificationServiceImpl implements NotificationService {
                 return adminRepository.findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "exception.notification.not_found_by_id",
+                                        "exception.notification.not_found",
                                         new Object[]{castedScope, id},
                                         Locale.getDefault()
                                 ),
                                 HttpStatus.BAD_REQUEST
                         ));
+            }
+            default -> {
             }
         }
         return null;
@@ -129,7 +135,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public AdminNotification createAdminNotification(
-            NotificationRequest request) {
+            final NotificationRequest request) {
 
         AdminNotification notification =
                 notificationUtil.buildNotification(
@@ -140,7 +146,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public PublicNotification createPublicNotification(
-            NotificationRequest request) {
+            final NotificationRequest request) {
 
         PublicNotification notification =
                 notificationUtil.buildNotification(
@@ -151,7 +157,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public PrivateNotification createPrivateNotification(
-            NotificationRequest request) {
+            final NotificationRequest request) {
 
         PrivateNotification notification =
                 notificationUtil.buildNotification(
@@ -161,13 +167,13 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Long getRecipientIdByPrivateNotificationId(String id) {
+    public Long getRecipientIdByPrivateNotificationId(final String id) {
 
         PrivateNotification notification =
                 privateRepository.findById(id)
                         .orElseThrow(() -> new NotificationNotFoundException(
                                 messageSource.getMessage(
-                                        "exception.notification.not_found_by_id",
+                                        "exception.notification.not_found",
                                         new Object[]{
                                                 NotificationScope.PRIVATE,
                                                 id

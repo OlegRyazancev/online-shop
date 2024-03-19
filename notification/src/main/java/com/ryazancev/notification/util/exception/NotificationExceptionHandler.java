@@ -21,7 +21,7 @@ public class NotificationExceptionHandler {
 
     @ExceptionHandler(ServiceUnavailableException.class)
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
-            ServiceUnavailableException e) {
+            final ServiceUnavailableException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -38,7 +38,7 @@ public class NotificationExceptionHandler {
 
     @ExceptionHandler(NotificationNotFoundException.class)
     public ResponseEntity<ExceptionBody> handleNotificationNotFound(
-            NotificationNotFoundException e) {
+            final NotificationNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -55,7 +55,7 @@ public class NotificationExceptionHandler {
 
     @ExceptionHandler(InvalidScopeException.class)
     public ResponseEntity<ExceptionBody> handleInvalidScope(
-            NotificationNotFoundException e) {
+            final NotificationNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -72,7 +72,7 @@ public class NotificationExceptionHandler {
 
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(
-            OnlineShopException e) {
+            final OnlineShopException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -89,7 +89,8 @@ public class NotificationExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(
+            final Exception e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());

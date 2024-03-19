@@ -28,7 +28,7 @@ import org.springframework.context.annotation.PropertySources;
 )
 public class NotificationApplication {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(NotificationApplication.class, args);
     }
 }

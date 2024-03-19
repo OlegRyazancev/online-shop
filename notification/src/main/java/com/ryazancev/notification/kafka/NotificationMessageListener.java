@@ -28,9 +28,10 @@ public class NotificationMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "messageFactory"
     )
-    void consumeMessage(NotificationRequest request) {
+    void consumeMessage(final NotificationRequest request) {
 
-        log.info("Received request to send {} notification to user: {} from: {}",
+        log.info("Received request to send {} notification to user: {}"
+                        + " from: {}",
                 request.getScope(),
                 request.getRecipientId(),
                 request.getSenderId());
@@ -44,16 +45,16 @@ public class NotificationMessageListener {
                             notificationService
                                     .createPrivateNotification(request);
 
-                    log.debug("Sending private notification with id {} " +
-                                    "by websocket...",
+                    log.debug("Sending private notification with id {} "
+                                    + "by websocket...",
                             notification.getId());
                     messagingTemplate.convertAndSendToUser(
                             String.valueOf(notification.getRecipientId()),
                             "/private",
                             notification);
 
-                    log.debug("Private notification with id {} " +
-                                    "was successfully sent",
+                    log.debug("Private notification with id {} "
+                                    + "was successfully sent",
                             notification.getId());
                 }
 
@@ -64,15 +65,15 @@ public class NotificationMessageListener {
                             notificationService
                                     .createPublicNotification(request);
 
-                    log.debug("Sending public notification with id {} " +
-                                    "by websocket...",
+                    log.debug("Sending public notification with id {} "
+                                    + "by websocket...",
                             notification.getId());
                     messagingTemplate.convertAndSend(
                             "/public",
                             notification);
 
-                    log.debug("Public notification with id {} was " +
-                                    "successfully sent",
+                    log.debug("Public notification with id {} was "
+                                    + "successfully sent",
                             notification.getId());
 
                 }
@@ -84,15 +85,15 @@ public class NotificationMessageListener {
                             notificationService
                                     .createAdminNotification(request);
 
-                    log.debug("Sending admin notification with id {} " +
-                                    "by websocket...",
+                    log.debug("Sending admin notification with id {} "
+                                    + "by websocket...",
                             notification.getId());
                     messagingTemplate.convertAndSend(
                             "/admin",
                             notification);
 
-                    log.debug("Admin notification with id {} was " +
-                                    "successfully sent",
+                    log.debug("Admin notification with id {} was "
+                                    + "successfully sent",
                             notification.getId());
                 }
 
@@ -106,6 +107,5 @@ public class NotificationMessageListener {
 
             log.error("Failed to send notification: {}", e.getMessage());
         }
-
     }
 }

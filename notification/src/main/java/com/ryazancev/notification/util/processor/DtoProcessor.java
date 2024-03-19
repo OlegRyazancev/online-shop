@@ -22,7 +22,8 @@ public class DtoProcessor {
     private final NotificationMapper notificationMapper;
     private final ClientsService clientsService;
 
-    public NotificationDto createNotificationDto(Notification notification) {
+    public NotificationDto createNotificationDto(
+            final Notification notification) {
 
         NotificationDto notificationDto =
                 notificationMapper.toDto(notification);
@@ -35,7 +36,7 @@ public class DtoProcessor {
     }
 
     public NotificationsSimpleResponse createNotificationsResponse(
-            List<Notification> notifications) {
+            final List<Notification> notifications) {
 
         List<NotificationDto> notificationsDto = Collections.emptyList();
 

@@ -22,10 +22,9 @@ public class ExceptionBody {
 
     private HttpStatus httpStatus;
 
-    public ExceptionBody(
-            String message,
-            ServiceStage serviceStage,
-            HttpStatus httpStatus) {
+    public ExceptionBody(final String message,
+                         final ServiceStage serviceStage,
+                         final HttpStatus httpStatus) {
         this.message = message;
         this.serviceStage = serviceStage;
         this.httpStatus = httpStatus;

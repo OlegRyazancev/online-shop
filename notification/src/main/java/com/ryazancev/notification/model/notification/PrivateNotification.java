@@ -22,7 +22,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class PrivateNotification
         extends Notification
-        implements Serializable{
+        implements Serializable {
 
     private NotificationStatus status;
     private Long recipientId;

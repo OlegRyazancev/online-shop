@@ -56,7 +56,7 @@ public class NotificationConsumerConfig {
     @Bean
     KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, NotificationRequest>>
-    messageFactory(ConsumerFactory<
+    messageFactory(final ConsumerFactory<
             String, NotificationRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<

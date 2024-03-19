@@ -27,8 +27,8 @@ public class NotificationController {
 
     @GetMapping("/customer/{id}")
     public NotificationsSimpleResponse getNotificationsByRecipientId(
-            @PathVariable("id") Long customerId,
-            @RequestParam("scope") String scope) {
+            @PathVariable("id") final Long customerId,
+            @RequestParam("scope") final String scope) {
 
         NotificationScope scopeEnum = notificationUtil.castScope(scope);
 
@@ -44,8 +44,8 @@ public class NotificationController {
 
     @GetMapping("/{id}")
     public NotificationDto getNotificationById(
-            @PathVariable("id") String id,
-            @RequestParam("scope") String scope) {
+            @PathVariable("id") final String id,
+            @RequestParam("scope") final String scope) {
 
         NotificationScope scopeEnum = notificationUtil.castScope(scope);
 
@@ -57,7 +57,7 @@ public class NotificationController {
 
     @GetMapping("/private/{id}/recipient-id")
     public Long getRecipientIdByPrivateNotificationId(
-            @PathVariable("id") String id) {
+            @PathVariable("id") final String id) {
 
         return notificationService.getRecipientIdByPrivateNotificationId(id);
     }

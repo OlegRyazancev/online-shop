@@ -29,7 +29,7 @@ public class NotificationUtil {
     private final MessageSource messageSource;
     private final ContentService contentService;
 
-    public NotificationScope castScope(String scope) {
+    public NotificationScope castScope(final String scope) {
 
         try {
 
@@ -47,8 +47,8 @@ public class NotificationUtil {
     }
 
     public <T extends Notification> T buildNotification(
-            NotificationRequest request,
-            Class<T> targetType) {
+            final NotificationRequest request,
+            final Class<T> targetType) {
 
         Content content = contentService.generateContent(
                 request.getType(),
@@ -82,6 +82,7 @@ public class NotificationUtil {
                         .build());
             }
             default -> {
+
                 return null;
             }
         }

@@ -10,11 +10,12 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public class InvalidScopeException extends RuntimeException{
+public class InvalidScopeException extends RuntimeException {
 
-    HttpStatus httpStatus;
+    private HttpStatus httpStatus;
 
-    public InvalidScopeException(String message, HttpStatus httpStatus) {
+    public InvalidScopeException(final String message,
+                                 final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

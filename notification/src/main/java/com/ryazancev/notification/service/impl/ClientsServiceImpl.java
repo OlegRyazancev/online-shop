@@ -27,12 +27,12 @@ public class ClientsServiceImpl implements ClientsService {
             name = "notification",
             fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Element getSimpleCustomerById(Long customerId) {
+    public Element getSimpleCustomerById(final Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
 
-    private Element getSimpleCustomerFallback(Exception e) {
+    private Element getSimpleCustomerFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(

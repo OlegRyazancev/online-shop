@@ -15,7 +15,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
+    public void configureMessageBroker(final MessageBrokerRegistry registry) {
 
         registry.enableSimpleBroker("/private", "/public", "/admin");
         registry.setApplicationDestinationPrefixes("/os-notifications");
@@ -23,7 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
+    public void registerStompEndpoints(final StompEndpointRegistry registry) {
 
         registry.addEndpoint("/ws")
                 .setAllowedOrigins("*")

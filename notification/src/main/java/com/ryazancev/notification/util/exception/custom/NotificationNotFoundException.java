@@ -10,11 +10,12 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public class NotificationNotFoundException extends RuntimeException{
+public class NotificationNotFoundException extends RuntimeException {
 
-    HttpStatus httpStatus;
+    private HttpStatus httpStatus;
 
-    public NotificationNotFoundException(String message, HttpStatus httpStatus) {
+    public NotificationNotFoundException(final String message,
+                                         final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }
