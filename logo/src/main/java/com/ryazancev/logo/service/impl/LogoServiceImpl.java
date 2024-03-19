@@ -34,7 +34,7 @@ public class LogoServiceImpl implements LogoService {
     private final MessageSource messageSource;
 
     @Override
-    public String upload(MultipartFile file) {
+    public String upload(final MultipartFile file) {
 
         try {
             createBucket();
@@ -99,14 +99,14 @@ public class LogoServiceImpl implements LogoService {
         }
     }
 
-    private String generateFileName(MultipartFile file) {
+    private String generateFileName(final MultipartFile file) {
 
         String extension = getExtension(file);
 
         return UUID.randomUUID() + "." + extension;
     }
 
-    private String getExtension(MultipartFile file) {
+    private String getExtension(final MultipartFile file) {
 
         return Objects.requireNonNull(file.getOriginalFilename())
                 .substring(file.getOriginalFilename()
@@ -114,7 +114,8 @@ public class LogoServiceImpl implements LogoService {
     }
 
     @SneakyThrows
-    private void saveImage(InputStream inputStream, String fileName) {
+    private void saveImage(final InputStream inputStream,
+                           final String fileName) {
 
         minioClient.putObject(PutObjectArgs.builder()
                 .stream(inputStream, inputStream.available(), -1)

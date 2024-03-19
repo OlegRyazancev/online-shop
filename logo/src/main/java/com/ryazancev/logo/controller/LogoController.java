@@ -27,7 +27,7 @@ public class LogoController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String upload(
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("file") final MultipartFile file) {
 
         return logoService.upload(file);
     }

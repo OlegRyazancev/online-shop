@@ -11,9 +11,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Setter
 public class LogoUploadException extends RuntimeException {
+
     private HttpStatus httpStatus;
 
-    public LogoUploadException(String message, HttpStatus httpStatus) {
+    public LogoUploadException(final String message,
+                               final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }
