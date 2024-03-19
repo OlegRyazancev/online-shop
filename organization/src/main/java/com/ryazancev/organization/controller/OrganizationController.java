@@ -48,8 +48,8 @@ public class OrganizationController {
     @GetMapping
     @Operation(
             summary = "Get all organizations",
-            description = "List(page) of all existing " +
-                    "(SIMPLE) organizations in database"
+            description = "List(page) of all existing "
+                    + "(SIMPLE) organizations in database"
     )
     public OrganizationsSimpleResponse getAll() {
 
@@ -63,17 +63,16 @@ public class OrganizationController {
     @GetMapping("/{id}")
     @Operation(
             summary = "Get organization by id",
-            description = "Retrieve detailed information about " +
-                    "an organization from the database based on its unique " +
-                    "identifier (ID), including owner details"
+            description = "Retrieve detailed information about "
+                    + "an organization from the database based on its unique "
+                    + "identifier (ID), including owner details"
     )
     public OrganizationDto getById(
-            @PathVariable("id")
             @Parameter(
                     description = "Organization ID",
                     example = "1"
             )
-            Long id) {
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkIfAccountLocked();
 
@@ -89,18 +88,17 @@ public class OrganizationController {
     @PostMapping
     @Operation(
             summary = "Make registration request for a new organization",
-            description = " Registers a new organization based on the " +
-                    "provided details"
+            description = " Registers a new organization based on the "
+                    + "provided details"
     )
     public OrganizationDto makeRegistrationRequest(
-            @RequestBody
-            @Validated(OnCreate.class)
             @Parameter(
-                    description = "Organization details for make " +
-                            "registration request",
+                    description = "Organization details for make "
+                            + "registration request",
                     required = true
             )
-            OrganizationEditDto organizationEditDto) {
+            @Validated(OnCreate.class)
+            @RequestBody final OrganizationEditDto organizationEditDto) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessUser(
@@ -117,17 +115,16 @@ public class OrganizationController {
     @PutMapping
     @Operation(
             summary = "Update organization details",
-            description = "Updates the details of an existing " +
-                    "organization based on the provided information"
+            description = "Updates the details of an existing "
+                    + "organization based on the provided information"
     )
     public OrganizationDto update(
-            @RequestBody
-            @Validated(OnUpdate.class)
             @Parameter(
                     description = "Updated organization details",
                     required = true
             )
-            OrganizationEditDto organizationEditDto) {
+            @Validated(OnUpdate.class)
+            @RequestBody final OrganizationEditDto organizationEditDto) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService
@@ -143,16 +140,15 @@ public class OrganizationController {
     @GetMapping("/{id}/products")
     @Operation(
             summary = "Get products by organization ID",
-            description = "Retrieves products associated " +
-                    "with the specified organization ID"
+            description = "Retrieves products associated "
+                    + "with the specified organization ID"
     )
     public ProductsSimpleResponse getProductsByOrganizationId(
-            @PathVariable("id")
             @Parameter(
                     description = "Organization ID",
                     example = "1"
             )
-            Long id) {
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkIfAccountLocked();
 
@@ -167,18 +163,17 @@ public class OrganizationController {
     @PostMapping("/{id}/logo")
     @Operation(
             summary = "Upload organization logo",
-            description = "Uploads a logo for the organization " +
-                    "with the specified ID"
+            description = "Uploads a logo for the organization "
+                    + "with the specified ID"
     )
     public String uploadLogo(
-            @PathVariable("id") Long id,
-            @Validated(OnCreate.class)
-            @ModelAttribute
             @Parameter(
                     description = "Logo information",
                     required = true
             )
-            LogoDto logoDto) {
+            @PathVariable("id") final Long id,
+            @Validated(OnCreate.class)
+            @ModelAttribute final LogoDto logoDto) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessOrganization(id);
@@ -189,16 +184,15 @@ public class OrganizationController {
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Delete organization by ID",
-            description = "Marks the organization with the " +
-                    "specified ID as deleted"
+            description = "Marks the organization with the "
+                    + "specified ID as deleted"
     )
     public String deleteOrganizationById(
-            @PathVariable("id")
             @Parameter(
                     description = "Organization ID",
                     example = "1"
             )
-            Long id) {
+            @PathVariable("id") final Long id) {
 
         customExpressionService.checkAccountConditions();
         customExpressionService.checkAccessOrganization(id);
@@ -212,16 +206,15 @@ public class OrganizationController {
     @GetMapping("/{id}/simple")
     @Operation(
             summary = "Get simple organization by ID. FOR FEIGN CLIENTS",
-            description = "Retrieves basic information (id, name) " +
-                    "about the organization with the specified ID."
+            description = "Retrieves basic information (id, name) "
+                    + "about the organization with the specified ID."
     )
     public OrganizationDto getSimpleById(
-            @PathVariable("id")
             @Parameter(
                     description = "Organization ID",
                     example = "1"
             )
-            Long id) {
+            @PathVariable("id") final Long id) {
 
         boolean statusCheck = false;
 
@@ -234,16 +227,15 @@ public class OrganizationController {
     @GetMapping("/{id}/owner-id")
     @Operation(
             summary = "Get owner ID of organization. FOR FEIGN CLIENTS",
-            description = "Retrieves the owner ID of the organization " +
-                    "with the specified ID."
+            description = "Retrieves the owner ID of the organization "
+                    + "with the specified ID."
     )
     public Long getOwnerId(
-            @PathVariable("id")
             @Parameter(
                     description = "Organization ID",
                     example = "1"
             )
-            Long id) {
+            @PathVariable("id") final Long id) {
 
         return organizationService.getOwnerId(id);
     }

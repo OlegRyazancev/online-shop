@@ -58,7 +58,7 @@ public class OrganizationConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, RegistrationRequestDto>>
-    registrationMessageFactory(ConsumerFactory<
+    registrationMessageFactory(final ConsumerFactory<
             String, RegistrationRequestDto> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<
@@ -88,7 +88,7 @@ public class OrganizationConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, ObjectRequest>>
-    changeStatusMessageFactory(ConsumerFactory<
+    changeStatusMessageFactory(final ConsumerFactory<
             String, ObjectRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<

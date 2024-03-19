@@ -13,13 +13,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Setter
 public class OrganizationCreationException extends RuntimeException {
+
     private HttpStatus httpStatus;
 
-
-    public OrganizationCreationException(
-            String message,
-            HttpStatus httpStatus) {
-
+    public OrganizationCreationException(final String message,
+                                         final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

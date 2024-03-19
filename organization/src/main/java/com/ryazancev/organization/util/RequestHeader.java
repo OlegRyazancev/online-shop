@@ -20,7 +20,8 @@ public class RequestHeader {
 
     private final List<String> roles;
 
-    public RequestHeader(HttpServletRequest request) {
+    public RequestHeader(final HttpServletRequest request) {
+
         this.userId = Long.valueOf(
                 request.getHeader("userId"));
         this.locked = Boolean.parseBoolean(

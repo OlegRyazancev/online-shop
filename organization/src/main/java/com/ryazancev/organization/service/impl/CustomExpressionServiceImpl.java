@@ -52,7 +52,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessOrganization(Long id) {
+    public void checkAccessOrganization(final Long id) {
 
         RequestHeader requestHeader = new RequestHeader(request);
 
@@ -74,7 +74,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     }
 
     @Override
-    public void checkAccessUser(Long customerId) {
+    public void checkAccessUser(final Long customerId) {
 
         RequestHeader requestHeader = new RequestHeader(request);
 

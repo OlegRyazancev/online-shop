@@ -22,12 +22,14 @@ public class KafkaMessageProcessor {
     private final DtoProcessor dtoProcessor;
     private final NotificationProcessor notificationProcessor;
 
-    public void sendProductIdToDeleteProductTopic(Long productId) {
+    public void sendProductIdToDeleteProductTopic(
+            final Long productId) {
 
         organizationProducerService.sendMessageToProductTopic(productId);
     }
 
-    public void sendRegistrationRequestToAdmin(Organization organization) {
+    public void sendRegistrationRequestToAdmin(
+            final Organization organization) {
 
         RegistrationRequestDto requestDto = RegistrationRequestDto.builder()
                 .objectToRegisterId(organization.getId())
@@ -38,7 +40,7 @@ public class KafkaMessageProcessor {
     }
 
     public void sendAcceptedMailToCustomerByOrganizationId(
-            Organization organization) {
+            final Organization organization) {
 
         MailDto mailDto = dtoProcessor.createMail(
                 organization,
@@ -48,7 +50,7 @@ public class KafkaMessageProcessor {
     }
 
     public void sendRejectedMailToCustomerByOrganizationId(
-            Organization organization) {
+            final Organization organization) {
 
         MailDto mailDto = dtoProcessor.createMail(
                 organization,

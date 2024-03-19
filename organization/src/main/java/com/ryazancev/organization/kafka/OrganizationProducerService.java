@@ -42,18 +42,14 @@ public class OrganizationProducerService {
     private String notificationTopic;
 
     public OrganizationProducerService(
-            @Qualifier("adminKafkaTemplate")
-            KafkaTemplate<String, RegistrationRequestDto>
-                    adminKafkaTemplate,
-            @Qualifier("productKafkaTemplate")
-            KafkaTemplate<String, Long>
-                    productKafkaTemplate,
-            @Qualifier("mailKafkaTemplate")
-            KafkaTemplate<String, MailDto>
-                    mailKafkaTemplate,
-            @Qualifier("notificationKafkaTemplate")
-            KafkaTemplate<String, NotificationRequest>
-                    notificationKafkaTemplate) {
+            @Qualifier("adminKafkaTemplate") final KafkaTemplate<
+                    String, RegistrationRequestDto> adminKafkaTemplate,
+            @Qualifier("productKafkaTemplate") final KafkaTemplate<
+                    String, Long> productKafkaTemplate,
+            @Qualifier("mailKafkaTemplate") final KafkaTemplate<
+                    String, MailDto> mailKafkaTemplate,
+            @Qualifier("notificationKafkaTemplate") final KafkaTemplate<
+                    String, NotificationRequest> notificationKafkaTemplate) {
 
         this.adminKafkaTemplate = adminKafkaTemplate;
         this.productKafkaTemplate = productKafkaTemplate;
@@ -61,10 +57,11 @@ public class OrganizationProducerService {
         this.notificationKafkaTemplate = notificationKafkaTemplate;
     }
 
-    public void sendMessageToAdminTopic(RegistrationRequestDto requestDto) {
+    public void sendMessageToAdminTopic(
+            final RegistrationRequestDto requestDto) {
 
-        log.info("Received request to make registration request " +
-                "of organization on topic: {}", adminTopic);
+        log.info("Received request to make registration request "
+                + "of organization on topic: {}", adminTopic);
 
         try {
 
@@ -81,7 +78,8 @@ public class OrganizationProducerService {
         }
     }
 
-    public void sendMessageToProductTopic(Long organizationId) {
+    public void sendMessageToProductTopic(
+            final Long organizationId) {
 
         log.info("Received request to send productId {} to topic: {}",
                 organizationId, productTopic);
@@ -101,7 +99,8 @@ public class OrganizationProducerService {
         }
     }
 
-    public void sendMessageToMailTopic(MailDto mailDto) {
+    public void sendMessageToMailTopic(
+            final MailDto mailDto) {
 
         log.info("Received request to send {} email to {} on topic: {}",
                 mailDto.getType(),
@@ -123,10 +122,11 @@ public class OrganizationProducerService {
         }
     }
 
-    public void sendNotification(NotificationRequest request) {
+    public void sendNotification(
+            final NotificationRequest request) {
 
-        log.info("Received request to send {} notification {} to user " +
-                        "with id: {} from recipient with id: {}",
+        log.info("Received request to send {} notification {} to user "
+                        + "with id: {} from recipient with id: {}",
                 request.getScope(),
                 request.getType(),
                 request.getRecipientId(),

@@ -53,7 +53,9 @@ public class OrganizationServiceImpl implements OrganizationService {
             value = "Organization::getById",
             key = "#id"
     )
-    public Organization getById(Long id, boolean statusCheck) {
+    public Organization getById(final Long id,
+                                final boolean statusCheck) {
+
         Organization existing = findById(id);
 
         if (statusCheck) {
@@ -73,7 +75,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             allEntries = true
     )
     public Organization makeRegistrationRequest(
-            Organization organization) {
+            final Organization organization) {
 
         organizationValidator.validateNameUniqueness(organization);
         organizationValidator.validateDescriptionUniqueness(organization);
@@ -102,7 +104,8 @@ public class OrganizationServiceImpl implements OrganizationService {
                             key = "#organization.id"
                     )}
     )
-    public Organization update(Organization organization) {
+    public Organization update(
+            final Organization organization) {
 
         Organization existing = findById(organization.getId());
 
@@ -128,8 +131,8 @@ public class OrganizationServiceImpl implements OrganizationService {
                             key = "#id"
                     )}
     )
-    public void changeStatus(Long id,
-                             OrganizationStatus status) {
+    public void changeStatus(final Long id,
+                             final OrganizationStatus status) {
 
         Organization existing = findById(id);
 
@@ -151,7 +154,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                             key = "#id"
                     )}
     )
-    public void register(Long id) {
+    public void register(final Long id) {
 
         Organization existing = findById(id);
 
@@ -166,7 +169,8 @@ public class OrganizationServiceImpl implements OrganizationService {
             value = "Organization::getById",
             key = "#id"
     )
-    public String uploadLogo(Long id, LogoDto logoDto) {
+    public String uploadLogo(final Long id,
+                             final LogoDto logoDto) {
 
         Organization existing = findById(id);
 
@@ -193,7 +197,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             value = "Organization::getOwnerId",
             key = "#organizationId"
     )
-    public Long getOwnerId(Long organizationId) {
+    public Long getOwnerId(final Long organizationId) {
 
         Organization existing = findById(organizationId);
 
@@ -216,7 +220,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                     key = "#id"
             )
     })
-    public String markOrganizationAsDeleted(Long id) {
+    public String markOrganizationAsDeleted(final Long id) {
 
         Organization existing = findById(id);
 
@@ -238,7 +242,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         );
     }
 
-    private Organization findById(Long id) {
+    private Organization findById(final Long id) {
 
         return organizationRepository.findById(id)
                 .orElseThrow(() -> new OrganizationNotFoundException(

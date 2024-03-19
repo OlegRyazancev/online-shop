@@ -30,10 +30,10 @@ public class OrganizationMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "registrationMessageFactory"
     )
-    void changeStatusAndRegister(RegistrationRequestDto requestDto) {
+    void changeStatusAndRegister(final RegistrationRequestDto requestDto) {
 
-        log.info("Received message from admin to register organization with" +
-                        " id {} with response: {}",
+        log.info("Received message from admin to register organization with"
+                        + " id {} with response: {}",
                 requestDto.getObjectToRegisterId(),
                 requestDto.getStatus());
 
@@ -82,8 +82,8 @@ public class OrganizationMessageListener {
                 }
                 default -> {
 
-                    log.warn("Received unexpected request type {}" +
-                                    " or status: {}",
+                    log.warn("Received unexpected request type {}"
+                                    + " or status: {}",
                             requestDto.getObjectType(),
                             requestDto.getStatus());
                 }
@@ -100,10 +100,10 @@ public class OrganizationMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "changeStatusMessageFactory"
     )
-    public void changeOrganizationStatus(ObjectRequest request) {
+    public void changeOrganizationStatus(final ObjectRequest request) {
 
-        log.info("Received message from admin to change status of " +
-                        "organization with id: {}, to {}",
+        log.info("Received message from admin to change status of "
+                        + "organization with id: {}, to {}",
                 request.getObjectId(),
                 request.getObjectStatus());
         try {
@@ -122,6 +122,5 @@ public class OrganizationMessageListener {
 
             log.error("Failed to change status: {}", e.getMessage());
         }
-
     }
 }

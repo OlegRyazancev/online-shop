@@ -38,7 +38,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "organization",
             fallbackMethod = "logoServiceUnavailable"
     )
-    public Object uploadLogo(MultipartFile multipartFile) {
+    public Object uploadLogo(final MultipartFile multipartFile) {
 
         return logoClient.upload(multipartFile);
     }
@@ -48,7 +48,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "organization",
             fallbackMethod = "productServiceUnavailable"
     )
-    public Object getProductsByOrganizationId(Long id) {
+    public Object getProductsByOrganizationId(final Long id) {
 
         return productClient.getProductsByOrganizationId(id);
     }
@@ -58,14 +58,14 @@ public class ClientsServiceImpl implements ClientsService {
             name = "organization",
             fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Element getSimpleCustomerById(Long customerId) {
+    public Element getSimpleCustomerById(final Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
 
     //Fallback methods
 
-    private Element getSimpleCustomerFallback(Exception e) {
+    private Element getSimpleCustomerFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -78,7 +78,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Object customerServiceUnavailable(Exception e)
+    private Object customerServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -93,7 +93,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object logoServiceUnavailable(Exception e)
+    private Object logoServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -108,7 +108,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object productServiceUnavailable(Exception e)
+    private Object productServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {

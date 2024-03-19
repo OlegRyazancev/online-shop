@@ -56,19 +56,19 @@ public class OrganizationProducerConfig {
 
 
     private <T> ProducerFactory<String, T>
-    createJsonProducerFactory(Class<T> valueType) {
+    createJsonProducerFactory(final Class<T> valueType) {
 
         return new DefaultKafkaProducerFactory<>(jsonProducerConfig());
     }
 
     private <T> ProducerFactory<String, T>
-    createLongValueProducerFactory(Class<T> valueType) {
+    createLongValueProducerFactory(final Class<T> valueType) {
 
         return new DefaultKafkaProducerFactory<>(longValueProducerConfig());
     }
 
     private <T> KafkaTemplate<String, T>
-    createKafkaTemplate(ProducerFactory<String, T> producerFactory) {
+    createKafkaTemplate(final ProducerFactory<String, T> producerFactory) {
 
         return new KafkaTemplate<>(producerFactory);
     }

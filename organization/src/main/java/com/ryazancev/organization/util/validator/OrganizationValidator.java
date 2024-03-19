@@ -25,8 +25,9 @@ public class OrganizationValidator {
 
     private final MessageSource messageSource;
 
-    public void validateStatus(Organization organization,
-                               OrganizationStatus status) {
+    public void validateStatus(final Organization organization,
+                               final OrganizationStatus status) {
+
         if (organization.getStatus() == status) {
 
             throw new AccessDeniedException(
@@ -40,14 +41,16 @@ public class OrganizationValidator {
     }
 
 
-    public void validateAllStatus(Organization organization) {
+    public void validateAllStatus(
+            final Organization organization) {
 
         validateStatus(organization, OrganizationStatus.DELETED);
         validateStatus(organization, OrganizationStatus.INACTIVE);
         validateStatus(organization, OrganizationStatus.FROZEN);
     }
 
-    public void validateNameUniqueness(Organization organization) {
+    public void validateNameUniqueness(
+            final Organization organization) {
 
         if (organizationRepository
                 .findByName(organization.getName())
@@ -64,7 +67,8 @@ public class OrganizationValidator {
         }
     }
 
-    public void validateDescriptionUniqueness(Organization organization) {
+    public void validateDescriptionUniqueness(
+            final Organization organization) {
 
         if (organizationRepository
                 .findByDescription(organization.getDescription())

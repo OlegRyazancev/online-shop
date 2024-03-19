@@ -28,7 +28,7 @@ public class DtoProcessor {
     private final ClientsService clientsService;
 
     public OrganizationsSimpleResponse createOrganizationsSimpleResponse(
-            List<Organization> organizations) {
+            final List<Organization> organizations) {
 
         return OrganizationsSimpleResponse.builder()
                 .organizations(
@@ -37,7 +37,7 @@ public class DtoProcessor {
     }
 
     public OrganizationDto createOrganizationDetailedDtoWithOwner(
-            Organization organization) {
+            final Organization organization) {
 
         OrganizationDto organizationDto =
                 organizationMapper.toDetailedDto(organization);
@@ -49,19 +49,20 @@ public class DtoProcessor {
     }
 
     public OrganizationDto createOrganizationSimpleDto(
-            Organization organization) {
+            final Organization organization) {
 
         return organizationMapper.toSimpleDto(organization);
     }
 
-    public ProductsSimpleResponse createProductsSimpleResponse(Long id) {
+    public ProductsSimpleResponse createProductsSimpleResponse(
+            final Long id) {
 
         return (ProductsSimpleResponse) clientsService
                 .getProductsByOrganizationId(id);
     }
 
-    public MailDto createMail(Organization organization,
-                               MailType mailType) {
+    public MailDto createMail(final Organization organization,
+                              final MailType mailType) {
 
 
         CustomerDto customerDto = clientsService
