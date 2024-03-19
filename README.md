@@ -1,6 +1,7 @@
 # Online Shop Microservices Project
 
 ![last commit (master)](https://img.shields.io/github/last-commit/OlegRyazancev/online-shop/master)
+[![maven-build](https://github.com/OlegRyazancev/online-shop/actions/workflows/maven-build.yml/badge.svg)](https://github.com/OlegRyazancev/online-shop/actions/workflows/maven-build.yml)
 
 Welcome to the Online Shop Microservices pet-project! This project is a
 collection of microservices built using **Spring Boot(v 3.1.4)** for an online
