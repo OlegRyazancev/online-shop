@@ -1,0 +1,35 @@
+name: maven-build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  maven-build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+          key: maven-${{ hashFiles('**/pom.xml')}}
+          restore-keys: |
+            maven-
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Push to DockerHub via Jib-Maven-Plugin
+        run: mvn clean package -P build-docker-image
