@@ -25,7 +25,7 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenApi(
-            @Value("${openapi.service.url}") String url) {
+            @Value("${openapi.service.url}") final String url) {
 
         return new OpenAPI()
                 .servers(List.of(new Server()

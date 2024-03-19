@@ -32,27 +32,30 @@ public class AuthController {
     @PostMapping("/login")
     public JwtResponse login(
             @Validated
-            @RequestBody JwtRequest loginRequest) {
+            @RequestBody final JwtRequest loginRequest) {
+
         return authService.login(loginRequest);
     }
 
     @PostMapping("/register")
     public UserDto register(
             @Validated(OnCreate.class)
-            @RequestBody UserDto userDto) {
+            @RequestBody final UserDto userDto) {
+
         return userService.create(userDto);
     }
 
     @PostMapping("/refresh")
     public JwtResponse refresh(
-            @RequestBody String refreshToken) {
+            @RequestBody final String refreshToken) {
+
         return authService.refresh(refreshToken);
     }
 
     @GetMapping("/confirm")
     public String confirm(
-            @RequestParam("token") String token) {
+            @RequestParam("token") final String token) {
+
         return confirmationTokenService.confirm(token);
     }
-
 }

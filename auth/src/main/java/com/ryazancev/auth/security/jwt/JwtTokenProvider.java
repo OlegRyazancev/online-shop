@@ -37,16 +37,18 @@ public class JwtTokenProvider {
     private final UserService userService;
 
     private Key getSignKey() {
+
         byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
+
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createAccessToken(Long userId,
-                                    String email,
-                                    Long customerId,
-                                    boolean isLocked,
-                                    boolean isConfirmed,
-                                    Set<Role> roles) {
+    public String createAccessToken(final Long userId,
+                                    final String email,
+                                    final Long customerId,
+                                    final boolean isLocked,
+                                    final boolean isConfirmed,
+                                    final Set<Role> roles) {
 
         Claims claims = Jwts.claims().setSubject(email);
 
@@ -66,11 +68,11 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createRefreshToken(Long userId,
-                                     String email,
-                                     Long customerId,
-                                     boolean isLocked,
-                                     boolean isConfirmed) {
+    public String createRefreshToken(final Long userId,
+                                     final String email,
+                                     final Long customerId,
+                                     final boolean isLocked,
+                                     final boolean isConfirmed) {
 
         Claims claims = Jwts.claims().setSubject(email);
 
@@ -89,7 +91,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public JwtResponse refreshUserTokens(String refreshToken) {
+    public JwtResponse refreshUserTokens(final String refreshToken) {
 
         JwtResponse jwtResponse = new JwtResponse();
 
@@ -126,14 +128,14 @@ public class JwtTokenProvider {
         return jwtResponse;
     }
 
-    private List<String> resolveRoles(Set<Role> roles) {
+    private List<String> resolveRoles(final Set<Role> roles) {
 
         return roles.stream()
                 .map(Enum::name)
                 .collect(Collectors.toList());
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(final String token) {
 
         Jws<Claims> claimsJws = Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
@@ -146,7 +148,7 @@ public class JwtTokenProvider {
                 .before(new Date());
     }
 
-    private String getId(String token) {
+    private String getId(final String token) {
 
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())

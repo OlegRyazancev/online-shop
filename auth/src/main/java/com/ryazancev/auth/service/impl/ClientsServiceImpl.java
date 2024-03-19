@@ -30,12 +30,12 @@ public class ClientsServiceImpl implements ClientsService {
             name = "auth",
             fallbackMethod = "customerServiceUnavailable"
     )
-    public Object createCustomer(CustomerDto customerDto) {
+    public Object createCustomer(final CustomerDto customerDto) {
 
         return customerClient.createCustomer(customerDto);
     }
 
-    private Object customerServiceUnavailable(Exception e)
+    private Object customerServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {

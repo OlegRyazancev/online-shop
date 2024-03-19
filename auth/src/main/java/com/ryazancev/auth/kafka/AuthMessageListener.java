@@ -24,7 +24,7 @@ public class AuthMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "userLockMessageFactory"
     )
-    void toggleUserLock(UserLockRequest request) {
+    void toggleUserLock(final UserLockRequest request) {
 
         log.info("Received message to {} user with id: {}",
                 request.isLock() ? "lock" : "unlock",
@@ -54,10 +54,10 @@ public class AuthMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "longValueMessageFactory"
     )
-    void markUserAsDeleted(Long customerId) {
+    void markUserAsDeleted(final Long customerId) {
 
-        log.info("Received message to mark user as deleted where" +
-                        " customerId: {}",
+        log.info("Received message to mark user as deleted where"
+                        + " customerId: {}",
                 customerId);
 
         try {
@@ -81,7 +81,7 @@ public class AuthMessageListener {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "userUpdateMessageFactory"
     )
-    void updateUser(UserUpdateRequest request) {
+    void updateUser(final UserUpdateRequest request) {
 
         log.info("Received message to update user where customerId: {}",
                 request.getCustomerId());

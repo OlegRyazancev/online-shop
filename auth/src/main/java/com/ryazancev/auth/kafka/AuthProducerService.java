@@ -21,12 +21,13 @@ public class AuthProducerService {
     private final KafkaTemplate<String, MailDto> mailKafkaTemplate;
 
     public AuthProducerService(
-            @Qualifier("mailKafkaTemplate")
-            KafkaTemplate<String, MailDto> mailKafkaTemplate) {
+            @Qualifier("mailKafkaTemplate") final KafkaTemplate<
+                    String, MailDto> mailKafkaTemplate) {
+
         this.mailKafkaTemplate = mailKafkaTemplate;
     }
 
-    public void sendMessageToMailTopic(MailDto mailDto) {
+    public void sendMessageToMailTopic(final MailDto mailDto) {
 
         log.info("Received request to send email to: {}",
                 mailDto.getEmail());

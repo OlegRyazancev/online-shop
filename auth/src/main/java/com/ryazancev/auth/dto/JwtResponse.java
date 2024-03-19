@@ -46,8 +46,8 @@ public class JwtResponse {
     private Boolean locked;
 
     @Schema(
-            description = "Indicates whether the user's account " +
-                    "is confirmed via email",
+            description = "Indicates whether the user's account "
+                    + "is confirmed via email",
             example = "true"
     )
     private Boolean confirmed;

@@ -36,7 +36,8 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
     @Transactional
     @Override
-    public String confirm(String token) {
+    public String confirm(final String token) {
+
         ConfirmationToken confirmationToken = confirmationTokenRepository
                 .findByToken(token)
                 .orElseThrow(() ->
@@ -50,8 +51,6 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
         authValidator.validateConfirmationStatus(confirmationToken);
         authValidator.validateExpiration(confirmationToken);
-
-
 
         confirmationTokenRepository.updateConfirmedAt(token);
         userRepository.enableUser(confirmationToken.getUser().getEmail());
@@ -67,7 +66,8 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
 
     @Override
-    public void save(ConfirmationToken token) {
+    public void save(final ConfirmationToken token) {
+
         confirmationTokenRepository.save(token);
     }
 }

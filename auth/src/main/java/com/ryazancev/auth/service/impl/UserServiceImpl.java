@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserDto create(final UserDto userDto) {
 
         authValidator.validateEmailUniqueness(userDto);
         authValidator.validatePasswordConfirmation(userDto);
@@ -88,36 +88,35 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User getByEmail(String email) {
+    public User getByEmail(final String email) {
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.auth.user_not_found_by_email",
-                                        new Object[]{email},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(
+                        messageSource.getMessage(
+                                "exception.auth.not_found_by_email",
+                                new Object[]{email},
+                                Locale.getDefault()
+                        ),
+                        HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public User getById(Long id) {
+    public User getById(final Long id) {
 
         return userRepository.findById(id)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.auth.user_not_found_by_id",
-                                        new Object[]{id},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(
+                        messageSource.getMessage(
+                                "exception.auth.not_found_by_id",
+                                new Object[]{id},
+                                Locale.getDefault()
+                        ),
+                        HttpStatus.NOT_FOUND));
     }
 
     @Override
     @Transactional
-    public void toggleUserLock(Long id, boolean lock) {
+    public void toggleUserLock(final Long id,
+                               final boolean lock) {
 
         User existing = getById(id);
 
@@ -128,19 +127,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void markUserAsDeletedByCustomerId(Long customerId) {
+    public void markUserAsDeletedByCustomerId(final Long customerId) {
 
         User existing = userRepository
                 .findByCustomerId(customerId)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.auth.user_not_found_by_customer_id",
-                                        new Object[]{customerId},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.NOT_FOUND
-                        ));
+                .orElseThrow(() -> new UserNotFoundException(
+                        messageSource.getMessage(
+                                "exception.auth.not_found_by_customer_id",
+                                new Object[]{customerId},
+                                Locale.getDefault()
+                        ),
+                        HttpStatus.NOT_FOUND
+                ));
 
         existing.setName("DELETED");
         existing.setDeletedAt(LocalDateTime.now());
@@ -150,18 +148,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateByCustomer(UserUpdateRequest request) {
+    public void updateByCustomer(final UserUpdateRequest request) {
 
         User existing = userRepository
                 .findByCustomerId(request.getCustomerId())
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.auth.user_not_found_by_customer_id",
-                                        new Object[]{request.getCustomerId()},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(
+                        messageSource.getMessage(
+                                "exception.auth.not_found_by_customer_id",
+                                new Object[]{request.getCustomerId()},
+                                Locale.getDefault()
+                        ),
+                        HttpStatus.NOT_FOUND));
 
         existing.setName(request.getName());
         existing.setEmail(request.getEmail());

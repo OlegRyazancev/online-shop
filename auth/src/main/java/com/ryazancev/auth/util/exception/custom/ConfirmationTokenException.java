@@ -14,11 +14,8 @@ public class ConfirmationTokenException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-
-    public ConfirmationTokenException(
-            String message,
-            HttpStatus httpStatus) {
-
+    public ConfirmationTokenException(final String message,
+                                      final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

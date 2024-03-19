@@ -14,7 +14,7 @@ import java.util.UUID;
 @Component
 public class TokenProcessor {
 
-    public ConfirmationToken createConfirmationToken(User user) {
+    public ConfirmationToken createConfirmationToken(final User user) {
 
         return ConfirmationToken.builder()
                 .token(UUID.randomUUID().toString())

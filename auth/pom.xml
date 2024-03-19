@@ -1,6 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.ryazancev</groupId>
@@ -11,15 +10,12 @@
     <artifactId>auth</artifactId>
     <packaging>jar</packaging>
 
-
     <properties>
         <mariadb.java.client.version>3.3.2</mariadb.java.client.version>
         <liquibase.version>4.25.0</liquibase.version>
         <micrometer.tracing.version>1.2.2</micrometer.tracing.version>
-        <micrometer.registry.prometheus.version>1.12.2
-        </micrometer.registry.prometheus.version>
-        <opentelemetry.exporter.zipkin.version>1.34.1
-        </opentelemetry.exporter.zipkin.version>
+        <micrometer.registry.prometheus.version>1.12.2</micrometer.registry.prometheus.version>
+        <opentelemetry.exporter.zipkin.version>1.34.1</opentelemetry.exporter.zipkin.version>
         <spring-security-test.version>6.1.5</spring-security-test.version>
         <jjwt.version>0.11.5</jjwt.version>
         <kafka.version>3.1.1</kafka.version>

@@ -8,5 +8,5 @@ import com.ryazancev.common.dto.customer.CustomerDto;
 
 public interface ClientsService {
 
-    Object createCustomer (CustomerDto customerDto);
+    Object createCustomer(CustomerDto customerDto);
 }

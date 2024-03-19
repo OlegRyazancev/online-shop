@@ -18,14 +18,14 @@ public class KafkaMessageProcessor {
     private final DtoProcessor dtoProcessor;
     private final AuthProducerService authProducerService;
 
-    public void sendRegistrationMailToCustomer(ConfirmationToken token) {
+    public void sendRegistrationMailToCustomer(final ConfirmationToken token) {
 
         MailDto mailDto = dtoProcessor.createRegistrationMailDto(token);
         authProducerService.sendMessageToMailTopic(mailDto);
     }
 
-    public void sendConfirmationMailToCustomer(User user,
-                                               ConfirmationToken token) {
+    public void sendConfirmationMailToCustomer(final User user,
+                                               final ConfirmationToken token) {
 
         MailDto mailDto = dtoProcessor.createConfirmationMailDto(
                 user.getEmail(),
@@ -33,6 +33,5 @@ public class KafkaMessageProcessor {
                 token.getToken());
 
         authProducerService.sendMessageToMailTopic(mailDto);
-
     }
 }

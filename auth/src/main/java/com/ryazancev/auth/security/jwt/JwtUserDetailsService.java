@@ -19,7 +19,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String email)
+    public UserDetails loadUserByUsername(final String email)
             throws UsernameNotFoundException {
         User user = userService.getByEmail(email);
         return JwtEntityFactory.create(user);

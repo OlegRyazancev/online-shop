@@ -26,6 +26,7 @@ public class AuthProducerConfig {
 
 
     public Map<String, Object> jsonProducerConfig() {
+
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -46,7 +47,7 @@ public class AuthProducerConfig {
 
     @Bean
     public KafkaTemplate<String, MailDto> mailKafkaTemplate(
-            ProducerFactory<String, MailDto> mailProducerFactory) {
+            final ProducerFactory<String, MailDto> mailProducerFactory) {
 
         return new KafkaTemplate<>(mailProducerFactory);
     }

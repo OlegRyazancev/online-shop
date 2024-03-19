@@ -16,13 +16,14 @@ import java.util.Properties;
 public class DtoProcessor {
 
     @Value("${security.jwt.confirmation_link_prefix}")
-    private String CONFIRMATION_LINK_PREFIX;
+    private String confirmationLinkPrefix;
 
-    public MailDto createConfirmationMailDto(
-            String email, String name, String token) {
+    public MailDto createConfirmationMailDto(final String email,
+                                             final String name,
+                                             final String token) {
 
         Properties properties = new Properties();
-        properties.setProperty("link", CONFIRMATION_LINK_PREFIX + token);
+        properties.setProperty("link", confirmationLinkPrefix + token);
 
         return MailDto.builder()
                 .email(email)
@@ -32,8 +33,7 @@ public class DtoProcessor {
                 .build();
     }
 
-    public MailDto createRegistrationMailDto(
-            ConfirmationToken token) {
+    public MailDto createRegistrationMailDto(final ConfirmationToken token) {
 
         return MailDto.builder()
                 .email(token.getUser().getEmail())

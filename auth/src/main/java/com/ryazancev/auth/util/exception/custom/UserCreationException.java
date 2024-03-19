@@ -10,15 +10,12 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public class UserCreationException extends RuntimeException{
+public class UserCreationException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-
-    public UserCreationException(
-            String message,
-            HttpStatus httpStatus) {
-
+    public UserCreationException(final String message,
+                                 final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

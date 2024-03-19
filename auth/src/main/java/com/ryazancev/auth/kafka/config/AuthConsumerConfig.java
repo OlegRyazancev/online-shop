@@ -59,7 +59,7 @@ public class AuthConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, UserLockRequest>>
-    userLockMessageFactory(ConsumerFactory<
+    userLockMessageFactory(final ConsumerFactory<
             String, UserLockRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<
@@ -85,7 +85,7 @@ public class AuthConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, Long>>
-    longValueMessageFactory(ConsumerFactory<
+    longValueMessageFactory(final ConsumerFactory<
             String, Long> longValueConsumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<String, Long> factory =
@@ -113,7 +113,7 @@ public class AuthConsumerConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<
             String, UserUpdateRequest>>
-    userUpdateMessageFactory(ConsumerFactory<
+    userUpdateMessageFactory(final ConsumerFactory<
             String, UserUpdateRequest> consumerFactory) {
 
         ConcurrentKafkaListenerContainerFactory<

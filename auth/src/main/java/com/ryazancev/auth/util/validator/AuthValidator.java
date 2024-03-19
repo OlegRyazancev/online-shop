@@ -29,7 +29,8 @@ public class AuthValidator {
 
     private final MessageSource messageSource;
 
-    public void validateUserAccess(User user) {
+    public void validateUserAccess(
+            final User user) {
 
         if (user.getDeletedAt() != null) {
 
@@ -47,7 +48,8 @@ public class AuthValidator {
         }
     }
 
-    public void validateConfirmationStatus(ConfirmationToken confirmationToken) {
+    public void validateConfirmationStatus(
+            final ConfirmationToken confirmationToken) {
 
         if (confirmationToken.getConfirmedAt() != null) {
             throw new ConfirmationTokenException(
@@ -60,7 +62,8 @@ public class AuthValidator {
         }
     }
 
-    public void validateExpiration(ConfirmationToken confirmationToken) {
+    public void validateExpiration(
+            final ConfirmationToken confirmationToken) {
 
         LocalDateTime expiredAt = confirmationToken.getExpiredAt();
 
@@ -75,7 +78,8 @@ public class AuthValidator {
         }
     }
 
-    public void validateEmailUniqueness(UserDto userDto) {
+    public void validateEmailUniqueness(
+            final UserDto userDto) {
 
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             throw new UserCreationException(
@@ -88,7 +92,8 @@ public class AuthValidator {
         }
     }
 
-    public void validatePasswordConfirmation(UserDto userDto) {
+    public void validatePasswordConfirmation(
+            final UserDto userDto) {
 
         if (!userDto.getPassword().equals(userDto.getPasswordConfirmation())) {
             throw new UserCreationException(
