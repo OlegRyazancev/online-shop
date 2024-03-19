@@ -22,21 +22,21 @@ public class PurchaseController {
 
     @PostMapping
     public PurchaseDto processPurchase(
-            @RequestBody PurchaseEditDto purchaseEditDto) {
+            @RequestBody final PurchaseEditDto purchaseEditDto) {
 
         return purchaseService.processPurchase(purchaseEditDto);
     }
 
     @GetMapping("/customer/{id}")
     public CustomerPurchasesResponse getByCustomerId(
-            @PathVariable("id") Long id) {
+            @PathVariable("id") final Long id) {
 
         return purchaseService.getByCustomerId(id);
     }
 
     @GetMapping("/{id}")
     public PurchaseDto getById(
-            @PathVariable("id") String id) {
+            @PathVariable("id") final String id) {
 
         return purchaseService.getById(id);
     }

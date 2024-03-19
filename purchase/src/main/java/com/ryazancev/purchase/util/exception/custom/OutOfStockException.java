@@ -14,7 +14,8 @@ public class OutOfStockException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-    public OutOfStockException(String message, HttpStatus httpStatus) {
+    public OutOfStockException(final String message,
+                               final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

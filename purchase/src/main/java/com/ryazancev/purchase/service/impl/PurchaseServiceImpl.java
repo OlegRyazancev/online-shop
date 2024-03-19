@@ -44,7 +44,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 
     @Override
-    public PurchaseDto getById(String id) {
+    public PurchaseDto getById(final String id) {
 
         Purchase purchase = findById(id);
 
@@ -53,7 +53,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public PurchaseDto processPurchase(
-            PurchaseEditDto purchaseEditDto) {
+            final PurchaseEditDto purchaseEditDto) {
 
         Long customerId = purchaseEditDto.getCustomerId();
         Long productId = purchaseEditDto.getProductId();
@@ -102,7 +102,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 
     @Override
-    public CustomerPurchasesResponse getByCustomerId(Long customerId) {
+    public CustomerPurchasesResponse getByCustomerId(
+            final Long customerId) {
 
         List<Purchase> purchases = purchaseRepository
                 .findByCustomerId(customerId);
@@ -110,7 +111,8 @@ public class PurchaseServiceImpl implements PurchaseService {
         return dtoProcessor.createCustomerPurchasesResponse(purchases);
     }
 
-    private Purchase findById(String id) {
+    private Purchase findById(final String id) {
+
         return purchaseRepository.findById(id)
                 .orElseThrow(() -> new PurchaseNotFoundException(
                         messageSource.getMessage(
@@ -120,5 +122,4 @@ public class PurchaseServiceImpl implements PurchaseService {
                         ),
                         HttpStatus.NOT_FOUND));
     }
-
 }

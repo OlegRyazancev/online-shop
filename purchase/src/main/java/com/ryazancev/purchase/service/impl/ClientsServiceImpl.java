@@ -34,7 +34,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "getSimpleCustomerFallback"
     )
-    public Element getSimpleCustomerById(Long customerId) {
+    public Element getSimpleCustomerById(final Long customerId) {
 
         return customerClient.getSimpleById(customerId);
     }
@@ -44,7 +44,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "getSimpleProductFallback"
     )
-    public Element getSimpleProductById(Long productId) {
+    public Element getSimpleProductById(final Long productId) {
 
         return productClient.getSimpleById(productId);
     }
@@ -54,7 +54,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "customerServiceUnavailable"
     )
-    public Object getCustomerBalance(Long customerId) {
+    public Object getCustomerBalance(final Long customerId) {
 
         return customerClient.getBalanceById(customerId);
     }
@@ -64,7 +64,7 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "productServiceUnavailable"
     )
-    public Object getProductPriceAndQuantity(Long productId) {
+    public Object getProductPriceAndQuantity(final Long productId) {
 
         return productClient.getPriceAndQuantityByProductId(productId);
     }
@@ -74,14 +74,14 @@ public class ClientsServiceImpl implements ClientsService {
             name = "purchase",
             fallbackMethod = "productServiceUnavailable"
     )
-    public Object getProductOwnerId(Long productId) {
+    public Object getProductOwnerId(final Long productId) {
 
         return productClient.getOwnerId(productId);
     }
 
 //    Fallback methods
 
-    private Object productServiceUnavailable(Exception e)
+    private Object productServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -96,7 +96,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Object customerServiceUnavailable(Exception e)
+    private Object customerServiceUnavailable(final Exception e)
             throws Exception {
 
         if (e instanceof RetryableException) {
@@ -111,7 +111,7 @@ public class ClientsServiceImpl implements ClientsService {
         throw e;
     }
 
-    private Element getSimpleProductFallback(Exception e) {
+    private Element getSimpleProductFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(
@@ -124,7 +124,7 @@ public class ClientsServiceImpl implements ClientsService {
                 .build();
     }
 
-    private Element getSimpleCustomerFallback(Exception e) {
+    private Element getSimpleCustomerFallback(final Exception e) {
 
         return Fallback.builder()
                 .message(

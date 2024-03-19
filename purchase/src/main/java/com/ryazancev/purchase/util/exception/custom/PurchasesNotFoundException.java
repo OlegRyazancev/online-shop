@@ -10,10 +10,11 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public class PurchasesNotFoundException extends RuntimeException{
+public class PurchasesNotFoundException extends RuntimeException {
     private HttpStatus httpStatus;
 
-    public PurchasesNotFoundException(String message, HttpStatus httpStatus) {
+    public PurchasesNotFoundException(final String message,
+                                      final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

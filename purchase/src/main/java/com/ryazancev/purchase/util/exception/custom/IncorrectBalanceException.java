@@ -14,8 +14,8 @@ public class IncorrectBalanceException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-
-    public IncorrectBalanceException(String message, HttpStatus httpStatus) {
+    public IncorrectBalanceException(final String message,
+                                     final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

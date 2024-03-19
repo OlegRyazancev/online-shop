@@ -1,7 +1,6 @@
 package com.ryazancev.purchase.kafka;
 
 import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
-import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.product.UpdateQuantityRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,21 +30,20 @@ public class PurchaseProducerService {
 
 
     public PurchaseProducerService(
-            @Qualifier("productKafkaTemplate")
-            KafkaTemplate<String, UpdateQuantityRequest>
-                    productKafkaTemplate,
-            @Qualifier("customerKafkaTemplate")
-            KafkaTemplate<String, UpdateBalanceRequest>
-                    customerKafkaTemplate) {
+            @Qualifier("productKafkaTemplate") final KafkaTemplate<
+                    String, UpdateQuantityRequest> productKafkaTemplate,
+            @Qualifier("customerKafkaTemplate") final KafkaTemplate<
+                    String, UpdateBalanceRequest> customerKafkaTemplate) {
 
         this.productKafkaTemplate = productKafkaTemplate;
         this.customerKafkaTemplate = customerKafkaTemplate;
     }
 
-    public void sendMessageToProductTopic(UpdateQuantityRequest request) {
+    public void sendMessageToProductTopic(
+            final UpdateQuantityRequest request) {
 
-        log.info("Received request to update product's quantity with id: {} " +
-                        "quantity: {} on topic: {}",
+        log.info("Received request to update product's quantity with id: {} "
+                        + "quantity: {} on topic: {}",
                 request.getProductId(),
                 request.getQuantityInStock(),
                 productTopic);
@@ -64,10 +62,11 @@ public class PurchaseProducerService {
         }
     }
 
-    public void sendMessageToCustomerTopic(UpdateBalanceRequest request) {
+    public void sendMessageToCustomerTopic(
+            final UpdateBalanceRequest request) {
 
-        log.info("Received request to update user's balance with id: {} " +
-                        "balance: {} on topic: {}",
+        log.info("Received request to update user's balance with id: {} "
+                        + "balance: {} on topic: {}",
                 request.getCustomerId(),
                 request.getBalance(),
                 customerTopic);

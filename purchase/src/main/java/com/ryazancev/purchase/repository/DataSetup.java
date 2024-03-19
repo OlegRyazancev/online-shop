@@ -18,9 +18,9 @@ public class DataSetup {
 
     private final PurchaseRepository purchaseRepository;
 
-    private static final Long[] customerIds = {1L, 2L, 3L, 4L, 5L};
-    private static final Long[] productIds = {1L, 2L, 3L, 4L, 5L};
-    private static final Double[] productPrices = {
+    private static final Long[] CUSTOMER_IDS = {1L, 2L, 3L, 4L, 5L};
+    private static final Long[] PRODUCT_IDS = {1L, 2L, 3L, 4L, 5L};
+    private static final Double[] PRODUCT_PRICES = {
             1299.99,
             699.99,
             79.99,
@@ -35,23 +35,25 @@ public class DataSetup {
     public void setup() {
         purchaseRepository.deleteAll();
 
-        createPurchases(customerIds[0], 5);
-        createPurchases(customerIds[1], 3);
-        createPurchases(customerIds[2], 4);
-        createPurchases(customerIds[3], 1);
+        createPurchases(CUSTOMER_IDS[0], 5);
+        createPurchases(CUSTOMER_IDS[1], 3);
+        createPurchases(CUSTOMER_IDS[2], 4);
+        createPurchases(CUSTOMER_IDS[3], 1);
     }
 
-    private void createPurchases(Long customerId, int totalSaves) {
+    private void createPurchases(final Long customerId,
+                                 final int totalSaves) {
 
-        LocalDateTime purchaseDate = LocalDateTime.of(2023, Month.JANUARY, 1, 0, 0, 0);
+        LocalDateTime purchaseDate =
+                LocalDateTime.of(2023, Month.JANUARY, 1, 0, 0, 0);
 
         for (int i = 0; i < totalSaves; i++) {
 
             purchaseRepository.save(Purchase.builder()
                     .id(String.valueOf(purchaseIdCounter++))
                     .customerId(customerId)
-                    .productId(productIds[i])
-                    .amount(productPrices[i])
+                    .productId(PRODUCT_IDS[i])
+                    .amount(PRODUCT_PRICES[i])
                     .purchaseDate(purchaseDate.plusMonths(i))
                     .build());
         }

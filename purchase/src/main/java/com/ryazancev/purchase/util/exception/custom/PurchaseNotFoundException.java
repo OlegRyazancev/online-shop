@@ -14,7 +14,8 @@ public class PurchaseNotFoundException extends RuntimeException {
 
     private HttpStatus httpStatus;
 
-    public PurchaseNotFoundException(String message, HttpStatus httpStatus) {
+    public PurchaseNotFoundException(final String message,
+                                     final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

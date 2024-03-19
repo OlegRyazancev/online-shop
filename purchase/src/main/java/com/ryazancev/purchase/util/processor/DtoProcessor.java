@@ -23,7 +23,7 @@ public class DtoProcessor {
     private final ClientsService clientsService;
 
     public CustomerPurchasesResponse createCustomerPurchasesResponse(
-            List<Purchase> purchases) {
+            final List<Purchase> purchases) {
 
         List<PurchaseDto> purchasesDto = Collections.emptyList();
 
@@ -43,7 +43,7 @@ public class DtoProcessor {
                 .build();
     }
 
-    public PurchaseDto createPurchaseDto(Purchase purchase) {
+    public PurchaseDto createPurchaseDto(final Purchase purchase) {
 
         PurchaseDto purchaseDto = purchaseMapper.toDto(purchase);
 
@@ -55,5 +55,4 @@ public class DtoProcessor {
 
         return purchaseDto;
     }
-
 }

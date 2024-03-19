@@ -20,8 +20,8 @@ public class PurchaseValidator {
     private final MessageSource messageSource;
 
     public void
-    validateSufficientBalance(Double availableCustomerBalance,
-                              Double selectedProductPrice) {
+    validateSufficientBalance(final Double availableCustomerBalance,
+                              final Double selectedProductPrice) {
 
         if (availableCustomerBalance < selectedProductPrice) {
             throw new IncorrectBalanceException(
@@ -36,7 +36,7 @@ public class PurchaseValidator {
     }
 
     public void
-    validateProductAvailability(Integer availableProductsInStock) {
+    validateProductAvailability(final Integer availableProductsInStock) {
 
         if (availableProductsInStock == 0) {
             throw new OutOfStockException(
@@ -49,5 +49,4 @@ public class PurchaseValidator {
             );
         }
     }
-
 }

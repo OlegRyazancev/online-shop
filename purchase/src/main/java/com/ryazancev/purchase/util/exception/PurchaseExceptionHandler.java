@@ -30,7 +30,7 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(ServiceUnavailableException.class)
     public ResponseEntity<ExceptionBody> handleServiceUnavailable(
-            ServiceUnavailableException e) {
+           final ServiceUnavailableException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -47,7 +47,7 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(PurchaseNotFoundException.class)
     public ResponseEntity<ExceptionBody> handlePurchaseNotFound(
-            PurchaseNotFoundException e) {
+            final PurchaseNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -64,7 +64,7 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(IncorrectBalanceException.class)
     public ResponseEntity<ExceptionBody> handleIncorrectBalance(
-            IncorrectBalanceException e) {
+            final IncorrectBalanceException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -81,7 +81,7 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(PurchasesNotFoundException.class)
     public ResponseEntity<ExceptionBody> handlePurchasesNotFound(
-            PurchasesNotFoundException e) {
+            final PurchasesNotFoundException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -98,7 +98,7 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(OutOfStockException.class)
     public ResponseEntity<ExceptionBody> handleOutOfStock(
-            OutOfStockException e) {
+           final OutOfStockException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -115,7 +115,7 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionBody> handleConstraintViolation(
-            ConstraintViolationException e) {
+           final ConstraintViolationException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -137,7 +137,7 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionBody> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException e) {
+            final MethodArgumentNotValidException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -160,7 +160,7 @@ public class PurchaseExceptionHandler {
 
     @ExceptionHandler(OnlineShopException.class)
     public ResponseEntity<ExceptionBody> handleOnlineShop(
-            OnlineShopException e) {
+            final OnlineShopException e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
@@ -177,7 +177,8 @@ public class PurchaseExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionBody> handleAny(Exception e) {
+    public ResponseEntity<ExceptionBody> handleAny(
+            final Exception e) {
 
         log.error(e.getClass().getSimpleName());
         log.debug(e.getMessage());
