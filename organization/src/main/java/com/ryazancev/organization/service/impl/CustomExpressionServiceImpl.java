@@ -1,9 +1,11 @@
 package com.ryazancev.organization.service.impl;
 
 import com.ryazancev.common.config.ServiceStage;
+import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.util.RequestHeader;
+import com.ryazancev.organization.util.exception.CustomExceptionFactory;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -41,13 +43,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!requestHeader.isConfirmed()) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.organization.email_not_confirmed",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .emailNotConfirmed(messageSource);
         }
     }
 
@@ -60,16 +58,13 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
                 requestHeader.getUserId(), id)
                 || requestHeader.getRoles().contains("ROLE_ADMIN")) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.organization.access_object",
-                            new Object[]{
-                                    ServiceStage.ORGANIZATION,
-                                    id
-                            },
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .cannotAccessObject(
+                            messageSource,
+                            ObjectType.ORGANIZATION,
+                            String.valueOf(id)
+                    );
         }
     }
 
@@ -81,16 +76,13 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!(customerId.equals(requestHeader.getUserId())
                 || requestHeader.getRoles().contains("ROLE_ADMIN"))) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.organization.access_object",
-                            new Object[]{
-                                    ServiceStage.CUSTOMER,
-                                    customerId
-                            },
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .cannotAccessObject(
+                            messageSource,
+                            ObjectType.CUSTOMER,
+                            String.valueOf(customerId)
+                    );
         }
     }
 
@@ -100,13 +92,10 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         RequestHeader requestHeader = new RequestHeader(request);
 
         if (requestHeader.isLocked()) {
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.organization.account_locked",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .accountLocked(messageSource);
         }
     }
 }

@@ -8,5 +8,5 @@ public enum ObjectType {
 
     PRODUCT,
     ORGANIZATION,
-    PURCHASE
+    CUSTOMER, PURCHASE
 }

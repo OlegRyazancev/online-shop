@@ -3,6 +3,7 @@ package com.ryazancev.organization.util.validator;
 import com.ryazancev.organization.model.Organization;
 import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
+import com.ryazancev.organization.util.exception.CustomExceptionFactory;
 import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import com.ryazancev.organization.util.exception.custom.OrganizationCreationException;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +31,12 @@ public class OrganizationValidator {
 
         if (organization.getStatus() == status) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.organization.status_access",
-                            new Object[]{organization.getStatus()},
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.CONFLICT);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .statusAccess(
+                            messageSource,
+                            organization.getStatus()
+                    );
         }
     }
 
@@ -56,14 +56,9 @@ public class OrganizationValidator {
                 .findByName(organization.getName())
                 .isPresent()) {
 
-            throw new OrganizationCreationException(
-                    messageSource.getMessage(
-                            "exception.organization.name_exists",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.BAD_REQUEST
-            );
+            throw CustomExceptionFactory
+                    .getOrganizationCreation()
+                    .nameExists(messageSource);
         }
     }
 
@@ -74,14 +69,9 @@ public class OrganizationValidator {
                 .findByDescription(organization.getDescription())
                 .isPresent()) {
 
-            throw new OrganizationCreationException(
-                    messageSource.getMessage(
-                            "exception.organization.description_exists",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.BAD_REQUEST
-            );
+            throw CustomExceptionFactory
+                    .getOrganizationCreation()
+                    .descriptionExists(messageSource);
         }
     }
 }

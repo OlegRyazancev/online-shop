@@ -6,6 +6,7 @@ import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.OrganizationService;
+import com.ryazancev.organization.util.exception.CustomExceptionFactory;
 import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.organization.util.processor.KafkaMessageProcessor;
 import com.ryazancev.organization.util.validator.OrganizationValidator;
@@ -245,16 +246,15 @@ public class OrganizationServiceImpl implements OrganizationService {
     private Organization findById(final Long id) {
 
         return organizationRepository.findById(id)
-                .orElseThrow(() -> new OrganizationNotFoundException(
-                        messageSource.getMessage(
-                                "exception.organization.not_found",
-                                new Object[]{id},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND
-                ));
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getOrganizationNotFound()
+                                .byId(
+                                        messageSource,
+                                        String.valueOf(id)
+                                )
+                );
     }
-
 }
 
 
