@@ -6,5 +6,6 @@ package com.ryazancev.notification.util.exception;
 
 public enum ErrorCode {
     NOTIFICATION_NOT_FOUND_BY_ID,
-    INVALID_SCOPE
+    INVALID_SCOPE,
+    INTERNAL
 }

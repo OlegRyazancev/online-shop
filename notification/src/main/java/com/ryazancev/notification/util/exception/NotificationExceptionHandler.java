@@ -32,7 +32,9 @@ public class NotificationExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.NOTIFICATION,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -49,7 +51,9 @@ public class NotificationExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.NOTIFICATION,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -66,7 +70,9 @@ public class NotificationExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.NOTIFICATION,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -84,7 +90,9 @@ public class NotificationExceptionHandler {
                         e.getMessage(),
                         e.getErrors(),
                         e.getServiceStage(),
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
