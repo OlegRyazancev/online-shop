@@ -4,7 +4,6 @@ import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.exception.OnlineShopException;
 import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
-import com.ryazancev.review.util.exception.custom.ReviewNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +39,9 @@ public class ReviewExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.REVIEW,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -56,24 +58,9 @@ public class ReviewExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.REVIEW,
-                        e.getHttpStatus()
-                ));
-    }
-
-    @ExceptionHandler(ReviewNotFoundException.class)
-    public ResponseEntity<ExceptionBody> handleReviewNotFound(
-            final ReviewNotFoundException e) {
-
-        log.error(e.getClass().getSimpleName());
-        log.debug(e.getMessage());
-        log.debug("Exception stack trace:", e);
-
-        return ResponseEntity
-                .status(e.getHttpStatus())
-                .body(new ExceptionBody(
-                        e.getMessage(),
-                        ServiceStage.REVIEW,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -93,6 +80,8 @@ public class ReviewExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.REVIEW);
+        exceptionBody.setCode(ErrorCode.CONSTRAINT_VIOLATION.name());
+        exceptionBody.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
@@ -116,6 +105,8 @@ public class ReviewExceptionHandler {
 
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.REVIEW);
+        exceptionBody.setCode(ErrorCode.METHOD_ARGUMENT_NOT_VALID.name());
+        exceptionBody.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
@@ -136,7 +127,9 @@ public class ReviewExceptionHandler {
                         e.getMessage(),
                         e.getErrors(),
                         e.getServiceStage(),
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
