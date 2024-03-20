@@ -8,7 +8,7 @@ import com.ryazancev.purchase.model.Purchase;
 import com.ryazancev.purchase.repository.PurchaseRepository;
 import com.ryazancev.purchase.service.ClientsService;
 import com.ryazancev.purchase.service.PurchaseService;
-import com.ryazancev.purchase.util.exception.custom.PurchaseNotFoundException;
+import com.ryazancev.purchase.util.exception.CustomExceptionFactory;
 import com.ryazancev.purchase.util.mapper.PurchaseMapper;
 import com.ryazancev.purchase.util.processor.DtoProcessor;
 import com.ryazancev.purchase.util.processor.KafkaMessageProcessor;
@@ -16,12 +16,10 @@ import com.ryazancev.purchase.util.validator.PurchaseValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -114,12 +112,13 @@ public class PurchaseServiceImpl implements PurchaseService {
     private Purchase findById(final String id) {
 
         return purchaseRepository.findById(id)
-                .orElseThrow(() -> new PurchaseNotFoundException(
-                        messageSource.getMessage(
-                                "exception.purchase.not_found_by_id",
-                                new Object[]{id},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND));
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getPurchaseNotFound()
+                                .byId(
+                                        messageSource,
+                                        id
+                                )
+                );
     }
 }
