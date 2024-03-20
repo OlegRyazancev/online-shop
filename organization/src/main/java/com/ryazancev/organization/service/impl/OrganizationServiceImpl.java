@@ -7,7 +7,6 @@ import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.OrganizationService;
 import com.ryazancev.organization.util.exception.CustomExceptionFactory;
-import com.ryazancev.organization.util.exception.custom.OrganizationNotFoundException;
 import com.ryazancev.organization.util.processor.KafkaMessageProcessor;
 import com.ryazancev.organization.util.validator.OrganizationValidator;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

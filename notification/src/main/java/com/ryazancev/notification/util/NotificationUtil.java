@@ -10,14 +10,11 @@ import com.ryazancev.notification.model.notification.PrivateNotification;
 import com.ryazancev.notification.model.notification.PublicNotification;
 import com.ryazancev.notification.service.ContentService;
 import com.ryazancev.notification.util.exception.CustomExceptionFactory;
-import com.ryazancev.notification.util.exception.custom.InvalidScopeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev

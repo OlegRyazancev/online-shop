@@ -1,19 +1,14 @@
 package com.ryazancev.organization.service.impl;
 
-import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.CustomExpressionService;
 import com.ryazancev.organization.util.RequestHeader;
 import com.ryazancev.organization.util.exception.CustomExceptionFactory;
-import com.ryazancev.organization.util.exception.custom.AccessDeniedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
 
 
 /**

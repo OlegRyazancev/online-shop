@@ -3,7 +3,6 @@ package com.ryazancev.review.util.exception.custom;
 import com.ryazancev.review.util.exception.ErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 

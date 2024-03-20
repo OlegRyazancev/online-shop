@@ -11,13 +11,11 @@ import com.ryazancev.review.repository.ReviewRepository;
 import com.ryazancev.review.service.ClientsService;
 import com.ryazancev.review.service.ReviewService;
 import com.ryazancev.review.util.exception.CustomExceptionFactory;
-import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import com.ryazancev.review.util.processor.DtoProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

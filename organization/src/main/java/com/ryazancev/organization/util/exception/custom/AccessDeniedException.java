@@ -5,7 +5,6 @@ import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.util.exception.ErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
