@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Oleg Ryazancev
  */
@@ -13,9 +15,14 @@ import org.springframework.http.HttpStatus;
 public class ServiceUnavailableException extends RuntimeException {
 
     private HttpStatus httpStatus;
+    private String code;
+    private LocalDateTime timestamp;
 
-    public ServiceUnavailableException(String message, HttpStatus httpStatus) {
+    public ServiceUnavailableException(final String message,
+                                       final HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
+        this.code = "SERVICE_UNAVAILABLE";
+        this.timestamp = LocalDateTime.now();
     }
 }

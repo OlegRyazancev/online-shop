@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -23,6 +24,8 @@ public class OnlineShopException extends RuntimeException {
     private Map<String, String> errors;
     private ServiceStage serviceStage;
     private HttpStatus httpStatus;
+    private String code;
+    private LocalDateTime timestamp;
 
 
     public OnlineShopException(String message) {
