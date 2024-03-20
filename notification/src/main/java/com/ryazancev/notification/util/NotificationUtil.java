@@ -9,6 +9,7 @@ import com.ryazancev.notification.model.notification.Notification;
 import com.ryazancev.notification.model.notification.PrivateNotification;
 import com.ryazancev.notification.model.notification.PublicNotification;
 import com.ryazancev.notification.service.ContentService;
+import com.ryazancev.notification.util.exception.CustomExceptionFactory;
 import com.ryazancev.notification.util.exception.custom.InvalidScopeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -36,13 +37,9 @@ public class NotificationUtil {
             return NotificationScope.valueOf(scope.toUpperCase());
         } catch (Exception e) {
 
-            throw new InvalidScopeException(
-                    messageSource.getMessage(
-                            "exception.notification.invalid_scope",
-                            null, Locale.getDefault()
-                    ),
-                    HttpStatus.BAD_REQUEST
-            );
+            throw CustomExceptionFactory
+                    .getInvalidScope()
+                    .invalidScope(messageSource);
         }
     }
 

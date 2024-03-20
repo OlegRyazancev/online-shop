@@ -12,6 +12,7 @@ import com.ryazancev.notification.repository.PrivateNotificationRepository;
 import com.ryazancev.notification.repository.PublicNotificationRepository;
 import com.ryazancev.notification.service.NotificationService;
 import com.ryazancev.notification.util.NotificationUtil;
+import com.ryazancev.notification.util.exception.CustomExceptionFactory;
 import com.ryazancev.notification.util.exception.custom.NotificationNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,14 +89,14 @@ public class NotificationServiceImpl implements NotificationService {
 
                 PrivateNotification notification = privateRepository
                         .findById(id)
-                        .orElseThrow(() -> new NotificationNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.notification.not_found",
-                                        new Object[]{castedScope, id},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.BAD_REQUEST));
-
+                        .orElseThrow(() ->
+                                CustomExceptionFactory
+                                        .getNotificationNotFound()
+                                        .byId(
+                                                messageSource,
+                                                castedScope,
+                                                id
+                                        ));
                 if (notification.getStatus() == NotificationStatus.UNREAD) {
 
                     notification.setStatus(NotificationStatus.READ);
@@ -107,25 +108,26 @@ public class NotificationServiceImpl implements NotificationService {
             case PUBLIC -> {
 
                 return publicRepository.findById(id)
-                        .orElseThrow(() -> new NotificationNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.notification.not_found",
-                                        new Object[]{castedScope, id},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.BAD_REQUEST));
+                        .orElseThrow(() ->
+                                CustomExceptionFactory
+                                        .getNotificationNotFound()
+                                        .byId(
+                                                messageSource,
+                                                castedScope,
+                                                id
+                                        ));
             }
             case ADMIN -> {
 
                 return adminRepository.findById(id)
-                        .orElseThrow(() -> new NotificationNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.notification.not_found",
-                                        new Object[]{castedScope, id},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.BAD_REQUEST
-                        ));
+                        .orElseThrow(() ->
+                                CustomExceptionFactory
+                                        .getNotificationNotFound()
+                                        .byId(
+                                                messageSource,
+                                                castedScope,
+                                                id
+                                        ));
             }
             default -> {
             }
@@ -171,17 +173,14 @@ public class NotificationServiceImpl implements NotificationService {
 
         PrivateNotification notification =
                 privateRepository.findById(id)
-                        .orElseThrow(() -> new NotificationNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.notification.not_found",
-                                        new Object[]{
+                        .orElseThrow(() ->
+                                CustomExceptionFactory
+                                        .getNotificationNotFound()
+                                        .byId(
+                                                messageSource,
                                                 NotificationScope.PRIVATE,
                                                 id
-                                        },
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.BAD_REQUEST
-                        ));
+                                        ));
 
         return notification.getRecipientId();
     }
