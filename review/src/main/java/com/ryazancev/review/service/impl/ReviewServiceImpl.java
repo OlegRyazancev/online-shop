@@ -10,6 +10,7 @@ import com.ryazancev.review.model.Review;
 import com.ryazancev.review.repository.ReviewRepository;
 import com.ryazancev.review.service.ClientsService;
 import com.ryazancev.review.service.ReviewService;
+import com.ryazancev.review.util.exception.CustomExceptionFactory;
 import com.ryazancev.review.util.exception.custom.ReviewCreationException;
 import com.ryazancev.review.util.mapper.ReviewMapper;
 import com.ryazancev.review.util.processor.DtoProcessor;
@@ -67,13 +68,13 @@ public class ReviewServiceImpl implements ReviewService {
         String purchaseId = reviewEditDto.getPurchaseId();
 
         if (reviewRepository.findByPurchaseId(purchaseId).isPresent()) {
-            throw new ReviewCreationException(
-                    messageSource.getMessage(
-                            "exception.review.duplicate_review",
-                            new Object[]{reviewEditDto.getPurchaseId()},
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.BAD_REQUEST);
+
+            throw CustomExceptionFactory
+                    .getReviewCreation()
+                    .duplicate(
+                            messageSource,
+                            reviewEditDto.getPurchaseId()
+                    );
         }
 
         PurchaseDto purchaseDto = (PurchaseDto) clientsService
