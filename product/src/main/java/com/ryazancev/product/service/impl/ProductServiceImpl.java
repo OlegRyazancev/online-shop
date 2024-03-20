@@ -4,7 +4,7 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
-import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
+import com.ryazancev.product.util.exception.CustomExceptionFactory;
 import com.ryazancev.product.util.processor.KafkaMessageProcessor;
 import com.ryazancev.product.util.validator.ProductValidator;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,14 +70,15 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getByOrganizationId(final Long organizationId) {
 
         return productRepository.findByOrganizationId(organizationId)
-                .orElseThrow(() -> new ProductNotFoundException(
-                        messageSource.getMessage(
-                                "exception.product.not_found_by_org_id",
-                                new Object[]{organizationId},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND)
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getProductNotFound()
+                                .byOrganizationId(
+                                        messageSource,
+                                        String.valueOf(organizationId)
+                                )
                 );
+
     }
 
     @Override
@@ -243,13 +243,13 @@ public class ProductServiceImpl implements ProductService {
     private Product findById(final Long productId) {
 
         return productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(
-                        messageSource.getMessage(
-                                "exception.product.not_found",
-                                new Object[]{productId},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND
-                ));
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getProductNotFound()
+                                .byId(
+                                        messageSource,
+                                        String.valueOf(productId)
+                                )
+                );
     }
 }

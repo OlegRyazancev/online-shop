@@ -1,0 +1,19 @@
+package com.ryazancev.product.util.exception;
+
+/**
+ * @author Oleg Ryazancev
+ */
+
+public enum ErrorCode {
+
+    ACCESS_DENIED_OBJECT,
+    ACCESS_DENIED_EMAIL,
+    ACCESS_DENIED_ACCOUNT,
+    ACCESS_DENIED_STATUS,
+    PRODUCT_CREATION_NAME,
+    PRODUCT_NOT_FOUND_BY_ID,
+    PRODUCT_NOT_FOUND_BY_ORGANIZATION_ID,
+    CONSTRAINT_VIOLATION,
+    METHOD_ARGUMENT_NOT_VALID,
+    INTERNAL
+}

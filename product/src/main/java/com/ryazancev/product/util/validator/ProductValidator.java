@@ -3,14 +3,10 @@ package com.ryazancev.product.util.validator;
 import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
-import com.ryazancev.product.util.exception.custom.AccessDeniedException;
-import com.ryazancev.product.util.exception.custom.ProductCreationException;
+import com.ryazancev.product.util.exception.CustomExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -28,13 +24,12 @@ public class ProductValidator {
 
         if (product.getStatus() == status) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.product.status_access",
-                            new Object[]{product.getStatus()},
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.CONFLICT);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .statusAccess(
+                            messageSource,
+                            product.getStatus()
+                    );
         }
     }
 
@@ -51,14 +46,9 @@ public class ProductValidator {
         if (productRepository.findByProductName(
                 product.getProductName()).isPresent()) {
 
-            throw new ProductCreationException(
-                    messageSource.getMessage(
-                            "exception.product.name_exists",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.BAD_REQUEST
-            );
+            throw CustomExceptionFactory
+                    .getProductCreation()
+                    .nameExists(messageSource);
         }
     }
 }

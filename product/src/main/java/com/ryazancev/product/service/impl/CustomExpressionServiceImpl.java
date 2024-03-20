@@ -1,6 +1,6 @@
 package com.ryazancev.product.service.impl;
 
-import com.ryazancev.common.config.ServiceStage;
+import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.customer.CustomerDto;
 import com.ryazancev.common.dto.product.ProductEditDto;
 import com.ryazancev.common.dto.purchase.PurchaseDto;
@@ -9,15 +9,13 @@ import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
 import com.ryazancev.product.util.RequestHeader;
-import com.ryazancev.product.util.exception.custom.AccessDeniedException;
+import com.ryazancev.product.util.exception.CustomExceptionFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -29,8 +27,8 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final ProductService productService;
     private final ClientsService clientsService;
-    private final MessageSource messageSource;
     private final HttpServletRequest request;
+    private final MessageSource messageSource;
 
     @Override
     public void checkAccountConditions() {
@@ -44,13 +42,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!requestHeader.isConfirmed()) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.product.email_not_confirmed",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .emailNotConfirmed(messageSource);
         }
     }
 
@@ -58,17 +52,13 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     public void checkAccessProduct(final Long id) {
 
         if (!canAccessProduct(id)) {
-
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.product.access_object",
-                            new Object[]{
-                                    ServiceStage.PRODUCT,
-                                    id
-                            },
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .cannotAccessObject(
+                            messageSource,
+                            ObjectType.PRODUCT,
+                            String.valueOf(id)
+                    );
         }
     }
 
@@ -77,16 +67,13 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!canAccessOrganization(productEditDto.getOrganizationId())) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.product.access_object",
-                            new Object[]{
-                                    ServiceStage.ORGANIZATION,
-                                    productEditDto.getOrganizationId()
-                            },
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .cannotAccessObject(
+                            messageSource,
+                            ObjectType.ORGANIZATION,
+                            String.valueOf(productEditDto.getOrganizationId())
+                    );
         }
     }
 
@@ -97,13 +84,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (requestHeader.isLocked()) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.product.account_locked",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .accountLocked(messageSource);
         }
     }
 
@@ -124,16 +107,13 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!canAccessPurchase) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.product.access_object",
-                            new Object[]{
-                                    ServiceStage.PURCHASE,
-                                    purchaseId
-                            },
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .cannotAccessObject(
+                            messageSource,
+                            ObjectType.PURCHASE,
+                            purchaseId
+                    );
         }
     }
 

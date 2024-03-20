@@ -1,22 +1,93 @@
 package com.ryazancev.product.util.exception.custom;
 
+import com.ryazancev.common.dto.admin.enums.ObjectType;
+import com.ryazancev.product.model.ProductStatus;
+import com.ryazancev.product.util.exception.ErrorCode;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
+import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
  */
 
 @Getter
-@Setter
+@NoArgsConstructor
 public class AccessDeniedException extends RuntimeException {
 
+
     private HttpStatus httpStatus;
+    private ErrorCode code;
+    private LocalDateTime timestamp;
 
     public AccessDeniedException(final String message,
-                                 final HttpStatus httpStatus) {
+                                 final ErrorCode code) {
         super(message);
-        this.httpStatus = httpStatus;
+        this.httpStatus = HttpStatus.FORBIDDEN;
+        this.code = code;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    public AccessDeniedException cannotAccessObject(final MessageSource source,
+                                                    final ObjectType objectType,
+                                                    final String objectId) {
+
+        String message = source.getMessage(
+                "exception.product.access_object",
+                new Object[]{
+                        objectType,
+                        objectId
+                },
+                Locale.getDefault()
+        );
+
+        return new AccessDeniedException(
+                message,
+                ErrorCode.ACCESS_DENIED_OBJECT
+        );
+    }
+
+    public AccessDeniedException emailNotConfirmed(final MessageSource source) {
+
+        String message = source.getMessage(
+                "exception.product.email_not_confirmed",
+                null,
+                Locale.getDefault()
+        );
+        return new AccessDeniedException(
+                message,
+                ErrorCode.ACCESS_DENIED_EMAIL
+        );
+    }
+
+    public AccessDeniedException accountLocked(final MessageSource source) {
+
+        String message = source.getMessage(
+                "exception.product.account_locked",
+                null,
+                Locale.getDefault()
+        );
+        return new AccessDeniedException(
+                message,
+                ErrorCode.ACCESS_DENIED_ACCOUNT
+        );
+    }
+
+    public AccessDeniedException statusAccess(final MessageSource source,
+                                              final ProductStatus status) {
+
+        String message = source.getMessage(
+                "exception.product.status_access",
+                new Object[]{status},
+                Locale.getDefault()
+        );
+        return new AccessDeniedException(
+                message,
+                ErrorCode.ACCESS_DENIED_STATUS
+        );
     }
 }
