@@ -1,5 +1,7 @@
 package com.ryazancev.organization.util.exception;
 
+import jakarta.annotation.Resource;
+
 /**
  * @author Oleg Ryazancev
  */
@@ -11,5 +13,8 @@ public enum ErrorCode {
     ORGANIZATION_CREATION_NAME,
     ORGANIZATION_CREATION_DESCRIPTION,
     ORGANIZATION_NOT_FOUND_BY_ID,
-    ACCESS_DENIED_STATUS
+    ACCESS_DENIED_STATUS,
+    CONSTRAINT_VIOLATION,
+    METHOD_ARGUMENT_NOT_VALID,
+    INTERNAL
 }
