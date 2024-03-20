@@ -28,7 +28,7 @@ public class OnlineShopException extends RuntimeException {
     private LocalDateTime timestamp;
 
 
-    public OnlineShopException(String message) {
+    public OnlineShopException(final String message) {
         super(message);
         this.message = message;
     }

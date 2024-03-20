@@ -15,8 +15,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "Request model for change " +
-        "object statuses in admin service")
+@Schema(description = "Request model for change "
+        + "object statuses in admin service")
 public class ObjectRequest {
 
 
@@ -25,19 +25,19 @@ public class ObjectRequest {
             example = "1"
     )
     @NotNull(message = "Id must be not null")
-    Long objectId;
+    private Long objectId;
 
     @Schema(
             description = "Type of the object (e.g., PRODUCT, ORGANIZATION)",
             example = "ORGANIZATION"
     )
     @NotNull(message = "Object type must be not null")
-    ObjectType objectType;
+    private ObjectType objectType;
 
     @Schema(
             description = "Status of the object (e.g., ACTIVATE, FREEZE)",
             example = "FREEZE"
     )
     @NotNull(message = "Object status must be not null")
-    ObjectStatus objectStatus;
+    private ObjectStatus objectStatus;
 }

@@ -47,8 +47,8 @@ public class RegistrationRequestDto {
     private ObjectType objectType;
 
     @Schema(
-            description = "Status of the registration request" +
-                    " (e.g., ON_REVIEW)",
+            description = "Status of the registration request "
+                    + "(e.g., ON_REVIEW)",
             example = "ON_REVIEW"
     )
     private RequestStatus status;

@@ -42,8 +42,8 @@ public class OrganizationEditDto {
 
     @Schema(
             description = "Description of the organization",
-            example = "This is a sample organization " +
-                    "providing excellent services"
+            example = "This is a sample organization "
+                    + "providing excellent services"
     )
     @NotNull(
             message = "Description must be not null",

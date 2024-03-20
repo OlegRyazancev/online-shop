@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Slf4j
-public class FeignClientsConfiguration extends FeignClientProperties.FeignClientConfiguration {
+public class FeignClientsConfiguration
+        extends FeignClientProperties.FeignClientConfiguration {
 
     @Bean
     public ErrorDecoder errorDecoder() {

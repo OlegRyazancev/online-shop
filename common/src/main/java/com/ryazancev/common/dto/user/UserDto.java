@@ -99,8 +99,8 @@ public class UserDto {
     private Boolean locked;
 
     @Schema(
-            description = "Indicates whether the user's account " +
-                    "is confirmed via email",
+            description = "Indicates whether the user's account "
+                    + "is confirmed via email",
             example = "true"
     )
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

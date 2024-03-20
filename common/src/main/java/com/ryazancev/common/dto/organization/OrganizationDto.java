@@ -36,8 +36,8 @@ public class OrganizationDto implements Element {
 
     @Schema(
             description = "Description of the organization",
-            example = "This is a sample organization" +
-                    " providing excellent services"
+            example = "This is a sample organization"
+                    + " providing excellent services"
     )
     private String description;
 

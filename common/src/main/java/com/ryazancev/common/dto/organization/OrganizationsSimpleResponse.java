@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Schema(
-        description = "Response containing a list of " +
-                "simplified organization DTOs"
+        description = "Response containing a list of "
+                + "simplified organization DTOs"
 )
 public class OrganizationsSimpleResponse {
 

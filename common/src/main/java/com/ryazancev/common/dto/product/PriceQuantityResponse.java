@@ -13,8 +13,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "Response model of actual price and quantity" +
-        " in stock of some product")
+@Schema(
+        description = "Response model of actual price and quantity"
+        + " in stock of some product"
+)
 public class PriceQuantityResponse {
 
     @Schema(

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Purchase DTO. Used in GET methods")
-public class PurchaseDto implements Element{
+public class PurchaseDto implements Element {
 
     @Schema(
             description = "Purchase ID",
