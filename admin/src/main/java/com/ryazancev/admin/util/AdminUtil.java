@@ -1,5 +1,6 @@
 package com.ryazancev.admin.util;
 
+import com.ryazancev.admin.util.exception.CustomExceptionFactory;
 import com.ryazancev.admin.util.exception.custom.InvalidRequestStatusException;
 import com.ryazancev.common.dto.admin.enums.RequestStatus;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +25,13 @@ public class AdminUtil {
         try {
             return RequestStatus.valueOf(status.toUpperCase());
         } catch (Exception e) {
-            throw new InvalidRequestStatusException(
-                    messageSource.getMessage(
-                            "exception.admin.invalid_status",
-                            new Object[]{status},
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.BAD_REQUEST
-            );
+
+            throw CustomExceptionFactory
+                    .getInvalidRequestStatus()
+                    .invalidStatus(
+                            messageSource,
+                            status
+                    );
         }
     }
 }

@@ -3,6 +3,7 @@ package com.ryazancev.admin.service.impl;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.repository.AdminRepository;
 import com.ryazancev.admin.service.AdminService;
+import com.ryazancev.admin.util.exception.CustomExceptionFactory;
 import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.admin.util.processor.KafkaMessageProcessor;
 import com.ryazancev.common.dto.admin.ObjectRequest;
@@ -82,13 +83,14 @@ public class AdminServiceImpl implements AdminService {
 
         RegistrationRequest existing =
                 adminRepository.findById(requestId)
-                        .orElseThrow(() -> new RequestNotFoundException(
-                                messageSource.getMessage(
-                                        "exception.admin.not_found_by_id",
-                                        new Object[]{requestId},
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.NOT_FOUND));
+                        .orElseThrow(() ->
+                                CustomExceptionFactory
+                                        .getRequestNotFound()
+                                        .byId(
+                                                messageSource,
+                                                String.valueOf(requestId)
+                                        )
+                        );
         existing.setStatus(status);
         existing.setReviewedAt(LocalDateTime.now());
 
