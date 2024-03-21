@@ -74,7 +74,6 @@ public class ProductServiceImpl implements ProductService {
                         CustomExceptionFactory
                                 .getProductNotFound()
                                 .byOrganizationId(
-                                        messageSource,
                                         String.valueOf(organizationId)
                                 )
                 );
@@ -246,10 +245,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() ->
                         CustomExceptionFactory
                                 .getProductNotFound()
-                                .byId(
-                                        messageSource,
-                                        String.valueOf(productId)
-                                )
+                                .byId(String.valueOf(productId))
                 );
     }
 }

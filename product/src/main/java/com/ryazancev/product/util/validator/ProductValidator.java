@@ -5,7 +5,6 @@ import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.util.exception.CustomExceptionFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class ProductValidator {
 
     private final ProductRepository productRepository;
-    private final MessageSource messageSource;
 
     public void validateStatus(final Product product,
                                final ProductStatus status) {
@@ -26,13 +24,9 @@ public class ProductValidator {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .statusAccess(
-                            messageSource,
-                            product.getStatus()
-                    );
+                    .statusAccess(product.getStatus());
         }
     }
-
 
     public void validateAllStatus(final Product product) {
 
@@ -48,7 +42,7 @@ public class ProductValidator {
 
             throw CustomExceptionFactory
                     .getProductCreation()
-                    .nameExists(messageSource);
+                    .nameExists();
         }
     }
 }

@@ -113,7 +113,7 @@ public class ClientsServiceImpl implements ClientsService {
         if (e instanceof RetryableException) {
             throw new ServiceUnavailableException(
                     messageSource.getMessage(
-                            "exception.product.service_unavailable",
+                            "OS-PRODUCT-SERVICE_UNAVAILABLE-503",
                             new Object[]{ServiceStage.CUSTOMER},
                             Locale.getDefault()
                     ),
@@ -128,7 +128,7 @@ public class ClientsServiceImpl implements ClientsService {
         if (e instanceof RetryableException) {
             throw new ServiceUnavailableException(
                     messageSource.getMessage(
-                            "exception.product.service_unavailable",
+                            "OS-PRODUCT-SERVICE_UNAVAILABLE-503",
                             new Object[]{ServiceStage.ORGANIZATION},
                             Locale.getDefault()
                     ),
@@ -143,7 +143,7 @@ public class ClientsServiceImpl implements ClientsService {
         if (e instanceof RetryableException) {
             throw new ServiceUnavailableException(
                     messageSource.getMessage(
-                            "exception.product.service_unavailable",
+                            "OS-PRODUCT-SERVICE_UNAVAILABLE-503",
                             new Object[]{ServiceStage.REVIEW},
                             Locale.getDefault()
                     ),
@@ -158,7 +158,7 @@ public class ClientsServiceImpl implements ClientsService {
         if (e instanceof RetryableException) {
             throw new ServiceUnavailableException(
                     messageSource.getMessage(
-                            "exception.product.service_unavailable",
+                            "OS-PRODUCT-SERVICE_UNAVAILABLE-503",
                             new Object[]{ServiceStage.PURCHASE},
                             Locale.getDefault()
                     ),
@@ -172,7 +172,7 @@ public class ClientsServiceImpl implements ClientsService {
         return Fallback.builder()
                 .message(
                         messageSource.getMessage(
-                                "exception.product.service_unavailable",
+                                "OS-PRODUCT-SERVICE_UNAVAILABLE-503",
                                 new Object[]{ServiceStage.CUSTOMER},
                                 Locale.getDefault()
                         )
@@ -185,7 +185,7 @@ public class ClientsServiceImpl implements ClientsService {
         return Fallback.builder()
                 .message(
                         messageSource.getMessage(
-                                "exception.product.service_unavailable",
+                                "OS-PRODUCT-SERVICE_UNAVAILABLE-503",
                                 new Object[]{ServiceStage.ORGANIZATION},
                                 Locale.getDefault()
                         )

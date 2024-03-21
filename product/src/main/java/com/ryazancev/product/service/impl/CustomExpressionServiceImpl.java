@@ -12,7 +12,6 @@ import com.ryazancev.product.util.RequestHeader;
 import com.ryazancev.product.util.exception.CustomExceptionFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +27,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
     private final ProductService productService;
     private final ClientsService clientsService;
     private final HttpServletRequest request;
-    private final MessageSource messageSource;
 
     @Override
     public void checkAccountConditions() {
@@ -44,7 +42,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .emailNotConfirmed(messageSource);
+                    .emailNotConfirmed();
         }
     }
 
@@ -55,7 +53,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
             throw CustomExceptionFactory
                     .getAccessDenied()
                     .cannotAccessObject(
-                            messageSource,
                             ObjectType.PRODUCT,
                             String.valueOf(id)
                     );
@@ -70,7 +67,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
             throw CustomExceptionFactory
                     .getAccessDenied()
                     .cannotAccessObject(
-                            messageSource,
                             ObjectType.ORGANIZATION,
                             String.valueOf(productEditDto.getOrganizationId())
                     );
@@ -86,7 +82,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .accountLocked(messageSource);
+                    .accountLocked();
         }
     }
 
@@ -110,7 +106,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
             throw CustomExceptionFactory
                     .getAccessDenied()
                     .cannotAccessObject(
-                            messageSource,
                             ObjectType.PURCHASE,
                             purchaseId
                     );
