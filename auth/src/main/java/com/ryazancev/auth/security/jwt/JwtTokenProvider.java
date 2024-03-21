@@ -5,7 +5,7 @@ import com.ryazancev.auth.dto.JwtResponse;
 import com.ryazancev.auth.model.Role;
 import com.ryazancev.auth.model.User;
 import com.ryazancev.auth.service.UserService;
-import com.ryazancev.auth.util.exception.custom.AccessDeniedException;
+import com.ryazancev.auth.util.exception.CustomExceptionFactory;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -35,6 +35,8 @@ public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
 
     private final UserService userService;
+
+    private final MessageSource messageSource;
 
     private Key getSignKey() {
 
@@ -96,9 +98,10 @@ public class JwtTokenProvider {
         JwtResponse jwtResponse = new JwtResponse();
 
         if (!validateToken(refreshToken)) {
-            throw new AccessDeniedException(
-                    "Invalid refresh token",
-                    HttpStatus.BAD_REQUEST);
+
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .invalidRefresh(messageSource);
         }
 
         Long userId = Long.valueOf(getId(refreshToken));

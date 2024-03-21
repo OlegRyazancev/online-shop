@@ -7,7 +7,7 @@ import com.ryazancev.auth.repository.UserRepository;
 import com.ryazancev.auth.service.ClientsService;
 import com.ryazancev.auth.service.ConfirmationTokenService;
 import com.ryazancev.auth.service.UserService;
-import com.ryazancev.auth.util.exception.custom.UserNotFoundException;
+import com.ryazancev.auth.util.exception.CustomExceptionFactory;
 import com.ryazancev.auth.util.mappers.UserMapper;
 import com.ryazancev.auth.util.processor.KafkaMessageProcessor;
 import com.ryazancev.auth.util.processor.TokenProcessor;
@@ -18,13 +18,11 @@ import com.ryazancev.common.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.Set;
 
 
@@ -91,26 +89,28 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(final String email) {
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(
-                        messageSource.getMessage(
-                                "exception.auth.not_found_by_email",
-                                new Object[]{email},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND));
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getUserNotFound()
+                                .byEmail(
+                                        messageSource,
+                                        email
+                                )
+                );
     }
 
     @Override
     public User getById(final Long id) {
 
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(
-                        messageSource.getMessage(
-                                "exception.auth.not_found_by_id",
-                                new Object[]{id},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND));
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getUserNotFound()
+                                .byId(
+                                        messageSource,
+                                        String.valueOf(id)
+                                )
+                );
     }
 
     @Override
@@ -131,14 +131,14 @@ public class UserServiceImpl implements UserService {
 
         User existing = userRepository
                 .findByCustomerId(customerId)
-                .orElseThrow(() -> new UserNotFoundException(
-                        messageSource.getMessage(
-                                "exception.auth.not_found_by_customer_id",
-                                new Object[]{customerId},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND
-                ));
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getUserNotFound()
+                                .byCustomerId(
+                                        messageSource,
+                                        String.valueOf(customerId)
+                                )
+                );
 
         existing.setName("DELETED");
         existing.setDeletedAt(LocalDateTime.now());
@@ -152,13 +152,14 @@ public class UserServiceImpl implements UserService {
 
         User existing = userRepository
                 .findByCustomerId(request.getCustomerId())
-                .orElseThrow(() -> new UserNotFoundException(
-                        messageSource.getMessage(
-                                "exception.auth.not_found_by_customer_id",
-                                new Object[]{request.getCustomerId()},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND));
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getUserNotFound()
+                                .byCustomerId(
+                                        messageSource,
+                                        String.valueOf(request.getCustomerId())
+                                )
+                );
 
         existing.setName(request.getName());
         existing.setEmail(request.getEmail());

@@ -4,13 +4,12 @@ import com.ryazancev.auth.model.ConfirmationToken;
 import com.ryazancev.auth.repository.ConfirmationTokenRepository;
 import com.ryazancev.auth.repository.UserRepository;
 import com.ryazancev.auth.service.ConfirmationTokenService;
-import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
+import com.ryazancev.auth.util.exception.CustomExceptionFactory;
 import com.ryazancev.auth.util.processor.KafkaMessageProcessor;
 import com.ryazancev.auth.util.validator.AuthValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,13 +40,10 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
         ConfirmationToken confirmationToken = confirmationTokenRepository
                 .findByToken(token)
                 .orElseThrow(() ->
-                        new ConfirmationTokenException(
-                                messageSource.getMessage(
-                                        "exception.auth.token_not_found",
-                                        null,
-                                        Locale.getDefault()
-                                ),
-                                HttpStatus.NOT_FOUND));
+                        CustomExceptionFactory
+                                .getConfirmationToken()
+                                .notFound(messageSource)
+                );
 
         authValidator.validateConfirmationStatus(confirmationToken);
         authValidator.validateExpiration(confirmationToken);

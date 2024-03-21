@@ -1,0 +1,15 @@
+package com.ryazancev.auth.util.exception;
+
+/**
+ * @author Oleg Ryazancev
+ */
+
+public enum ErrorCode {
+    AUTH_SERVICE_DELETED_ACCOUNT,
+    AUTH_SERVICE_EMAIl_CONFIRMED,
+    AUTH_SERVICE_TOKEN_EXPIRED,
+    AUTH_SERVICE_NOT_FOUND,
+    AUTH_SERVICE_EMAIL_EXISTS,
+    AUTH_SERVICE_PASSWORD_MISMATCH,
+    AUTH_SERVICE_INVALID_REFRESH
+}

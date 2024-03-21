@@ -19,7 +19,6 @@ import java.util.Locale;
 @NoArgsConstructor
 public class AccessDeniedException extends RuntimeException {
 
-
     private HttpStatus httpStatus;
     private ErrorCode code;
     private LocalDateTime timestamp;
