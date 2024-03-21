@@ -7,4 +7,5 @@ package com.ryazancev.logo.util.exception;
 public enum ErrorCode {
     LOGO_UPLOAD_FAILED,
     LOGO_NAME,
+    INTERNAL
 }
