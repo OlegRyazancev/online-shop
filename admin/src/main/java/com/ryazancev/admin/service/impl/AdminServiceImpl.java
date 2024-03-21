@@ -4,7 +4,6 @@ import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.repository.AdminRepository;
 import com.ryazancev.admin.service.AdminService;
 import com.ryazancev.admin.util.exception.CustomExceptionFactory;
-import com.ryazancev.admin.util.exception.custom.RequestNotFoundException;
 import com.ryazancev.admin.util.processor.KafkaMessageProcessor;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
@@ -16,7 +15,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

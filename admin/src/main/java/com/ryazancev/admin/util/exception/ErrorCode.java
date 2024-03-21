@@ -1,7 +1,5 @@
 package com.ryazancev.admin.util.exception;
 
-import jakarta.annotation.Resource;
-
 /**
  * @author Oleg Ryazancev
  */
