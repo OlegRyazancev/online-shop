@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,9 @@ public class CustomerExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.CUSTOMER,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -57,7 +60,9 @@ public class CustomerExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.CUSTOMER,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -74,7 +79,9 @@ public class CustomerExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.CUSTOMER,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -94,6 +101,8 @@ public class CustomerExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.CUSTOMER);
+        exceptionBody.setCode(ErrorCode.CONSTRAINT_VIOLATION.name());
+        exceptionBody.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
@@ -117,6 +126,8 @@ public class CustomerExceptionHandler {
 
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.CUSTOMER);
+        exceptionBody.setCode(ErrorCode.METHOD_ARGUMENT_NOT_VALID.name());
+        exceptionBody.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
@@ -136,7 +147,9 @@ public class CustomerExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.CUSTOMER,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -154,7 +167,9 @@ public class CustomerExceptionHandler {
                         e.getMessage(),
                         e.getErrors(),
                         e.getServiceStage(),
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
