@@ -28,10 +28,6 @@ public class ExceptionBody {
 
     private LocalDateTime timestamp;
 
-    public ExceptionBody(final String message) {
-        this.message = message;
-    }
-
     public ExceptionBody(final String message,
                          final ServiceStage serviceStage,
                          final HttpStatus httpStatus) {

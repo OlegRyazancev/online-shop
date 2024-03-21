@@ -18,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,9 @@ public class AuthExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.AUTH,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -59,7 +62,9 @@ public class AuthExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.AUTH,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -76,7 +81,9 @@ public class AuthExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.AUTH,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -93,7 +100,9 @@ public class AuthExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.AUTH,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -110,7 +119,9 @@ public class AuthExceptionHandler {
                 .body(new ExceptionBody(
                         e.getMessage(),
                         ServiceStage.AUTH,
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode().name(),
+                        e.getTimestamp()
                 ));
     }
 
@@ -129,7 +140,9 @@ public class AuthExceptionHandler {
                 .body(new ExceptionBody(
                         "Access Denied",
                         ServiceStage.AUTH,
-                        HttpStatus.FORBIDDEN
+                        HttpStatus.FORBIDDEN,
+                        ErrorCode.AUTH_SERVICE_SECURITY_ACCESS_DENIED.name(),
+                        LocalDateTime.now()
                 ));
     }
 
@@ -149,6 +162,10 @@ public class AuthExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.AUTH);
+        exceptionBody.setCode(
+                ErrorCode.AUTH_SERVICE_SECURITY_CONSTRAINT_VIOLATION.name()
+        );
+        exceptionBody.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
@@ -172,6 +189,10 @@ public class AuthExceptionHandler {
 
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.AUTH);
+        exceptionBody.setCode(
+                ErrorCode.AUTH_SERVICE_SECURITY_METHOD_ARGUMENT_NOT_VALID.name()
+        );
+        exceptionBody.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity
                 .status(exceptionBody.getHttpStatus())
@@ -190,9 +211,10 @@ public class AuthExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ExceptionBody(
                         "Authentication failed",
-                        null,
                         ServiceStage.AUTH,
-                        HttpStatus.UNAUTHORIZED
+                        HttpStatus.UNAUTHORIZED,
+                        ErrorCode.AUTH_SERVICE_SECURITY_UNAUTHORIZED.name(),
+                        LocalDateTime.now()
                 ));
     }
 
@@ -210,7 +232,9 @@ public class AuthExceptionHandler {
                         e.getMessage(),
                         e.getErrors(),
                         e.getServiceStage(),
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
