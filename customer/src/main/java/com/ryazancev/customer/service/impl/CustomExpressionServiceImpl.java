@@ -3,14 +3,11 @@ package com.ryazancev.customer.service.impl;
 import com.ryazancev.customer.service.ClientsService;
 import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.util.RequestHeader;
-import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
+import com.ryazancev.customer.util.exception.CustomExceptionFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -37,13 +34,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!requestHeader.isConfirmed()) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.customer.email_not_confirmed",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .emailNotConfirmed(messageSource);
         }
     }
 
@@ -55,13 +48,12 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
         if (!(requestHeader.getUserId().equals(customerId)
                 || requestHeader.getRoles().contains("ROLE_ADMIN"))) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.customer.access_customer",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .cannotAccessCustomer(
+                            messageSource,
+                            String.valueOf(customerId)
+                    );
         }
     }
 
@@ -72,14 +64,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (requestHeader.isLocked()) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.customer.account_locked",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
-
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .accountLocked(messageSource);
         }
     }
 
@@ -90,13 +77,9 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!requestHeader.getRoles().contains("ROLE_ADMIN")) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.customer.access_notifications",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.FORBIDDEN);
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .cannotAccessNotifications(messageSource);
         }
     }
 
@@ -111,14 +94,12 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
         if (!recipientId.equals(requestHeader.getUserId())) {
 
-            throw new AccessDeniedException(
-                    messageSource.getMessage(
-                            "exception.customer.access_private_notification",
-                            new Object[]{notificationId},
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.BAD_REQUEST
-            );
+            throw CustomExceptionFactory
+                    .getAccessDenied()
+                    .cannotAccessPrivateNotification(
+                            messageSource,
+                            notificationId
+                    );
         }
     }
 }

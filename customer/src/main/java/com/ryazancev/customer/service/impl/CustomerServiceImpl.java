@@ -4,8 +4,7 @@ import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
-import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
-import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
+import com.ryazancev.customer.util.exception.CustomExceptionFactory;
 import com.ryazancev.customer.util.processor.KafkaMessageProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,16 +75,13 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer create(final Customer customer) {
 
         if (customerRepository.findByEmail(customer.getEmail()).isPresent()) {
-            throw new CustomerCreationException(
-                    messageSource.getMessage(
-                            "exception.customer.customer_email_exists",
-                            null,
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.BAD_REQUEST
-            );
+
+            throw CustomExceptionFactory
+                    .getCustomerCreation()
+                    .emailExists(messageSource);
         }
         customerRepository.save(customer);
+
         return customer;
     }
 
@@ -137,14 +132,13 @@ public class CustomerServiceImpl implements CustomerService {
     private Customer findById(final Long id) {
 
         return customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(
-                        messageSource.getMessage(
-                                "exception.customer.not_found_by_id",
-                                new Object[]{id},
-                                Locale.getDefault()
-                        ),
-                        HttpStatus.NOT_FOUND
-                ));
+                .orElseThrow(() ->
+                        CustomExceptionFactory
+                                .getCustomerNotFound()
+                                .byId(
+                                        messageSource,
+                                        String.valueOf(id)
+                                )
+                );
     }
-
 }
