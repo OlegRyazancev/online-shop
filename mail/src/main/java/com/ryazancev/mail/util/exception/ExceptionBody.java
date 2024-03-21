@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -23,11 +24,17 @@ public class ExceptionBody {
 
     private HttpStatus httpStatus;
 
+    private String code;
+
+    private LocalDateTime timestamp;
+
     public ExceptionBody(final String message,
                          final ServiceStage serviceStage,
                          final HttpStatus httpStatus) {
         this.message = message;
         this.serviceStage = serviceStage;
         this.httpStatus = httpStatus;
+        this.code = ErrorCode.INTERNAL.name();
+        this.timestamp = LocalDateTime.now();
     }
 }

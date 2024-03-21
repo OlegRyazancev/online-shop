@@ -30,7 +30,9 @@ public class MailExceptionHandler {
                         e.getMessage(),
                         e.getErrors(),
                         e.getServiceStage(),
-                        e.getHttpStatus()
+                        e.getHttpStatus(),
+                        e.getCode(),
+                        e.getTimestamp()
                 ));
     }
 
