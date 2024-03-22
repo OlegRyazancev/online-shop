@@ -1,5 +1,6 @@
 package com.ryazancev.product.util.exception;
 
+import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.product.util.exception.custom.AccessDeniedException;
 import com.ryazancev.product.util.exception.custom.ProductCreationException;
 import com.ryazancev.product.util.exception.custom.ProductNotFoundException;
@@ -24,5 +25,10 @@ public class CustomExceptionFactory {
     public static ProductNotFoundException getProductNotFound() {
 
         return new ProductNotFoundException();
+    }
+
+    public static ServiceUnavailableException getServiceUnavailable() {
+
+        return new ServiceUnavailableException();
     }
 }
