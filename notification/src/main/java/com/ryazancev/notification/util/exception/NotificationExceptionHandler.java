@@ -107,7 +107,8 @@ public class NotificationExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(
-                        "Internal error: " + e.getMessage(),
+                        CustomErrorCode.OS_NOTIFICATION_INTERNAL_500
+                                .getMessage(e.getMessage()),
                         ServiceStage.CUSTOMER,
                         HttpStatus.INTERNAL_SERVER_ERROR
                 ));
