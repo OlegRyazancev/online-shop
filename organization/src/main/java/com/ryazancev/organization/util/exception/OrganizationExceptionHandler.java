@@ -92,7 +92,9 @@ public class OrganizationExceptionHandler {
         log.debug(e.getMessage());
         log.debug("Exception stack trace:", e);
 
-        ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
+        ExceptionBody exceptionBody = new ExceptionBody(
+                CustomErrorCode.OS_ORGANIZATION_SECURITY
+                        .getMessage("Validation failed"));
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
                         violation -> violation.getPropertyPath().toString(),
@@ -100,7 +102,7 @@ public class OrganizationExceptionHandler {
                 )));
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.ORGANIZATION);
-        exceptionBody.setCode(ErrorCode.CONSTRAINT_VIOLATION.name());
+        exceptionBody.setCode(CustomErrorCode.OS_ORGANIZATION_SECURITY.name());
         exceptionBody.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity
@@ -116,7 +118,9 @@ public class OrganizationExceptionHandler {
         log.debug(e.getMessage());
         log.debug("Exception stack trace:", e);
 
-        ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
+        ExceptionBody exceptionBody = new ExceptionBody(
+                CustomErrorCode.OS_ORGANIZATION_SECURITY
+                        .getMessage("Validation failed"));
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
         exceptionBody.setErrors(errors.stream()
                 .collect(Collectors.toMap(
@@ -125,7 +129,7 @@ public class OrganizationExceptionHandler {
 
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.ORGANIZATION);
-        exceptionBody.setCode(ErrorCode.METHOD_ARGUMENT_NOT_VALID.name());
+        exceptionBody.setCode(CustomErrorCode.OS_ORGANIZATION_SECURITY.name());
         exceptionBody.setTimestamp(LocalDateTime.now());
 
         return ResponseEntity
@@ -183,7 +187,8 @@ public class OrganizationExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(
-                        "Internal error: " + e.getMessage(),
+                        CustomErrorCode.OS_ORGANIZATION_SECURITY
+                                .getMessage(e.getMessage()),
                         ServiceStage.ORGANIZATION,
                         HttpStatus.INTERNAL_SERVER_ERROR
                 ));

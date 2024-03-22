@@ -5,7 +5,6 @@ import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.util.exception.CustomExceptionFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 
@@ -19,8 +18,6 @@ public class OrganizationValidator {
 
     private final OrganizationRepository organizationRepository;
 
-    private final MessageSource messageSource;
-
     public void validateStatus(final Organization organization,
                                final OrganizationStatus status) {
 
@@ -28,10 +25,7 @@ public class OrganizationValidator {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .statusAccess(
-                            messageSource,
-                            organization.getStatus()
-                    );
+                    .statusAccess(organization.getStatus());
         }
     }
 
@@ -53,7 +47,7 @@ public class OrganizationValidator {
 
             throw CustomExceptionFactory
                     .getOrganizationCreation()
-                    .nameExists(messageSource);
+                    .nameExists();
         }
     }
 
@@ -66,7 +60,7 @@ public class OrganizationValidator {
 
             throw CustomExceptionFactory
                     .getOrganizationCreation()
-                    .descriptionExists(messageSource);
+                    .descriptionExists();
         }
     }
 }

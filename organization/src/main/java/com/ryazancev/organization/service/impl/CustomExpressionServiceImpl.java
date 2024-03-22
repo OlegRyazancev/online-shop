@@ -7,7 +7,6 @@ import com.ryazancev.organization.util.RequestHeader;
 import com.ryazancev.organization.util.exception.CustomExceptionFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Service;
 public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final OrganizationRepository organizationRepository;
-
-    private final MessageSource messageSource;
 
     private final HttpServletRequest request;
 
@@ -40,7 +37,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .emailNotConfirmed(messageSource);
+                    .emailNotConfirmed();
         }
     }
 
@@ -56,7 +53,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
             throw CustomExceptionFactory
                     .getAccessDenied()
                     .cannotAccessObject(
-                            messageSource,
                             ObjectType.ORGANIZATION,
                             String.valueOf(id)
                     );
@@ -74,7 +70,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
             throw CustomExceptionFactory
                     .getAccessDenied()
                     .cannotAccessObject(
-                            messageSource,
                             ObjectType.CUSTOMER,
                             String.valueOf(customerId)
                     );
@@ -90,7 +85,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .accountLocked(messageSource);
+                    .accountLocked();
         }
     }
 }

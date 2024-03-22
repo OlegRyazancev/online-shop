@@ -2,14 +2,12 @@ package com.ryazancev.organization.util.exception.custom;
 
 import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.organization.model.OrganizationStatus;
-import com.ryazancev.organization.util.exception.ErrorCode;
+import com.ryazancev.organization.util.exception.CustomErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -20,73 +18,48 @@ import java.util.Locale;
 public class AccessDeniedException extends RuntimeException {
 
     private HttpStatus httpStatus;
-    private ErrorCode code;
+    private CustomErrorCode code;
     private LocalDateTime timestamp;
 
     public AccessDeniedException(final String message,
-                                 final ErrorCode code) {
+                                 final CustomErrorCode code) {
         super(message);
         this.httpStatus = HttpStatus.FORBIDDEN;
         this.code = code;
         this.timestamp = LocalDateTime.now();
     }
 
-    public AccessDeniedException cannotAccessObject(final MessageSource source,
-                                                    final ObjectType objectType,
+    public AccessDeniedException cannotAccessObject(final ObjectType objectType,
                                                     final String objectId) {
 
-        String message = source.getMessage(
-                "exception.organization.access_object",
-                new Object[]{
-                        objectType,
-                        objectId
-                },
-                Locale.getDefault()
-        );
-
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCESS_DENIED_OBJECT
+                CustomErrorCode.OS_ORGANIZATION_101_403.getMessage(
+                        objectType, objectId),
+                CustomErrorCode.OS_ORGANIZATION_101_403
         );
     }
 
-    public AccessDeniedException statusAccess(final MessageSource source,
-                                              final OrganizationStatus status) {
+    public AccessDeniedException statusAccess(final OrganizationStatus status) {
 
-        String message =  source.getMessage(
-                "exception.organization.status_access",
-                new Object[]{status},
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCESS_DENIED_STATUS
+                CustomErrorCode.OS_ORGANIZATION_104_403.getMessage(status),
+                CustomErrorCode.OS_ORGANIZATION_104_403
         );
     }
 
-    public AccessDeniedException emailNotConfirmed(final MessageSource source) {
+    public AccessDeniedException emailNotConfirmed() {
 
-        String message = source.getMessage(
-                "exception.organization.email_not_confirmed",
-                null,
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCESS_DENIED_EMAIL
+                CustomErrorCode.OS_ORGANIZATION_103_403.getMessage(),
+                CustomErrorCode.OS_ORGANIZATION_103_403
         );
     }
 
-    public AccessDeniedException accountLocked(final MessageSource source) {
+    public AccessDeniedException accountLocked() {
 
-        String message = source.getMessage(
-                "exception.organization.account_locked",
-                null,
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCESS_DENIED_ACCOUNT
+                CustomErrorCode.OS_ORGANIZATION_102_403.getMessage(),
+                CustomErrorCode.OS_ORGANIZATION_102_403
         );
     }
 }

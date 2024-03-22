@@ -1,13 +1,11 @@
 package com.ryazancev.organization.util.exception.custom;
 
-import com.ryazancev.organization.util.exception.ErrorCode;
+import com.ryazancev.organization.util.exception.CustomErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -18,42 +16,30 @@ import java.util.Locale;
 public class OrganizationCreationException extends RuntimeException {
 
     private HttpStatus httpStatus;
-    private ErrorCode code;
+    private CustomErrorCode code;
     private LocalDateTime timestamp;
 
     public OrganizationCreationException(final String message,
-                                         final ErrorCode code) {
+                                         final CustomErrorCode code) {
         super(message);
         this.httpStatus = HttpStatus.BAD_REQUEST;
         this.code = code;
         this.timestamp = LocalDateTime.now();
     }
 
-    public OrganizationCreationException nameExists(
-            final MessageSource source) {
+    public OrganizationCreationException nameExists() {
 
-        String message = source.getMessage(
-                "exception.organization.name_exists",
-                null,
-                Locale.getDefault()
-        );
         return new OrganizationCreationException(
-                message,
-                ErrorCode.ORGANIZATION_CREATION_NAME
+                CustomErrorCode.OS_ORGANIZATION_202_400.getMessage(),
+                CustomErrorCode.OS_ORGANIZATION_202_400
         );
     }
 
-    public OrganizationCreationException descriptionExists(
-            final MessageSource source) {
+    public OrganizationCreationException descriptionExists() {
 
-        String message = source.getMessage(
-                "exception.organization.description_exists",
-                null,
-                Locale.getDefault()
-        );
         return new OrganizationCreationException(
-                message,
-                ErrorCode.ORGANIZATION_CREATION_DESCRIPTION
+                CustomErrorCode.OS_ORGANIZATION_201_400.getMessage(),
+                CustomErrorCode.OS_ORGANIZATION_201_400
         );
     }
 }

@@ -247,10 +247,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .orElseThrow(() ->
                         CustomExceptionFactory
                                 .getOrganizationNotFound()
-                                .byId(
-                                        messageSource,
-                                        String.valueOf(id)
-                                )
+                                .byId(String.valueOf(id))
                 );
     }
 }
