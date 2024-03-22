@@ -40,17 +40,14 @@ public class LogoServiceImpl implements LogoService {
 
             throw CustomExceptionFactory
                     .getLogoUpload()
-                    .failed(
-                            messageSource,
-                            e.getMessage()
-                    );
+                    .failed(e.getMessage());
         }
 
         if (file.isEmpty() || file.getOriginalFilename() == null) {
 
             throw CustomExceptionFactory
                     .getLogoUpload()
-                    .mustHaveName(messageSource);
+                    .mustHaveName();
         }
 
         String fileName = generateFileName(file);
@@ -62,10 +59,7 @@ public class LogoServiceImpl implements LogoService {
 
             throw CustomExceptionFactory
                     .getLogoUpload()
-                    .failed(
-                            messageSource,
-                            e.getMessage()
-                    );
+                    .failed(e.getMessage());
         }
 
         saveImage(inputStream, fileName);

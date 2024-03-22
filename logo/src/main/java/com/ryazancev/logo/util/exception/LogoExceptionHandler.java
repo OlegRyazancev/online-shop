@@ -67,7 +67,8 @@ public class LogoExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(
-                        "Internal error: " + e.getMessage(),
+                        CustomErrorCode.OS_LOGO_INTERNAL_500
+                                .getMessage(e.getMessage()),
                         ServiceStage.LOGO,
                         HttpStatus.INTERNAL_SERVER_ERROR
                 ));
