@@ -84,10 +84,7 @@ public class AdminServiceImpl implements AdminService {
                         .orElseThrow(() ->
                                 CustomExceptionFactory
                                         .getRequestNotFound()
-                                        .byId(
-                                                messageSource,
-                                                String.valueOf(requestId)
-                                        )
+                                        .byId(String.valueOf(requestId))
                         );
         existing.setStatus(status);
         existing.setReviewedAt(LocalDateTime.now());

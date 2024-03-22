@@ -1,6 +1,7 @@
 package com.ryazancev.admin.service.impl;
 
 import com.ryazancev.admin.service.ClientsService;
+import com.ryazancev.admin.util.exception.CustomErrorCode;
 import com.ryazancev.common.clients.OrganizationClient;
 import com.ryazancev.common.clients.ProductClient;
 import com.ryazancev.common.config.ServiceStage;
@@ -8,10 +9,7 @@ import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.Fallback;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -24,8 +22,6 @@ public class ClientsServiceImpl implements ClientsService {
     private final ProductClient productClient;
 
     private final OrganizationClient organizationClient;
-
-    private final MessageSource messageSource;
 
     @Override
     @CircuitBreaker(
@@ -73,11 +69,8 @@ public class ClientsServiceImpl implements ClientsService {
 
         return Fallback.builder()
                 .message(
-                        messageSource.getMessage(
-                                "exception.admin.service_unavailable",
-                                new Object[]{ServiceStage.ORGANIZATION},
-                                Locale.getDefault()
-                        )
+                        CustomErrorCode.OS_ADMIN_SERVICE_UNAVAILABLE_503
+                                .getMessage(ServiceStage.ORGANIZATION)
                 )
                 .build();
     }
@@ -86,11 +79,8 @@ public class ClientsServiceImpl implements ClientsService {
 
         return Fallback.builder()
                 .message(
-                        messageSource.getMessage(
-                                "exception.admin.service_unavailable",
-                                new Object[]{ServiceStage.PRODUCT},
-                                Locale.getDefault()
-                        )
+                        CustomErrorCode.OS_ADMIN_SERVICE_UNAVAILABLE_503
+                                .getMessage(ServiceStage.PRODUCT)
                 )
                 .build();
     }
