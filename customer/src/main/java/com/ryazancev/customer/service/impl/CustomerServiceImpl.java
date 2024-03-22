@@ -78,7 +78,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             throw CustomExceptionFactory
                     .getCustomerCreation()
-                    .emailExists(messageSource);
+                    .emailExists();
         }
         customerRepository.save(customer);
 
@@ -135,10 +135,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() ->
                         CustomExceptionFactory
                                 .getCustomerNotFound()
-                                .byId(
-                                        messageSource,
-                                        String.valueOf(id)
-                                )
+                                .byId(String.valueOf(id))
                 );
     }
 }

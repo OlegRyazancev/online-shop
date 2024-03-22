@@ -6,7 +6,6 @@ import com.ryazancev.customer.util.RequestHeader;
 import com.ryazancev.customer.util.exception.CustomExceptionFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,7 +18,6 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
     private final HttpServletRequest request;
     private final ClientsService clientsService;
-    private final MessageSource messageSource;
 
     @Override
     public void checkAccountConditions() {
@@ -36,7 +34,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .emailNotConfirmed(messageSource);
+                    .emailNotConfirmed();
         }
     }
 
@@ -50,10 +48,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .cannotAccessCustomer(
-                            messageSource,
-                            String.valueOf(customerId)
-                    );
+                    .cannotAccessCustomer(String.valueOf(customerId));
         }
     }
 
@@ -66,7 +61,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .accountLocked(messageSource);
+                    .accountLocked();
         }
     }
 
@@ -79,7 +74,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .cannotAccessNotifications(messageSource);
+                    .cannotAccessNotifications();
         }
     }
 
@@ -96,10 +91,7 @@ public class CustomExpressionServiceImpl implements CustomExpressionService {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .cannotAccessPrivateNotification(
-                            messageSource,
-                            notificationId
-                    );
+                    .cannotAccessPrivateNotification(notificationId);
         }
     }
 }

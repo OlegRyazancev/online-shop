@@ -1,5 +1,6 @@
 package com.ryazancev.customer.util.exception;
 
+import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.customer.util.exception.custom.AccessDeniedException;
 import com.ryazancev.customer.util.exception.custom.CustomerCreationException;
 import com.ryazancev.customer.util.exception.custom.CustomerNotFoundException;
@@ -23,5 +24,10 @@ public class CustomExceptionFactory {
     public static CustomerNotFoundException getCustomerNotFound() {
 
         return new CustomerNotFoundException();
+    }
+
+    public static ServiceUnavailableException getServiceUnavailable() {
+
+        return new ServiceUnavailableException();
     }
 }

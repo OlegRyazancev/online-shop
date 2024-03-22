@@ -1,13 +1,11 @@
 package com.ryazancev.customer.util.exception.custom;
 
-import com.ryazancev.customer.util.exception.ErrorCode;
+import com.ryazancev.customer.util.exception.CustomErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -18,84 +16,55 @@ import java.util.Locale;
 public class AccessDeniedException extends RuntimeException {
 
     private HttpStatus httpStatus;
-    private ErrorCode code;
+    private CustomErrorCode code;
     private LocalDateTime timestamp;
 
     public AccessDeniedException(final String message,
-                                 final ErrorCode code) {
+                                 final CustomErrorCode code) {
         super(message);
-        this.httpStatus = HttpStatus.BAD_REQUEST;
+        this.httpStatus = HttpStatus.FORBIDDEN;
         this.code = code;
         this.timestamp = LocalDateTime.now();
     }
 
-    public AccessDeniedException emailNotConfirmed(final MessageSource source) {
+    public AccessDeniedException emailNotConfirmed() {
 
-        String message = source.getMessage(
-                "exception.customer.email_not_confirmed",
-                null,
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCESS_DENIED_EMAIL
+                CustomErrorCode.OS_CUSTOMER_105_403.getMessage(),
+                CustomErrorCode.OS_CUSTOMER_105_403
         );
     }
 
-    public AccessDeniedException cannotAccessCustomer(
-            final MessageSource source,
-            final String id) {
+    public AccessDeniedException cannotAccessCustomer(final String id) {
 
-        String message = source.getMessage(
-                "exception.customer.access_customer",
-                new Object[]{id},
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCESS_CUSTOMER
+                CustomErrorCode.OS_CUSTOMER_101_403.getMessage(id),
+                CustomErrorCode.OS_CUSTOMER_101_403
         );
     }
 
-    public AccessDeniedException accountLocked(final MessageSource source) {
+    public AccessDeniedException accountLocked() {
 
-        String message = source.getMessage(
-                "exception.customer.account_locked",
-                null,
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCOUNT_LOCKED
+                CustomErrorCode.OS_CUSTOMER_104_403.getMessage(),
+                CustomErrorCode.OS_CUSTOMER_104_403
         );
     }
 
-    public AccessDeniedException cannotAccessNotifications(
-            final MessageSource source) {
+    public AccessDeniedException cannotAccessNotifications() {
 
-        String message = source.getMessage(
-                "exception.customer.access_notifications",
-                null,
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCESS_NOTIFICATIONS
+                CustomErrorCode.OS_CUSTOMER_102_403.getMessage(),
+                CustomErrorCode.OS_CUSTOMER_102_403
         );
     }
 
     public AccessDeniedException cannotAccessPrivateNotification(
-            final MessageSource source,
             final String id) {
 
-        String message = source.getMessage(
-                "exception.customer.access_private_notification",
-                new Object[]{id},
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.ACCESS_PRIVATE_NOTIFICATION
+                CustomErrorCode.OS_CUSTOMER_103_403.getMessage(id),
+                CustomErrorCode.OS_CUSTOMER_103_403
         );
     }
 }
