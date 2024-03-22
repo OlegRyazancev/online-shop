@@ -42,7 +42,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
                 .orElseThrow(() ->
                         CustomExceptionFactory
                                 .getConfirmationToken()
-                                .notFound(messageSource)
+                                .notFound()
                 );
 
         authValidator.validateConfirmationStatus(confirmationToken);

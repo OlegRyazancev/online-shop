@@ -1,13 +1,11 @@
 package com.ryazancev.auth.util.exception.custom;
 
-import com.ryazancev.auth.util.exception.ErrorCode;
+import com.ryazancev.auth.util.exception.CustomErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -18,11 +16,11 @@ import java.util.Locale;
 public class ConfirmationTokenException extends RuntimeException {
 
     private HttpStatus httpStatus;
-    private ErrorCode code;
+    private CustomErrorCode code;
     private LocalDateTime timestamp;
 
     public ConfirmationTokenException(final String message,
-                                      final ErrorCode code,
+                                      final CustomErrorCode code,
                                       final HttpStatus status) {
         super(message);
         this.httpStatus = status;
@@ -30,45 +28,29 @@ public class ConfirmationTokenException extends RuntimeException {
         this.timestamp = LocalDateTime.now();
     }
 
-    public ConfirmationTokenException emailConfirmed(
-            final MessageSource source) {
+    public ConfirmationTokenException emailConfirmed() {
 
-        String message = source.getMessage(
-                "exception.auth.email_confirmed",
-                null,
-                Locale.getDefault()
-        );
         return new ConfirmationTokenException(
-                message,
-                ErrorCode.AUTH_SERVICE_EMAIl_CONFIRMED,
+                CustomErrorCode.OS_AUTH_201_400.getMessage(),
+                CustomErrorCode.OS_AUTH_201_400,
                 HttpStatus.BAD_REQUEST
         );
     }
 
-    public ConfirmationTokenException notFound(final MessageSource source){
+    public ConfirmationTokenException notFound(){
 
-        String message = source.getMessage(
-                "exception.auth.token_not_found",
-                null,
-                Locale.getDefault()
-        );
-        return new ConfirmationTokenException(message,
-                ErrorCode.AUTH_SERVICE_NOT_FOUND,
+        return new ConfirmationTokenException(
+                CustomErrorCode.OS_AUTH_203_404.getMessage(),
+                CustomErrorCode.OS_AUTH_203_404,
                 HttpStatus.NOT_FOUND
         );
     }
 
-    public ConfirmationTokenException expired(final MessageSource source,
-                                              final String expiredDate) {
+    public ConfirmationTokenException expired(final String expiredDate) {
 
-        String message = source.getMessage(
-                "exception.auth.token_expired",
-                new Object[]{expiredDate},
-                Locale.getDefault()
-        );
         return new ConfirmationTokenException(
-                message,
-                ErrorCode.AUTH_SERVICE_TOKEN_EXPIRED,
+                CustomErrorCode.OS_AUTH_202_403.getMessage(expiredDate),
+                CustomErrorCode.OS_AUTH_202_403,
                 HttpStatus.FORBIDDEN
         );
     }

@@ -138,10 +138,11 @@ public class AuthExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ExceptionBody(
-                        "Access Denied",
+                        CustomErrorCode.OS_AUTH_SECURITY
+                                .getMessage(e.getMessage()),
                         ServiceStage.AUTH,
                         HttpStatus.FORBIDDEN,
-                        ErrorCode.AUTH_SERVICE_SECURITY_ACCESS_DENIED.name(),
+                        CustomErrorCode.OS_AUTH_SECURITY.name(),
                         LocalDateTime.now()
                 ));
     }
@@ -154,7 +155,10 @@ public class AuthExceptionHandler {
         log.debug(e.getMessage());
         log.debug("Exception stack trace:", e);
 
-        ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
+        ExceptionBody exceptionBody = new ExceptionBody(
+                CustomErrorCode.OS_AUTH_SECURITY
+                        .getMessage("Validation failed"));
+
         exceptionBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
                         violation -> violation.getPropertyPath().toString(),
@@ -163,7 +167,7 @@ public class AuthExceptionHandler {
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.AUTH);
         exceptionBody.setCode(
-                ErrorCode.AUTH_SERVICE_SECURITY_CONSTRAINT_VIOLATION.name()
+                CustomErrorCode.OS_AUTH_SECURITY.name()
         );
         exceptionBody.setTimestamp(LocalDateTime.now());
 
@@ -180,7 +184,10 @@ public class AuthExceptionHandler {
         log.debug(e.getMessage());
         log.debug("Exception stack trace:", e);
 
-        ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
+        ExceptionBody exceptionBody = new ExceptionBody(
+                CustomErrorCode.OS_AUTH_SECURITY
+                        .getMessage("Validation failed"));
+
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
         exceptionBody.setErrors(errors.stream()
                 .collect(Collectors.toMap(
@@ -190,7 +197,7 @@ public class AuthExceptionHandler {
         exceptionBody.setHttpStatus(HttpStatus.BAD_REQUEST);
         exceptionBody.setServiceStage(ServiceStage.AUTH);
         exceptionBody.setCode(
-                ErrorCode.AUTH_SERVICE_SECURITY_METHOD_ARGUMENT_NOT_VALID.name()
+                CustomErrorCode.OS_AUTH_SECURITY.name()
         );
         exceptionBody.setTimestamp(LocalDateTime.now());
 
@@ -210,10 +217,11 @@ public class AuthExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ExceptionBody(
-                        "Authentication failed",
+                        CustomErrorCode.OS_AUTH_SECURITY
+                                .getMessage("Authentication failed"),
                         ServiceStage.AUTH,
                         HttpStatus.UNAUTHORIZED,
-                        ErrorCode.AUTH_SERVICE_SECURITY_UNAUTHORIZED.name(),
+                        CustomErrorCode.OS_AUTH_SECURITY.name(),
                         LocalDateTime.now()
                 ));
     }
@@ -249,7 +257,8 @@ public class AuthExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(
-                        "Internal error: " + e.getMessage(),
+                        CustomErrorCode.OS_AUTH_INTERNAL_500
+                                .getMessage(e.getMessage()),
                         ServiceStage.AUTH,
                         HttpStatus.INTERNAL_SERVER_ERROR
                 ));

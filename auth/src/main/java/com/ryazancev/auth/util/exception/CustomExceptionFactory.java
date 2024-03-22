@@ -4,6 +4,7 @@ import com.ryazancev.auth.util.exception.custom.AccessDeniedException;
 import com.ryazancev.auth.util.exception.custom.ConfirmationTokenException;
 import com.ryazancev.auth.util.exception.custom.UserCreationException;
 import com.ryazancev.auth.util.exception.custom.UserNotFoundException;
+import com.ryazancev.common.exception.ServiceUnavailableException;
 
 /**
  * @author Oleg Ryazancev
@@ -29,5 +30,10 @@ public class CustomExceptionFactory {
     public static UserNotFoundException getUserNotFound() {
 
         return new UserNotFoundException();
+    }
+
+    public static ServiceUnavailableException getServiceUnavailable() {
+
+        return new ServiceUnavailableException();
     }
 }

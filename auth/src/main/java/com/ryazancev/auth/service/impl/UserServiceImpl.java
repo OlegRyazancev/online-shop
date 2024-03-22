@@ -17,7 +17,6 @@ import com.ryazancev.common.dto.user.UserDto;
 import com.ryazancev.common.dto.user.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,9 +47,6 @@ public class UserServiceImpl implements UserService {
 
     private final KafkaMessageProcessor kafkaMessageProcessor;
     private final TokenProcessor tokenProcessor;
-
-    private final MessageSource messageSource;
-
 
     @Transactional
     @Override
@@ -92,10 +88,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         CustomExceptionFactory
                                 .getUserNotFound()
-                                .byEmail(
-                                        messageSource,
-                                        email
-                                )
+                                .byEmail(email)
                 );
     }
 
@@ -106,10 +99,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         CustomExceptionFactory
                                 .getUserNotFound()
-                                .byId(
-                                        messageSource,
-                                        String.valueOf(id)
-                                )
+                                .byId(String.valueOf(id))
                 );
     }
 
@@ -134,10 +124,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         CustomExceptionFactory
                                 .getUserNotFound()
-                                .byCustomerId(
-                                        messageSource,
-                                        String.valueOf(customerId)
-                                )
+                                .byCustomerId(String.valueOf(customerId))
                 );
 
         existing.setName("DELETED");
@@ -156,7 +143,6 @@ public class UserServiceImpl implements UserService {
                         CustomExceptionFactory
                                 .getUserNotFound()
                                 .byCustomerId(
-                                        messageSource,
                                         String.valueOf(request.getCustomerId())
                                 )
                 );

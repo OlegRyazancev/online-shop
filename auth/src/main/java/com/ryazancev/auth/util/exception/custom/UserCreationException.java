@@ -1,13 +1,11 @@
 package com.ryazancev.auth.util.exception.custom;
 
-import com.ryazancev.auth.util.exception.ErrorCode;
+import com.ryazancev.auth.util.exception.CustomErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -18,40 +16,30 @@ import java.util.Locale;
 public class UserCreationException extends RuntimeException {
 
     private HttpStatus httpStatus;
-    private ErrorCode code;
+    private CustomErrorCode code;
     private LocalDateTime timestamp;
 
     public UserCreationException(final String message,
-                                 final ErrorCode code) {
+                                 final CustomErrorCode code) {
         super(message);
         this.httpStatus = HttpStatus.BAD_REQUEST;
         this.code = code;
         this.timestamp = LocalDateTime.now();
     }
 
-    public UserCreationException emailExists(final MessageSource source) {
+    public UserCreationException emailExists() {
 
-        String message = source.getMessage(
-                "exception.auth.email_exists",
-                null,
-                Locale.getDefault()
-        );
         return new UserCreationException(
-                message,
-                ErrorCode.AUTH_SERVICE_EMAIL_EXISTS
+                CustomErrorCode.OS_AUTH_301_400.getMessage(),
+                CustomErrorCode.OS_AUTH_301_400
         );
     }
 
-    public UserCreationException passwordMismatch(final MessageSource source) {
+    public UserCreationException passwordMismatch() {
 
-        String message = source.getMessage(
-                "exception.auth.password_mismatch",
-                null,
-                Locale.getDefault()
-        );
         return new UserCreationException(
-                message,
-                ErrorCode.AUTH_SERVICE_PASSWORD_MISMATCH
+                CustomErrorCode.OS_AUTH_302_400.getMessage(),
+                CustomErrorCode.OS_AUTH_302_400
         );
     }
 }

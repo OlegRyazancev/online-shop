@@ -1,13 +1,11 @@
 package com.ryazancev.auth.util.exception.custom;
 
-import com.ryazancev.auth.util.exception.ErrorCode;
+import com.ryazancev.auth.util.exception.CustomErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -18,56 +16,38 @@ import java.util.Locale;
 public class UserNotFoundException extends RuntimeException {
 
     private HttpStatus httpStatus;
-    private ErrorCode code;
+    private CustomErrorCode code;
     private LocalDateTime timestamp;
 
     public UserNotFoundException(final String message,
-                                 final ErrorCode code) {
+                                 final CustomErrorCode code) {
         super(message);
         this.httpStatus = HttpStatus.NOT_FOUND;
         this.code = code;
         this.timestamp = LocalDateTime.now();
     }
 
-    public UserNotFoundException byId(final MessageSource source,
-                                      final String id) {
+    public UserNotFoundException byId(final String id) {
 
-        String message = source.getMessage(
-                "exception.auth.not_found_by_id",
-                new Object[]{id},
-                Locale.getDefault()
-        );
         return new UserNotFoundException(
-                message,
-                ErrorCode.AUTH_SERVICE_NOT_FOUND
+                CustomErrorCode.OS_AUTH_401_404.getMessage(id),
+                CustomErrorCode.OS_AUTH_401_404
         );
     }
 
-    public UserNotFoundException byEmail(final MessageSource source,
-                                         final String email) {
+    public UserNotFoundException byEmail(final String email) {
 
-        String message = source.getMessage(
-                "exception.auth.not_found_by_email",
-                new Object[]{email},
-                Locale.getDefault()
-        );
         return new UserNotFoundException(
-                message,
-                ErrorCode.AUTH_SERVICE_NOT_FOUND
+                CustomErrorCode.OS_AUTH_402_404.getMessage(email),
+                CustomErrorCode.OS_AUTH_402_404
         );
     }
 
-    public UserNotFoundException byCustomerId(final MessageSource source,
-                                              final String customerId) {
+    public UserNotFoundException byCustomerId(final String customerId) {
 
-        String message = source.getMessage(
-                "exception.auth.not_found_by_customer_id",
-                new Object[]{customerId},
-                Locale.getDefault()
-        );
         return new UserNotFoundException(
-                message,
-                ErrorCode.AUTH_SERVICE_NOT_FOUND
+                CustomErrorCode.OS_AUTH_403_404.getMessage(customerId),
+                CustomErrorCode.OS_AUTH_403_404
         );
     }
 }

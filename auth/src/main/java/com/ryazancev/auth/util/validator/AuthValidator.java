@@ -6,7 +6,6 @@ import com.ryazancev.auth.repository.UserRepository;
 import com.ryazancev.auth.util.exception.CustomExceptionFactory;
 import com.ryazancev.common.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -23,8 +22,6 @@ public class AuthValidator {
 
     private final UserRepository userRepository;
 
-    private final MessageSource messageSource;
-
     public void validateUserAccess(
             final User user) {
 
@@ -36,11 +33,7 @@ public class AuthValidator {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .deletedAccount(
-                            messageSource,
-                            user.getEmail(),
-                            formattedDate
-                    );
+                    .deletedAccount(user.getEmail(), formattedDate);
         }
     }
 
@@ -51,7 +44,7 @@ public class AuthValidator {
 
             throw CustomExceptionFactory
                     .getConfirmationToken()
-                    .emailConfirmed(messageSource);
+                    .emailConfirmed();
         }
     }
 
@@ -64,10 +57,7 @@ public class AuthValidator {
 
             throw CustomExceptionFactory
                     .getConfirmationToken()
-                    .expired(
-                            messageSource,
-                            String.valueOf(expiredAt)
-                    );
+                    .expired(String.valueOf(expiredAt));
         }
     }
 
@@ -78,7 +68,7 @@ public class AuthValidator {
 
             throw CustomExceptionFactory
                     .getUserCreation()
-                    .emailExists(messageSource);
+                    .emailExists();
         }
     }
 
@@ -89,7 +79,7 @@ public class AuthValidator {
 
             throw CustomExceptionFactory
                     .getUserCreation()
-                    .passwordMismatch(messageSource);
+                    .passwordMismatch();
         }
     }
 

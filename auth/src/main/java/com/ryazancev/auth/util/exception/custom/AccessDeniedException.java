@@ -1,13 +1,11 @@
 package com.ryazancev.auth.util.exception.custom;
 
-import com.ryazancev.auth.util.exception.ErrorCode;
+import com.ryazancev.auth.util.exception.CustomErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -18,42 +16,31 @@ import java.util.Locale;
 public class AccessDeniedException extends RuntimeException {
 
     private HttpStatus httpStatus;
-    private ErrorCode code;
+    private CustomErrorCode code;
     private LocalDateTime timestamp;
 
     public AccessDeniedException(final String message,
-                                 final ErrorCode code) {
+                                 final CustomErrorCode code) {
         super(message);
-        this.httpStatus = HttpStatus.BAD_REQUEST;
+        this.httpStatus = HttpStatus.FORBIDDEN;
         this.code = code;
         this.timestamp = LocalDateTime.now();
     }
 
-    public AccessDeniedException invalidRefresh(final MessageSource source) {
+    public AccessDeniedException invalidRefresh() {
 
-        String message = source.getMessage(
-                "exception.auth.invalid_refresh",
-                null,
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.AUTH_SERVICE_INVALID_REFRESH
+                CustomErrorCode.OS_AUTH_102_403.getMessage(),
+                CustomErrorCode.OS_AUTH_102_403
         );
     }
 
-    public AccessDeniedException deletedAccount(final MessageSource source,
-                                                final String email,
+    public AccessDeniedException deletedAccount(final String email,
                                                 final String deletionDate) {
 
-        String message = source.getMessage(
-                "exception.auth.deleted_account_format",
-                new Object[]{email, deletionDate},
-                Locale.getDefault()
-        );
         return new AccessDeniedException(
-                message,
-                ErrorCode.AUTH_SERVICE_DELETED_ACCOUNT
+                CustomErrorCode.OS_AUTH_101_403.getMessage(email, deletionDate),
+                CustomErrorCode.OS_AUTH_101_403
         );
     }
 }

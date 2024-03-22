@@ -13,7 +13,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -35,8 +34,6 @@ public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
 
     private final UserService userService;
-
-    private final MessageSource messageSource;
 
     private Key getSignKey() {
 
@@ -101,7 +98,7 @@ public class JwtTokenProvider {
 
             throw CustomExceptionFactory
                     .getAccessDenied()
-                    .invalidRefresh(messageSource);
+                    .invalidRefresh();
         }
 
         Long userId = Long.valueOf(getId(refreshToken));
