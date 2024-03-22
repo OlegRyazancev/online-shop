@@ -11,6 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Oleg Ryazancev
  */
@@ -55,7 +57,9 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
         ExceptionBody exceptionBody = new ExceptionBody(
                 ex.getMessage(),
-                HttpStatus.UNAUTHORIZED);
+                ex.getHttpStatus(),
+                ex.getCode(),
+                ex.getTimestamp());
 
         return writeErrorResponse(response, exceptionBody);
     }
@@ -65,8 +69,11 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             final Throwable ex) {
 
         ExceptionBody exceptionBody = new ExceptionBody(
-                "Internal Server Error: " + ex.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR);
+                CustomErrorCode.OS_API_GATEWAY_INTERNAL_500
+                        .getMessage(ex.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                CustomErrorCode.OS_API_GATEWAY_INTERNAL_500,
+                LocalDateTime.now());
 
         return writeErrorResponse(response, exceptionBody);
     }
@@ -84,6 +91,12 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
                 + "\","
                 + "\"httpStatus\":\""
                 + exceptionBody.getHttpStatus().value()
+                + "\","
+                + "\"errorCode\":\""
+                + exceptionBody.getCode().name()
+                + "\","
+                + "\"timestamp\":\""
+                + exceptionBody.getTimestamp().toString()
                 + "\""
                 + "}";
 
