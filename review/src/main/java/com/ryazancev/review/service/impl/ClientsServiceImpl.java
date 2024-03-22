@@ -6,17 +6,14 @@ import com.ryazancev.common.clients.PurchaseClient;
 import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.Fallback;
-import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.review.service.ClientsService;
+import com.ryazancev.review.util.exception.CustomErrorCode;
+import com.ryazancev.review.util.exception.CustomExceptionFactory;
 import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
-
 
 /**
  * @author Oleg Ryazancev
@@ -78,11 +75,9 @@ public class ClientsServiceImpl implements ClientsService {
 
         return Fallback.builder()
                 .message(
-                        messageSource.getMessage(
-                                "exception.review.service_unavailable",
-                                new Object[]{ServiceStage.PRODUCT},
-                                Locale.getDefault()
-                        )
+                        CustomErrorCode
+                                .OS_REVIEW_SERVICE_UNAVAILABLE_503
+                                .getMessage(ServiceStage.PRODUCT)
                 )
                 .build();
     }
@@ -91,11 +86,9 @@ public class ClientsServiceImpl implements ClientsService {
 
         return Fallback.builder()
                 .message(
-                        messageSource.getMessage(
-                                "exception.review.service_unavailable",
-                                new Object[]{ServiceStage.CUSTOMER},
-                                Locale.getDefault()
-                        )
+                        CustomErrorCode
+                                .OS_REVIEW_SERVICE_UNAVAILABLE_503
+                                .getMessage(ServiceStage.CUSTOMER)
                 )
                 .build();
     }
@@ -104,13 +97,12 @@ public class ClientsServiceImpl implements ClientsService {
             throws Exception {
 
         if (e instanceof RetryableException) {
-            throw new ServiceUnavailableException(
-                    messageSource.getMessage(
-                            "exception.review.service_unavailable",
-                            new Object[]{ServiceStage.PURCHASE},
-                            Locale.getDefault()
-                    ),
-                    HttpStatus.SERVICE_UNAVAILABLE);
+            throw CustomExceptionFactory.getServiceUnavailable().get(
+                    CustomErrorCode.OS_REVIEW_SERVICE_UNAVAILABLE_503
+                            .getMessage(ServiceStage.PURCHASE),
+                    CustomErrorCode.OS_REVIEW_SERVICE_UNAVAILABLE_503
+                            .name()
+            );
         }
         throw e;
     }

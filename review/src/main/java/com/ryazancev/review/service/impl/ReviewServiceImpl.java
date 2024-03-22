@@ -70,7 +70,6 @@ public class ReviewServiceImpl implements ReviewService {
             throw CustomExceptionFactory
                     .getReviewCreation()
                     .duplicate(
-                            messageSource,
                             reviewEditDto.getPurchaseId()
                     );
         }
@@ -113,7 +112,7 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.deleteAll(reviews);
 
         return messageSource.getMessage(
-                "exception.review.deleted",
+                "service.review.deleted",
                 new Object[]{reviews.size()},
                 Locale.getDefault()
         );
