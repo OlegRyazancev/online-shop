@@ -50,7 +50,7 @@ public class ExceptionBody {
         this.message = message;
         this.serviceStage = serviceStage;
         this.httpStatus = httpStatus;
-        this.code = ErrorCode.INTERNAL.name();
+        this.code = CustomErrorCode.OS_PURCHASE_INTERNAL_500.name();
         this.timestamp = LocalDateTime.now();
     }
 }

@@ -15,7 +15,6 @@ import com.ryazancev.purchase.util.processor.KafkaMessageProcessor;
 import com.ryazancev.purchase.util.validator.PurchaseValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,7 +37,6 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final DtoProcessor dtoProcessor;
 
     private final ClientsService clientsService;
-    private final MessageSource messageSource;
 
 
     @Override
@@ -115,10 +113,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .orElseThrow(() ->
                         CustomExceptionFactory
                                 .getPurchaseNotFound()
-                                .byId(
-                                        messageSource,
-                                        id
-                                )
+                                .byId(id)
                 );
     }
 }

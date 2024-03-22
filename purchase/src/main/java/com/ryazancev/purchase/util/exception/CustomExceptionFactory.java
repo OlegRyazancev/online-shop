@@ -1,5 +1,6 @@
 package com.ryazancev.purchase.util.exception;
 
+import com.ryazancev.common.exception.ServiceUnavailableException;
 import com.ryazancev.purchase.util.exception.custom.IncorrectBalanceException;
 import com.ryazancev.purchase.util.exception.custom.OutOfStockException;
 import com.ryazancev.purchase.util.exception.custom.PurchaseNotFoundException;
@@ -23,5 +24,10 @@ public class CustomExceptionFactory {
     public static PurchaseNotFoundException getPurchaseNotFound() {
 
         return new PurchaseNotFoundException();
+    }
+
+    public static ServiceUnavailableException getServiceUnavailable() {
+
+        return new ServiceUnavailableException();
     }
 }

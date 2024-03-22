@@ -2,7 +2,6 @@ package com.ryazancev.purchase.util.validator;
 
 import com.ryazancev.purchase.util.exception.CustomExceptionFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PurchaseValidator {
 
-    private final MessageSource messageSource;
-
     public void
     validateSufficientBalance(final Double availableCustomerBalance,
                               final Double selectedProductPrice) {
@@ -23,7 +20,7 @@ public class PurchaseValidator {
 
             throw CustomExceptionFactory
                     .getIncorrectBalance()
-                    .insufficientFunds(messageSource);
+                    .insufficientFunds();
         }
     }
 
@@ -34,7 +31,7 @@ public class PurchaseValidator {
 
             throw CustomExceptionFactory
                     .getOutOfStock()
-                    .noProducts(messageSource);
+                    .noProducts();
         }
     }
 }
