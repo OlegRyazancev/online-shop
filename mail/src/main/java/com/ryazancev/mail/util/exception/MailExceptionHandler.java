@@ -47,7 +47,8 @@ public class MailExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionBody(
-                        "Internal error: " + e.getMessage(),
+                        CustomErrorCode.OS_MAIL_INTERNAL_500
+                                .getMessage(e.getMessage()),
                         ServiceStage.MAIL,
                         HttpStatus.INTERNAL_SERVER_ERROR
                 ));
