@@ -15,7 +15,6 @@ import com.ryazancev.notification.util.NotificationUtil;
 import com.ryazancev.notification.util.exception.CustomExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,9 +34,6 @@ public class NotificationServiceImpl implements NotificationService {
     private final PrivateNotificationRepository privateRepository;
     private final PublicNotificationRepository publicRepository;
     private final NotificationUtil notificationUtil;
-
-    private final MessageSource messageSource;
-
 
     @Override
     public List<Notification> getNotificationsByRecipientId(
@@ -89,11 +85,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .orElseThrow(() ->
                                 CustomExceptionFactory
                                         .getNotificationNotFound()
-                                        .byId(
-                                                messageSource,
-                                                castedScope,
-                                                id
-                                        ));
+                                        .byId(castedScope, id));
                 if (notification.getStatus() == NotificationStatus.UNREAD) {
 
                     notification.setStatus(NotificationStatus.READ);
@@ -108,11 +100,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .orElseThrow(() ->
                                 CustomExceptionFactory
                                         .getNotificationNotFound()
-                                        .byId(
-                                                messageSource,
-                                                castedScope,
-                                                id
-                                        ));
+                                        .byId(castedScope, id));
             }
             case ADMIN -> {
 
@@ -120,11 +108,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .orElseThrow(() ->
                                 CustomExceptionFactory
                                         .getNotificationNotFound()
-                                        .byId(
-                                                messageSource,
-                                                castedScope,
-                                                id
-                                        ));
+                                        .byId(castedScope, id));
             }
             default -> {
             }
@@ -173,11 +157,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .orElseThrow(() ->
                                 CustomExceptionFactory
                                         .getNotificationNotFound()
-                                        .byId(
-                                                messageSource,
-                                                NotificationScope.PRIVATE,
-                                                id
-                                        ));
+                                        .byId(NotificationScope.PRIVATE, id));
 
         return notification.getRecipientId();
     }

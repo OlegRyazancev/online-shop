@@ -27,8 +27,6 @@ public class ClientsServiceImpl implements ClientsService {
     private final CustomerClient customerClient;
     private final PurchaseClient purchaseClient;
 
-    private final MessageSource messageSource;
-
     @Override
     @CircuitBreaker(
             name = "review",

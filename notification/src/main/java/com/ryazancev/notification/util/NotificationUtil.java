@@ -11,7 +11,6 @@ import com.ryazancev.notification.model.notification.PublicNotification;
 import com.ryazancev.notification.service.ContentService;
 import com.ryazancev.notification.util.exception.CustomExceptionFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class NotificationUtil {
 
-    private final MessageSource messageSource;
     private final ContentService contentService;
 
     public NotificationScope castScope(final String scope) {
@@ -36,7 +34,7 @@ public class NotificationUtil {
 
             throw CustomExceptionFactory
                     .getInvalidScope()
-                    .invalidScope(messageSource);
+                    .invalidScope();
         }
     }
 

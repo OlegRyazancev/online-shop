@@ -1,15 +1,14 @@
 package com.ryazancev.notification.service.impl;
 
 import com.ryazancev.common.clients.CustomerClient;
+import com.ryazancev.common.config.ServiceStage;
 import com.ryazancev.common.dto.Element;
 import com.ryazancev.common.dto.Fallback;
 import com.ryazancev.notification.service.ClientsService;
+import com.ryazancev.notification.util.exception.CustomErrorCode;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
 
 /**
  * @author Oleg Ryazancev
@@ -20,7 +19,6 @@ import java.util.Locale;
 public class ClientsServiceImpl implements ClientsService {
 
     private final CustomerClient customerClient;
-    private final MessageSource messageSource;
 
     @Override
     @CircuitBreaker(
@@ -36,11 +34,9 @@ public class ClientsServiceImpl implements ClientsService {
 
         return Fallback.builder()
                 .message(
-                        messageSource.getMessage(
-                                "exception.notification.service_unavailable",
-                                null,
-                                Locale.getDefault()
-                        )
+                        CustomErrorCode
+                                .OS_NOTIFICATION_SERVICE_UNAVAILABLE_503
+                                .getMessage(ServiceStage.CUSTOMER)
                 )
                 .build();
     }
