@@ -36,7 +36,7 @@ public class UnauthorizedException extends RuntimeException {
         );
     }
 
-    public UnauthorizedException unauthorizedRequest(){
+    public UnauthorizedException unauthorizedRequest() {
 
         return new UnauthorizedException(
                 CustomErrorCode.OS_API_GATEWAY_102_401.getMessage(),
@@ -44,7 +44,7 @@ public class UnauthorizedException extends RuntimeException {
         );
     }
 
-    public UnauthorizedException insufficientPrivileges(){
+    public UnauthorizedException insufficientPrivileges() {
 
         return new UnauthorizedException(
                 CustomErrorCode.OS_API_GATEWAY_103_401.getMessage(),

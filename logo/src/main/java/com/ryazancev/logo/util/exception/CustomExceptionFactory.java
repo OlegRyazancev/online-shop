@@ -8,7 +8,7 @@ import com.ryazancev.logo.util.exception.custom.LogoUploadException;
 
 public class CustomExceptionFactory {
 
-    public static LogoUploadException getLogoUpload(){
+    public static LogoUploadException getLogoUpload() {
 
         return new LogoUploadException();
     }

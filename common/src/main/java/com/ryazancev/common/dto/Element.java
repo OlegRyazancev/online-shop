@@ -47,7 +47,7 @@ public interface Element {
             if (throwException) {
                 throw new ServiceUnavailableException(
                         ((Fallback) this).getMessage(),
-                        HttpStatus.SERVICE_UNAVAILABLE);
+                        HttpStatus.SERVICE_UNAVAILABLE.name());
             } else {
                 String message = "SERVICE_UNAVAILABLE";
 

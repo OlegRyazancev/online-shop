@@ -37,7 +37,7 @@ public class ConfirmationTokenException extends RuntimeException {
         );
     }
 
-    public ConfirmationTokenException notFound(){
+    public ConfirmationTokenException notFound() {
 
         return new ConfirmationTokenException(
                 CustomErrorCode.OS_AUTH_203_404.getMessage(),
