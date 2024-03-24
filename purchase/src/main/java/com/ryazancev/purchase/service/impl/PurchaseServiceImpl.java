@@ -84,14 +84,14 @@ public class PurchaseServiceImpl implements PurchaseService {
         toSave.setPurchaseDate(LocalDateTime.now());
         toSave.setAmount(selectedProductPrice);
 
+        Purchase saved = purchaseRepository.save(toSave);
+
         kafkaMessageProcessor.updateCustomerBalance(customerId,
                 availableCustomerBalance - selectedProductPrice);
         kafkaMessageProcessor.updateProductQuantity(productId,
                 availableProductsInStock - 1);
         kafkaMessageProcessor.updateCustomerBalance(productOwnerId,
                 ownerBalance + selectedProductPrice);
-
-        Purchase saved = purchaseRepository.save(toSave);
 
         return dtoProcessor.createPurchaseDto(saved);
     }
