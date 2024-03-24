@@ -4,9 +4,11 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.repository.ProductRepository;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.RequestHeader;
 import com.ryazancev.product.util.exception.CustomExceptionFactory;
 import com.ryazancev.product.util.processor.KafkaMessageProcessor;
 import com.ryazancev.product.util.validator.ProductValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -37,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
     private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final MessageSource messageSource;
+    private final HttpServletRequest httpServletRequest;
 
     @Override
     @Cacheable(value = "Product::getAll")
@@ -103,7 +106,8 @@ public class ProductServiceImpl implements ProductService {
 
         kafkaMessageProcessor
                 .sendRegistrationRequestToAdminTopic(saved.getId());
-        kafkaMessageProcessor.sendNewRegistrationRequestNotification();
+        kafkaMessageProcessor.sendNewRegistrationRequestNotification(
+                new RequestHeader(httpServletRequest));
 
 
         return saved;
@@ -228,9 +232,9 @@ public class ProductServiceImpl implements ProductService {
         existing.setQuantityInStock(0);
         existing.setStatus(ProductStatus.DELETED);
 
-        kafkaMessageProcessor.sendProductIdToDeleteReviewTopic(id);
-
         productRepository.save(existing);
+
+        kafkaMessageProcessor.sendProductIdToDeleteReviewTopic(id);
 
         return messageSource.getMessage(
                 "service.product.deleted",

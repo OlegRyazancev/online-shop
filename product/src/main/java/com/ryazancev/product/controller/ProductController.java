@@ -14,10 +14,12 @@ import com.ryazancev.product.model.Product;
 import com.ryazancev.product.model.ProductStatus;
 import com.ryazancev.product.service.CustomExpressionService;
 import com.ryazancev.product.service.ProductService;
+import com.ryazancev.product.util.RequestHeader;
 import com.ryazancev.product.util.mapper.ProductMapper;
 import com.ryazancev.product.util.processor.DtoProcessor;
 import com.ryazancev.product.util.processor.KafkaMessageProcessor;
 import com.ryazancev.product.util.validator.ProductValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -43,6 +45,7 @@ public class ProductController {
 
     private final DtoProcessor dtoProcessor;
     private final CustomExpressionService customExpressionService;
+    private final HttpServletRequest httpServletRequest;
 
     @GetMapping
     public ProductsSimpleResponse getAll() {
@@ -144,7 +147,11 @@ public class ProductController {
                         .getOrganizationId();
 
         kafkaMessageProcessor
-                .sendReviewCreatedNotification(created, organizationId);
+                .sendReviewCreatedNotification(
+                        created,
+                        organizationId,
+                        new RequestHeader(httpServletRequest)
+                );
 
         return created;
     }

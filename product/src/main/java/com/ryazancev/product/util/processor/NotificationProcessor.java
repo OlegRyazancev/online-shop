@@ -9,7 +9,6 @@ import com.ryazancev.common.dto.purchase.PurchaseDto;
 import com.ryazancev.common.dto.review.ReviewDto;
 import com.ryazancev.product.service.ClientsService;
 import com.ryazancev.product.util.RequestHeader;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +22,14 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class NotificationProcessor {
 
-    private final HttpServletRequest request;
     private final ClientsService clientsService;
 
     public NotificationRequest createAdminNotification(
-            final ReviewDto reviewDto, final Long organizationId) {
+            final ReviewDto reviewDto,
+            final Long organizationId,
+            final RequestHeader requestHeader) {
 
-        Long senderId = new RequestHeader(request).getUserId();
+        Long senderId = requestHeader.getUserId();
 
         Long recipientId =
                 (Long) clientsService
@@ -57,7 +57,8 @@ public class NotificationProcessor {
                 .build();
     }
 
-    public NotificationRequest createAdminNotification() {
+    public NotificationRequest createAdminNotification(
+            final RequestHeader requestHeader) {
 
         Properties properties = new Properties();
         properties.setProperty("object_type", ObjectType.PRODUCT.name());
@@ -66,7 +67,7 @@ public class NotificationProcessor {
                 .type(NotificationType.ADMIN_NEW_REGISTRATION_REQUEST_RECEIVED)
                 .scope(NotificationScope.ADMIN)
                 .properties(properties)
-                .senderId(new RequestHeader(request).getUserId())
+                .senderId(requestHeader.getUserId())
                 .build();
     }
 }

@@ -8,7 +8,10 @@ import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.review.ReviewDto;
 import com.ryazancev.product.kafka.ProductProducerService;
 import com.ryazancev.product.model.Product;
+import com.ryazancev.product.util.RequestHeader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,18 +20,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class KafkaMessageProcessor {
 
     private final ProductProducerService productProducerService;
     private final DtoProcessor dtoProcessor;
     private final NotificationProcessor notificationProcessor;
 
+    @Async("asyncTaskExecutor")
     public void sendProductIdToDeleteReviewTopic(final Long id) {
+
+        log.info("Method sendProductIdToDeleteReviewTopic starts work "
+                + "at thread: " + Thread.currentThread().getName());
 
         productProducerService.sendMessageToReviewTopic(id);
     }
 
+    @Async("asyncTaskExecutor")
     public void sendRegistrationRequestToAdminTopic(final Long productId) {
+
+        log.info("Method sendRegistrationRequestToAdminTopic starts work "
+                + "at thread: " + Thread.currentThread().getName());
 
         RegistrationRequestDto requestDto = RegistrationRequestDto.builder()
                 .objectToRegisterId(productId)
@@ -36,6 +48,39 @@ public class KafkaMessageProcessor {
                 .build();
 
         productProducerService.sendMessageToAdminTopic(requestDto);
+    }
+
+    @Async("asyncTaskExecutor")
+    public void sendReviewCreatedNotification(
+            final ReviewDto reviewDto,
+            final Long organizationId,
+            final RequestHeader requestHeader) {
+
+        log.info("Method sendReviewCreatedNotification starts work "
+                + "at thread: " + Thread.currentThread().getName());
+
+        NotificationRequest privateNotificationRequest =
+                notificationProcessor
+                        .createAdminNotification(
+                                reviewDto,
+                                organizationId,
+                                requestHeader
+                        );
+
+        productProducerService.sendNotification(privateNotificationRequest);
+    }
+
+    @Async("asyncTaskExecutor")
+    public void sendNewRegistrationRequestNotification(
+            final RequestHeader requestHeader) {
+
+        log.info("Method sendNewRegistrationRequestNotification starts work "
+                + "at thread: " + Thread.currentThread().getName());
+
+        NotificationRequest adminNotificationRequest =
+                notificationProcessor.createAdminNotification(requestHeader);
+
+        productProducerService.sendNotification(adminNotificationRequest);
     }
 
     public void sendAcceptedMailToCustomerByProductId(final Product product) {
@@ -54,23 +99,5 @@ public class KafkaMessageProcessor {
                 MailType.OBJECT_REGISTRATION_REJECTED);
 
         productProducerService.sendMessageToMailTopic(mailDto);
-    }
-
-    public void sendReviewCreatedNotification(final ReviewDto reviewDto,
-                                              final Long organizationId) {
-
-        NotificationRequest privateNotificationRequest =
-                notificationProcessor
-                        .createAdminNotification(reviewDto, organizationId);
-
-        productProducerService.sendNotification(privateNotificationRequest);
-    }
-
-    public void sendNewRegistrationRequestNotification() {
-
-        NotificationRequest adminNotificationRequest =
-                notificationProcessor.createAdminNotification();
-
-        productProducerService.sendNotification(adminNotificationRequest);
     }
 }
