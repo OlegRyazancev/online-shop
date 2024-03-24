@@ -1,6 +1,7 @@
 package com.ryazancev.admin.util.processor;
 
 import com.ryazancev.admin.model.RegistrationRequest;
+import com.ryazancev.admin.util.RequestHeader;
 import com.ryazancev.admin.util.notification.NotificationAttributeDeterminer;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
@@ -24,7 +25,8 @@ public class NotificationProcessor {
 
     public NotificationRequest createNotification(
             final RegistrationRequest request,
-            final NotificationScope scope) {
+            final NotificationScope scope,
+            final RequestHeader requestHeader) {
 
         NotificationType type =
                 determiner.determineNotificationType(
@@ -47,7 +49,8 @@ public class NotificationProcessor {
         Long senderId =
                 determiner.determineSenderId(
                         scope,
-                        recipientId
+                        recipientId,
+                        requestHeader
                 );
 
         return NotificationRequest.builder()
@@ -66,7 +69,8 @@ public class NotificationProcessor {
 
     public NotificationRequest createNotification(
             final ObjectRequest request,
-            final NotificationScope scope) {
+            final NotificationScope scope,
+            final RequestHeader requestHeader) {
 
         NotificationType type = determiner.determineNotificationType(request);
 
@@ -78,7 +82,7 @@ public class NotificationProcessor {
                 );
 
         Long senderId =
-                determiner.determineSenderId();
+                determiner.determineSenderId(requestHeader);
 
         Properties properties =
                 determiner.determineProperties(
@@ -99,14 +103,15 @@ public class NotificationProcessor {
 
     public NotificationRequest createNotification(
             final UserLockRequest request,
-            final NotificationScope scope) {
+            final NotificationScope scope,
+            final RequestHeader requestHeader) {
 
         NotificationType type = determiner.determineNotificationType(request);
 
         Long recipientId = request.getUserId();
 
         Long senderId =
-                determiner.determineSenderId();
+                determiner.determineSenderId(requestHeader);
 
         return NotificationRequest.builder()
                 .scope(scope)

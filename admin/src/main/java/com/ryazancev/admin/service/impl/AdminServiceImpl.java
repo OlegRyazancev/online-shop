@@ -3,12 +3,14 @@ package com.ryazancev.admin.service.impl;
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.repository.AdminRepository;
 import com.ryazancev.admin.service.AdminService;
+import com.ryazancev.admin.util.RequestHeader;
 import com.ryazancev.admin.util.exception.CustomExceptionFactory;
 import com.ryazancev.admin.util.processor.KafkaMessageProcessor;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
 import com.ryazancev.common.dto.admin.enums.ObjectType;
 import com.ryazancev.common.dto.admin.enums.RequestStatus;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,6 +38,7 @@ public class AdminServiceImpl implements AdminService {
     private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final MessageSource messageSource;
+    private final HttpServletRequest httpServletRequest;
 
     @Override
     @Cacheable(value = "Admin::getAll")
@@ -48,16 +51,14 @@ public class AdminServiceImpl implements AdminService {
     @Cacheable(value = "Admin::getProductRegRequests")
     public List<RegistrationRequest> getProductRegistrationRequests() {
 
-        return adminRepository
-                .findAllByObjectType(ObjectType.PRODUCT);
+        return adminRepository.findAllByObjectType(ObjectType.PRODUCT);
     }
 
     @Override
     @Cacheable(value = "Admin::getOrganizationRegRequests")
     public List<RegistrationRequest> getOrganizationRegistrationRequests() {
 
-        return adminRepository
-                .findAllByObjectType(ObjectType.ORGANIZATION);
+        return adminRepository.findAllByObjectType(ObjectType.ORGANIZATION);
     }
 
     @Transactional
@@ -92,15 +93,23 @@ public class AdminServiceImpl implements AdminService {
         RegistrationRequest updated =
                 adminRepository.save(existing);
 
-        kafkaMessageProcessor.sendRegisterResponse(updated);
-        kafkaMessageProcessor.sendPrivateNotification(updated);
+        kafkaMessageProcessor
+                .sendRegisterResponse(updated);
+        kafkaMessageProcessor
+                .sendPrivateNotification(
+                        updated,
+                        new RequestHeader(httpServletRequest)
+                );
 
         if (updated.getObjectType() == ObjectType.PRODUCT
                 && updated.getStatus() == RequestStatus.ACCEPTED) {
 
-            kafkaMessageProcessor.sendPublicNotification(updated);
+            kafkaMessageProcessor
+                    .sendPublicNotification(
+                            updated,
+                            new RequestHeader(httpServletRequest)
+                    );
         }
-
         return updated;
     }
 
@@ -108,8 +117,13 @@ public class AdminServiceImpl implements AdminService {
     public String changeObjectStatus(
             final ObjectRequest request) {
 
-        kafkaMessageProcessor.sendMessageToChangeObjectStatus(request);
-        kafkaMessageProcessor.sendPrivateNotification(request);
+        kafkaMessageProcessor
+                .sendMessageToChangeObjectStatus(request);
+        kafkaMessageProcessor
+                .sendPrivateNotification(
+                        request,
+                        new RequestHeader(httpServletRequest)
+                );
 
         return messageSource.getMessage(
                 "service.admin.change_status_request",
@@ -126,8 +140,13 @@ public class AdminServiceImpl implements AdminService {
     public String toggleUserLock(
             final UserLockRequest request) {
 
-        kafkaMessageProcessor.sendMessageToToggleUserLock(request);
-        kafkaMessageProcessor.sendPrivateNotification(request);
+        kafkaMessageProcessor
+                .sendMessageToToggleUserLock(request);
+        kafkaMessageProcessor
+                .sendPrivateNotification(
+                        request,
+                        new RequestHeader(httpServletRequest)
+                );
 
         return messageSource.getMessage(
                 "service.admin.toggle_account_lock_request",

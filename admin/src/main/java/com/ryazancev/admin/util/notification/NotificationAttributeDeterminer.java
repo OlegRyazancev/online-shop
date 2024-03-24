@@ -2,6 +2,7 @@ package com.ryazancev.admin.util.notification;
 
 import com.ryazancev.admin.model.RegistrationRequest;
 import com.ryazancev.admin.service.ClientsService;
+import com.ryazancev.admin.util.RequestHeader;
 import com.ryazancev.common.dto.admin.ObjectRequest;
 import com.ryazancev.common.dto.admin.UserLockRequest;
 import com.ryazancev.common.dto.admin.enums.ObjectType;
@@ -10,7 +11,6 @@ import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.notification.enums.NotificationType;
 import com.ryazancev.common.dto.organization.OrganizationDto;
 import com.ryazancev.common.dto.product.ProductDto;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,19 +25,19 @@ import java.util.Properties;
 public class NotificationAttributeDeterminer {
 
     private final ClientsService clientsService;
-    private final HttpServletRequest servletRequest;
 
-    public Long determineSenderId() {
+    public Long determineSenderId(final RequestHeader requestHeader) {
 
-        return Long.valueOf(servletRequest.getHeader("userId"));
+        return requestHeader.getUserId();
     }
 
     public Long determineSenderId(final NotificationScope scope,
-                                  final Long recipientId) {
+                                  final Long recipientId,
+                                  final RequestHeader requestHeader) {
 
         return scope == NotificationScope.ADMIN
                 ? recipientId
-                : determineSenderId();
+                : determineSenderId(requestHeader);
     }
 
     public Long determineRecipientId(final ObjectType objectType,
