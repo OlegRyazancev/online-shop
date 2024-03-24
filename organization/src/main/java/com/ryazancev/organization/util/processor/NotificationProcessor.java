@@ -19,9 +19,8 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class NotificationProcessor {
 
-    private final HttpServletRequest request;
-
-    public NotificationRequest createAdminNotification() {
+    public NotificationRequest createAdminNotification(
+            final RequestHeader requestHeader) {
 
         Properties properties = new Properties();
         properties.setProperty("object_type", ObjectType.ORGANIZATION.name());
@@ -30,7 +29,7 @@ public class NotificationProcessor {
                 .type(NotificationType.ADMIN_NEW_REGISTRATION_REQUEST_RECEIVED)
                 .scope(NotificationScope.ADMIN)
                 .properties(properties)
-                .senderId(new RequestHeader(request).getUserId())
+                .senderId(requestHeader.getUserId())
                 .build();
     }
 }

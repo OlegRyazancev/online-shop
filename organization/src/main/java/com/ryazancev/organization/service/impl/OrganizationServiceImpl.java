@@ -6,9 +6,11 @@ import com.ryazancev.organization.model.OrganizationStatus;
 import com.ryazancev.organization.repository.OrganizationRepository;
 import com.ryazancev.organization.service.ClientsService;
 import com.ryazancev.organization.service.OrganizationService;
+import com.ryazancev.organization.util.RequestHeader;
 import com.ryazancev.organization.util.exception.CustomExceptionFactory;
 import com.ryazancev.organization.util.processor.KafkaMessageProcessor;
 import com.ryazancev.organization.util.validator.OrganizationValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -38,6 +40,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final KafkaMessageProcessor kafkaMessageProcessor;
 
     private final ClientsService clientsService;
+    private final HttpServletRequest httpServletRequest;
     private final MessageSource messageSource;
 
     @Override
@@ -84,7 +87,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization saved = organizationRepository.save(organization);
 
         kafkaMessageProcessor.sendRegistrationRequestToAdmin(saved);
-        kafkaMessageProcessor.sendNewRegistrationRequestNotification();
+        kafkaMessageProcessor
+                .sendNewRegistrationRequestNotification(
+                        new RequestHeader(httpServletRequest));
 
         return saved;
     }
@@ -229,10 +234,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         existing.setDescription("DELETED");
         existing.setStatus(OrganizationStatus.DELETED);
 
+        organizationRepository.save(existing);
+
         kafkaMessageProcessor
                 .sendProductIdToDeleteProductTopic(id);
-
-        organizationRepository.save(existing);
 
         return messageSource.getMessage(
                 "service.organization.deleted",
