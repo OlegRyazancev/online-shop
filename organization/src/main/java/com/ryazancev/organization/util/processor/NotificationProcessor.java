@@ -5,7 +5,6 @@ import com.ryazancev.common.dto.notification.NotificationRequest;
 import com.ryazancev.common.dto.notification.enums.NotificationScope;
 import com.ryazancev.common.dto.notification.enums.NotificationType;
 import com.ryazancev.organization.util.RequestHeader;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

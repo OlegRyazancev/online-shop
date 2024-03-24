@@ -7,7 +7,6 @@ import com.ryazancev.common.dto.product.ProductDto;
 import com.ryazancev.common.dto.purchase.PurchaseEditDto;
 import com.ryazancev.customer.service.ClientsService;
 import com.ryazancev.customer.util.RequestHeader;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
