@@ -13,8 +13,10 @@ import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.service.ClientsService;
 import com.ryazancev.customer.service.CustomExpressionService;
 import com.ryazancev.customer.service.CustomerService;
+import com.ryazancev.customer.util.RequestHeader;
 import com.ryazancev.customer.util.mapper.CustomerMapper;
 import com.ryazancev.customer.util.processor.KafkaMessageProcessor;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -36,7 +38,7 @@ public class CustomerController {
     private final CustomerMapper customerMapper;
 
     private final KafkaMessageProcessor kafkaMessageProcessor;
-
+    private final HttpServletRequest httpServletRequest;
     private final ClientsService clientsService;
 
     @GetMapping("/{id}")
@@ -104,7 +106,10 @@ public class CustomerController {
                 .processPurchase(purchaseEditDto);
 
         kafkaMessageProcessor
-                .sendPurchaseProcessedNotification(purchaseEditDto);
+                .sendPurchaseProcessedNotification(
+                        purchaseEditDto,
+                        new RequestHeader(httpServletRequest)
+                );
 
         return created;
     }

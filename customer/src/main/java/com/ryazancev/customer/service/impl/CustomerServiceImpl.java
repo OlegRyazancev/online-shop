@@ -4,8 +4,10 @@ import com.ryazancev.common.dto.customer.UpdateBalanceRequest;
 import com.ryazancev.customer.model.Customer;
 import com.ryazancev.customer.repository.CustomerRepository;
 import com.ryazancev.customer.service.CustomerService;
+import com.ryazancev.customer.util.RequestHeader;
 import com.ryazancev.customer.util.exception.CustomExceptionFactory;
 import com.ryazancev.customer.util.processor.KafkaMessageProcessor;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -118,9 +120,9 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setBalance(0.0);
         existing.setDeletedAt(LocalDateTime.now());
 
-        kafkaMessageProcessor.sendCustomerIdToAuthDeleteTopic(id);
-
         customerRepository.save(existing);
+
+        kafkaMessageProcessor.sendCustomerIdToAuthDeleteTopic(id);
 
         return messageSource.getMessage(
                 "service.customer.deleted",

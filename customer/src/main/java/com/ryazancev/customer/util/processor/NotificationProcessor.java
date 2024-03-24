@@ -22,10 +22,10 @@ import java.util.Properties;
 public class NotificationProcessor {
 
     private final ClientsService clientsService;
-    private final HttpServletRequest request;
 
     public NotificationRequest createNotification(
-            final PurchaseEditDto purchaseEditDto) {
+            final PurchaseEditDto purchaseEditDto,
+            final RequestHeader requestHeader) {
 
         Long recipientId = (Long) clientsService
                 .getProductOwnerId(purchaseEditDto.getProductId());
@@ -43,7 +43,7 @@ public class NotificationProcessor {
                 .scope(NotificationScope.PRIVATE)
                 .type(NotificationType.PRIVATE_PURCHASE_PROCESSED)
                 .recipientId(recipientId)
-                .senderId(new RequestHeader(request).getUserId())
+                .senderId(requestHeader.getUserId())
                 .properties(properties)
                 .build();
 
